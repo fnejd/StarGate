@@ -21,6 +21,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((request)->request
                         .requestMatchers("/tests/**").permitAll()
+                        .requestMatchers("/pusers/register","/pusers/login","/fusers/register","/fusers/login").anonymous()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form)-> form.disable())
