@@ -2,6 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'SUIT';
+  src: url(./assets/font/SUIT-Regular.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SUIT';
+  src: url(./assets/font/SUIT-SemiBold.ttf) format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KREON';
+  src: url(./assets/font/KREON-Regular.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KREON';
+  src: url(./assets/font/KREON-SemiBold.ttf) format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@layer components {
+  .t1b {
+    @apply font-kreon text-160 font-semibold leading-120;
+  }
+
+  .t1r {
+    @apply font-kreon text-160 font-normal leading-120;
+  }
+  
+  .t2b {
+    @apply font-kreon text-80 font-semibold leading-120;
+  }
+
+  .t2r {
+    @apply font-kreon text-80 font-normal leading-120;
+  }
+
+  .t3b {
+    @apply font-kreon text-60 font-semibold leading-120;
+  }
+
+  .t3r {
+    @apply font-kreon text-60 font-normal leading-120;
+  }
+
+  .t4b {
+    @apply font-kreon text-48 font-semibold leading-120;
+  }
+
+  .t4r {
+    @apply font-kreon text-48 font-normal leading-120;
+  }
+
+  .h1b {
+    @apply font-suit text-32 font-semibold leading-120;
+  }
+
+  .h1r {
+    @apply font-suit text-32 font-normal leading-120;
+  }
+
+  .h2b {
+    @apply font-suit text-28 font-semibold leading-120;
+  }
+
+  .h2r {
+    @apply font-suit text-28 font-normal leading-120;
+  }
+
+  .h3b {
+    @apply font-suit text-24 font-semibold leading-120;
+  }
+
+  .h3r {
+    @apply font-suit text-24 font-normal leading-120;
+  }
+
+  .h4b {
+    @apply font-suit text-20 font-semibold leading-130;
+  }
+
+  .h4r {
+    @apply font-suit text-20 font-normal leading-130;
+  }
+
+  .p1b {
+    @apply font-suit text-18 font-semibold leading-140;
+  }
+
+  .p1r {
+    @apply font-suit text-18 font-normal leading-140;
+  }
+
+  .p2b {
+    @apply font-suit text-16 font-semibold leading-140;
+  }
+
+  .p2r {
+    @apply font-suit text-16 font-normal leading-140;
+  }
+
+  .p3b {
+    @apply font-suit text-14 font-semibold leading-140;
+  }
+
+  .p3r {
+    @apply font-suit text-14 font-normal leading-140;
+  }
+
+  .captionb {
+    @apply font-suit text-12 font-semibold leading-140;
+  }
+
+  .captionr {
+    @apply font-suit text-12 font-normal leading-140;
+  }
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
