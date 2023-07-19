@@ -15,11 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FUserRegisterRequestDto {
+public class FUserLoginRequestDto {
     private String email;
-    private String name;
-    private String nickname;
     private String password;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime birthday;
 }
