@@ -1,4 +1,4 @@
-package com.ssafy.stargate.model.dto;
+package com.ssafy.stargate.model.dto.request;
 
 import lombok.*;
 
