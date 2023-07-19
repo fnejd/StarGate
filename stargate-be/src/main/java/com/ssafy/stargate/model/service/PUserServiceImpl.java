@@ -63,8 +63,8 @@ public class PUserServiceImpl implements PUserService {
         PUser pUser = pUserRepository.findById(dto.getEmail()).orElseThrow(() -> new LoginException());
         if(passwordEncoder.matches(dto.getPassword(),pUser.getPassword())){
             return JwtResponseDto.builder()
-                    .refreshToken(jwtTokenUtil.createRefreshToken(pUser.getEmail()))
-                    .accessToken(jwtTokenUtil.createAccessToken(pUser.getEmail()))
+                    .refreshToken(jwtTokenUtil.createRefreshToken(pUser.getEmail(),"PRODUCER"))
+                    .accessToken(jwtTokenUtil.createAccessToken(pUser.getEmail(),"PRODUCER"))
                     .build();
         }else{
             throw new LoginException();

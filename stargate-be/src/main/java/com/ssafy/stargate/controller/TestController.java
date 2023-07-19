@@ -24,4 +24,10 @@ public class TestController {
         return ResponseEntity.ok(null);
     }
 
+    @GetMapping("/jwt-expired")
+    public ResponseEntity<?> getJwtExpired(Principal principal){
+        log.info("JWT 만료 status 테스트");
+        return ResponseEntity.ok(null);
+    }
+
 }
