@@ -3,7 +3,7 @@ package com.ssafy.stargate.model.service;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.JwtResponseDto;
-import com.ssafy.stargate.model.dto.PUserRequestDto;
+import com.ssafy.stargate.model.dto.request.PUserRequestDto;
 
 /**
  * 소속사 유저와 관련된 서비스를 명시하는 인터페이스

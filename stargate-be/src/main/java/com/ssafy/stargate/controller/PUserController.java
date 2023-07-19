@@ -3,7 +3,7 @@ package com.ssafy.stargate.controller;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.JwtResponseDto;
-import com.ssafy.stargate.model.dto.PUserRequestDto;
+import com.ssafy.stargate.model.dto.request.PUserRequestDto;
 import com.ssafy.stargate.model.dto.SimpleDto;
 import com.ssafy.stargate.model.service.PUserService;
 import lombok.extern.slf4j.Slf4j;
