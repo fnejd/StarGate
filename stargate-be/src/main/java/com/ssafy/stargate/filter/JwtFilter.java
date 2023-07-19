@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,8 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter{
 
-    private final JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     /**
      *
@@ -36,7 +38,6 @@ public class JwtFilter extends OncePerRequestFilter{
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         String bearerToken = request.getHeader("Authorization"); // 헤더 파싱
         String token = null;
 
@@ -45,10 +46,8 @@ public class JwtFilter extends OncePerRequestFilter{
         }
 
         if (token != null && jwtTokenUtil.validateToken(token)) {
-
             Authentication authentication = jwtTokenUtil.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         }
         filterChain.doFilter(request,response);
     }

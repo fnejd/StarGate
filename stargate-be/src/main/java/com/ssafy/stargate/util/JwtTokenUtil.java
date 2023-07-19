@@ -135,7 +135,6 @@ public class JwtTokenUtil {
      */
     public Authentication getAuthentication(String token) {
         String email = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
-
         return new UsernamePasswordAuthenticationToken(email, "", null);
     }
 
