@@ -2,9 +2,9 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
-import com.ssafy.stargate.model.dto.JwtResponseDto;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserRegisterRequestDto;
+import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.entity.FUser;
 import com.ssafy.stargate.model.repository.FUserRepository;
 import com.ssafy.stargate.util.JwtTokenUtil;
@@ -69,8 +69,8 @@ public class FUserServiceImpl implements FUserService {
         FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow(() -> new LoginException());
         if(passwordEncoder.matches(dto.getPassword(), fUser.getPassword())) {
             return JwtResponseDto.builder()
-                    .refreshToken(jwtTokenUtil.createRefreshToken(fUser.getEmail()))
-                    .accessToken(jwtTokenUtil.createAccessToken(fUser.getEmail()))
+                    .refreshToken(jwtTokenUtil.createRefreshToken(fUser.getEmail(),"USER"))
+                    .accessToken(jwtTokenUtil.createAccessToken(fUser.getEmail(),"USER"))
                     .build();
         } else {
             throw new LoginException();

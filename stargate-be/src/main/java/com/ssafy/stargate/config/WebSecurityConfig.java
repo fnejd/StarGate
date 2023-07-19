@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -22,30 +23,32 @@ public class WebSecurityConfig {
 
     @Autowired
     private JwtFilter jwtFilter;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((request)->request
+                .authorizeHttpRequests((request) -> request
                         .requestMatchers("/tests/jwt-auth").authenticated()
                         .requestMatchers("/tests/**").permitAll()
-                        .requestMatchers("/pusers/register","/pusers/login","/fusers/register","/fusers/login").anonymous()
+                        .requestMatchers("/pusers/register", "/pusers/login", "/fusers/register", "/fusers/login").anonymous()
                         .requestMatchers("/pdashboard").hasAuthority("Producer")
                         .anyRequest().authenticated()
                 )
-                .formLogin((form)-> form.disable())
-                .csrf((csrf)->csrf.disable())
+                .formLogin((form) -> form.disable())
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf((csrf) -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList("http://localhost"));
-        config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTION"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTION"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",config);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

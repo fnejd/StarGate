@@ -1,13 +1,14 @@
 package com.ssafy.stargate.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.sql.Array;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Entity
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Setter
 @DynamicInsert
 @DynamicUpdate
+@Table(name = "p_user")
 public class PUser {
 
     @Id
@@ -31,5 +33,8 @@ public class PUser {
 
     @Column(name = "join_date",columnDefinition = "timestamp default current_timestamp()")
     private LocalDateTime joinDate;
+
+    @OneToMany(mappedBy = "pUser")
+    List<PGroup> pGroups = new ArrayList<>();
 
 }
