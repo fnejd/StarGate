@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PUserRegisterRequestDto {
+public class PUserRequestDto {
     private String email;
     private String password;
     private String code;
