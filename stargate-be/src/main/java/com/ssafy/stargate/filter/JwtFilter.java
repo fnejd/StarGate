@@ -20,6 +20,7 @@ import java.io.IOException;
 
 /**
  * Http Request 한번의 요청에 대해 한번만 실행해는 JWT 관련 필터
+ * @author 김도현
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -31,8 +32,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     /**
      * SecurityContextHolder 에 authentication 저장, 만료된 토큰이면 601 status code 전송
-     * @param request
-     * @param response
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
      * @param filterChain
      * @throws ServletException
      * @throws IOException
