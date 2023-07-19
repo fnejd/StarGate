@@ -2,9 +2,8 @@ package com.ssafy.stargate.controller;
 
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
-import com.ssafy.stargate.model.dto.JwtResponseDto;
+import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.dto.request.PUserRequestDto;
-import com.ssafy.stargate.model.dto.SimpleDto;
 import com.ssafy.stargate.model.service.PUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 소속사 유저 자체와 관련된 모든 연계 컨트롤러
+ * 소속사 그룹 및 멤버는 PManagement 하겠다.
+ */
 @RequestMapping("/pusers")
 @RestController
 @Slf4j

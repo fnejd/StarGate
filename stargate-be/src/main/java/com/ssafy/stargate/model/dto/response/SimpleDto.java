@@ -1,4 +1,4 @@
-package com.ssafy.stargate.model.dto;
+package com.ssafy.stargate.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
