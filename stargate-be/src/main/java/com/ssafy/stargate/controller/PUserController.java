@@ -1,5 +1,6 @@
 package com.ssafy.stargate.controller;
 
+import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
@@ -32,7 +33,7 @@ public class PUserController {
      * @return 성공시 200, 실패시 600
      */
     @PostMapping("/register")
-    public ResponseEntity<?> createPUser(@ModelAttribute PUserRequestDto dto) {
+    public ResponseEntity<?> createPUser(@ModelAttribute PUserRequestDto dto) throws EmailDuplicationException, RegisterException{
         try {
             pUserService.register(dto);
             return ResponseEntity.ok(null);

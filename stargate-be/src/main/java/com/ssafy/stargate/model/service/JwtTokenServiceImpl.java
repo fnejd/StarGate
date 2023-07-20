@@ -3,7 +3,6 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.util.JwtTokenUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

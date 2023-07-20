@@ -1,21 +1,20 @@
 package com.ssafy.stargate.exception;
 
 /**
- * 로그인 실패 시 던지는 에러
- * 모든 로그인 실패 경우에 사용한다.
- * [Status: 401]
+ * 이메일 중복 시 발생하는 에러
+ * [Status: 600]
  */
-public class LoginException extends BaseException {
+public class EmailDuplicationException extends BaseException {
     private final String message;
 
-    public LoginException(String message) {
+    public EmailDuplicationException(String message) {
         super(message);
         this.message = message;
     }
 
     @Override
     public int getStatus() {
-        return 401;
+        return 600;
     }
 
     @Override
