@@ -34,7 +34,7 @@ public class PUser {
     @Column(name = "join_date",columnDefinition = "timestamp default current_timestamp()")
     private LocalDateTime joinDate;
 
-    @OneToMany(mappedBy = "pUser")
-    List<PGroup> pGroups = new ArrayList<>();
+    @OneToMany(mappedBy = "pUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<PGroup> pGroups;
 
 }
