@@ -1,5 +1,6 @@
 package com.ssafy.stargate.model.service;
 
+import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
@@ -38,11 +39,10 @@ public class PUserServiceImpl implements PUserService {
      * @throws RegisterException 중복가입 발생시 던지는 예외이다.
      */
     @Override
-    public void register(PUserRequestDto dto) throws RegisterException {
+    public void register(PUserRequestDto dto) throws EmailDuplicationException, RegisterException {
         PUser dbCheck = pUserRepository.findById(dto.getEmail()).orElse(null);
         if (dbCheck != null) {
-            log.error("소속사 회원가입 실패. 가입 데이터 : {}", dto);
-            throw new RegisterException();
+            throw new EmailDuplicationException("아이디 중복");
         }
         PUser pUser = PUser.builder()
                 .email(dto.getEmail())
@@ -60,14 +60,14 @@ public class PUserServiceImpl implements PUserService {
      */
     @Override
     public JwtResponseDto login(PUserRequestDto dto) throws LoginException{
-        PUser pUser = pUserRepository.findById(dto.getEmail()).orElseThrow(() -> new LoginException());
+        PUser pUser = pUserRepository.findById(dto.getEmail()).orElseThrow(() -> new LoginException("해당 이메일 없음"));
         if(passwordEncoder.matches(dto.getPassword(),pUser.getPassword())){
             return JwtResponseDto.builder()
                     .refreshToken(jwtTokenUtil.createRefreshToken(pUser.getEmail(),"PRODUCER"))
                     .accessToken(jwtTokenUtil.createAccessToken(pUser.getEmail(),"PRODUCER"))
                     .build();
         }else{
-            throw new LoginException();
+            throw new LoginException("소속사 로그인 실패");
         }
     }
 }

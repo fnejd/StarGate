@@ -1,5 +1,6 @@
 package com.ssafy.stargate.model.service;
 
+import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
@@ -11,6 +12,6 @@ import com.ssafy.stargate.model.dto.response.JwtResponseDto;
  * @author 남현실
  */
 public interface FUserService {
-    public void create(FUserRegisterRequestDto dto) throws RegisterException;
+    public void create(FUserRegisterRequestDto dto) throws EmailDuplicationException, RegisterException;
     public JwtResponseDto login(FUserLoginRequestDto dto) throws LoginException;
 }
