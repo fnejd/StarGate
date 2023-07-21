@@ -11,6 +11,7 @@ import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.service.FUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +20,14 @@ import java.util.HashMap;
 
 /**
  * 팬 유저에 관한 Controller이다.
- * 회원가입, 로그인을 지원한다.
+ * 팬 정보 CRUD 및 로그인을 지원한다.
  */
 @RestController
 @RequestMapping("/fusers")
 @RequiredArgsConstructor
 @Slf4j
 public class FUserController {
+    @Autowired
     private final FUserService fUserService;
 
     /**
@@ -46,6 +48,9 @@ public class FUserController {
      * @param dto [FUserLoginRequestDto] 팬 로그인 request
      * @return [ResponseEntity<JwtResponseDto>] 성공: [200] JWT Response, 실패: [401]
      * @throws LoginException
+     */
+    /*
+    TODO: Login error throws로 바꾸기
      */
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDto> loginFUsers(@ModelAttribute FUserLoginRequestDto dto) throws LoginException {

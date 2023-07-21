@@ -4,6 +4,7 @@ package com.ssafy.stargate.model.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,13 +13,13 @@ import java.time.LocalDateTime;
  * 팬 유저 엔티티
  */
 @Entity
+@Table(name = "f_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
 @Getter
 @Setter
-public class FUser extends BaseEntity{
+public class FUser extends BaseEntity {
     @Id
     @Column
     private String email;
