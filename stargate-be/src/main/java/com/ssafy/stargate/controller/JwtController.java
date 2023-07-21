@@ -4,7 +4,6 @@ package com.ssafy.stargate.controller;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.service.JwtTokenService;
 import com.ssafy.stargate.util.JwtTokenUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +31,14 @@ public class JwtController {
 
     /**
      * refreshToken 을 받아서 만료된 accessToken 반환
-     * @param map HashMap<String, Object> refreshToken
-     * @return ResponseEntity<JwtResponseDto> 성공: [200] JWT Response, 실패: [600]
+     * @param token HashMap<String, Object> refreshToken
+     * @return [ResponseEntity<JwtResponseDto>] 성공: [200] JWT Response, 실패: [600]
      */
     @PostMapping("/new-access-token")
-    public ResponseEntity<JwtResponseDto> createNewToken(@RequestBody HashMap<String, Object> map){
+    public ResponseEntity<JwtResponseDto> createNewToken(@RequestBody HashMap<String, Object> token){
 
         try {
-            String refreshToken = (String) map.get("refreshToken");
+            String refreshToken = (String) token.get("refreshToken");
             return ResponseEntity.ok(jwtTokenService.create(refreshToken));
         }catch (Exception e){
             return ResponseEntity.status(600).build();

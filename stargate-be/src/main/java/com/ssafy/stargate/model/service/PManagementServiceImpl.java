@@ -1,6 +1,7 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.model.dto.common.PGroupDto;
+import com.ssafy.stargate.model.dto.common.PMemberDto;
 import com.ssafy.stargate.model.entity.PGroup;
 import com.ssafy.stargate.model.entity.PMember;
 import com.ssafy.stargate.model.entity.PUser;
@@ -9,7 +10,7 @@ import com.ssafy.stargate.model.repository.PMemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import jakarta.transaction.Transactional;
 import java.security.Principal;
 import java.util.List;
 
