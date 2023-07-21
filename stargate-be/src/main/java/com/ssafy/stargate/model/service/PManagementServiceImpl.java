@@ -7,6 +7,7 @@ import com.ssafy.stargate.model.entity.PMember;
 import com.ssafy.stargate.model.entity.PUser;
 import com.ssafy.stargate.model.repository.PGroupRepository;
 import com.ssafy.stargate.model.repository.PMemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,11 +99,13 @@ public class PManagementServiceImpl implements PManagementService {
     /**
      * 그룹 정보를 갱신한다.
      * 2023-07-20기준으로 이름만 변경한다.
-     * @param dto PGroupDto 그룹번호, 그룹이름
+     *
+     * @param dto       PGroupDto 그룹번호, 그룹이름
+     * @param principal
      */
     @Override
-    public void updateGroup(PGroupDto dto) {
-       PGroup pGroup = groupRepository.findById(dto.getGroupNo()).orElseThrow();
+    public void updateGroup(PGroupDto dto, Principal principal) {
+       PGroup pGroup = groupRepository.findByGroupNoAndEmail(dto.getGroupNo(),principal.getName());
        pGroup.setName(dto.getName());
        groupRepository.save(pGroup);
     }

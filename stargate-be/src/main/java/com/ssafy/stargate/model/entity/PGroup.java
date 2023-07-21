@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class PGroup {
 
     @ManyToOne
     @JoinColumn(name = "email",referencedColumnName = "email")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private PUser pUser;
 
 

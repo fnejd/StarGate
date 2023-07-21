@@ -15,7 +15,7 @@ public interface PManagementService {
 
     void deleteMember(PMemberDto dto);
 
-    void updateGroup(PGroupDto dto);
+    void updateGroup(PGroupDto dto, Principal principal);
 
     PMemberDto createMember(PGroupDto dto);
 

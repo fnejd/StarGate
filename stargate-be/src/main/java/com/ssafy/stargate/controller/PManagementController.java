@@ -62,11 +62,12 @@ public class PManagementController {
      * 그룹 정보를 변경한다. 실질적으로 이름만 변경한다.
      *
      * @param dto PGroupDto 그룹번호, 신규 이름이 포함된 그룹dto 객체를 반환한다.
+     * @param principal Principal 인증객체
      * @return 성공시 200 코드를 반환한다.
      */
     @PutMapping("/group/update")
-    public ResponseEntity<?> updateGroup(@RequestBody PGroupDto dto) {
-        managementService.updateGroup(dto);
+    public ResponseEntity<?> updateGroup(@RequestBody PGroupDto dto, Principal principal) {
+        managementService.updateGroup(dto, principal);
         return ResponseEntity.ok(null);
     }
 
