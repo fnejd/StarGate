@@ -2,15 +2,18 @@ package com.ssafy.stargate.util;
 
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.Base64;
 import java.util.Date;
 
@@ -67,7 +70,6 @@ public class JwtTokenUtil {
      * @return String accessToken
      */
     public String createAccessToken(String email, String auth) {
-        log.info("ASDFASDFEWASFKERKEFK32452345");
         return createToken(email, ACCESS_TOKEN_VALID_TIME, auth);
     }
 
@@ -101,7 +103,6 @@ public class JwtTokenUtil {
      * @return String 토큰에서 추출한 이메일
      */
     public String getEmailFromToken(String token) {
-        log.info("extracated");
         String email = String.valueOf(parseToken(token, key).getSubject());
         return email;
     }
@@ -161,6 +162,7 @@ public class JwtTokenUtil {
      */
     public String getAuthorityFromToken(String token){
         String auth = String.valueOf(parseToken(token, key).get("auth"));
+        log.info(auth);
         return auth;
     }
 

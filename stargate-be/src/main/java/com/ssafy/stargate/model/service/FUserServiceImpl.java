@@ -3,6 +3,7 @@ package com.ssafy.stargate.model.service;
 import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
+import com.ssafy.stargate.model.dto.common.FUserDto;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserRegisterRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
@@ -15,6 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * 팬 유저 서비스 구현체
@@ -76,4 +81,54 @@ public class FUserServiceImpl implements FUserService {
             throw new LoginException("팬 로그인 실패");
         }
     }
+
+    /**
+     * FUser 의 회원 정보 반환
+     * @param principal 유저 email이 포함된 principal 객체
+     * @return FUserDto 회원정보 객체
+     */
+    @Override
+    public FUserDto getFUser(Principal principal) throws Exception {
+        String email = principal.getName();
+        FUser fUser = fUserRepository.findById(email).orElseThrow(() ->new Exception("NO EMAIL"));
+
+        return FUserDto.builder()
+                .name(fUser.getName())
+                .email(fUser.getEmail())
+                .nickname(fUser.getNickname())
+                .password(fUser.getPassword())
+                .birthday(fUser.getBirthday())
+                .build();
+    }
+
+    /**
+     * FUser 회원 정보 수정
+     * @param fUserDto 회원 email 정보가 담긴 FUserDto 객체
+     */
+    @Override
+    public void updateFUser(FUserDto fUserDto) {
+
+        FUser fUser = fUserRepository.findById(fUserDto.getEmail()).orElseThrow();
+
+        fUser.setName(fUser.getName());
+        fUser.setPassword(fUser.getPassword());
+        fUser.setNickname(fUserDto.getNickname());
+        fUser.setBirthday(fUserDto.getBirthday());
+
+        fUserRepository.save(fUser);
+    }
+
+    /**
+     * FUser 회원 탈퇴
+     * @param fUserDto 회원 email 정보가 담긴 FUserDto 객체
+     * @param principal 유저 email이 포함된 principal 객체
+     */
+    @Override
+    public void deleteFUser(FUserDto fUserDto, Principal principal) {
+        fUserRepository.deleteById(principal.getName());
+    }
+
+
 }
+
+
