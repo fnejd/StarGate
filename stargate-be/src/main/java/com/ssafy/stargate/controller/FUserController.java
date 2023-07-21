@@ -4,19 +4,18 @@ import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.common.FUserDto;
+import com.ssafy.stargate.model.dto.common.FUserFindIdDto;
+import com.ssafy.stargate.model.dto.common.FUserFindPwDto;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
-import com.ssafy.stargate.model.dto.request.FUserRegisterRequestDto;
-import com.ssafy.stargate.model.dto.request.PUserRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.service.FUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
-import java.util.HashMap;
 
 /**
  * 팬 유저에 관한 Controller이다.
@@ -38,7 +37,7 @@ public class FUserController {
      * @throws RegisterException 회원가입 등록 실패
      */
     @PostMapping("/register")
-    public ResponseEntity<?> createFUsers(@ModelAttribute FUserRegisterRequestDto dto) throws EmailDuplicationException, RegisterException {
+    public ResponseEntity<?> createFUsers(@ModelAttribute @Validated FUserDto dto) throws EmailDuplicationException, RegisterException {
         fUserService.create(dto);
         return ResponseEntity.ok(null);
     }
@@ -53,7 +52,7 @@ public class FUserController {
     TODO: Login error throws로 바꾸기
      */
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDto> loginFUsers(@ModelAttribute FUserLoginRequestDto dto) throws LoginException {
+    public ResponseEntity<JwtResponseDto> loginFUsers(@ModelAttribute @Validated FUserLoginRequestDto dto) throws LoginException {
         try {
             return ResponseEntity.ok(fUserService.login(dto));
         } catch (LoginException e) {
@@ -63,43 +62,95 @@ public class FUserController {
 
     /**
      * 팬 유저 마이페이지 정보
-     * @param email HashMap<String, Object> email 회원 이메일
-     * @param principal 유저 email이 담긴 객체
+     * @param principal Principal 유저 email이 담긴 객체
      * @return [ResponseEntity<FUserDto>] 회원 정보
-     * @throws Exception
      */
-    @GetMapping("/info")
-    public ResponseEntity<FUserDto> getFUserInfo(@RequestBody HashMap<String, Object> email, Principal principal) throws Exception {
+    @GetMapping("/get")
+    public ResponseEntity<FUserDto> getFUserInfo(Principal principal){
         FUserDto fUser = fUserService.getFUser(principal);
         log.info("user{}", fUser);
         return ResponseEntity.ok(fUser);
     }
 
-
     /**
      * FUser 회원 정보 변경 (name, nickname, password, birthday 변경 가능)
-     * @param dto 팬회원 정보가 저장된 DTO
+     * @param dto FUserDto 팬회원 정보가 저장된 DTO
+     * @param principal Principal 유저 email이 담긴 객체
      * @return 성공 -> 200 코드 반환
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateFUserInfo(@ModelAttribute FUserDto dto){
-        fUserService.updateFUser(dto);
+    public ResponseEntity<?> updateFUserInfo(@ModelAttribute @Validated FUserDto dto, Principal principal){
+        fUserService.updateFUser(dto, principal);
+        return ResponseEntity.ok(null);
+    }
+
+
+    /**
+     * FUser 회원 탈퇴
+     * @param principal Principal 유저 email이 담긴 객체
+     * @return 성공 -> 200 코드 반환
+     */
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteFUserInfo(Principal principal){
+        fUserService.deleteFUser(principal);
         return ResponseEntity.ok(null);
     }
 
     /**
-     * FUser 회원 탈퇴
-     * @param dto 팬회원 정보가 저장된 DTO
-     * @param principal 유저 email이 담긴 객체
-     * @return 성공 -> 200 코드 반환
+     * FUser 아이디 찾기
+     * @param dto FUserFindIdDto 아이디를 찾기 위한 객체 (name,phone 정보 저장)
+     * @return [ResponseEntity<FUserFindIdDto>] (아이디- 이메일) 저장되어 있는 객체
+     * @throws LoginException
      */
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteFUserInfo(@RequestBody FUserDto dto, Principal principal){
-        fUserService.deleteFUser(dto, principal);
-        return ResponseEntity.ok(null);
+    @PostMapping("/find-id")
+    public ResponseEntity<?> findFUserId(@ModelAttribute @Validated FUserFindIdDto dto) throws LoginException {
+        try {
+            return ResponseEntity.ok(fUserService.getFUserId(dto));
+        } catch (LoginException e) {
+            return ResponseEntity.status(401).build();
+        }
     }
 
+    /**
+     * FUser 비밀번호 찾기 요청에 대해 인증 번호 발송
+     * @param dto FUserFindPwDto 비밀번호를 찾기 위한 객체 (이메일 정보 필수로 저장)
+     * @return [ResponseEntity<FUserFindPwDto>] 인증 번호가 저장되어 있는 객체 반환
+     * @throws LoginException
+     */
+    @PostMapping("/get-code")
+    public ResponseEntity<?> getCertifyCode(@RequestBody @Validated FUserFindPwDto dto) throws LoginException{
+        try {
+            return ResponseEntity.ok(fUserService.getCertifyCode(dto));
+        }catch (LoginException e){
+            return ResponseEntity.status(401).build();
+        }
+    }
 
+    /**
+     * 비밀번호 재설정하려 할때 인증 번호 확인 & 비밀번호 변경
+     * @param dto FUserFindPwDto 인증 번호를 담고 있는 객체 (이메일 정보 필수로 저장)
+     * @return 성공 -> 200, 실패 -> 401
+     * @throws LoginException 인증 번호 불일치
+     */
+    @PostMapping("/check-code")
+    public ResponseEntity<?> checkCertifyCode(@RequestBody @Validated FUserFindPwDto dto) throws LoginException{
+        try{
+            fUserService.checkCertify(dto);
 
+            return ResponseEntity.ok(null);
+        }catch (LoginException e){
+            return ResponseEntity.status(401).build();
+        }
+    }
+
+    /**
+     * 비밀 번호 재설정
+     * @param dto FUserFindPwDto FUser 의 이메일 정보와 새로운 비밀번호가 저장된 객체
+     * @return 성공 -> 200
+     */
+    @PostMapping("/new-pw")
+    public ResponseEntity<?> updateFUserPassword(@RequestBody @Validated FUserFindPwDto dto){
+        fUserService.updateFUserPw(dto);
+        return ResponseEntity.ok(null);
+    }
 }

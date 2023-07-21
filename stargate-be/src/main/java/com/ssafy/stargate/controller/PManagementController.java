@@ -27,7 +27,7 @@ public class PManagementController {
      * @param principal 소속사 email이 담긴 객체
      * @return List&lt;PGroupDto&gt; 그룹 목록(멤버 데이터 미포함)
      */
-    @GetMapping("/")
+    @GetMapping("/get")
     public ResponseEntity<?> getGroupList(Principal principal) {
         List<PGroupDto> groupList = managementService.getGroupList(principal);
         return ResponseEntity.ok(groupList);
