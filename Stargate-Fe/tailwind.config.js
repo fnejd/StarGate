@@ -1,7 +1,9 @@
+// tailwindcss 모듈에서 Config라는 타입을 임포트
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html",
+    // 모든 html 파일 경로 등록
+    "./**/*.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -105,6 +107,19 @@ export default {
         normal: 400,
         semibold: 600,
       },
+      transitionDuration: {
+        0: '0ms',
+        100: '100ms',
+        slow: '200ms',
+        300: '300ms',
+        normal: '400ms',
+        500: '500ms',
+        fast: '600ms',
+        700: '700ms',
+        800: '800ms',
+        900: '900ms',
+        1000: '1000ms',
+      }
     },
   },
   plugins: [],
