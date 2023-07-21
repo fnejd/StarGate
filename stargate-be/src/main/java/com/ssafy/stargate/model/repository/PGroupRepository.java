@@ -14,6 +14,9 @@ public interface PGroupRepository extends JpaRepository<PGroup,Long> {
     @Query("SELECT pg from PGroup pg where pg.pUser.email = :email ")
     List<PGroup> findAllByEmail(@Param("email") String email);
 
+    @Query("SELECT pg from PGroup pg inner join pg.pUser pu where pg.groupNo = :groupNo and pu.email = :email")
+    PGroup findByGroupNoAndEmail(@Param("groupNo") long groupNo, @Param("email") String email);
+
     @Modifying
     @Query("DELETE from PGroup pg where pg.groupNo = :groupNo and pg.pUser.email = :email")
     void deleteGroupByGroupNo(@Param("groupNo") long groupNo, @Param("email") String email);

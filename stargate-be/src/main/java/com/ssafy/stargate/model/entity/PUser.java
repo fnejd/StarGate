@@ -28,10 +28,13 @@ public class PUser {
     @Column(name = "code")
     private String code;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "password")
     private String password;
 
-    @Column(name = "join_date",columnDefinition = "timestamp default current_timestamp()")
+    @Column(name = "join_date", columnDefinition = "timestamp default current_timestamp()")
     private LocalDateTime joinDate;
 
     @OneToMany(mappedBy = "pUser", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -2,9 +2,10 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
+import com.ssafy.stargate.exception.PasswordFailException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
-import com.ssafy.stargate.model.dto.request.PUserRequestDto;
+import com.ssafy.stargate.model.dto.request.PUserDto;
 import com.ssafy.stargate.model.entity.PUser;
 import com.ssafy.stargate.model.repository.PUserRepository;
 import com.ssafy.stargate.util.JwtTokenUtil;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 /**
@@ -39,7 +41,7 @@ public class PUserServiceImpl implements PUserService {
      * @throws RegisterException 중복가입 발생시 던지는 예외이다.
      */
     @Override
-    public void register(PUserRequestDto dto) throws EmailDuplicationException, RegisterException {
+    public void register(PUserDto dto) throws EmailDuplicationException, RegisterException {
         PUser dbCheck = pUserRepository.findById(dto.getEmail()).orElse(null);
         if (dbCheck != null) {
             throw new EmailDuplicationException("아이디 중복");
@@ -59,7 +61,7 @@ public class PUserServiceImpl implements PUserService {
      * @return String : 새로 생성한 JWT 를 반환한다.
      */
     @Override
-    public JwtResponseDto login(PUserRequestDto dto) throws LoginException{
+    public JwtResponseDto login(PUserDto dto) throws LoginException{
         PUser pUser = pUserRepository.findById(dto.getEmail()).orElseThrow(() -> new LoginException("해당 이메일 없음"));
         if(passwordEncoder.matches(dto.getPassword(),pUser.getPassword())){
             return JwtResponseDto.builder()
@@ -69,5 +71,34 @@ public class PUserServiceImpl implements PUserService {
         }else{
             throw new LoginException("소속사 로그인 실패");
         }
+    }
+
+    /**
+     * 소속사 유저를 삭제한다.
+     * @param dto PUserRequestDto 삭제할 유저의 이메일, 비밀번호
+     */
+    @Override
+    public void deletePUser(PUserDto dto, Principal principal) {
+        PUser pUser = pUserRepository.findById(principal.getName()).orElseThrow();
+        if(passwordEncoder.matches(dto.getPassword(),pUser.getPassword())){
+            pUserRepository.delete(pUser);
+        }else{
+            throw new PasswordFailException("비밀번호가 틀렸습니다.");
+        }
+    }
+
+    /**
+     * 소속사 계정 정보를 principal을 기반으로 가져오자.
+     * @param principal 인증 객체(Email 추출용)
+     * @return PUserData 소속사 계정 정보
+     */
+    @Override
+    public PUserDto getPUserData(Principal principal) {
+        PUser pUser = pUserRepository.findById(principal.getName()).orElseThrow();
+        return PUserDto.builder()
+                .name(pUser.getName())
+                .email(pUser.getEmail())
+                .code(pUser.getCode())
+                .build();
     }
 }
