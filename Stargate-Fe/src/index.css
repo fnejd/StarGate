@@ -1,5 +1,8 @@
+/* Tailwind 기본 스타일과 플러그인에 의해 등록된 모든 기본 스타일을 주입 */
 @tailwind base;
+/* Tailwind 컴포넌트 클래스와 플러그인에 의해 등록된 컴포넌트 클래스를 주입 */
 @tailwind components;
+/* Tailwind 유틸리티 클래스와 플러그인에 의해 등록된 모든 유틸리티 클래스를 주입 */
 @tailwind utilities;
 
 @font-face {
