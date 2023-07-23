@@ -52,16 +52,16 @@
 }
 
 @layer components {
-  .medium-white {
-    @apply font-suit text-28 font-medium text-white
+  .medium-blue {
+    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl
   }
 
-  .medium-blue {
-    @apply font-suit text-28 font-medium text-mainblue
+  .medium-white {
+    @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl
   }
 
   .form-title {
-    @apply font-suit text-60 font-medium text-white
+    @apply font-suit text-32 font-medium text-white
   }
 
   .input-warning {

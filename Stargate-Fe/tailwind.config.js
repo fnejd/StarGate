@@ -11,6 +11,12 @@ export default {
   ],
   theme: {
     extend: {
+      height: {
+        400: '400px',
+        500: '500px',
+        550: '550px',
+        600: '600px',
+      },
       colors: {
         g1: '#f6f6f6',
         g2: '#e7e7e7',
@@ -73,6 +79,7 @@ export default {
         y11: '#432005',
 
         red: '#DC2626',
+        admingray: '#DADADA',
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],
@@ -113,6 +120,13 @@ export default {
         800: '800ms',
         900: '900ms',
         1000: '1000ms',
+      },
+      borderRadius: {
+        xs: '2px',
+        sm: '4px',
+        md: '8px',
+        lg: '16px',
+        xl: '32px',
       }
     },
   },
