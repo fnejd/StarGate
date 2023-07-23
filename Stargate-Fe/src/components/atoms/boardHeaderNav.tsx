@@ -1,11 +1,15 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
-const boardHeaderNav = () => {
+const BoardHeaderNav = () => {
+
   return <div className='w-screen flex justify-end'>
-    <div className=''>
-      네비게이션이에용
+    <div className='flex w-1/4 justify-evenly'>
+      <NavLink className="text-black aria-[current=page]:p1b" to="/board">대시보드</NavLink>
+      <NavLink className="text-black aria-[current=page]:p1b" to="/mypage">마이페이지</NavLink>
+      <div>로그아웃</div>
     </div>
   </div>;
 };
 
-export default boardHeaderNav;
+export default BoardHeaderNav;

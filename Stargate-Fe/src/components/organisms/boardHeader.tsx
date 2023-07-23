@@ -1,7 +1,8 @@
 import React from 'react';
-import BoardHeaderNav from '../atoms/boardHeaderNav';
-import BoardHeaderTitle from '../atoms/boardHeaderTitle';
-const boardHeader = () => {
+import BoardHeaderNav from '../atoms/BoardHeaderNav';
+import BoardHeaderTitle from '../atoms/BoardHeaderTitle';
+
+const BoardHeader = () => {
   return (
     <div>
       <BoardHeaderNav></BoardHeaderNav>
@@ -10,4 +11,4 @@ const boardHeader = () => {
   );
 };
 
-export default boardHeader;
+export default BoardHeader;
