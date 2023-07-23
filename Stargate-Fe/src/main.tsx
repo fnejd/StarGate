@@ -19,6 +19,7 @@ import AdminMyPage from './pages/admin/board/adminMyPage.tsx';
 import AdminEventCreate from './pages/admin/event/adminEventCreate.tsx';
 import AdminEventDetail from './pages/admin/event/adminEventDetail.tsx';
 import AdminMonitoring from './pages/admin/event/adminMonitoring.tsx';
+import './index.css'; // CSS 파일을 import
 
 const router = createBrowserRouter([
   { path: '/', element: <SignIn /> },
