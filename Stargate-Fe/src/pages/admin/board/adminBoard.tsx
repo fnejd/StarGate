@@ -11,7 +11,7 @@ const dummy ={
 }
 
 const adminBoard = () => {
-  return <div className='h-screen'>
+  return <div className='w-screen h-screen'>
     <AdminBoardHeader></AdminBoardHeader>
     <BoardCardBox
     imageSrc={dummy.Image}

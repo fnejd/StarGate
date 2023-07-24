@@ -12,8 +12,8 @@ const dummy = {
 
 const board = () => {
   return (
-    <div className='w-screen'>
-      <BoardHeader></BoardHeader>
+    <div className='w-screen h-screen'>
+      <BoardHeader/>
       <BoardCardBox
         imageSrc={dummy.Image}
         title={dummy.title}

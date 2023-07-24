@@ -15,8 +15,10 @@ const AdminManagementModal = () => {
 
   return (
     <div>
-      <ModalPlusButton onClick={handleCircleClick} />
-      <ModalBox isOpen={isModalOpen} onClose={handleModalClose} />
+      <div>
+        <ModalPlusButton onClick={handleCircleClick} />
+        <ModalBox isOpen={isModalOpen} onClose={handleModalClose} />
+      </div>
     </div>
   );
 };
