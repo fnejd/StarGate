@@ -1,9 +1,10 @@
 import React from 'react';
+import SignInComponent from '../../components/organisms/SignInComponent';
 
 const signIn = () => {
     return (
         <div>
-            로그인
+            <SignInComponent />
         </div>
     );
 };

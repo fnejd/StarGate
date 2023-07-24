@@ -6,8 +6,8 @@ interface TextButtonProps {
 
 const TextButtonComponent: React.FC<TextButtonProps> = ({ text }) => {
   return (
-    <div className="m-2">
-      <a className="text-slate-50 text-14 font-semibold">{text}</a>
+    <div className="ml-2 mr-2 mb-2">
+      <a className="text-slate-50 text-12 font-semibold">{text}</a>
     </div>
   );
 };

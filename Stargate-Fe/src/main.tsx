@@ -1,4 +1,6 @@
 import React from 'react';
+import './index.css';
+import './App.css';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import SignIn from './pages/auth/signIn.tsx';
@@ -27,7 +29,7 @@ const router = createBrowserRouter([
   {path: '/pwinquiry', element: <PwInquiry />},
   {path: '/pwreset', element: <PwReset />},
   {path: '/board', element: <Board /> },
-  {path: '/mypage', element: <MyPage /> },
+  {path: '/mypage', element: <MyPage /> }, 
   {path: '/remind', element: <Remind />},
   {path: '/ready', element: <Ready />},
   {path: '/video', element: <Video />},
