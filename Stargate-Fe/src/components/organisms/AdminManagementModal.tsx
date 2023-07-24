@@ -15,8 +15,15 @@ const AdminManagementModal = () => {
 
   return (
     <div>
-      <div className='lg:min-h-fit h-2/3 bg-black'>
-        <ModalPlusButton onClick={handleCircleClick} />
+      <div className='border-2 w-50vw h-600 flex flex-col justify-between'>
+        <div>
+          <button>그룹1</button>
+          <button>그룹2</button>
+          <button>그룹3</button>
+        </div>
+        <div className='self-end'>
+          <ModalPlusButton onClick={handleCircleClick} />
+        </div>
         <ModalBox isOpen={isModalOpen} onClose={handleModalClose} />
       </div>
     </div>

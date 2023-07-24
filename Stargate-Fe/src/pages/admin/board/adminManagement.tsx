@@ -3,10 +3,12 @@ import AdminBoardHeaderNav from '../../../components/atoms/AdminBoardHeaderNav'
 import AdminManagementModal from '../../../components/organisms/AdminManagementModal';
 
 const adminManagement = () => {
-  return <div className='h-screen'>
+  return <div className='w-screen h-screen'>
     <AdminBoardHeaderNav />
-    관리자 연예인관리
-    <AdminManagementModal />
+    <div className='flex flex-col justify-center items-center'>
+      <p className='form-title bg-black'>소속 연예인 관리</p>
+      <AdminManagementModal />
+    </div>
   </div>;
 };
 
