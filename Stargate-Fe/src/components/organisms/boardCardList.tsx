@@ -1,23 +1,32 @@
 import React from 'react';
 import BoardCard from '../atoms/BoardCard';
 
-const BoardCardList = () => {
-  return <div className="h-5/6 w-full lg:h-96 md:h-56 sm:h-56 flex justify-center">
-    <div className='w-3/4 flex justify-evenly'>
-      <div className='p-4 sm:w-1/2 lg:w-1/5 h-full'>
-        <BoardCard />
-      </div>
-      <div className='p-4 sm:w-1/2 lg:w-1/5'>
-        <BoardCard />
-      </div>
-      <div className='p-4 sm:w-1/2 lg:w-1/5'>
-        <BoardCard />
-      </div>
-      <div className='p-4 sm:w-1/2 lg:w-1/5'>
-        <BoardCard />
+interface BoardCardProps {
+  imageSrc: string;
+  title?: string;
+  date?: string;
+  time?: string;
+}
+
+const BoardCardList = ({ imageSrc, title, date, time }: BoardCardProps) => {
+  return (
+    <div className="h-5/6 lg:h-96 sm:h-56 flex justify-center">
+      <div className='w-5/6 flex justify-evenly flex-wrap'>
+        <div className='w-1/4 h-full'>
+          <BoardCard imageSrc={imageSrc} title={title} date={date} time={time} />
+        </div>
+        <div className='w-1/4'>
+          <BoardCard imageSrc={imageSrc} title={title} date={date} time={time} />
+        </div>
+        <div className='w-1/4'>
+          <BoardCard imageSrc={imageSrc} title={title} date={date} time={time} />
+        </div>
+        <div className='w-1/4'>
+          <BoardCard imageSrc={imageSrc} title={title} date={date} time={time} />
+        </div>
       </div>
     </div>
-  </div>;
+  );
 };
 
 export default BoardCardList;

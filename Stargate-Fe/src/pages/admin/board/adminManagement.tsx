@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminBoardHeaderNav from '../../../components/atoms/AdminBoardHeaderNav'
-import AdminManagementModal from '../../../components/atoms/AdminManagementModal';
+import AdminManagementModal from '../../../components/organisms/AdminManagementModal';
 
 const adminManagement = () => {
   return <div>
