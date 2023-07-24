@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './index.css'
 import SignIn from './pages/auth/signIn.tsx';
 import SignUp from './pages/auth/signUp.tsx';
 import IdInquiry from './pages/auth/idInquiry.tsx';
