@@ -1,4 +1,8 @@
 import { Plugin } from 'tailwindcss';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9abf38bf0b739321b20ba53f6da2720c56214d42
 // tailwindcss 모듈에서 Config라는 타입을 임포트
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -16,6 +20,7 @@ export default {
         550: '550px',
         600: '600px',
       },
+<<<<<<< HEAD
       width: {
         '30vw': '30vw',
         '50vw': '50vw',
@@ -23,6 +28,8 @@ export default {
         '90vw': '90vw',
         '98vw': '98vw',
       },
+=======
+>>>>>>> 9abf38bf0b739321b20ba53f6da2720c56214d42
       colors: {
         g1: '#f6f6f6',
         g2: '#e7e7e7',
@@ -86,6 +93,10 @@ export default {
 
         red: '#DC2626',
         admingray: '#DADADA',
+<<<<<<< HEAD
+=======
+        endbg: '#E7F1FF',
+>>>>>>> 9abf38bf0b739321b20ba53f6da2720c56214d42
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],

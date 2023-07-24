@@ -18,8 +18,13 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      "@/*": ["./src/*"],
+    },
   },
-  "include": ["src"],
+  "include": ["src",  "vite.config.ts",  "tailwind.config.js"],
+  // "extends": "./tsconfig.json",
   "references": [{ "path": "./tsconfig.node.json" }]
 }
