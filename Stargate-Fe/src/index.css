@@ -43,7 +43,7 @@
   }
   
   button:disabled {
-   @apply cursor-not-allowed;
+    @apply cursor-not-allowed;
   }
 
   abbr[title] {
@@ -242,3 +242,4 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
