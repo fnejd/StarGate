@@ -22,16 +22,16 @@ const AdminSignUpComponent = () => {
         <button className="medium-white p3r min-w-max w-full h-10 rounded-lg">이메일 확인</button>
       </div>
       <div className="flex">
-        <InputComponent text="회사명" type="text" notice={null} state={null} />
+        <InputComponent text="회사명" type="text" />
       </div>
       <div className="flex">
-        <InputComponent text="사업자 번호" type="text" notice={null} state={null} />
+        <InputComponent text="사업자 번호" type="text" />
       </div>
       <div className="flex">
         <PasswordFormComponent text="비밀번호" />
       </div>
       <div className="flex">
-        <InputComponent text="비밀번호 확인" type="password" notice={null} state={null} />
+        <InputComponent text="비밀번호 확인" type="password" />
       </div>
       <button className="medium-white" onClick={AdminSignUp}>회원가입</button>
     </div>

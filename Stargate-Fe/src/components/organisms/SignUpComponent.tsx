@@ -29,22 +29,22 @@ const SignUpComponent = () => {
         <button className="medium-white p3r w-full h-10 rounded-lg" onClick={verify}>이메일 확인</button>
       </div>
       <div className="flex">
-        <InputComponent text="이름" type="text" notice={null} state={null} />
+        <InputComponent text="이름" type="text" />
       </div>
       <div className="flex">
-        <InputComponent text="닉네임" type="text" notice={null} state={null} />
+        <InputComponent text="닉네임" type="text" />
       </div>
       <div className="flex">
         <PasswordFormComponent text="비밀번호" />
       </div>
       <div className="flex">
-        <InputComponent text="비밀번호 확인" type="password" notice={null} state={null} />
+        <InputComponent text="비밀번호 확인" type="password" />
       </div>
       <div className="flex">
-        <InputComponent text="전화번호" type="text" notice={null} state={null} />
+        <InputComponent text="전화번호" type="text" />
       </div>
       <div className="flex">
-        <InputComponent text="생년월일" type="text" notice={null} state={null} />
+        <InputComponent text="생년월일" type="text" />
       </div>
       <button className="medium-white">회원가입</button>
     </div>

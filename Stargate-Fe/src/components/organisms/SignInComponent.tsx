@@ -13,7 +13,7 @@ const SignInComponent = () => {
 
   return (
     <div className="max-w-sm ml-auto mr-auto">
-      <InputComponent type="text" text="이메일" notice={null} state={null} />
+      <InputComponent type="text" text="이메일" />
       <InputComponent
         type="password"
         text="비밀번호"

@@ -12,8 +12,8 @@ import React from "react";
 interface InputProps {
   type: string;
   text: string;
-  notice: string | null;
-  state: string | null;
+  notice?: string;
+  state?: string;
 }
 
 const InputComponent: React.FC<InputProps> = ({ type, text, notice, state }) => {

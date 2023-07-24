@@ -17,14 +17,14 @@ const PasswordFormComponent: React.FC<PasswordFormProps> = ({ text }) => {
   return (
     visiable ? (
       <div className="flex w-full h-full">
-        <InputComponent text={text} type="text" notice={null} state={null} />
+        <InputComponent text={text} type="text" />
         <div className="flex items-center" onClick={() => setVisiable(false)}>
           <PWHidden />
         </div>
       </div>
     ) : (
       <div className="flex w-full h-full">
-        <InputComponent text={text} type="password" notice={null} state={null} />
+        <InputComponent text={text} type="password" />
         <div className="flex items-center" onClick={() => setVisiable(true)}>
           <PWShown />
         </div>
