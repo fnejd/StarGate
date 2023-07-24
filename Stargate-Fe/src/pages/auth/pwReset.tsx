@@ -1,7 +1,12 @@
 import React from 'react';
+import PwresetComponent from '../../components/organisms/PwresetComponent';
 
 const pwreset = () => {
-  return <div>비밀번호 재설정</div>;
+  return (
+    <div>
+      <PwresetComponent />
+    </div>
+  );
 };
 
 export default pwreset;

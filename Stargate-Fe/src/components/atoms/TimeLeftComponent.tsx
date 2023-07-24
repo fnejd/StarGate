@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+/**
+ * @param min => 출력될 분
+ * @param sec => 출력될 초
+ */
+
 interface TimeProps { 
   min: number;
   sec: number;
