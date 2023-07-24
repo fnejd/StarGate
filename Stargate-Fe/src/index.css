@@ -1,5 +1,8 @@
+/* Tailwind 기본 스타일과 플러그인에 의해 등록된 모든 기본 스타일을 주입 */
 @tailwind base;
+/* Tailwind 컴포넌트 클래스와 플러그인에 의해 등록된 컴포넌트 클래스를 주입 */
 @tailwind components;
+/* Tailwind 유틸리티 클래스와 플러그인에 의해 등록된 모든 유틸리티 클래스를 주입 */
 @tailwind utilities;
 
 @font-face {
@@ -30,7 +33,49 @@
   font-style: normal;
 }
 
+@layer base {
+  [hidden] {
+    @apply hidden;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+  
+  button:disabled {
+   @apply cursor-not-allowed;
+  }
+
+  abbr[title] {
+    @apply cursor-help no-underline;
+  }
+}
+
 @layer components {
+  .medium-blue {
+    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl
+  }
+
+  .medium-white {
+    @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl
+  }
+
+  .form-title {
+    @apply font-suit text-32 font-medium text-white
+  }
+
+  .input-warning {
+    @apply font-suit text-16 font-medium text-red
+  }
+
+  .page-title-md {
+    @apply font-suit text-16 font-medium text-white
+  }
+
+  .modal-title {
+    @apply font-suit text-16 font-medium text-white
+  }
+
   .t1b {
     @apply font-kreon text-160 font-semibold leading-120;
   }
@@ -197,3 +242,4 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+

@@ -1,9 +1,10 @@
 import React from "react";
+import AdminSignUpComponent from "../../../components/organisms/AdminSignUpComponent";
 
 const adminSignUp = () => {
   return (
     <div>
-      관리자 회원가입
+      <AdminSignUpComponent />
     </div>
   );
 };

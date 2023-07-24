@@ -3,9 +3,9 @@ import SignUpComponent from '../../components/organisms/SignUpComponent';
 
 const signup = () => {
     return (
-        <div>
-            <SignUpComponent />
-        </div>
+      <div>
+        <SignUpComponent />
+      </div>
     );
 };
 
