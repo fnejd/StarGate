@@ -1,3 +1,11 @@
+html {
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
+  --tw-gradient-from: #E7F1FF var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(231 241 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: #0010ff var(--tw-gradient-to-position);
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
