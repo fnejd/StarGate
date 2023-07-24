@@ -4,7 +4,7 @@ import BoardHeaderTitle from '../atoms/BoardHeaderTitle';
 
 const AdminBoardHeader = () => {
   return (
-    <div>
+    <div className='w-full'>
       <AdminBoardHeaderNav></AdminBoardHeaderNav>
       <BoardHeaderTitle></BoardHeaderTitle>
     </div>

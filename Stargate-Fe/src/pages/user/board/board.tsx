@@ -12,7 +12,7 @@ const dummy = {
 
 const board = () => {
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-98vw h-screen'>
       <BoardHeader/>
       <BoardCardBox
         imageSrc={dummy.Image}

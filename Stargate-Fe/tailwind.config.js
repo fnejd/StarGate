@@ -16,6 +16,13 @@ export default {
         550: '550px',
         600: '600px',
       },
+      width: {
+        '30vw': '30vw',
+        '50vw': '50vw',
+        '70vw': '70vw',
+        '90vw': '90vw',
+        '98vw': '98vw',
+      },
       colors: {
         g1: '#f6f6f6',
         g2: '#e7e7e7',

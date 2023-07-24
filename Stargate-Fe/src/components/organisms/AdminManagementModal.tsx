@@ -15,7 +15,7 @@ const AdminManagementModal = () => {
 
   return (
     <div>
-      <div>
+      <div className='lg:min-h-fit h-2/3 bg-black'>
         <ModalPlusButton onClick={handleCircleClick} />
         <ModalBox isOpen={isModalOpen} onClose={handleModalClose} />
       </div>
