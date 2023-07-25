@@ -5,6 +5,7 @@ import PolariodCard from '@/atoms/PolariodCard.tsx'
 import AdminBtn from '@/atoms/AdminBtn.tsx';
 import AdminInput from '@/atoms/AdminInput.tsx';
 import MeetingLeftSection from '@/organisms/MeetingLeftSection.tsx';
+import MeetingRightSection from '@/organisms/MeetingRightSection.tsx';
 
 const SignIn = () => {
   const handleClick = () => {
@@ -18,6 +19,7 @@ const SignIn = () => {
     // 임시
     <div className='bg-slate-700'>
       <MeetingLeftSection />
+      <MeetingRightSection />
       {/* <BtnWhite text="Click me" onClick={handleClick} />
       <BtnBlue text="Click me" onClick={handleClick} />
       <PolariodCard imageUrl={imageUrl} caption={caption} />
