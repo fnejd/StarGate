@@ -2,7 +2,7 @@ import React from 'react';
 import BoardHeaderNav from '../../../components/atoms/BoardHeaderNav';
 import MyPageBox from '../../../components/organisms/MyPageBox';
 
-const myPage = () => {
+const MyPage = () => {
   return <div className='h-screen w-screen'>
     <BoardHeaderNav></BoardHeaderNav>
     <div className='flex w-full justify-center items-center'>
@@ -11,4 +11,4 @@ const myPage = () => {
   </div>;
 };
 
-export default myPage;
+export default MyPage;

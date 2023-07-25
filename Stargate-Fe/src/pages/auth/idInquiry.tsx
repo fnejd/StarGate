@@ -1,7 +1,7 @@
 import React from 'react';
 import IdinquiryComponent from '../../components/organisms/IdinquiryComponent';
 
-const idinquiry = () => {
+const Idinquiry = () => {
   return (
     <div>
       <IdinquiryComponent />
@@ -9,4 +9,4 @@ const idinquiry = () => {
   );
 };
 
-export default idinquiry;
+export default Idinquiry;

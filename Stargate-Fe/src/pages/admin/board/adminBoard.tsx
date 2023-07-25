@@ -10,7 +10,7 @@ const dummy ={
   time : '00:05' 
 }
 
-const adminBoard = () => {
+const AdminBoard = () => {
   return <div className='w-98vw h-screen'>
     <AdminBoardHeader></AdminBoardHeader>
     <BoardCardBox
@@ -37,4 +37,4 @@ const adminBoard = () => {
   </div>;
 };
 
-export default adminBoard;
+export default AdminBoard;
