@@ -7,11 +7,14 @@ import com.ssafy.stargate.model.dto.common.FUserDto;
 import com.ssafy.stargate.model.dto.common.FUserFindIdDto;
 import com.ssafy.stargate.model.dto.common.FUserFindPwDto;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
+import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.entity.Certify;
 import com.ssafy.stargate.model.entity.FUser;
+import com.ssafy.stargate.model.entity.JwtToken;
 import com.ssafy.stargate.model.repository.CertifyRepository;
 import com.ssafy.stargate.model.repository.FUserRepository;
+import com.ssafy.stargate.model.repository.JwtTokenRepository;
 import com.ssafy.stargate.util.JwtTokenUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +48,10 @@ public class FUserServiceImpl implements FUserService {
     @Autowired
     private CertifyRepository certifyRepository;
 
+    @Autowired
+    private JwtTokenRepository jwtTokenRepository;
+
+
     /**
      * 팬 유저 회원가입을 진행한다.
      *
@@ -72,7 +79,7 @@ public class FUserServiceImpl implements FUserService {
     }
 
     /**
-     * 팬 로그인을 진행한다.
+     * 팬 로그인을 진행한다. refreshToken 을 JwtToken 에 저장
      * @param dto [FUserLoginRequestDto] 유저 로그인 정보
      * @return [JwtResponseDto] 새로 생성한 JWT
      * @throws LoginException 로그인 에러
@@ -80,10 +87,23 @@ public class FUserServiceImpl implements FUserService {
     @Override
     public JwtResponseDto login(FUserLoginRequestDto dto) throws LoginException {
         FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow(() -> new LoginException("해당 이메일 없음"));
+
         if(passwordEncoder.matches(dto.getPassword(), fUser.getPassword())) {
+
+            String refreshToken = jwtTokenUtil.createRefreshToken(fUser.getEmail(),"USER");
+
+            String accessToken = jwtTokenUtil.createAccessToken(fUser.getEmail(),"USER");
+
+            JwtToken jwtToken = JwtToken.builder()
+                    .email(dto.getEmail())
+                    .refreshToken(refreshToken)
+                    .build();
+
+            jwtTokenRepository.save(jwtToken);
+
              return JwtResponseDto.builder()
-                    .refreshToken(jwtTokenUtil.createRefreshToken(fUser.getEmail(),"USER"))
-                    .accessToken(jwtTokenUtil.createAccessToken(fUser.getEmail(),"USER"))
+                    .refreshToken(refreshToken)
+                    .accessToken(accessToken)
                     .build();
 
         } else {
@@ -116,14 +136,21 @@ public class FUserServiceImpl implements FUserService {
      * @param principal Principal 유저 email이 포함된 principal 객체
      */
     @Override
-    public void updateFUser(FUserDto fUserDto, Principal principal) {
+    public void updateFUser(FUserUpdateRequestDto fUserDto, Principal principal) {
 
         FUser fUser = fUserRepository.findById(principal.getName()).orElseThrow();
 
-        fUser.setName(fUser.getName());
-        fUser.setPassword(fUser.getPassword());
+        log.info("팬 유저 비밀번호 {}", fUser.getPassword());
+        log.info("팬 유저 새로운 비밀번호 {}", fUserDto.getPassword());
+
+        if(fUserDto.getNewPassword() != null && !passwordEncoder.matches(fUserDto.getNewPassword(), fUser.getPassword())){
+            fUser.setPassword(passwordEncoder.encode(fUserDto.getNewPassword()));
+        }
+        log.info("팬 유저 입력 받은 이름 {}", fUserDto.getName());
+        fUser.setName(fUserDto.getName());
         fUser.setNickname(fUserDto.getNickname());
         fUser.setBirthday(fUserDto.getBirthday());
+        fUser.setPhone(fUserDto.getPhone());
 
         fUserRepository.save(fUser);
     }
@@ -135,6 +162,7 @@ public class FUserServiceImpl implements FUserService {
     @Override
     public void deleteFUser(Principal principal) {
         fUserRepository.deleteById(principal.getName());
+        jwtTokenRepository.deleteById(principal.getName());
     }
 
     /**
@@ -151,6 +179,8 @@ public class FUserServiceImpl implements FUserService {
             throw new LoginException("아이디 찾기 실패 : 해당 정보와 일치 하는 회원이 없습니다.");
         }
         return FUserFindIdDto.builder()
+                .name(fUser.getName())
+                .phone(fUser.getPhone())
                 .email(fUser.getEmail())
                 .build();
     }
@@ -165,9 +195,12 @@ public class FUserServiceImpl implements FUserService {
     @Override
     public FUserFindPwDto getCertifyCode(FUserFindPwDto dto) throws LoginException{
 
+        log.info("비밀번호 찾기 {}", dto.getEmail());
+
         FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow();
 
-        log.info("이메일로 찾은 회원 정보 {}", fUser);
+        log.info("이메일로 찾은 회원 정보 {}", fUser.getEmail());
+
 
         if(fUser != null){
             String certify = RandomStringUtils.randomNumeric(10);
@@ -219,6 +252,13 @@ public class FUserServiceImpl implements FUserService {
         fUser.setPassword(dto.getPassword());
 
         fUserRepository.save(fUser);
+
+        Certify certify = certifyRepository.findByfUserEmail(dto.getEmail());
+
+        if(certify != null){
+            certifyRepository.delete(certify);
+        }
+
     }
 }
 

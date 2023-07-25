@@ -1,7 +1,9 @@
 package com.ssafy.stargate.filter;
 
+import com.ssafy.stargate.exception.InvalidTokenException;
 import com.ssafy.stargate.util.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,25 +43,33 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String bearerToken = request.getHeader("Authorization");
-        String token = null;
-
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            token = bearerToken.substring(7);
-        }
+        String token = getToken(request);
+//        log.info("info log= {} bearer 뺸 token",token);
 
         try {
             if (token != null && jwtTokenUtil.validateToken(token)) {
                 Authentication authentication = jwtTokenUtil.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (ExpiredJwtException jwtException) {
-            log.info("[ERR] : 만료된 JWT TOKEN");
-            response.setStatus(601);
-            response.getWriter().write("만료된 토큰입니다");
-            response.getWriter().flush();
+        } catch (ExpiredJwtException | SecurityException | UnsupportedJwtException jwtException) {
+            throw new InvalidTokenException("유효하지 않은 토큰입니다.");
         }
         filterChain.doFilter(request, response);
+    }
+
+    /**
+     * Bearer 를 제외한 토큰 반환
+     * @param request HttpServletRequest
+     * @return String Bearer 를 제외한 토큰
+     */
+    private String getToken(HttpServletRequest request){
+
+        String bearerToken = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }
 

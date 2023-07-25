@@ -1,6 +1,7 @@
 package com.ssafy.stargate.controller;
 
 
+import com.ssafy.stargate.exception.InvalidTokenException;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.service.JwtTokenService;
 import com.ssafy.stargate.util.JwtTokenUtil;
@@ -40,8 +41,8 @@ public class JwtController {
         try {
             String refreshToken = (String) token.get("refreshToken");
             return ResponseEntity.ok(jwtTokenService.create(refreshToken));
-        }catch (Exception e){
-            return ResponseEntity.status(600).build();
+        }catch (InvalidTokenException e){
+            return ResponseEntity.status(e.getStatus()).build();
         }
     }
 }
