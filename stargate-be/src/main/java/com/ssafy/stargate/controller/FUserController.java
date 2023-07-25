@@ -7,7 +7,7 @@ import com.ssafy.stargate.model.dto.common.FUserDto;
 import com.ssafy.stargate.model.dto.common.FUserFindIdDto;
 import com.ssafy.stargate.model.dto.common.FUserFindPwDto;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
-import com.ssafy.stargate.model.dto.request.FUserRegisterRequestDto;
+import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.service.FUserService;
 import lombok.RequiredArgsConstructor;
@@ -75,12 +75,12 @@ public class FUserController {
 
     /**
      * FUser 회원 정보 변경 (name, nickname, password, birthday 변경 가능)
-     * @param dto FUserDto 팬회원 정보가 저장된 DTO
+     * @param dto FUserUpdateRequestDto 팬회원 정보가 저장된 DTO
      * @param principal Principal 유저 email이 담긴 객체
      * @return 성공 -> 200 코드 반환
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateFUserInfo(@ModelAttribute @Validated FUserDto dto, Principal principal){
+    public ResponseEntity<?> updateFUserInfo(@ModelAttribute @Validated FUserUpdateRequestDto dto, Principal principal){
         fUserService.updateFUser(dto, principal);
         return ResponseEntity.ok(null);
     }
@@ -108,7 +108,7 @@ public class FUserController {
         try {
             return ResponseEntity.ok(fUserService.getFUserId(dto));
         } catch (LoginException e) {
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(e.getStatus()).build();
         }
     }
 
@@ -123,7 +123,7 @@ public class FUserController {
         try {
             return ResponseEntity.ok(fUserService.getCertifyCode(dto));
         }catch (LoginException e){
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(e.getStatus()).build();
         }
     }
 
@@ -140,7 +140,7 @@ public class FUserController {
 
             return ResponseEntity.ok(null);
         }catch (LoginException e){
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(e.getStatus()).build();
         }
     }
 

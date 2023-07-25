@@ -1,10 +1,14 @@
 package com.ssafy.stargate.model.repository;
 
 import com.ssafy.stargate.model.entity.Certify;
-import com.ssafy.stargate.model.entity.FUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface CertifyRepository extends JpaRepository<Certify, String> {
+public interface CertifyRepository extends JpaRepository<Certify, String>{
+
+    Certify findByfUserEmail(String email);
 }
+

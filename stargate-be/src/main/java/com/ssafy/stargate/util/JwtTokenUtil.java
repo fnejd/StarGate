@@ -1,19 +1,17 @@
 package com.ssafy.stargate.util;
 
 
+import com.ssafy.stargate.exception.InvalidTokenException;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.Base64;
 import java.util.Date;
 
@@ -131,8 +129,10 @@ public class JwtTokenUtil {
             log.info("[ERR] : 지원 안되는 JWT TOKEN");
         } catch (IllegalArgumentException e) {
             log.info("[ERR] : 잘못된 JWT TOKEN");
+        }catch (Exception e){
+            log.info("[ERR] : {}", e.getMessage());
         }
-        return false;
+        throw new InvalidTokenException("유효하지 않은 토큰들");
     }
 
 

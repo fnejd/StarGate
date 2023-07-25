@@ -7,6 +7,7 @@ import com.ssafy.stargate.model.dto.common.FUserDto;
 import com.ssafy.stargate.model.dto.common.FUserFindIdDto;
 import com.ssafy.stargate.model.dto.common.FUserFindPwDto;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
+import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import org.springframework.validation.annotation.Validated;
 import java.security.Principal;
@@ -23,7 +24,7 @@ public interface FUserService {
 
     public FUserDto getFUser(Principal principal);
 
-    public void updateFUser(FUserDto fUserDto, Principal principal);
+    public void updateFUser(FUserUpdateRequestDto fUserDto, Principal principal);
 
     public void deleteFUser(Principal principal);
 
