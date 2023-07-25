@@ -1,7 +1,7 @@
 import React from 'react';
-import SignUpComponent from '../../components/organisms/SignUpComponent';
+import SignUpComponent from '@/organisms/SignUpComponent';
 
-const signup = () => {
+const SignUp = () => {
     return (
       <div>
         <SignUpComponent />
@@ -9,4 +9,4 @@ const signup = () => {
     );
 };
 
-export default signup;
+export default SignUp;

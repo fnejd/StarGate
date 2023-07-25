@@ -1,7 +1,7 @@
 import React from "react";
-import AdminSignUpComponent from "../../../components/organisms/AdminSignUpComponent";
+import AdminSignUpComponent from "@/organisms/AdminSignUpComponent";
 
-const adminSignUp = () => {
+const AdminSignUp = () => {
   return (
     <div>
       <AdminSignUpComponent />
@@ -9,4 +9,4 @@ const adminSignUp = () => {
   );
 };
 
-export default adminSignUp;
+export default AdminSignUp;

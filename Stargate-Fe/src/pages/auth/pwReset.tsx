@@ -1,7 +1,7 @@
 import React from 'react';
-import PwresetComponent from '../../components/organisms/PwresetComponent';
+import PwresetComponent from '@/organisms/PwresetComponent';
 
-const pwreset = () => {
+const PwReset = () => {
   return (
     <div>
       <PwresetComponent />
@@ -9,4 +9,4 @@ const pwreset = () => {
   );
 };
 
-export default pwreset;
+export default PwReset;

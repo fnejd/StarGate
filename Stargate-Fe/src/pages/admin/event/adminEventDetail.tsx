@@ -1,7 +1,7 @@
 import React from 'react';
 
-const adminEventDetail = () => {
+const AdminEventDetail = () => {
   return <div>이벤트 상세</div>;
 };
 
-export default adminEventDetail;
+export default AdminEventDetail;

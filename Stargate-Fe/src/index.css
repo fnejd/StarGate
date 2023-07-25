@@ -43,7 +43,7 @@
   }
   
   button:disabled {
-    @apply cursor-not-allowed;
+   @apply cursor-not-allowed;
   }
 
   abbr[title] {
@@ -65,11 +65,7 @@
   }
 
   .input-warning {
-<<<<<<< HEAD
     @apply font-suit text-12 font-medium text-red
-=======
-    @apply font-suit text-16 font-medium text-red
->>>>>>> 76a03aa6d17fd58e10a5c4126990fee685337b6e
   }
 
   .page-title-md {
@@ -245,9 +241,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> 76a03aa6d17fd58e10a5c4126990fee685337b6e

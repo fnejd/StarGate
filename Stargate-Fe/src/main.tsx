@@ -4,24 +4,24 @@ import './App.css';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css'
-import SignIn from './pages/auth/signIn.tsx';
-import SignUp from './pages/auth/signUp.tsx';
-import IdInquiry from './pages/auth/idInquiry.tsx';
-import PwInquiry from './pages/auth/pwInquiry.tsx';
-import PwReset from './pages/auth/pwReset.tsx';
-import Board from './pages/user/board/board.tsx';
-import MyPage from './pages/user/board/myPage.tsx';
-import Remind from './pages/user/board/remind.tsx';
-import Ready from './pages/user/video/ready.tsx';
-import Video from './pages/user/video/video.tsx';
-import StarVideo from './pages/star/starVideo.tsx';
-import AdminSignUp from './pages/admin/signUp/adminSignUp.tsx';
-import AdminBoard from './pages/admin/board/adminBoard.tsx';
-import AdminManagement from './pages/admin/board/adminManagement.tsx';
-import AdminMyPage from './pages/admin/board/adminMyPage.tsx';
-import AdminEventCreate from './pages/admin/event/adminEventCreate.tsx';
-import AdminEventDetail from './pages/admin/event/adminEventDetail.tsx';
-import AdminMonitoring from './pages/admin/event/adminMonitoring.tsx';
+import SignIn from './pages/auth/SignIn.tsx';
+import SignUp from './pages/auth/SignUp.tsx';
+import IdInquiry from './pages/auth/Idinquiry.tsx';
+import PwInquiry from './pages/auth/PwInquiry.tsx';
+import PwReset from './pages/auth/PwReset.tsx';
+import Board from './pages/user/board/UserBoard.tsx';
+import MyPage from './pages/user/board/MyPage.tsx';
+import Remind from './pages/user/board/Remind.tsx';
+import Ready from './pages/user/video/ReadyRoom.tsx';
+import Video from './pages/user/video/UserVideo.tsx';
+import StarVideo from './pages/star/StarVideo.tsx';
+import AdminSignUp from './pages/admin/signUp/AdminSignUp.tsx';
+import AdminBoard from './pages/admin/board/AdminBoard.tsx';
+import AdminManagement from './pages/admin/board/AdminManagement.tsx';
+import AdminMyPage from './pages/admin/board/AdminMyPage.tsx';
+import AdminEventCreate from './pages/admin/event/AdminEventCreate.tsx';
+import AdminEventDetail from './pages/admin/event/AdminEventDetail.tsx';
+import AdminMonitoring from './pages/admin/event/AdminMonitoring.tsx';
 import './index.css'; // CSS 파일을 import
 
 const router = createBrowserRouter([

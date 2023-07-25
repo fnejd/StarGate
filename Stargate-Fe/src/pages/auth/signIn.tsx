@@ -1,8 +1,8 @@
 import React from 'react';
-import SignInComponent from '../../components/organisms/SignInComponent';
-import ToolTipComponent from '../../components/atoms/ToolTipComponent';
+import SignInComponent from '@/organisms/SignInComponent';
+import ToolTipComponent from '@/atoms/ToolTipComponent';
 
-const signIn = () => {
+const SignIn = () => {
   return (
     <div>
       <h1 className="t2b text-white m-5">S T A R G A T E</h1>
@@ -14,4 +14,4 @@ const signIn = () => {
   );
 };
 
-export default signIn;
+export default SignIn;

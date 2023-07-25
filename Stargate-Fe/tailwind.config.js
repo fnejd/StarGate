@@ -1,3 +1,5 @@
+import { Plugin } from 'tailwindcss';
+
 // tailwindcss 모듈에서 Config라는 타입을 임포트
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -9,6 +11,12 @@ export default {
   ],
   theme: {
     extend: {
+      height: {
+        400: '400px',
+        500: '500px',
+        550: '550px',
+        600: '600px',
+      },
       colors: {
         g1: '#f6f6f6',
         g2: '#e7e7e7',
@@ -69,6 +77,9 @@ export default {
         y9: '#864d0d',
         y10: '#723f11',
         y11: '#432005',
+
+        red: '#DC2626',
+        admingray: '#DADADA',
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],
@@ -86,6 +97,7 @@ export default {
         28: '28px',
         32: '32px',
         48: '48px',
+        60: '60px',
         80: '80px',
         160: '160px',
       },
@@ -110,8 +122,26 @@ export default {
         800: '800ms',
         900: '900ms',
         1000: '1000ms',
+      },
+      borderRadius: {
+        xs: '2px',
+        sm: '4px',
+        md: '8px',
+        lg: '16px',
+        xl: '32px',
       }
     },
   },
-  plugins: [],
+  plugins: [
+    // plugin(function ({ addUtilities }) {
+    //   const newUtilities = {
+    //     ".medium-white": {
+    //       "@apply font-suit text-28 font-semibold text-white": "",
+    //     },
+    //     ".medium-blue": {
+    //       "@apply font-suit text-28 font-semibold text-[#0010FF]": "",
+    //     },
+    //   };
+    // }),
+  ],
 }

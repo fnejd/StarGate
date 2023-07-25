@@ -1,8 +1,8 @@
 import React from 'react';
-import AdminBoardHeaderNav from '../../../components/atoms/AdminBoardHeaderNav'
-import AdminManagementModal from '../../../components/organisms/AdminManagementModal';
+import AdminBoardHeaderNav from '../../../atoms/AdminBoardHeaderNav'
+import AdminManagementModal from '@/organisms/AdminManagementModal';
 
-const adminManagement = () => {
+const AdminManagement = () => {
   return <div className='w-screen h-screen'>
     <AdminBoardHeaderNav />
     <div className='flex flex-col justify-center items-center'>
@@ -12,4 +12,4 @@ const adminManagement = () => {
   </div>;
 };
 
-export default adminManagement;
+export default AdminManagement;

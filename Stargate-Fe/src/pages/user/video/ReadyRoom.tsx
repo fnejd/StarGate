@@ -1,7 +1,7 @@
 import React from 'react';
 
-const ready = () => {
+const ReadyRoom = () => {
   return <div>대기방</div>;
 };
 
-export default ready;
+export default ReadyRoom;
