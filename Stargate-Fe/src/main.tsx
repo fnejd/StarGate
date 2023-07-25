@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css'
 import SignIn from './pages/auth/SignIn.tsx';
 import SignUp from './pages/auth/SignUp.tsx';
+<<<<<<< HEAD
 import IdInquiry from './pages/auth/Idinquiry.tsx';
 import PwInquiry from './pages/auth/PwInquiry.tsx';
 import PwReset from './pages/auth/PwReset.tsx';
@@ -14,6 +15,16 @@ import MyPage from './pages/user/board/MyPage.tsx';
 import Remind from './pages/user/board/Remind.tsx';
 import Ready from './pages/user/video/ReadyRoom.tsx';
 import Video from './pages/user/video/UserVideo.tsx';
+=======
+import IdInquiry from './pages/auth/IdInquiry.tsx';
+import PwInquiry from './pages/auth/PwInquiry.tsx';
+import PwReset from './pages/auth/PwReset.tsx';
+import Board from './pages/user/board/Board.tsx';
+import MyPage from './pages/user/board/MyPage.tsx';
+import Remind from './pages/user/board/Remind.tsx';
+import Ready from './pages/user/video/Ready.tsx';
+import Video from './pages/user/video/Video.tsx';
+>>>>>>> 71ab1aec65570a2c5a1a29ca83134af5bc74bc12
 import StarVideo from './pages/star/StarVideo.tsx';
 import AdminSignUp from './pages/admin/signUp/AdminSignUp.tsx';
 import AdminBoard from './pages/admin/board/AdminBoard.tsx';
