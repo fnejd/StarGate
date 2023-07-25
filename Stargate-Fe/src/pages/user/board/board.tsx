@@ -10,7 +10,7 @@ const dummy = {
   time: '00:05',
 };
 
-const board = () => {
+const Board = () => {
   return (
     <div className='w-98vw h-screen'>
       <BoardHeader/>
@@ -39,4 +39,4 @@ const board = () => {
   );
 };
 
-export default board;
+export default Board;

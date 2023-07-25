@@ -69,6 +69,9 @@ export default {
         y9: '#864d0d',
         y10: '#723f11',
         y11: '#432005',
+
+        red: '#DC2626',
+        admingray: '#DADADA',
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],
@@ -86,6 +89,7 @@ export default {
         28: '28px',
         32: '32px',
         48: '48px',
+        60: '60px',
         80: '80px',
         160: '160px',
       },
