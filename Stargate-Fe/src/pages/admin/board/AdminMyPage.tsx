@@ -1,14 +1,27 @@
 import React from 'react';
-import AdminBoardHeaderNav from '../../../atoms/AdminBoardHeaderNav'
-import AdminMyPageBox from '@/organisms/AdminMyPageBox';
+import AdminBoardHeaderNav from '@/atoms/AdminBoardHeaderNav';
+import MyPageBox from '@/organisms/MyPageBox';
+
+const dummy = {
+  email: 'YunHans@ssafy.com',
+  companyName: '수환컴퍼니',
+  companyNum: 123456,
+};
 
 const AdminMyPage = () => {
-  return <div className='w-screen h-screen'>
-    <AdminBoardHeaderNav></AdminBoardHeaderNav>
-    <div className='flex w-full h-4/5 justify-center items-center'>
-      <AdminMyPageBox />
+  return (
+    <div>
+      <AdminBoardHeaderNav></AdminBoardHeaderNav>
+      <div className='flex w-full justify-center items-center'>
+        <MyPageBox
+          isAdmin={true}
+          email={dummy.email}
+          companyName={dummy.companyName}
+          companyNum={dummy.companyNum}
+        />
+      </div>
     </div>
-  </div>;
+  );
 };
 
 export default AdminMyPage;
