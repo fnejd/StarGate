@@ -16,7 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-public class PMember {
+public class PMember extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "member_no")

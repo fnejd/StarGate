@@ -79,4 +79,6 @@ public class PUserController {
         return ResponseEntity.ok(pUserDto);
     }
 
+    // TODO 소속사 계정 업데이트 코드
+
 }

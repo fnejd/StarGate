@@ -5,21 +5,19 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.sql.Array;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder
 @Entity
+@Table(name = "p_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "p_user")
-public class PUser {
+public class PUser extends BaseEntity{
 
     @Id
     @Column(name = "email")
