@@ -1,6 +1,6 @@
 import React from 'react';
-import BoardHeaderNav from '../../../components/atoms/BoardHeaderNav';
-import MyPageBox from '../../../components/organisms/MyPageBox';
+import BoardHeaderNav from '@/atoms/BoardHeaderNav';
+import MyPageBox from '@/organisms/MyPageBox';
 
 const MyPage = () => {
   return <div className='h-screen w-screen'>

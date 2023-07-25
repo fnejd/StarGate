@@ -1,6 +1,6 @@
 import React from 'react';
-import AdminBoardHeaderNav from '../../../components/atoms/AdminBoardHeaderNav'
-import AdminMyPageBox from '../../../components/organisms/AdminMyPageBox';
+import AdminBoardHeaderNav from '../../../atoms/AdminBoardHeaderNav'
+import AdminMyPageBox from '@/organisms/AdminMyPageBox';
 
 const AdminMyPage = () => {
   return <div className='w-screen h-screen'>

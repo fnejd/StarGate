@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Video = () => {
+const UserVideo = () => {
   return <div>화상통화방</div>;
 };
 
-export default Video;
+export default UserVideo;

@@ -1,5 +1,5 @@
 import React from "react";
-import AdminSignUpComponent from "../../../components/organisms/AdminSignUpComponent";
+import AdminSignUpComponent from "@/organisms/AdminSignUpComponent";
 
 const AdminSignUp = () => {
   return (

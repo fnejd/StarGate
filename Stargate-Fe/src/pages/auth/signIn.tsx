@@ -1,6 +1,6 @@
 import React from 'react';
-import SignInComponent from '../../components/organisms/SignInComponent';
-import ToolTipComponent from '../../components/atoms/ToolTipComponent';
+import SignInComponent from '@/organisms/SignInComponent';
+import ToolTipComponent from '@/atoms/ToolTipComponent';
 
 const SignIn = () => {
   return (

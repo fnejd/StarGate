@@ -1,6 +1,6 @@
 import React from 'react';
-import AdminBoardHeaderNav from '../../../components/atoms/AdminBoardHeaderNav'
-import AdminManagementModal from '../../../components/organisms/AdminManagementModal';
+import AdminBoardHeaderNav from '../../../atoms/AdminBoardHeaderNav'
+import AdminManagementModal from '@/organisms/AdminManagementModal';
 
 const AdminManagement = () => {
   return <div className='w-screen h-screen'>

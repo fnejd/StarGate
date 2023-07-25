@@ -1,7 +1,7 @@
 import React from 'react';
-import AdminBoardHeader from '../../../components/organisms/AdminBoardHeader'
-import BoardCardBox from '../../../components/organisms/BoardCardBox';
-import BoardCardList from '../../../components/organisms/BoardCardList';
+import AdminBoardHeader from '@/organisms/AdminBoardHeader'
+import BoardCardBox from '@/organisms/BoardCardBox';
+import BoardCardList from '@/organisms/BoardCardList';
 
 const dummy ={
   Image : 'https://picsum.photos/id/188/720/400/',

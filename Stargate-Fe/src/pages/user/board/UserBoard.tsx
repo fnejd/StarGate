@@ -1,7 +1,7 @@
 import React from 'react';
-import BoardHeader from '../../../components/organisms/BoardHeader';
-import BoardCardBox from '../../../components/organisms/BoardCardBox';
-import BoardCardList from '../../../components/organisms/BoardCardList';
+import BoardHeader from '@/organisms/BoardHeader';
+import BoardCardBox from '@/organisms/BoardCardBox';
+import BoardCardList from '@/organisms/BoardCardList';
 
 const dummy = {
   Image: 'https://picsum.photos/id/188/720/400/',
@@ -10,7 +10,7 @@ const dummy = {
   time: '00:05',
 };
 
-const Board = () => {
+const UserBoard = () => {
   return (
     <div className='w-98vw h-screen'>
       <BoardHeader/>
@@ -39,4 +39,4 @@ const Board = () => {
   );
 };
 
-export default Board;
+export default UserBoard;
