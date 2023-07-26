@@ -61,4 +61,7 @@ public class Meeting extends BaseEntity {
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
     @Builder.Default
     private List<MeetingFUserBridge> meetingFUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "meeting")
+    private List<Letter> letters = new ArrayList<>();
 }
