@@ -8,6 +8,7 @@ import MeetingLeftSection from '@/organisms/MeetingLeftSection.tsx';
 import MeetingRightSection from '@/organisms/MeetingRightSection.tsx';
 import MeetingBottomSection from '@/organisms/MeetingBottomSection.tsx';
 import RemindTitle from '@/organisms/RemindTitle.tsx';
+import RemindDetail from '@/organisms/RemindDetail.tsx';
 
 const SignIn = () => {
   const handleClick = () => {
@@ -24,6 +25,7 @@ const SignIn = () => {
       {/* <MeetingRightSection /> */}
       {/* <MeetingBottomSection /> */}
       <RemindTitle />
+      <RemindDetail />
       {/* <BtnWhite text="Click me" onClick={handleClick} />
       <BtnBlue text="Click me" onClick={handleClick} />
       <PolariodCard imageUrl={imageUrl} caption={caption} />
