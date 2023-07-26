@@ -1,7 +1,8 @@
 package com.ssafy.stargate.model.dto.common;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 @AllArgsConstructor

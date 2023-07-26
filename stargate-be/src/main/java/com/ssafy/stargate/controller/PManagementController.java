@@ -42,7 +42,7 @@ public class PManagementController {
     @PostMapping("/group/create")
     public ResponseEntity<PGroupDto> createGroup(@RequestBody PGroupDto dto, Principal principal) {
         PGroupDto group = managementService.createGroup(dto, principal);
-        return ResponseEntity.status(201).body(group);
+        return ResponseEntity.status(200).body(group);
     }
 
     /**
@@ -81,7 +81,7 @@ public class PManagementController {
     @PostMapping("/member/create")
     public ResponseEntity<?> createMember(@RequestBody PGroupDto dto) {
         PMemberDto memberDto = managementService.createMember(dto);
-        return ResponseEntity.status(201).body(memberDto);
+        return ResponseEntity.status(200).body(memberDto);
     }
 
     /**

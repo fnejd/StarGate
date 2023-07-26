@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.UUID;
+
 /**
  * 미팅 멤버 브릿지 엔티티
  */
@@ -13,15 +15,15 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 public class MeetingMemberBridge extends BaseEntity {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long no;
-
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID uuid;
 
     @ManyToOne
-    @JoinColumn(name="p_member.email")
+    @JoinColumn(name="p_member.no")
     private PMember pMember;
 
     @ManyToOne
