@@ -12,6 +12,9 @@ export default {
   theme: {
     extend: {
       width: {
+        'm': '50vw',
+        'l': '70vw',
+        'xl': '98vw',
         62: '241px',
         300: '300px',
         350: '350px',
@@ -27,11 +30,6 @@ export default {
         500: '500px',
         550: '550px',
         600: '600px',
-      },
-      width: {
-        'm': '50vw',
-        'l': '70vw',
-        'xl': '98vw',
       },
       colors: {
         g1: '#f6f6f6',

@@ -12,7 +12,7 @@ const MeetingLeftSection: React.FC = () => {
   const setTotalTime: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const newTime: number = parseInt(event.currentTarget.value, 10);
     setTotalSec(newTime);
-    console.log(`전체 미팅 시간은 ${newTime}초`); // Use the updated value newTime here
+    console.log(`전체 미팅 시간은 ${newTime}초`);
   
     const cnt = Math.floor(newTime / 2 / 10);
     console.log(`컷 수는 ${cnt}`);
