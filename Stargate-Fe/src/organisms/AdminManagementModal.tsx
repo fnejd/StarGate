@@ -22,10 +22,10 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
   const groupNames = Object.keys(group);
   const totalButtons = Math.ceil(groupNames.length / 5) * 5;
 
-/**
- * group의 이름들을 가져와서 버튼으로 출력, 만약 5의 배수가 아니라면 비어있는 <div>를 이용해 공간을 채워줌
- * 버튼을 click하면, setSelectedGroup에 group을 state로 넣어줌
- */
+  /**
+   * group의 이름들을 가져와서 버튼으로 출력, 만약 5의 배수가 아니라면 비어있는 <div>를 이용해 공간을 채워줌
+   * 버튼을 click하면, setSelectedGroup에 group을 state로 넣어줌
+   */
 
   const handleCircleClick = (groupName: string) => {
     setSelectedGroup(groupName);
