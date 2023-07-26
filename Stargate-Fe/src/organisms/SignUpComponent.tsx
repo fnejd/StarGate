@@ -100,7 +100,7 @@ const SignUpComponent = () => {
       <div className="flex">
         <InputComponent
           text="생년월일"
-          type="text"
+          type="date"
           keyName="birth"
           getter={user}
           setter={setUser}

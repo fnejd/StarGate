@@ -35,7 +35,7 @@ const SignInComponent = () => {
   };
 
   return (
-    <div className="max-w-sm ml-auto mr-auto">
+    <div className="max-w-sm ml-auto mr-auto items-center">
       <InputComponent
         type="text"
         text="이메일"
