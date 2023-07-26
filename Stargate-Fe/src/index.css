@@ -41,7 +41,7 @@
   button {
     @apply cursor-pointer;
   }
-  
+
   button:disabled {
     @apply cursor-not-allowed;
   }
@@ -53,31 +53,35 @@
 
 @layer components {
   .medium-blue {
-    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl
+    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
   }
 
   .medium-white {
-    @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl
+    @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
   }
 
   .form-title {
-    @apply font-suit text-32 font-medium text-white
+    @apply font-suit text-32 font-medium text-white;
   }
 
   .input-warning {
-    @apply font-suit text-12 font-medium text-red
+    @apply font-suit text-12 font-medium text-red;
   }
 
   .page-title-md {
-    @apply font-suit text-16 font-medium text-white
+    @apply font-suit text-16 font-medium text-white;
   }
 
   .modal-title {
-    @apply font-suit text-16 font-medium text-white
+    @apply font-suit text-48 font-semibold;
+  }
+
+  .modal-content {
+    @apply font-suit text-48 font-medium;
   }
 
   .csv-btn {
-    @apply w-32 h-8 ml-1 text-12 font-medium bg-admingray text-black rounded-sm flex items-center justify-center cursor-pointer opacity-0
+    @apply w-32 h-8 ml-1 text-12 font-medium bg-admingray text-black rounded-sm flex items-center justify-center cursor-pointer opacity-0;
   }
 
   .t1b {
@@ -87,7 +91,7 @@
   .t1r {
     @apply font-kreon text-160 font-normal leading-120;
   }
-  
+
   .t2b {
     @apply font-kreon text-80 font-semibold leading-120;
   }

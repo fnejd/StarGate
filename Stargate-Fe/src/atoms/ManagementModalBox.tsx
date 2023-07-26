@@ -2,6 +2,7 @@
 import React, { useRef, MouseEvent } from 'react';
 
 /**
+ * ManagementModalBoxProps
  * @param isOpen => 모달 창이 열려있는지를 나타내는 boolean 값
  * @param onClose => 모달 창이 닫힐 때 호출되는 콜백 함수
  * @param members => 선택된 그룹에 해당하는 멤버들의 정보가 담긴 객체
@@ -43,8 +44,8 @@ const ManagementModalBox = ({
           className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50'
           onClick={handleOutsideClick}
         >
-          <div ref={modalRef} className='w-96 h-96 bg-white rounded-lg p-4'>
-            <h2 className='text-lg font-bold mb-4'>멤버 목록</h2>
+          <div ref={modalRef} className='w-l h-500 bg-white rounded-sm flex flex-col items-center'>
+            <p className='modal-title'>그룹이름</p>
             <ul>
               {Object.entries(members).map(([index, memberName]) => (
                 <li key={index}>{memberName}</li>

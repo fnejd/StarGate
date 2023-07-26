@@ -2,7 +2,8 @@ import React from 'react';
 import BoardCard from '../atoms/BoardCard';
 
 /**
- * InputComponent
+ * BoardCardBoxProps
+ * @param uuid => 미팅에 부여되는 고유 번호
  * @param imageSrc => 이미지 api 주소
  * @param title => Box 측면에서 보여줄 사인회 제목
  * @param date => Box 측면에서 보여줄 사인회 날짜
@@ -11,6 +12,7 @@ import BoardCard from '../atoms/BoardCard';
  */
 
 interface BoardCardBoxProps {
+  uuid: string;
   imageSrc: string;
   title: string;
   date: string;
@@ -19,6 +21,7 @@ interface BoardCardBoxProps {
 }
 
 const BoardCardBox = ({
+  uuid,
   imageSrc,
   title,
   date,
