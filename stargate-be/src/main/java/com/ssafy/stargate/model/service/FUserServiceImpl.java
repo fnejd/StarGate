@@ -203,7 +203,7 @@ public class FUserServiceImpl implements FUserService {
 
 
         if(fUser != null){
-            String certify = RandomStringUtils.randomNumeric(10);
+            String certify = RandomStringUtils.randomNumeric(6);
 
             Certify code = Certify.builder()
                     .code(certify)

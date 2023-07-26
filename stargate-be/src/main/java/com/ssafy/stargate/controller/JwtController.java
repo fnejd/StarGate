@@ -40,7 +40,7 @@ public class JwtController {
 
         try {
             String refreshToken = (String) token.get("refreshToken");
-            return ResponseEntity.ok(jwtTokenService.create(refreshToken));
+            return ResponseEntity.ok(jwtTokenService.createAccessToken(refreshToken));
         }catch (InvalidTokenException e){
             return ResponseEntity.status(e.getStatus()).build();
         }

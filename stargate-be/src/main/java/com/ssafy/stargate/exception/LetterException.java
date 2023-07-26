@@ -1,21 +1,21 @@
 package com.ssafy.stargate.exception;
 
 /**
- * JWT 토큰 관련 에러
+ * 편지 서비스 관련 에러
  */
-public class InvalidTokenException extends BaseException{
-
+public class LetterException extends BaseException {
 
     private final String message;
 
-    public InvalidTokenException(String message){
+    public LetterException(String message){
         super(message);
         this.message = message;
     }
 
+
     @Override
     public int getStatus() {
-        return 601;
+        return 600;
     }
 
     @Override

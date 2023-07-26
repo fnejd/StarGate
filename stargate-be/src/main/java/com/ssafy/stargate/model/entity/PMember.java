@@ -7,6 +7,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "p_member")
 @Builder
@@ -29,4 +32,8 @@ public class PMember extends BaseEntity{
     @JoinColumn(name = "group_no", referencedColumnName = "group_no")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private PGroup pGroup;
+
+    @OneToMany(mappedBy = "pMember")
+    private List<Letter> letters = new ArrayList<>();
+
 }

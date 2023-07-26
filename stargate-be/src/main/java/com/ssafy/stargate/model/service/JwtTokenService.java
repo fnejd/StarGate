@@ -9,5 +9,5 @@ import com.ssafy.stargate.model.dto.response.JwtResponseDto;
  */
 public interface JwtTokenService {
 
-    public JwtResponseDto create(String refreshToken) throws InvalidTokenException;
+    public JwtResponseDto createAccessToken(String refreshToken) throws InvalidTokenException;
 }

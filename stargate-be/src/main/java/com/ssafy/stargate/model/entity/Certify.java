@@ -3,6 +3,9 @@ package com.ssafy.stargate.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * 인증 번호 엔티티
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

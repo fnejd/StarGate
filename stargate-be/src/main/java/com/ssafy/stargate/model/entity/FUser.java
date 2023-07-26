@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 팬 유저 엔티티
@@ -38,4 +40,7 @@ public class FUser extends BaseEntity {
 
     @OneToOne(mappedBy = "fUser")
     private Certify certify;
+
+    @OneToMany(mappedBy = "fUser")
+    private List<Letter> letters = new ArrayList<>();
 }
