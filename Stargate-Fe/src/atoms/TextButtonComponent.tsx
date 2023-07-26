@@ -13,7 +13,9 @@ interface TextButtonProps {
 const TextButtonComponent: React.FC<TextButtonProps> = ({ text, link }) => {
   return (
     <div className="m-2 mt-0">
-      <a className="text-slate-50 duration-100" href={link}>{text}</a>
+      <a className="text-slate-50 duration-100" href={link}>
+        {text}
+      </a>
     </div>
   );
 };
