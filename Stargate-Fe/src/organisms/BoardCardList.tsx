@@ -1,6 +1,14 @@
 import React from 'react';
 import BoardCard from '../atoms/BoardCard';
 
+/**
+ * InputComponent
+ * @param imageSrc => 이미지 api 주소
+ * @param title => Card flip시 보여줄 사인회 제목
+ * @param date => Card flip시 보여줄 사인회 날짜
+ * @param time => Card flip시 보여줄 남은 시간
+ */
+
 interface BoardCardProps {
   imageSrc: string;
   title?: string;

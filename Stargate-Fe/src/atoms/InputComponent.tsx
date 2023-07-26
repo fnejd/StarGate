@@ -9,7 +9,8 @@ import React from "react";
  * @param state => 경고 문구의 상태 값, (색상 값을 전달 ex: green, red)
  * @param keyName => 유저 객체에 저장할 키 네임
  * @param getter => 기존 유저 값
- * @param setter => 인풋 태그의 값 세팅할 setter
+ * @param setter() => 인풋 태그의 값 세팅할 setter
+ * @param value => 마이페이지에서 기본적으로 들어가 있을 값
  */
 
 interface InputProps {
@@ -20,6 +21,7 @@ interface InputProps {
   keyName: string;
   getter: object;
   setter: React.Dispatch<React.SetStateAction<object>>;
+  value?: string;
 }
 
 const InputComponent: React.FC<InputProps> = ({
@@ -30,6 +32,7 @@ const InputComponent: React.FC<InputProps> = ({
   keyName,
   getter,
   setter,
+  value,
 }) => {
 
   // state 값 class 지정 분기
@@ -60,6 +63,7 @@ const InputComponent: React.FC<InputProps> = ({
             className="min-w-full text-slate-50 bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
             placeholder={text}
+            value={value}
           />
         </div>
       ) : (
@@ -70,6 +74,7 @@ const InputComponent: React.FC<InputProps> = ({
             className="min-w-full text-slate-50 bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
             placeholder={text}
+            value={value}
           />
         </div>
       )}
