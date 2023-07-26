@@ -4,7 +4,7 @@ import AdminInput from '@/atoms/AdminInput.tsx';
 import DropDown from '@/atoms/DropDown.tsx';
 import useDropdown from '@/hooks/useDropdown.tsx';
 
-const MeetingLeftSection: React.FC = () => {
+const MeetingLeftSection = () => {
   const [picSec, setPicSec] = useState<number>(40);
   const [totalSec, setTotalSec] = useState<number>(80);
   const [numbers, setNumbers] = useState<number[]>([4]);

@@ -11,7 +11,7 @@ interface AdminInputProps {
   children?: React.ReactNode;
 }
 
-const AdminInput: React.FC<AdminInputProps> = ({ labelFor, type, placeholder, min, max, step, onChange, children }) => {
+const AdminInput = ({ labelFor, type, placeholder, min, max, step, onChange, children }: AdminInputProps) => {
   return (
     <div className="flex flex-col w-60 mr-2">
       <label htmlFor={labelFor} className="ml-1 my-2 flex justify-start"> 

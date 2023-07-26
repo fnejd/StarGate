@@ -3,7 +3,7 @@ import CSVReader from 'react-csv-reader';
 import AdminBtn from '@/atoms/AdminBtn.tsx';
 import AdminInput from '@/atoms/AdminInput.tsx';
 
-const MeetingBottomSection: React.FC = () => {
+const MeetingBottomSection = () => {
   const [members, setMembers] = useState<string[]>(['a']);
   const [fans, setFans] = useState<string[]>([]);
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const MeetingRightSection: React.FC = () => {
+const MeetingRightSection = () => {
   const [textValue, setTextValue] = useState<string>('');
 
   const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
