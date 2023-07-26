@@ -11,16 +11,25 @@ export default {
   ],
   theme: {
     extend: {
-      height: {
+      width: {
+        'm': '50vw',
+        'l': '70vw',
+        'xl': '98vw',
+        62: '241px',
+        300: '300px',
+        350: '350px',
         400: '400px',
         500: '500px',
         550: '550px',
         600: '600px',
       },
-      width: {
-        'm': '50vw',
-        'l': '70vw',
-        'xl': '98vw',
+      height: {
+        300: '300px',
+        350: '350px',
+        400: '400px',
+        500: '500px',
+        550: '550px',
+        600: '600px',
       },
       colors: {
         g1: '#f6f6f6',
@@ -134,7 +143,7 @@ export default {
         md: '8px',
         lg: '16px',
         xl: '32px',
-      }
+      },
     },
   },
   plugins: [
