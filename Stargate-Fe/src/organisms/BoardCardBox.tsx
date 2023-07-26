@@ -1,6 +1,15 @@
 import React from 'react';
 import BoardCard from '../atoms/BoardCard';
 
+/**
+ * InputComponent
+ * @param imageSrc => 이미지 api 주소
+ * @param title => Box 측면에서 보여줄 사인회 제목
+ * @param date => Box 측면에서 보여줄 사인회 날짜
+ * @param time => Box 측면에서 보여줄 남은 시간
+ * @param isAdmin => admin 여부에 따라 확인 후 버튼 이름 변경
+ */
+
 interface BoardCardBoxProps {
   imageSrc: string;
   title: string;
@@ -8,7 +17,6 @@ interface BoardCardBoxProps {
   time: string;
   isAdmin: boolean;
 }
-
 
 const BoardCardBox = ({ imageSrc, title, date, time, isAdmin }: BoardCardBoxProps) => {
   return <div className='flex justify-center'>

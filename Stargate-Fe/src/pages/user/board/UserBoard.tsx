@@ -10,9 +10,14 @@ const dummy = {
   time: '00:05',
 };
 
+  /**
+   * Json으로 값 가져와서
+   * map으로 반복문 돌려서 갯수만큼 출력할 계획
+   */
+
 const UserBoard = () => {
   return (
-    <div className='w-98vw h-screen'>
+    <div className='w-xl h-screen'>
       <BoardHeader/>
       <BoardCardBox
         imageSrc={dummy.Image}
