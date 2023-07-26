@@ -31,12 +31,16 @@ const InputComponent: React.FC<InputProps> = ({
   getter,
   setter,
 }) => {
+
+  // state 값 class 지정 분기
   if (state == "red") {
     state = "input-warning";
   } else {
     state = `font-suit text-16 font-medium text-${state}`;
   }
 
+  // Input onChange 시 setter 호출해 state 값 변경해주기
+  // 더 좋은 방법 없을까? 고민해보기
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setter({
