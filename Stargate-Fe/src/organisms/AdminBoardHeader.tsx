@@ -5,8 +5,8 @@ import BoardHeaderTitle from '@/atoms/BoardHeaderTitle';
 const AdminBoardHeader = () => {
   return (
     <div className='w-full'>
-      <AdminBoardHeaderNav></AdminBoardHeaderNav>
-      <BoardHeaderTitle></BoardHeaderTitle>
+      <AdminBoardHeaderNav/>
+      <BoardHeaderTitle/>
     </div>
   );
 };

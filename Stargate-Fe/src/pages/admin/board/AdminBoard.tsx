@@ -11,7 +11,7 @@ const dummy ={
 }
 
 const AdminBoard = () => {
-  return <div className='w-98vw h-screen'>
+  return <div className='w-xl h-screen'>
     <AdminBoardHeader></AdminBoardHeader>
     <BoardCardBox
     imageSrc={dummy.Image}
@@ -20,14 +20,14 @@ const AdminBoard = () => {
     time={dummy.time}
     isAdmin={true}
     />
-    <p className='t3b text-center lg:my-14 sm:my-6'>예정</p>
+    <p className='t3b text-center lg:my-14 sm:my-6 text-white'>예정</p>
     <BoardCardList
       imageSrc={dummy.Image}
       title={dummy.title}
       date={dummy.date}
       time={dummy.time}
     />
-    <p className='t3b text-center lg:my-14 sm:my-6'>리마인드</p>
+    <p className='t3b text-center lg:my-14 sm:my-6 text-white'>리마인드</p>
     <BoardCardList
       imageSrc={dummy.Image}
       title={dummy.title}

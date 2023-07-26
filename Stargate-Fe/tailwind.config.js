@@ -28,6 +28,11 @@ export default {
         550: '550px',
         600: '600px',
       },
+      width: {
+        'm': '50vw',
+        'l': '70vw',
+        'xl': '98vw',
+      },
       colors: {
         g1: '#f6f6f6',
         g2: '#e7e7e7',

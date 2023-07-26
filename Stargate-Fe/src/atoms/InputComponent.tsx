@@ -7,6 +7,7 @@ import React from 'react';
  * @param text => 라벨과 플레이스 홀더에 들어갈 인풋 이름 변수
  * @param notice => 있다면 하단에 띄울 공지? 경고 문구
  * @param state => 경고 문구의 상태 값, (색상 값을 전달 ex: green, red)
+ * @param value => 마이페이지에서 기본적으로 들어가 있을 값
  */
 
 interface InputProps {
@@ -14,6 +15,7 @@ interface InputProps {
   text: string;
   notice?: string;
   state?: string;
+  value?: string;
 }
 
 const InputComponent: React.FC<InputProps> = ({
@@ -21,6 +23,7 @@ const InputComponent: React.FC<InputProps> = ({
   text,
   notice,
   state,
+  value,
 }) => {
   if (state == 'red') {
     state = 'input-warning';
@@ -37,6 +40,7 @@ const InputComponent: React.FC<InputProps> = ({
             className='min-w-full text-slate-50 bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50'
             type={type}
             placeholder={text}
+            value={value}
           />
         </div>
       ) : (
@@ -45,6 +49,7 @@ const InputComponent: React.FC<InputProps> = ({
             className='min-w-full text-slate-50 bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50'
             type={type}
             placeholder={text}
+            value={value}
           />
         </div>
       )}
