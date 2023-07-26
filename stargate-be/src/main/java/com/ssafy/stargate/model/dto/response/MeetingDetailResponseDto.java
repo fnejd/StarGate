@@ -36,6 +36,7 @@ public class MeetingDetailResponseDto {
     @ToString
     public static class MeetingFUser extends MeetingFUserBridgeDto {
         private boolean isRegister;
+        private String name;
     }
 
     @SuperBuilder

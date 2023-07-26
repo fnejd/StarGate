@@ -52,7 +52,8 @@ public class MeetingServiceImplement implements MeetingService {
      * ResponseDto에는 기본 정보에 미팅방 ID(roomId), 팬유저 가입 여부(isRegister)가 추가적으로 들어간다.
      * 맴버 미팅방 ID(roomId) 포멧 (String): {미팅UUID}.{유저UUID}
      * 팬유저 가입 여부: 팬 유저 이메일이 DB에 존재하는지 확인
-     * @param uuid [UUID] 미팅 UUID
+     *
+     * @param uuid      [UUID] 미팅 UUID
      * @param principal [Principal] 소속사 email이 포함된 principal 객체
      * @return [MeetingDetailResponseDto] 기본 정보 + 맴버 미팅방 ID, 유저 가입 여부를 포함한 DTO
      * @throws NotFoundException 데이터 찾기 실패 에러
@@ -77,12 +78,21 @@ public class MeetingServiceImplement implements MeetingService {
 
         List<MeetingDetailResponseDto.MeetingFUser> meetingFUserDtos = (List<MeetingDetailResponseDto.MeetingFUser>) meeting.getMeetingFUsers()
                 .stream()
-                .map(meetingFUser -> MeetingDetailResponseDto.MeetingFUser.builder()
-                        .no(meetingFUser.getNo())
-                        .email(meetingFUser.getEmail())
-                        .orderNum(meetingFUser.getOrderNum())
-                        .isRegister(fUserRepository.existsById(meetingFUser.getEmail()))
-                        .build()).toList();
+                .map(meetingFUser -> {
+                    MeetingDetailResponseDto.MeetingFUser.MeetingFUserBuilder builder = MeetingDetailResponseDto.MeetingFUser.builder();
+                    builder.no(meetingFUser.getNo())
+                            .email(meetingFUser.getEmail())
+                            .orderNum(meetingFUser.getOrderNum());
+                    Optional<FUser> optionalFUser = fUserRepository.findById(meetingFUser.getEmail());
+                    if (optionalFUser.isPresent()) {
+                        builder.isRegister(true);
+                        builder.name(optionalFUser.get().getName());
+                    } else {
+                        builder.isRegister(false);
+                        builder.name(null);
+                    }
+                    return builder.build();
+                }).toList();
 
         return MeetingDetailResponseDto.builder()
                 .uuid(meeting.getUuid())
@@ -99,10 +109,11 @@ public class MeetingServiceImplement implements MeetingService {
 
     /**
      * 신규 미팅을 생성한다.
+     *
      * @param dto       [MeetingDto] 입력받은 Meeting DTO
      * @param principal [Principal] 소속사 이메일이 포함된 객체
      * @return [MeetingDto] 생성한 미팅 정보를 담은 DTO
-     * @throws CRUDException 데이터 CRUD 에러
+     * @throws CRUDException     데이터 CRUD 에러
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     @Transactional
@@ -150,9 +161,10 @@ public class MeetingServiceImplement implements MeetingService {
 
     /**
      * 미팅 정보를 수정한다.
-     * @param dto [MeetingDto] 입력받은 Meeting DTO
+     *
+     * @param dto       [MeetingDto] 입력받은 Meeting DTO
      * @param principal [Principal] 소속사 이메일이 포함된 객체
-     * @throws CRUDException 데이터 CRUD 에러
+     * @throws CRUDException     데이터 CRUD 에러
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     @Transactional
@@ -195,9 +207,10 @@ public class MeetingServiceImplement implements MeetingService {
 
     /**
      * 미팅을 삭제한다.
-     * @param dto [MeetingDto] 입력받은 Meeting DTO
+     *
+     * @param dto       [MeetingDto] 입력받은 Meeting DTO
      * @param principal [Principal] 소속사 이메일이 포함된 객체
-     * @throws CRUDException 데이터 CRUD 에러
+     * @throws CRUDException     데이터 CRUD 에러
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     @Transactional
@@ -217,10 +230,11 @@ public class MeetingServiceImplement implements MeetingService {
     /**
      * 미팅 멤버 리스트를 수정한다.
      * 기존과 수정할 데이터의 멤버 id(no)를 비교하여,
-     *  - 동일한 멤버: 미팅 멤버 데이터 수정
-     *  - 수정할 데이터에만 있는 멤버: 해당 미팅 멤버 데이터 생성
-     *  - 기존 데이터에만 있는 멤버: 해당 미팅 멤버 데이터 삭제
-     *  를 진행한다.
+     * - 동일한 멤버: 미팅 멤버 데이터 수정
+     * - 수정할 데이터에만 있는 멤버: 해당 미팅 멤버 데이터 생성
+     * - 기존 데이터에만 있는 멤버: 해당 미팅 멤버 데이터 삭제
+     * 를 진행한다.
+     *
      * @param source [List<MeetingMemberBridge>] 기존 데이터 리스트
      * @param target [List<MeetingMemberBridge>] 수정할 데이터 리스트
      * @throws CRUDException 데이터 CRUD 에러
@@ -269,10 +283,11 @@ public class MeetingServiceImplement implements MeetingService {
     /**
      * 팬유저 리스트를 수정한다.
      * 기존과 수정할 데이터의 팬유저 id(email)를 비교하여,
-     *  - 동일한 팬유저: 미팅 팬유저 데이터 수정
-     *  - 수정할 데이터에만 있는 팬유저: 해당 미팅 팬유저 데이터 생성
-     *  - 기존 데이터에만 있는 팬유저: 해당 미팅 팬유저 데이터 삭제
-     *  를 진행한다.
+     * - 동일한 팬유저: 미팅 팬유저 데이터 수정
+     * - 수정할 데이터에만 있는 팬유저: 해당 미팅 팬유저 데이터 생성
+     * - 기존 데이터에만 있는 팬유저: 해당 미팅 팬유저 데이터 삭제
+     * 를 진행한다.
+     *
      * @param source [List<MeetingMemberBridge>] 기존 데이터 리스트
      * @param target [List<MeetingMemberBridge>] 수정할 데이터 리스트
      * @throws CRUDException 데이터 CRUD 에러
