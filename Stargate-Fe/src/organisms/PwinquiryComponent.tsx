@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import InputComponent from "../atoms/InputComponent";
 import AuthNumberComponent from "./AuthNumberComponent";
-import ModalBox from "@/atoms/ModalBox";
 import BtnBlue from "@/atoms/BtnBlue";
 
 const PwinquiryComponent = () => {
