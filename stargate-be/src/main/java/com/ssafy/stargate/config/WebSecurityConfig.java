@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
@@ -31,11 +32,12 @@ public class WebSecurityConfig {
                         .requestMatchers("/tests/**").permitAll()
                         .requestMatchers("/pusers/register", "/pusers/login", "/fusers/register", "/fusers/login", "/fusers/find-id", "/fusers/get-code", "/fusers/check-code", "/fusers/new-pw").anonymous()
                         .requestMatchers("/pdashboard").hasAuthority("Producer")
+                        .requestMatchers("/rtc/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin((form) -> form.disable())
+                .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf((csrf) -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
