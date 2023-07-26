@@ -1,6 +1,6 @@
-import React from 'react';
-import AuthNumberComponent from '@/organisms/AuthNumberComponent';
-import PwinquiryComponent from '@/organisms/PwinquiryComponent';
+import React from "react";
+import AuthNumberComponent from "@/organisms/AuthNumberComponent";
+import PwinquiryComponent from "@/organisms/PwinquiryComponent";
 
 /**
  * @todo

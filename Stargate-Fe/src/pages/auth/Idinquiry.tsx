@@ -1,5 +1,5 @@
-import React from 'react';
-import IdinquiryComponent from '@/organisms/IdinquiryComponent';
+import React from "react";
+import IdinquiryComponent from "@/organisms/IdinquiryComponent";
 
 const Idinquiry = () => {
   return (

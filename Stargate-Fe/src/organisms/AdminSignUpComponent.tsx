@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import InputComponent from '../atoms/InputComponent';
-import PasswordFormComponent from './PasswordFormComponent';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import InputComponent from "../atoms/InputComponent";
+import PasswordFormComponent from "./PasswordFormComponent";
+import { useNavigate } from "react-router-dom";
 
 const AdminSignUpComponent = () => {
-  const [emailText, setEmailText] = useState('사용 불가한 이메일입니다.');
-  const [emailState, setEmailState] = useState('red');
+  const [emailText, setEmailText] = useState("사용 불가한 이메일입니다.");
+  const [emailState, setEmailState] = useState("red");
   const [admin, setAdmin] = useState<object>({
-    email: '',
-    company: '',
-    bizNum: '',
-    pw: '',
-    pwCheck: ''
-  })
+    email: "",
+    company: "",
+    bizNum: "",
+    pw: "",
+    pwCheck: "",
+  });
 
   const navigate = useNavigate();
 
@@ -31,8 +31,8 @@ const AdminSignUpComponent = () => {
     // 회원가입 요청 하기 전에 유효성 검사가 이루어져야할까요
     // 얼마나 이루어져야 할까요?
     console.log("관리자 회원가입 요청");
-    navigate('/');
-  }
+    navigate("/");
+  };
 
   return (
     <div className="m-5">
@@ -47,23 +47,52 @@ const AdminSignUpComponent = () => {
           getter={admin}
           setter={setAdmin}
         />
-        <button className="medium-white p3b min-w-max w-full h-10 rounded-lg" onClick={verify}>이메일 확인</button>
+        <button
+          className="medium-white p3b min-w-max w-full h-10 rounded-lg"
+          onClick={verify}
+        >
+          이메일 확인
+        </button>
       </div>
       <div className="flex">
-        <InputComponent text="회사명" type="text" keyName="company" getter={admin} setter={setAdmin} />
+        <InputComponent
+          text="회사명"
+          type="text"
+          keyName="company"
+          getter={admin}
+          setter={setAdmin}
+        />
       </div>
       <div className="flex">
-        <InputComponent text="사업자 번호" type="text" keyName="bizNum" getter={admin} setter={setAdmin} />
+        <InputComponent
+          text="사업자 번호"
+          type="text"
+          keyName="bizNum"
+          getter={admin}
+          setter={setAdmin}
+        />
       </div>
       <div className="flex">
-        <PasswordFormComponent text="비밀번호" getter={admin} setter={setAdmin} />
+        <PasswordFormComponent
+          text="비밀번호"
+          getter={admin}
+          setter={setAdmin}
+        />
       </div>
       <div className="flex">
-        <InputComponent text="비밀번호 확인" type="password" keyName="pwCheck" getter={admin} setter={setAdmin} />
+        <InputComponent
+          text="비밀번호 확인"
+          type="password"
+          keyName="pwCheck"
+          getter={admin}
+          setter={setAdmin}
+        />
       </div>
-      <button className="medium-white" onClick={signUp}>회원가입</button>
+      <button className="medium-white" onClick={signUp}>
+        회원가입
+      </button>
     </div>
-  )
-}
+  );
+};
 
 export default AdminSignUpComponent;
