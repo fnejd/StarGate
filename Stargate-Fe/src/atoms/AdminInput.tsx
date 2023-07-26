@@ -26,11 +26,11 @@ const AdminInput = ({
 }: AdminInputProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    onInputChange(newValue); // 하위 컴포넌트에서 입력값 변경 시, 콜백 함수를 호출하여 상위 컴포넌트로 값을 전달합니다.
+    onInputChange(newValue);
   };
 
   return (
-    <div className="flex flex-col w-60 mr-2">
+    <div className="flex flex-col w-60 mr-1">
       <label htmlFor={labelFor} className="ml-1 my-2 flex justify-start">
         {labelFor && (
           <span className="font-suit font-medium text-14 text-white">

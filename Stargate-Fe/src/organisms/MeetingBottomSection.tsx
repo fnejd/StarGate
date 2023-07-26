@@ -57,13 +57,29 @@ const MeetingBottomSection = () => {
   const addFans = (name: string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      fans: [...prevFormData.fans, name], // 이전 members 배열을 그대로 가져옵니다.
+      fans: [...prevFormData.fans, name],
     }));
-    setFanValue(''); // 입력 후 값을 초기화합니다.
+    setFanValue('');
   };
 
   const handleCsvData = (data, fileInfo) => {
     console.log(data);
+  };
+
+  const deleteMember = (index: number) => {
+    setFormData((prevFormData) => {
+      const updatedMembers = [...prevFormData.members];
+      updatedMembers.splice(index, 1);
+      return { ...prevFormData, members: updatedMembers };
+    });
+  };
+
+  const deleteFan = (index: number) => {
+    setFormData((prevFormData) => {
+      const updatedFans = [...prevFormData.fans];
+      updatedFans.splice(index, 1);
+      return { ...prevFormData, fans: updatedFans };
+    });
   };
 
   return (
@@ -109,7 +125,7 @@ const MeetingBottomSection = () => {
             <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
               {item}
             </div>
-            <AdminBtn text="삭제" onClick={() => handle} />
+            <AdminBtn text="삭제" onClick={() => deleteMember(index)} />
           </div>
         ))}
       </div>
@@ -121,6 +137,7 @@ const MeetingBottomSection = () => {
             type="text"
             onInputChange={handleFanValue}
             value={fanValue}
+            placeholder="stargate@gmail.com"
           >
             <AdminBtn text="등록" onClick={() => addFans(fanValue)} />
           </AdminInput>
@@ -144,7 +161,7 @@ const MeetingBottomSection = () => {
               <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
                 {item}
               </div>
-              <AdminBtn text="삭제" onClick={() => handle} />
+              <AdminBtn text="삭제" onClick={() => deleteFan(index)} />
             </div>
           ))}
         </div>
