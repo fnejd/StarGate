@@ -1,5 +1,5 @@
-import React from 'react';
-import PwresetComponent from '@/organisms/PwresetComponent';
+import React from "react";
+import PwresetComponent from "@/organisms/PwresetComponent";
 
 const PwReset = () => {
   return (
