@@ -12,6 +12,7 @@ export default {
   theme: {
     extend: {
       width: {
+        62: '241px',
         300: '300px',
         350: '350px',
         400: '400px',
@@ -139,7 +140,7 @@ export default {
         md: '8px',
         lg: '16px',
         xl: '32px',
-      }
+      },
     },
   },
   plugins: [
