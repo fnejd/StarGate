@@ -5,7 +5,7 @@ import path from "path";
 const viteConfig = defineConfig({
   server: {
       // host: 'localhost',
-      port: 3000,
+       port: 3000,
     },
   resolve: {
     alias: [

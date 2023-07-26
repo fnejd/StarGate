@@ -1,4 +1,4 @@
-import React, { useRef, MouseEvent } from 'react';
+import React, { useRef, MouseEvent } from "react";
 
 interface ModalBoxProps {
   isOpen: boolean;
@@ -16,16 +16,18 @@ const ModalBox = ({ isOpen, onClose }: ModalBoxProps) => {
 
   return (
     <>
-    {isOpen && (
-      <div
-        className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50"
-        onClick={handleOutsideClick}
-      >
-        <div ref={modalRef} className="w-96 h-96 bg-white rounded-lg p-4">
+      {isOpen && (
+        <div
+          className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50"
+          onClick={handleOutsideClick}
+        >
+          <div
+            ref={modalRef}
+            className="w-96 h-96 bg-white rounded-lg p-4"
+          ></div>
         </div>
-      </div>
-    )}
-  </>
+      )}
+    </>
   );
 };
 
