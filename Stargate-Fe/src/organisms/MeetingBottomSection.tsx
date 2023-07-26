@@ -69,14 +69,14 @@ const MeetingBottomSection = () => {
   return (
     <>
       {/* 연예인명 추가 */}
-      <div className="flex items-end">
+      <div className="flex flex-col items-start">
         <AdminInput
           labelFor="연예인명 / 그룹명"
           type="text"
           onInputChange={handleStarvalue}
           value={starValue}
         >
-          <AdminBtn text="추가" onClick={() => addStar(starValue)} />
+          <AdminBtn text="등록" onClick={() => addStar(starValue)} />
         </AdminInput>
         {formData.starName ? (
           <div className="w-62 mt-2 flex justify-between items-center">
@@ -97,7 +97,7 @@ const MeetingBottomSection = () => {
           onInputChange={handleMembervalue}
           value={memberValue}
         >
-          <AdminBtn text="추가" onClick={() => addMember(memberValue)} />
+          <AdminBtn text="등록" onClick={() => addMember(memberValue)} />
         </AdminInput>
       </div>
       <div className="flex flex-col items-start w-52 justify-between">
@@ -114,23 +114,25 @@ const MeetingBottomSection = () => {
         ))}
       </div>
       {/* 참가자 추가 */}
-      <div className="flex items-end">
-        <AdminInput
-          labelFor="참가자 등록"
-          type="text"
-          onInputChange={handleFanValue}
-          value={fanValue}
-        >
-          <AdminBtn text="추가" onClick={() => addFans(fanValue)} />
-        </AdminInput>
-        <div className="relative inline-block w-32 h-8 cursor-pointer">
-          <CSVReader
-            cssClass="csv-btn"
-            label="CSV 파일 불러오기"
-            onFileLoaded={handleCsvData}
-          />
-          <div className="w-32 h-8 leading-8 text-12 font-medium bg-admingray font-suit text-black rounded-sm text-center">
-            CSV 파일 불러오기
+      <div className="flex flex-col items-start">
+        <div className="flex">
+          <AdminInput
+            labelFor="참가자 등록"
+            type="text"
+            onInputChange={handleFanValue}
+            value={fanValue}
+          >
+            <AdminBtn text="등록" onClick={() => addFans(fanValue)} />
+          </AdminInput>
+          <div className="relative top-9 inline-block w-32 h-8 cursor-pointer">
+            <CSVReader
+              cssClass="csv-btn"
+              label="CSV 파일 불러오기"
+              onFileLoaded={handleCsvData}
+            />
+            <div className="w-32 h-8 leading-8 text-12 font-medium bg-admingray font-suit text-black rounded-sm text-center">
+              CSV 파일 불러오기
+            </div>
           </div>
         </div>
         <div className="flex flex-col items-start w-52 justify-between">
