@@ -38,7 +38,7 @@ public class FUserController {
      * @throws RegisterException 회원가입 등록 실패
      */
     @PostMapping("/register")
-    public ResponseEntity<?> createFUsers(@ModelAttribute @Validated FUserDto dto) throws EmailDuplicationException, RegisterException {
+    public ResponseEntity<Void> createFUsers(@ModelAttribute @Validated FUserDto dto) throws EmailDuplicationException, RegisterException {
         fUserService.create(dto);
         return ResponseEntity.ok(null);
     }
@@ -48,9 +48,6 @@ public class FUserController {
      * @param dto [FUserLoginRequestDto] 팬 로그인 request
      * @return [ResponseEntity<JwtResponseDto>] 성공: [200] JWT Response, 실패: [401]
      * @throws LoginException
-     */
-    /*
-    TODO: Login error throws로 바꾸기
      */
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDto> loginFUsers(@ModelAttribute @Validated FUserLoginRequestDto dto) throws LoginException {
@@ -84,7 +81,6 @@ public class FUserController {
         fUserService.updateFUser(dto, principal);
         return ResponseEntity.ok(null);
     }
-
 
     /**
      * FUser 회원 탈퇴

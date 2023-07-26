@@ -13,16 +13,14 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 public class MeetingFUserBridge extends BaseEntity {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long no;
 
-
-    @ManyToOne
-    @JoinColumn(name="f_user.email")
-    private FUser fUser;
+    private String email; // fuser
 
     @ManyToOne
     @JoinColumn(name="meeting.uuid")

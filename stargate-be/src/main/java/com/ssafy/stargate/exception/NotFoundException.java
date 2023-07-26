@@ -1,13 +1,12 @@
 package com.ssafy.stargate.exception;
 
 /**
- * 데이터베이스 저장 실패 시 던지는 에러이다.
- * [Status: 600]
+ * 찾고자하는 데이터가 없을 때 던져지는 예외
  */
-public class SaveException extends BaseException {
+public class NotFoundException extends BaseException {
     private final String message;
 
-    public SaveException(String message) {
+    public NotFoundException(String message) {
         super(message);
         this.message = message;
     }
