@@ -1,5 +1,5 @@
-import React from "react";
-import PwinquiryComponent from "@/organisms/PwinquiryComponent";
+import React from 'react';
+import PwinquiryComponent from '@/organisms/PwinquiryComponent';
 
 /**
  * @todo
@@ -9,7 +9,7 @@ import PwinquiryComponent from "@/organisms/PwinquiryComponent";
  */
 const PwInquiry = () => {
   return (
-    <div>
+    <div className="w-screen">
       <PwinquiryComponent />
     </div>
   );
