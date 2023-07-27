@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import React from "react";
+import React from 'react';
 
 /**
  * InputComponent
@@ -34,12 +34,11 @@ const InputComponent: React.FC<InputProps> = ({
   setter,
   value,
 }) => {
-
   // state 값 class 지정 분기
-  if (state == "red") {
-    state = "input-warning";
-  } else {
-    state = `font-suit text-16 font-medium text-${state}`;
+  if (state == 'red') {
+    state = 'input-warning';
+  } else if (state != undefined) {
+    state = `font-suit text-12 font-medium text-green-400`;
   }
 
   // Input onChange 시 setter 호출해 state 값 변경해주기
@@ -55,12 +54,12 @@ const InputComponent: React.FC<InputProps> = ({
   return (
     <div className="p-1 m-2 w-full text-start">
       <p className="h4r text-white text-left">{text}</p>
-      {type == "password" ? (
+      {type == 'password' ? (
         <div>
           <input
             name={keyName}
             onChange={(e) => onChange(e)}
-            className="min-w-full text-slate-50 bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
+            className="min-w-full text-white bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
             placeholder={text}
             value={value}
@@ -71,7 +70,7 @@ const InputComponent: React.FC<InputProps> = ({
           <input
             name={keyName}
             onChange={(e) => onChange(e)}
-            className="min-w-full text-slate-50 bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
+            className="min-w-full text-white bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
             placeholder={text}
             value={value}

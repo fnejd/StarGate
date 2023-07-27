@@ -1,41 +1,72 @@
-import React, { useState } from "react";
-import InputComponent from "../atoms/InputComponent";
-import PasswordFormComponent from "./PasswordFormComponent";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import InputComponent from '../atoms/InputComponent';
+import PasswordFormComponent from './PasswordFormComponent';
+import { useNavigate } from 'react-router-dom';
+
+interface adminType {
+  email: string;
+  company: string;
+  bizNum: string;
+  pw: string;
+  pwCheck: string;
+}
 
 const AdminSignUpComponent = () => {
-  const [emailText, setEmailText] = useState("사용 불가한 이메일입니다.");
-  const [emailState, setEmailState] = useState("red");
+  const [emailText, setEmailText] = useState('사용 불가한 이메일입니다.');
+  const [emailState, setEmailState] = useState('red');
   const [admin, setAdmin] = useState<object>({
-    email: "",
-    company: "",
-    bizNum: "",
-    pw: "",
-    pwCheck: "",
+    email: '',
+    company: '',
+    bizNum: '',
+    pw: '',
+    pwCheck: '',
   });
 
   const navigate = useNavigate();
 
-  /**
-   * 이메일 인증 결과를 이용해 emailState 값을 변경시켜
-   * Input 컴포넌트에 프로퍼티로 전달해주기
-   * 이메일 값을 함수 매개변수로 가져가야하려나
-   * 그냥 인풋 태그 자체에서 가져가야 하려나
-   * 따로 컴포넌트로 빼둔거라 함수 매개변수로 가져가는게 나으려나?
-   */
   const verify = () => {
-    console.log("AdminSignup AUth api 요청");
+    console.log('AdminSignup AUth api 요청');
+    // get으로 보내달라 함 쿼리스트링으루
+    // 리턴으론 불리언
+    // const response = email 중복 검사 요청 api 호출
+    // if (response가 true라면 ) {
+    //   setEmailText('사용 가능한 이메일입니다.');
+    //   setEmailState('green');
+    // } else {
+    //   setEmailText('사용 불가한 이메일입니다.');
+    //   setEmailState('red');
+    // }
+  };
+
+  const submit = () => {
+    const formData = new FormData();
+    formData.append('email', (admin as adminType).email);
+    formData.append('name', (admin as adminType).company);
+    formData.append('code', (admin as adminType).bizNum);
+    formData.append('password', (admin as adminType).pw);
+
+    console.log(formData);
   };
 
   const signUp = () => {
     // 회원가입 요청 하기 전에 유효성 검사가 이루어져야할까요
     // 얼마나 이루어져야 할까요?
-    console.log("관리자 회원가입 요청");
-    navigate("/");
+
+    // pw Checking
+    const pw = (admin as adminType).pw;
+    const pwCheck = (admin as adminType).pwCheck;
+    // 비밀번호가 일치하지 않는 경우
+    if (pw != pwCheck || pw.length == 0) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return 0;
+    }
+
+    submit();
+    navigate('/');
   };
 
   return (
-    <div className="m-5">
+    <div className="max-w-sm ml-auto mr-auto text-center">
       <p className="form-title">관리자 회원가입</p>
       <div className="flex items-center">
         <InputComponent
@@ -48,7 +79,7 @@ const AdminSignUpComponent = () => {
           setter={setAdmin}
         />
         <button
-          className="medium-white p3b min-w-max w-full h-10 rounded-lg"
+          className="medium-white captionb w-1/3 h-10 rounded-lg"
           onClick={verify}
         >
           이메일 확인

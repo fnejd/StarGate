@@ -5,13 +5,13 @@ import React, { useEffect, useState } from 'react';
  * @param sec => 출력될 초
  */
 
-interface TimeProps { 
+interface TimeProps {
   min: number;
   sec: number;
 }
 
 const TimeLeftComponent: React.FC<TimeProps> = ({ min, sec }) => {
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState('');
   useEffect(() => {
     if (min < 10) {
       sec < 10 ? setTime(`0${min}:0${sec}`) : setTime(`0${min}:${sec}`);
@@ -21,9 +21,9 @@ const TimeLeftComponent: React.FC<TimeProps> = ({ min, sec }) => {
   }, [min, sec]);
   return (
     <div>
-      <p className="font-semibold text-slate-50 text-48">{time}</p>
+      <p className="font-semibold text-white text-48">{time}</p>
     </div>
-  )
-}
+  );
+};
 
 export default TimeLeftComponent;

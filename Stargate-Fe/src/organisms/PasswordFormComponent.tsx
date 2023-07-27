@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import InputComponent from "../atoms/InputComponent";
-import PWShown from "../atoms/PWShown";
-import PWHidden from "../atoms/PWHidden";
+import React, { useState } from 'react';
+import InputComponent from '../atoms/InputComponent';
+import PWShown from '../atoms/PWShown';
+import PWHidden from '../atoms/PWHidden';
 
 /**
  * @param text => input에 전달될 text 변수
