@@ -63,5 +63,6 @@ public class Meeting extends BaseEntity {
     private List<MeetingFUserBridge> meetingFUsers = new ArrayList<>();
 
     @OneToMany(mappedBy = "meeting")
+    @Builder.Default
     private List<Letter> letters = new ArrayList<>();
 }

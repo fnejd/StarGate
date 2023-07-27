@@ -30,7 +30,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((request) -> request
                         .requestMatchers("/tests/jwt-auth").authenticated()
                         .requestMatchers("/tests/**").permitAll()
-                        .requestMatchers("/pusers/register", "/pusers/login", "/fusers/register", "/fusers/login", "/fusers/find-id", "/fusers/get-code", "/fusers/check-code", "/fusers/new-pw").anonymous()
+                        .requestMatchers("/pusers/register", "/pusers/login", "/fusers/register", "/fusers/login", "/fusers/find-id", "/fusers/get-code", "/fusers/check-code", "/fusers/new-pw", "/fusers/check-email").anonymous()
                         .requestMatchers("/pdashboard").hasAuthority("Producer")
                         .requestMatchers("/rtc/**").permitAll()
                         .anyRequest().authenticated()

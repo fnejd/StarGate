@@ -34,15 +34,12 @@ public class JwtController {
      * refreshToken 을 받아서 만료된 accessToken 반환
      * @param token HashMap<String, Object> refreshToken
      * @return [ResponseEntity<JwtResponseDto>] 성공: [200] JWT Response, 실패: [600]
+     * @throws InvalidTokenException 유효하지 않은 토큰 에러
      */
     @PostMapping("/new-access-token")
-    public ResponseEntity<JwtResponseDto> createNewToken(@RequestBody HashMap<String, Object> token){
+    public ResponseEntity<JwtResponseDto> createNewToken(@RequestBody HashMap<String, Object> token) throws InvalidTokenException{
 
-        try {
             String refreshToken = (String) token.get("refreshToken");
             return ResponseEntity.ok(jwtTokenService.createAccessToken(refreshToken));
-        }catch (InvalidTokenException e){
-            return ResponseEntity.status(e.getStatus()).build();
-        }
     }
 }
