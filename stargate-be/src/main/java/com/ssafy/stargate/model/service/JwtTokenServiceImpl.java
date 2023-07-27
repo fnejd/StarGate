@@ -25,12 +25,12 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Autowired
     private JwtTokenRepository jwtTokenRepository;
-
+    
     /**
      * refreshToken 을 바탕으로 accessToken 새로 생성 (JwtToken 에 저장되어 있는 refreshToken 과 비교
-     *
      * @param refreshToken String refreshToken
      * @return JwtResponseDto 새로 생성된 accessToken
+     * @throws InvalidTokenException 유효하지 않은 토큰 에러
      */
     @Override
     public JwtResponseDto createAccessToken(String refreshToken) throws InvalidTokenException {

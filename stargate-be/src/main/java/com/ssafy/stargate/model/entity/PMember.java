@@ -34,6 +34,7 @@ public class PMember extends BaseEntity{
     private PGroup pGroup;
 
     @OneToMany(mappedBy = "pMember")
+    @Builder.Default
     private List<Letter> letters = new ArrayList<>();
 
 }

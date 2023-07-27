@@ -33,27 +33,25 @@ public class JwtFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
     /**
-     * SecurityContextHolder 에 authentication 저장, 만료된 토큰이면 601 status code 전송
+     * SecurityContextHolder 에 authentication 저장, 유효하지 않은 토큰 이면 601 status code 전송
      * @param request HttpServletRequest
      * @param response HttpServletResponse
      * @param filterChain
      * @throws ServletException
      * @throws IOException
+     * @throws InvalidTokenException
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException , InvalidTokenException {
 
         String token = getToken(request);
-//        log.info("info log= {} bearer 뺸 token",token);
+        log.info("info log= {} bearer 뺸 token",token);
 
-        try {
-            if (token != null && jwtTokenUtil.validateToken(token)) {
-                Authentication authentication = jwtTokenUtil.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (ExpiredJwtException | SecurityException | UnsupportedJwtException jwtException) {
-            throw new InvalidTokenException("유효하지 않은 토큰입니다.");
+        if (token != null && jwtTokenUtil.validateToken(token)) {
+            Authentication authentication = jwtTokenUtil.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         filterChain.doFilter(request, response);
     }
 

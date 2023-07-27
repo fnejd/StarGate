@@ -1,5 +1,6 @@
 package com.ssafy.stargate.controller;
 
+import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.model.dto.common.LetterDto;
 import com.ssafy.stargate.model.dto.request.LetterCreateRequestDto;
 import com.ssafy.stargate.model.dto.request.LetterDeleteRequestDto;
@@ -30,9 +31,10 @@ public class LetterController {
      * 편지 작성
      * @param dto LetterCreateRequestDto 팬유저가 작성한 편지 정보 담는 dto
      * @return [ResponseEntity<LetterDto>] 팬유저가 작성한 편지 정보가 저장된 dto
+     * @throws NotFoundException 존재하지 않는 회원, 존재하지 않는 멤버, 존재하지 않는 팬미팅 에러
      */
     @PostMapping("/create")
-    public ResponseEntity<?> createLetter(@RequestBody LetterCreateRequestDto dto){
+    public ResponseEntity<?> createLetter(@RequestBody LetterCreateRequestDto dto) throws NotFoundException {
         LetterDto letterDto = letterService.createLetter(dto);
         return ResponseEntity.ok(letterDto);
     }
@@ -41,9 +43,10 @@ public class LetterController {
      * 편지 수정
      * @param dto LetterDto 팬유저가 수정한 편지 정보 담는 dto
      * @return [ResponseEntity<LetterDto>] 팬유저가 수정한 편지 정보가 저장된 dto
+     * @throws NotFoundException 존재하지 않는 편지 에러
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateLetter(@RequestBody LetterUpdateRequestDto dto){
+    public ResponseEntity<?> updateLetter(@RequestBody LetterUpdateRequestDto dto) throws NotFoundException{
         LetterDto letterDto = letterService.updateLetter(dto);
         return ResponseEntity.ok(letterDto);
     }
@@ -59,13 +62,15 @@ public class LetterController {
         return ResponseEntity.ok(null);
     }
 
+
     /**
      * 개별 편지 조회
      * @param no long 편지 번호
      * @return [ResponseEntity<LetterDto>] 편지 번호에 해당하는 편지 정보
+     * @throws NotFoundException 존재 하지 않는 편지 에러
      */
     @GetMapping("/get/{no}")
-    public ResponseEntity<?> getLetter(@PathVariable long no){
+    public ResponseEntity<?> getLetter(@PathVariable long no) throws NotFoundException{
         LetterDto letterDto = letterService.getLetter(no);
         return ResponseEntity.ok(letterDto);
     }

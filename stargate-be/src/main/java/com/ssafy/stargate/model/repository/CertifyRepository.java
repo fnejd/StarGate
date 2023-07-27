@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CertifyRepository extends JpaRepository<Certify, String>{
 
-    Certify findByfUserEmail(String email);
+    Optional<Certify> findByfUserEmail(String email);
 }
 

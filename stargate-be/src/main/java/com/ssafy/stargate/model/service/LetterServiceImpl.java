@@ -1,6 +1,7 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.LetterException;
+import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.model.dto.common.LetterDto;
 import com.ssafy.stargate.model.dto.request.LetterCreateRequestDto;
 import com.ssafy.stargate.model.dto.request.LetterDeleteRequestDto;
@@ -39,18 +40,19 @@ public class LetterServiceImpl implements LetterService{
 
     @Autowired
     private PMemberRepository pMemberRepository;
-
+    
     /**
      * 편지 작성해서 저장
      * @param dto LetterCreateRequestDto 팬유저가 작성한 편지 정보 담는 dto
      * @return LetterDto 저장된 편지 정보 dto
+     * @throws NotFoundException 존재하지 않는 회원, 존재하지 않는 멤버, 존재하지 않는 팬미팅 에러
      */
     @Override
-    public LetterDto createLetter(LetterCreateRequestDto dto) {
+    public LetterDto createLetter(LetterCreateRequestDto dto) throws NotFoundException {
 
-        FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow();
-        PMember pMember = pMemberRepository.findById(dto.getMemberNo()).orElseThrow();
-        Meeting meeting = meetingRepository.findById(dto.getUuid()).orElseThrow();
+        FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+        PMember pMember = pMemberRepository.findById(dto.getMemberNo()).orElseThrow(() -> new NotFoundException("존재하지 않는 멤버입니다."));
+        Meeting meeting = meetingRepository.findById(dto.getUuid()).orElseThrow(() -> new NotFoundException("존재하지 않는 팬미팅입니다."));
 
         Letter letter = Letter.builder()
                 .contents(dto.getContents())
@@ -77,9 +79,10 @@ public class LetterServiceImpl implements LetterService{
      * 편지 수정
      * @param dto 편지 정보가 저장된 dto
      * @return LetterDto 수정 완료된 편지 정보 담는 dto
+     * @throws NotFoundException 존재하지 않는 편지 에러
      */
     @Override
-    public LetterDto updateLetter(LetterUpdateRequestDto dto) throws LetterException {
+    public LetterDto updateLetter(LetterUpdateRequestDto dto) throws NotFoundException {
 
         Letter letter = letterRepository.findById(dto.getNo()).orElseThrow();
 
@@ -87,7 +90,7 @@ public class LetterServiceImpl implements LetterService{
             letter.setContents(dto.getContents());
 
         }else{
-            throw new LetterException("해당하는 편지가 없습니다.");
+            throw new NotFoundException("해당하는 편지가 없습니다.");
         }
 
         Letter updatedLetter = letterRepository.save(letter);
@@ -106,26 +109,24 @@ public class LetterServiceImpl implements LetterService{
     /**
      * 편지 삭제
      * @param dto LetterDeleteRequestDto 삭제하려는 편지 번호 정보를 담는 dto
-     * @throws LetterException 삭제하려는 편지 번호가 존재하지 않을 때 발생
      */
     @Override
-    public void deleteLetter(LetterDeleteRequestDto dto) throws LetterException {
-        try{
+    public void deleteLetter(LetterDeleteRequestDto dto){
+
             letterRepository.deleteById(dto.getNo());
-        }catch (Exception e){
-            throw new LetterException("삭제하려는 편지가 존재하지 않습니다.");
-        }
     }
 
+    
     /**
      * 편지 번호로 조회해서 해당하는 편지 정보 반환
      * @param no Long 편지 번호
      * @return LetterDto 편지 정보가 담긴 dto
+     * @throws NotFoundException 존재 하지 않는 편지 에러
      */
     @Override
-    public LetterDto getLetter(Long no) {
+    public LetterDto getLetter(Long no) throws NotFoundException {
 
-        Letter letter = letterRepository.findById(no).orElseThrow();
+        Letter letter = letterRepository.findById(no).orElseThrow(() -> new NotFoundException("찾으려는 편지는 존재하지 않는 편지입니다"));
 
         return LetterDto.builder()
                 .no(letter.getNo())
@@ -146,7 +147,7 @@ public class LetterServiceImpl implements LetterService{
     @Override
     public List<LetterDto> getLetterByMeeting(LetterFindRequestDto dto) {
 
-        List<Letter> letters = letterRepository.findByMeeting_Uuid(dto.getUuid());
+        List<Letter> letters = letterRepository.findByMeeting_Uuid(dto.getUuid()).orElseThrow();
 
         return letters.stream().map((Letter -> LetterDto.builder()
                 .no(Letter.getNo())
@@ -168,7 +169,7 @@ public class LetterServiceImpl implements LetterService{
     @Override
     public List<LetterDto> getLetterByMember(LetterFindRequestDto dto) {
 
-        List<Letter> letters = letterRepository.findBypMemberMemberNo(dto.getMemberNo());
+        List<Letter> letters = letterRepository.findBypMemberMemberNo(dto.getMemberNo()).orElseThrow();
 
         return letters.stream().map((Letter -> LetterDto.builder()
                 .no(Letter.getNo())
@@ -190,7 +191,7 @@ public class LetterServiceImpl implements LetterService{
     @Override
     public List<LetterDto> getLetterByFUser(String email) {
 
-        List<Letter> letters = letterRepository.findByfUserEmail(email);
+        List<Letter> letters = letterRepository.findByfUserEmail(email).orElseThrow();
 
         return letters.stream().map((Letter -> LetterDto.builder()
                 .no(Letter.getNo())

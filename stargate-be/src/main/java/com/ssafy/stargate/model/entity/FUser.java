@@ -12,6 +12,7 @@ import java.util.List;
  * 팬 유저 엔티티
  */
 @Entity
+@Table(name = "f_user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -42,5 +43,6 @@ public class FUser extends BaseEntity {
     private Certify certify;
 
     @OneToMany(mappedBy = "fUser")
+    @Builder.Default
     private List<Letter> letters = new ArrayList<>();
 }

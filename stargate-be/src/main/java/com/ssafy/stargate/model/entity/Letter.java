@@ -7,6 +7,7 @@ import lombok.*;
  * 편지 엔티티
  */
 @Entity
+@Table(name = "letter")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

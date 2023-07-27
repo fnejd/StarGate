@@ -1,6 +1,7 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.LetterException;
+import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.model.dto.common.LetterDto;
 import com.ssafy.stargate.model.dto.request.LetterCreateRequestDto;
 import com.ssafy.stargate.model.dto.request.LetterDeleteRequestDto;
@@ -16,13 +17,13 @@ import java.util.UUID;
  */
 public interface LetterService {
 
-    public LetterDto createLetter(LetterCreateRequestDto dto);
+    public LetterDto createLetter(LetterCreateRequestDto dto) throws NotFoundException;
 
-    public LetterDto updateLetter(LetterUpdateRequestDto dto) throws LetterException;
+    public LetterDto updateLetter(LetterUpdateRequestDto dto) throws NotFoundException;
 
-    public void deleteLetter(LetterDeleteRequestDto dto) throws LetterException;
+    public void deleteLetter(LetterDeleteRequestDto dto);
 
-    public LetterDto getLetter(Long no);
+    public LetterDto getLetter(Long no) throws NotFoundException;
 
     public List<LetterDto> getLetterByMeeting(LetterFindRequestDto dto);
 

@@ -2,12 +2,15 @@ package com.ssafy.stargate.controller;
 
 import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
+import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.common.FUserDto;
 import com.ssafy.stargate.model.dto.common.FUserFindIdDto;
 import com.ssafy.stargate.model.dto.common.FUserFindPwDto;
+import com.ssafy.stargate.model.dto.request.FUserEmailCheckRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
+import com.ssafy.stargate.model.dto.response.FUserEmailCheckResponseDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.service.FUserService;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +32,12 @@ import java.security.Principal;
 public class FUserController {
     @Autowired
     private final FUserService fUserService;
-
+    
     /**
      * 팬 유저 회원가입
-     *
      * @param dto [FUserRegisterRequestDto] 팬 유저 회원가입 request
      * @return [ResponseEntity<?>]성공: [200], 실패: [600]
-     * @throws RegisterException 회원가입 등록 실패
+     * @throws EmailDuplicationException 아이디(이메일) 중복 가입 시 발생하는 에러
      */
     @PostMapping("/register")
     public ResponseEntity<Void> createFUsers(@ModelAttribute @Validated FUserDto dto) throws EmailDuplicationException, RegisterException {
@@ -43,28 +45,29 @@ public class FUserController {
         return ResponseEntity.ok(null);
     }
 
+
     /**
      * 팬 로그인
      * @param dto [FUserLoginRequestDto] 팬 로그인 request
      * @return [ResponseEntity<JwtResponseDto>] 성공: [200] JWT Response, 실패: [401]
-     * @throws LoginException
+     * @throws NotFoundException 존재하지 않는 회원 에러
+     * @throws LoginException 로그인 실패 에러
      */
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDto> loginFUsers(@ModelAttribute @Validated FUserLoginRequestDto dto) throws LoginException {
-        try {
+    public ResponseEntity<JwtResponseDto> loginFUsers(@ModelAttribute @Validated FUserLoginRequestDto dto) throws NotFoundException, LoginException{
+
             return ResponseEntity.ok(fUserService.login(dto));
-        } catch (LoginException e) {
-            return ResponseEntity.status(401).build();
-        }
     }
 
     /**
      * 팬 유저 마이페이지 정보
      * @param principal Principal 유저 email이 담긴 객체
      * @return [ResponseEntity<FUserDto>] 회원 정보
+     * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @GetMapping("/get")
-    public ResponseEntity<FUserDto> getFUserInfo(Principal principal){
+    public ResponseEntity<FUserDto> getFUserInfo(Principal principal) throws NotFoundException {
+
         FUserDto fUser = fUserService.getFUser(principal);
         log.info("user{}", fUser);
         return ResponseEntity.ok(fUser);
@@ -75,9 +78,11 @@ public class FUserController {
      * @param dto FUserUpdateRequestDto 팬회원 정보가 저장된 DTO
      * @param principal Principal 유저 email이 담긴 객체
      * @return 성공 -> 200 코드 반환
+     * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateFUserInfo(@ModelAttribute @Validated FUserUpdateRequestDto dto, Principal principal){
+    public ResponseEntity<?> updateFUserInfo(@ModelAttribute @Validated FUserUpdateRequestDto dto, Principal principal) throws NotFoundException {
+
         fUserService.updateFUser(dto, principal);
         return ResponseEntity.ok(null);
     }
@@ -89,65 +94,73 @@ public class FUserController {
      */
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteFUserInfo(Principal principal){
+
         fUserService.deleteFUser(principal);
         return ResponseEntity.ok(null);
     }
+
 
     /**
      * FUser 아이디 찾기
      * @param dto FUserFindIdDto 아이디를 찾기 위한 객체 (name,phone 정보 저장)
      * @return [ResponseEntity<FUserFindIdDto>] (아이디- 이메일) 저장되어 있는 객체
-     * @throws LoginException
+     * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @PostMapping("/find-id")
-    public ResponseEntity<?> findFUserId(@ModelAttribute @Validated FUserFindIdDto dto) throws LoginException {
-        try {
+    public ResponseEntity<FUserFindIdDto> findFUserId(@ModelAttribute @Validated FUserFindIdDto dto) throws NotFoundException{
+
             return ResponseEntity.ok(fUserService.getFUserId(dto));
-        } catch (LoginException e) {
-            return ResponseEntity.status(e.getStatus()).build();
-        }
     }
 
     /**
      * FUser 비밀번호 찾기 요청에 대해 인증 번호 발송
      * @param dto FUserFindPwDto 비밀번호를 찾기 위한 객체 (이메일 정보 필수로 저장)
      * @return [ResponseEntity<FUserFindPwDto>] 인증 번호가 저장되어 있는 객체 반환
-     * @throws LoginException
+     * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @PostMapping("/get-code")
-    public ResponseEntity<?> getCertifyCode(@RequestBody @Validated FUserFindPwDto dto) throws LoginException{
-        try {
+    public ResponseEntity<FUserFindPwDto> getCertifyCode(@RequestBody @Validated FUserFindPwDto dto) throws NotFoundException{
+
             return ResponseEntity.ok(fUserService.getCertifyCode(dto));
-        }catch (LoginException e){
-            return ResponseEntity.status(e.getStatus()).build();
-        }
     }
+
 
     /**
      * 비밀번호 재설정하려 할때 인증 번호 확인 & 비밀번호 변경
      * @param dto FUserFindPwDto 인증 번호를 담고 있는 객체 (이메일 정보 필수로 저장)
      * @return 성공 -> 200, 실패 -> 401
-     * @throws LoginException 인증 번호 불일치
+     * @throws LoginException 인증번호 불일치 에러
+     * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @PostMapping("/check-code")
-    public ResponseEntity<?> checkCertifyCode(@RequestBody @Validated FUserFindPwDto dto) throws LoginException{
-        try{
-            fUserService.checkCertify(dto);
+    public ResponseEntity<?> checkCertifyCode(@RequestBody @Validated FUserFindPwDto dto) throws LoginException, NotFoundException{
 
+            fUserService.checkCertify(dto);
             return ResponseEntity.ok(null);
-        }catch (LoginException e){
-            return ResponseEntity.status(e.getStatus()).build();
-        }
     }
 
     /**
      * 비밀 번호 재설정
      * @param dto FUserFindPwDto FUser 의 이메일 정보와 새로운 비밀번호가 저장된 객체
      * @return 성공 -> 200
+     * @throws NotFoundException 존재하지 않는 회원 에러, 존재하지 않는 인증번호 에러
      */
     @PostMapping("/new-pw")
-    public ResponseEntity<?> updateFUserPassword(@RequestBody @Validated FUserFindPwDto dto){
+    public ResponseEntity<?> updateFUserPassword(@RequestBody @Validated FUserFindPwDto dto) throws NotFoundException{
+
         fUserService.updateFUserPw(dto);
         return ResponseEntity.ok(null);
     }
+
+    /**
+     * 이미 해당 이메일로 회원가입된 계정이 있는지 확인
+     * @param dto FUserEmailCheckRequestDto 회원 가입하려는 이메일 정보가 담긴 dto
+     * @return [ResponseEntity<FUserEmailCheckResponseDto>] 이메일 중복 여부 담긴 dto
+     */
+    @GetMapping("/check-email")
+    public ResponseEntity<FUserEmailCheckResponseDto> checkDuplicateEmail(@RequestBody FUserEmailCheckRequestDto dto){
+
+        return ResponseEntity.ok(fUserService.checkDuplicateEmail(dto));
+    }
+
 }

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
 
 import java.nio.charset.StandardCharsets;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.Base64;
 import java.util.Date;
@@ -113,26 +116,28 @@ public class JwtTokenUtil {
     public boolean isTokenExpired(String token) {
         return parseToken(token, key).getExpiration().before(new Date());
     }
-
+    
     /**
      * 토큰이 유요한지 검증
      * @param token String 토큰
      * @return boolean 토큰이 유요하면 true
+     * @throws InvalidTokenException 토큰 에러
      */
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws InvalidTokenException {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (SecurityException | MalformedJwtException e) {
-            log.info("[ERR] : 잘못된 JWT SIGN");
+        } catch (SecurityException e) {
+            throw new InvalidTokenException("잘못된 JWT 서명입니다.");
         } catch (UnsupportedJwtException e) {
-            log.info("[ERR] : 지원 안되는 JWT TOKEN");
-        } catch (IllegalArgumentException e) {
-            log.info("[ERR] : 잘못된 JWT TOKEN");
-        }catch (Exception e){
-            log.info("[ERR] : {}", e.getMessage());
+            throw new InvalidTokenException("지원하지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException | MalformedJwtException e) {
+            throw new InvalidTokenException("잘못된 JWT 토큰입니다.");
+        } catch (ExpiredJwtException e){
+            throw new InvalidTokenException("만료된 토큰입니다.");
+        } catch (Exception e){
+            throw new InvalidTokenException("유효하지 않은 토큰입니다.");
         }
-        throw new InvalidTokenException("유효하지 않은 토큰들");
     }
 
 
