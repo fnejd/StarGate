@@ -21,7 +21,7 @@ const TimeLeftComponent: React.FC<TimeProps> = ({ min, sec }) => {
   }, [min, sec]);
   return (
     <div>
-      <p className="font-semibold text-slate-50 text-48">{time}</p>
+      <p className="font-semibold text-white text-48">{time}</p>
     </div>
   );
 };

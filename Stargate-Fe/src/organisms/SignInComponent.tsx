@@ -75,10 +75,10 @@ const SignInComponent = () => {
       <div className="flex justify-center">
         <BtnBlue text="로그인" onClick={Login} />
       </div>
-      <div className="flex text-slate-50 p2r mt-2 w-full justify-center">
+      <div className="flex text-white p2r mt-2 w-full justify-center">
         <div className="flex">
           <TextButtonComponent text="아이디" link="/idinquiry" />
-          <div className="text-slate-50 p3r">
+          <div className="text-white p3r">
             <p>또는</p>
           </div>
           <TextButtonComponent text="비밀번호 찾기" link="/pwinquiry" />
