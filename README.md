@@ -1,5 +1,6 @@
 ## <img src="https://pic.sopili.net/pub/emoji/twitter/2/72x72/1f320.png" width=32 height=32> 스타게이트
 #### 화상통화 팬사인회 App
+![스타게이트_-_1](/uploads/ab4dfeb6812b29e8881da4a69b6c4910/스타게이트_-_1.png)
 
 ## Guide
 
@@ -26,6 +27,7 @@
 0. [Dev 서버 구동방법](#Dev 서버 구동방법)
 1. [기획](#기획)
 2. [Link](#Link)
+3. [Soultion](#Soultion)
 3. [Preview](#Preview)
 4. [Skills](#Skills)
 5. [Team](#Team)
@@ -44,25 +46,32 @@ pnpm install
 #### Dev 서버 구동
 pnpm run dev
    
-## 기획
-![image](https://github.com/Legitgoons/Everyones-Subway/assets/101088491/5ab691b7-c9e9-4fc3-bf57-5e68d72d5d29)<br>
-![image](https://github.com/Legitgoons/Everyones-Subway/assets/101088491/4eb01a4e-706e-464e-9ba4-040d9834b179)<br>
-![image](https://github.com/Legitgoons/Everyones-Subway/assets/101088491/01230f12-f33a-4bbe-8a73-11dbbd234fde)<br>
-![image](https://github.com/Legitgoons/Everyones-Subway/assets/101088491/26b8665c-5104-4a88-bc00-6c99aec3b849)<br>
+## 개발 배경
+![스타게이트_-_3](/uploads/5a0bf9aa8352c9697c1a8ad24358c866/스타게이트_-_3.png)
+![스타게이트_-_4](/uploads/173aba4903b6cb73e4829cf93a2136f3/스타게이트_-_4.png)
+![스타게이트_-_5](/uploads/bdd2614e092c4a1f0b5ad16183cdbfcb/스타게이트_-_5.png)
+![스타게이트_-_6](/uploads/a5c1fa1c5bf05fb5a4f3c17711002183/스타게이트_-_6.png)
+![스타게이트_-_9](/uploads/2e2543a6982a22d5c3c07c5f10536336/스타게이트_-_9.png)
+
+## Solution
+![스타게이트_-_10](/uploads/676b8a2ce979f3a66ab41530ed61c184/스타게이트_-_10.png)
+![스타게이트_-_11](/uploads/109f0884caf1f89075dd4ef153bd1a51/스타게이트_-_11.png)
 
 ## Link
- - [모두의 지하철 Homepage](everyones-subway.vercel.app)
  - [Visit project repository](https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A406)
 
 ## Preview
-![시연콘티-11](https://github.com/Legitgoons/Everyones-Subway/assets/101088491/2a3a294e-c315-4a2a-a2ed-1d3d53bd1f3b)
+![스타게이트_-_13](/uploads/01961f81aadc1999e92bd9e36f63e53b/스타게이트_-_13.png)
 
 ### User
-![시연콘티-1](https://github.com/Legitgoons/Everyones-Subway/assets/101088491/c9735127-e1d3-465c-a553-ea896ec0a7cd)
+![스타게이트_-_14](/uploads/cdb5da8eee0f3e81840d7b497e5598bc/스타게이트_-_14.png)
+![스타게이트_-_15](/uploads/0ab4cf53b2fe45b885d31e45f3d54b81/스타게이트_-_15.png)
+![스타게이트_-_16](/uploads/920df4e390656cfb1891531ed3eccb92/스타게이트_-_16.png)
 
 ### Admin
-![시연콘티-8](https://github.com/Legitgoons/Everyones-Subway/assets/101088491/3e5cba10-08f5-4ce0-99d0-0a91499f8cde)
-
+![스타게이트_-_17](/uploads/6730fb0fd0f07506f17a5dffeb2dce43/스타게이트_-_17.png)
+![스타게이트_-_18](/uploads/be76f5bd554c07008b59403722c6ec23/스타게이트_-_18.png)
+![스타게이트_-_19](/uploads/dcbacdcdffd54c4747974d554f634570/스타게이트_-_19.png)
 ## Skills
 ### Frontend
  - React
