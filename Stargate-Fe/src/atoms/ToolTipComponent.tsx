@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const ToolTipComponent = () => {
   return (
@@ -7,7 +7,7 @@ const ToolTipComponent = () => {
         ?
       </a>
     </div>
-  )
-}
+  );
+};
 
 export default ToolTipComponent;

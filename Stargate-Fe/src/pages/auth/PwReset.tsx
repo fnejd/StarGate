@@ -1,10 +1,10 @@
 import React from 'react';
-import PwresetComponent from '@/organisms/PwresetComponent';
+import PwResetComponent from '@/organisms/PwResetComponent';
 
 const PwReset = () => {
   return (
-    <div>
-      <PwresetComponent />
+    <div className="w-screen">
+      <PwResetComponent />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import IdinquiryComponent from '@/organisms/IdinquiryComponent';
 
 const Idinquiry = () => {
   return (
-    <div>
+    <div className="w-screen">
       <IdinquiryComponent />
     </div>
   );
