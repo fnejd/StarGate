@@ -2,6 +2,10 @@
 #### 화상통화 팬사인회 App
 ![스타게이트_-_1](/uploads/ab4dfeb6812b29e8881da4a69b6c4910/스타게이트_-_1.png)
 
+## Link
+ - [Visit Project Repository](https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A406)
+ - [Proto Type](https://www.figma.com/file/XV9X0H24uaUo6EEIHUlKHW/%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85?type=design&node-id=0%3A1&mode=design&t=iLza45bmqasaKXw7-1)
+
 ## Guide
 
 ### User
@@ -26,8 +30,7 @@
 ## Contents
 0. [Dev 서버 구동방법](#Dev 서버 구동방법)
 1. [기획](#기획)
-2. [Link](#Link)
-3. [Soultion](#Soultion)
+2. [Soultion](#Soultion)
 3. [Preview](#Preview)
 4. [Skills](#Skills)
 5. [Team](#Team)
@@ -56,9 +59,6 @@ pnpm run dev
 ## Solution
 ![스타게이트_-_10](/uploads/676b8a2ce979f3a66ab41530ed61c184/스타게이트_-_10.png)
 ![스타게이트_-_11](/uploads/109f0884caf1f89075dd4ef153bd1a51/스타게이트_-_11.png)
-
-## Link
- - [Visit project repository](https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A406)
 
 ## Preview
 ![스타게이트_-_13](/uploads/01961f81aadc1999e92bd9e36f63e53b/스타게이트_-_13.png)
