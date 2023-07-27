@@ -323,12 +323,11 @@ C:.
 </table>
 
 ## Project Control
-- Version Control: Git, GitLap
-- Task Control: Notion, Figma, Jira, Slack
+##### Version Control: Git, GitLap
+##### Task Control: Notion, Figma, Jira, Slack
 
 ## Code Convention
-
-- Part별 Code Convention은 노션에 작성했습니다.
+#### Part별 Code Convention은 노션에 작성했습니다.
 ### [Frontend](https://denim-meteorite-208.notion.site/478eaf4a6ea44312bfd3a91645586f5e?pvs=4)
 ### [Backend](https://denim-meteorite-208.notion.site/724d3b46fe24422f8429c3ef21ef3d18?pvs=4)
 
