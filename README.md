@@ -27,15 +27,15 @@
 2. 화상통화 창으로 진입해서 팬사인회에 참가한다.
 
 ## Contents
-0. [Dev 서버 구동방법](#Dev 서버 구동방법)
-1. [기획](#기획)
+0. [Dev 서버 구동방법](#dev-서버-구동방법)
+1. [개발 배경](#개발-배경)
 2. [Soultion](#soultion)
 3. [Preview](#preview)
 4. [Skills](#skills)
 5. [Structure](#structure)
 6. [Team](#team)
-7. [Project Control](#project-Control)
-8. [Code Convention](#code-Convention)
+7. [Project Control](#project-control)
+8. [Code Convention](#code-convention)
 9. [Challenges](#challenges)
 
 ## Dev 서버 구동방법
