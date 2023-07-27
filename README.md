@@ -29,14 +29,14 @@
 ## Contents
 0. [Dev 서버 구동방법](#Dev 서버 구동방법)
 1. [기획](#기획)
-2. [Soultion](#Soultion)
-3. [Preview](#Preview)
-4. [Skills](#Skills)
-5. [Structure](#Structure)
-6. [Team](#Team)
-7. [Project Control](#Project-Control)
-8. [Code Convention](#Code-Convention)
-9. [Challenges](#Challenges)
+2. [Soultion](#soultion)
+3. [Preview](#preview)
+4. [Skills](#skills)
+5. [Structure](#structure)
+6. [Team](#team)
+7. [Project Control](#project-Control)
+8. [Code Convention](#code-Convention)
+9. [Challenges](#challenges)
 
 ## Dev 서버 구동방법
 아래 코드를 터미널에 붙여넣습니다.
