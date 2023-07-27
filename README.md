@@ -9,23 +9,22 @@
 ## Guide
 
 ### User
-1. 회원가입과 로그인을 한다.
-2. 대쉬보드 페이지에서  
-3. 
-4. 
-5. 
+1. 로그인을 통해 대시보드 페이지에 입장한다.
+2. 대시보드 페이지 상단에 있는 오픈되어 있는 팬사인회에 입장한다.
+3. 팬사인회 대기 진입화면에서 공지사항, 화면 테스트, 폴라로이드 촬영 옵션 선택 등을 진행한다.
+4. 대기화면에서 대기하다가 시간이 되면 화상통화 창으로 진입해서 팬사인회에 참가한다.
+5. 팬사인회가가 모두 마무리 되면 촬영한 사진을 확인하고 편지를 보낸다.
 
 ### Admin
-1. 호출 내역에서 호출을 확인한다.
-2. 호출을 확인했다면 확인 메시지를 보낸다.
-3. 호출한 역으로 이동해 도움을 제공한다.
-4. 만약 User가 환승/도착역에서 추가적인 도움을 필요로 한다면 환승역 전달 버튼을 누른다.
+1. 로그인을 통해 대시보드 페이지에 입장한다.
+2. 대시보드 페이지 우측 하단에 있는 버튼을 눌러 새로운 팬사인회를 생성페이지로 이동한다.
+3. 날짜, 시간, 진행 시간 등의 옵션과 참여할 그룹과 멤버, 그리고 User 리스트를 추가한 뒤, 팬사인회를 생성한다.
+4. 팬사인회가 진행되는 동안 실시간으로 사인회를 모니터링한다.
+5. 팬사인회가 종료된 후에 팬들의 편지 리스트를 확인하고 전달한다.
 
 ### Star
 1. Admin에게 접속할 URL을 전달받는다.
-2. 
-3. 
-4. 
+2. 화상통화 창으로 진입해서 팬사인회에 참가한다.
 
 ## Contents
 0. [Dev 서버 구동방법](#Dev 서버 구동방법)
@@ -33,10 +32,11 @@
 2. [Soultion](#Soultion)
 3. [Preview](#Preview)
 4. [Skills](#Skills)
-5. [Team](#Team)
-6. [Project Control](#Project-Control)
-7. [Code Convention](#Code-Convention)
-8. [Challenges](#Challenges)
+5. [Structure](#Structure)
+6. [Team](#Team)
+7. [Project Control](#Project-Control)
+8. [Code Convention](#Code-Convention)
+9. [Challenges](#Challenges)
 
 ## Dev 서버 구동방법
 아래 코드를 터미널에 붙여넣습니다.
@@ -98,6 +98,158 @@ pnpm run dev
  - AWS EC2
  - Docker Desktop(예정)
 
+## Structure
+### Frontend
+##### Frontend에서는 Atomic Design Pattern을 커스텀하여 Atoms, Organisms, Pages 3단계로 나눠서 구현하였습니다.<br>
+Atom : 더 이상 분해할 수 없는 기본 컴포넌트<br/>
+Organism : 하나 이상의 Atom을 조합<br/>
+Page : 비즈니스 로직을 관리, 하위 단위에서 필요한 상태값들을 props로 전달.
+```
+C:.
+│  .eslintrc.cjs
+│  .gitignore
+│  .prettierrc.json
+│  index.html
+│  package.json
+│  pnpm-lock.yaml
+│  postcss.config.js
+│  tailwind.config.js
+│  tsconfig.json
+│  tsconfig.node.json
+│  vite.config.ts
+│  
+├─public
+│      vite.svg
+│      
+└─src
+    │  App.css
+    │  App.tsx
+    │  index.css
+    │  main.tsx
+    │  vite-env.d.ts
+    │  
+    ├─assets
+    │  │  react.svg
+    │  │  
+    │  ├─font
+    │  │      Kreon-Regular.ttf
+    │  │      Kreon-SemiBold.ttf
+    │  │      SUIT-Regular.ttf
+    │  │      SUIT-SemiBold.ttf
+    │  │      
+    │  └─image
+    │          NEWJEANS.jpg
+    │          NEWJEANS.svg
+    │          
+    ├─atoms
+    │      AdminBoardHeaderNav.tsx
+    │      AdminBtn.tsx
+    │      AdminInput.tsx
+    │      AuthNumInputComponent.tsx
+    │      BlackLayer.tsx
+    │      BoardCard.tsx
+    │      BoardHeaderNav.tsx
+    │      BoardHeaderTitle.tsx
+    │      BtnBlue.tsx
+    │      BtnWhite.tsx
+    │      DropDown.tsx
+    │      InputComponent.tsx
+    │      ManagementModalBox.tsx
+    │      ModalPlusButton.tsx
+    │      PolariodCard.tsx
+    │      PWHidden.tsx
+    │      PWShown.tsx
+    │      TextButtonComponent.tsx
+    │      TimeLeftComponent.tsx
+    │      ToolTipComponent.tsx
+    │      
+    ├─hooks
+    │      useDropdown.tsx
+    │      
+    ├─organisms
+    │      AdminBoardHeader.tsx
+    │      AdminManagementModal.tsx
+    │      AdminSignUpComponent.tsx
+    │      AuthNumberComponent.tsx
+    │      BoardCardBox.tsx
+    │      BoardCardList.tsx
+    │      BoardHeader.tsx
+    │      IdinquiryComponent.tsx
+    │      MeetingBottomSection.tsx
+    │      MeetingLeftSection.tsx
+    │      MeetingRightSection.tsx
+    │      MyPageBox.tsx
+    │      PasswordFormComponent.tsx
+    │      PwinquiryComponent.tsx
+    │      PwResetComponent.tsx
+    │      SignInComponent.tsx
+    │      SignUpComponent.tsx
+    │      
+    └─pages
+        ├─admin
+        │  ├─board
+        │  │      AdminBoard.tsx
+        │  │      AdminManagement.tsx
+        │  │      AdminMyPage.tsx
+        │  │      
+        │  ├─event
+        │  │      AdminEventCreate.tsx
+        │  │      AdminEventDetail.tsx
+        │  │      AdminMonitoring.tsx
+        │  │      
+        │  └─signUp
+        │          AdminSignUp.tsx
+        │          
+        ├─auth
+        │      Idinquiry.tsx
+        │      PwInquiry.tsx
+        │      PwReset.tsx
+        │      SignIn.tsx
+        │      SignUp.tsx
+        │      
+        ├─star
+        │      StarVideo.tsx
+        │      
+        └─user
+            ├─board
+            │      MyPage.tsx
+            │      Remind.tsx
+            │      UserBoard.tsx
+            │      
+            └─video
+                    ReadyRoom.tsx
+                    UserVideo.tsx
+```
+### Backend
+```
+C:.
+├─main
+│  ├─java
+│  │  └─com
+│  │      └─ssafy
+│  │          └─stargate
+│  │              ├─advice
+│  │              ├─config
+│  │              ├─controller
+│  │              ├─exception
+│  │              ├─filter
+│  │              ├─handler
+│  │              ├─model
+│  │              │  ├─dto
+│  │              │  │  ├─common
+│  │              │  │  ├─request
+│  │              │  │  └─response
+│  │              │  ├─entity
+│  │              │  ├─repository
+│  │              │  └─service
+│  │              └─util
+│  └─resources
+└─test
+    └─java
+        └─com
+            └─ssafy
+                └─stargate
+```
 ## Team
 <table>
   <tr>
@@ -173,7 +325,6 @@ pnpm run dev
 ## Project Control
 - Version Control: Git, GitLap
 - Task Control: Notion, Figma, Jira, Slack
-
 
 ## Code Convention
 
