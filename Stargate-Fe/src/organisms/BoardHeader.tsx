@@ -5,8 +5,8 @@ import BoardHeaderTitle from '../atoms/BoardHeaderTitle';
 const BoardHeader = () => {
   return (
     <div className='w-full'>
-      <BoardHeaderNav/>
-      <BoardHeaderTitle/>
+      <BoardHeaderNav />
+      <BoardHeaderTitle />
     </div>
   );
 };
