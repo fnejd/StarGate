@@ -32,12 +32,12 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
   const groupNames = group.map((data) => data.name);
   const totalButtons = Math.ceil(groupNames.length / 5) * 5;
 
-/**
- * handleCircleClick
- * 버튼이 클릭되면, props로 전달받은 groupName을 이용해 group의 data를 찾음
- * data에서 groupNo를 selectedGroup에 저장, 만약에 못찾았다면 null값을 넣어줌
- * 그 후 setIsModalOpen을 이용해 Modal창을 열어줌
- */
+  /**
+   * handleCircleClick
+   * 버튼이 클릭되면, props로 전달받은 groupName을 이용해 group의 data를 찾음
+   * data에서 groupNo를 selectedGroup에 저장, 만약에 못찾았다면 null값을 넣어줌
+   * 그 후 setIsModalOpen을 이용해 Modal창을 열어줌
+   */
 
   const handleCircleClick = (groupName: string) => {
     const selectedGroupNo =
@@ -59,7 +59,10 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
             const groupName = groupNames[index];
             if (groupName) {
               return (
-                <div key={groupName} className="lg:w-1/5 flex justify-center">
+                <div
+                  key={groupName}
+                  className="lg:w-1/5 flex justify-center mb-16"
+                >
                   <BtnBlue
                     onClick={() => handleCircleClick(groupName)}
                     text={groupName}
