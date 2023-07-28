@@ -1,12 +1,18 @@
 import React from 'react';
-import InputComponent from '../atoms/InputComponent';
-import PasswordFormComponent from './PasswordFormComponent';
-import TextButtonComponent from '@/atoms/TextButtonComponent';
+import InputComponent from '../../atoms/common/InputComponent';
+import PasswordFormComponent from '../auth/PasswordFormComponent';
+import TextButtonComponent from '@/atoms/common/TextButtonComponent';
 
 /**
- * InputComponent
+ * Todos
+ * InputComponents 충돌 수정
+ */
+
+/**
+ * MyPageBoxProps
  * @param isAdmin => admin 여부가 들어갈 boolean 변수, 값에 따라 다른 항목이 랜더링 됨
  */
+
 
 interface MyPageBoxProps {
   isAdmin: boolean;

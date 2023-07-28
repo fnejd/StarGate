@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import CSVReader from 'react-csv-reader';
-import AdminBtn from '@/atoms/AdminBtn.tsx';
-import AdminInput from '@/atoms/AdminInput.tsx';
+import AdminBtn from '@/atoms/common/AdminBtn';
+import AdminInput from '@/atoms/event/AdminInput';
 
 const MeetingBottomSection = () => {
   const [members, setMembers] = useState<string[]>(['a']);

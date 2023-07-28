@@ -1,5 +1,5 @@
 import React from 'react';
-import SignUpComponent from '@/organisms/SignUpComponent';
+import SignUpComponent from '@/organisms/auth/SignUpComponent';
 
 const SignUp = () => {
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
-import AdminBoardHeaderNav from '@/atoms/AdminBoardHeaderNav';
-import MyPageBox from '@/organisms/MyPageBox';
+import AdminBoardHeaderNav from '@/atoms/board/AdminBoardHeaderNav';
+import MyPageBox from '@/organisms/board/MyPageBox';
 
 const dummy = {
   email: 'YunHans@ssafy.com',

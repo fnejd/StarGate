@@ -1,6 +1,11 @@
 import React from 'react';
-import AdminBoardHeaderNav from '../../../atoms/AdminBoardHeaderNav';
-import AdminManagementModal from '@/organisms/AdminManagementModal';
+import AdminBoardHeaderNav from '../../../atoms/board/AdminBoardHeaderNav';
+import AdminManagementModal from '@/organisms/board/AdminManagementModal';
+
+/**
+ * Todos
+ * Modal 클릭시 이름 출력 수정
+ */
 
 const dummy = [
   {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import InputComponent from '../atoms/InputComponent';
+import InputComponent from '../../atoms/common/InputComponent';
 import AuthNumberComponent from './AuthNumberComponent';
-import BtnBlue from '@/atoms/BtnBlue';
+import BtnBlue from '@/atoms/common/BtnBlue';
 
 const PwinquiryComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
