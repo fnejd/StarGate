@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import InputComponent from '../atoms/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import BtnBlue from '@/atoms/BtnBlue';
-import { redirect, useNavigate } from 'react-router-dom';
+import { redirect, useFormAction, useNavigate } from 'react-router-dom';
+import { signUpApi } from '@/services/userService';
 
 interface userType {
   email: string;
@@ -42,8 +43,34 @@ const SignUpComponent = () => {
     //   setEmailState('red');
     // }
   };
-  const submit = () => {
-    console.log('회원가입 요청');
+
+  const signUp = () => {
+    // pw Checking
+    const pw = (user as userType).pw;
+    const pwCheck = (user as userType).pwCheck;
+    // 일치하지 않는 경우
+    if (pw != pwCheck || pw.length == 0) {
+      alert('비밀번호가 일치하지 않습니다.');
+      window.location.reload();
+      return 0;
+    }
+
+    // phoneNumber formatting & Checking
+    const phone = (user as userType).phone;
+    const numArr = phone.split('');
+
+    if (numArr[0] != '0' || numArr[1] != '1' || numArr.length != 11) {
+      alert('잘못된 전화번호 형식입니다.');
+      window.location.reload();
+      return 0;
+    }
+
+    let newPhone = '0';
+    numArr.map((num, i) => {
+      if (i == 0) return;
+      if (i == 3 || i == 7) newPhone += '-';
+      newPhone += num;
+    });
 
     const formData = new FormData();
 
@@ -51,27 +78,12 @@ const SignUpComponent = () => {
     formData.append('name', (user as userType).name);
     formData.append('nickname', (user as userType).nickname);
     formData.append('password', (user as userType).pw);
-    formData.append('phone', (user as userType).phone);
+    formData.append('phone', newPhone);
     formData.append('birthday', `${(user as userType).birth}T00:00:00.000`);
 
-    // 객체 폼데이터로 변환
-    console.log(formData.get('birthday'));
-  };
-  const signUp = () => {
-    // 회원가입 요청 하기 전에 유효성 검사가 이루어져야할까요
-    // 얼마나 이루어져야 할까요?
-    
-    // pw Checking
-    const pw = (user as userType).pw;
-    const pwCheck = (user as userType).pwCheck;
-    // 일치하지 않는 경우
-    if (pw != pwCheck || pw.length == 0) {
-      alert('비밀번호가 일치하지 않습니다.');
-      redirect('/signup');
-      return 0;
-    }
+    const response = signUpApi(formData);
 
-    submit();
+    console.log(response);
     navigate('/');
   };
 
