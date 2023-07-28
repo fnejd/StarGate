@@ -106,119 +106,24 @@ Organism : 하나 이상의 Atom을 조합<br/>
 Page : 비즈니스 로직을 관리, 하위 단위에서 필요한 상태값들을 props로 전달.
 ```
 C:.
-│  .eslintrc.cjs
-│  .gitignore
-│  .prettierrc.json
-│  index.html
-│  package.json
-│  pnpm-lock.yaml
-│  postcss.config.js
-│  tailwind.config.js
-│  tsconfig.json
-│  tsconfig.node.json
-│  vite.config.ts
-│  
-├─public
-│      vite.svg
-│      
+├─public    
 └─src
-    │  App.css
-    │  App.tsx
-    │  index.css
-    │  main.tsx
-    │  vite-env.d.ts
-    │  
     ├─assets
-    │  │  react.svg
-    │  │  
-    │  ├─font
-    │  │      Kreon-Regular.ttf
-    │  │      Kreon-SemiBold.ttf
-    │  │      SUIT-Regular.ttf
-    │  │      SUIT-SemiBold.ttf
-    │  │      
-    │  └─image
-    │          NEWJEANS.jpg
-    │          NEWJEANS.svg
-    │          
-    ├─atoms
-    │      AdminBoardHeaderNav.tsx
-    │      AdminBtn.tsx
-    │      AdminInput.tsx
-    │      AuthNumInputComponent.tsx
-    │      BlackLayer.tsx
-    │      BoardCard.tsx
-    │      BoardHeaderNav.tsx
-    │      BoardHeaderTitle.tsx
-    │      BtnBlue.tsx
-    │      BtnWhite.tsx
-    │      DropDown.tsx
-    │      InputComponent.tsx
-    │      ManagementModalBox.tsx
-    │      ModalPlusButton.tsx
-    │      PolariodCard.tsx
-    │      PWHidden.tsx
-    │      PWShown.tsx
-    │      TextButtonComponent.tsx
-    │      TimeLeftComponent.tsx
-    │      ToolTipComponent.tsx
-    │      
-    ├─hooks
-    │      useDropdown.tsx
-    │      
+    │  ├─font    
+    │  └─image     
+    ├─atoms 
+    ├─hooks    
     ├─organisms
-    │      AdminBoardHeader.tsx
-    │      AdminManagementModal.tsx
-    │      AdminSignUpComponent.tsx
-    │      AuthNumberComponent.tsx
-    │      BoardCardBox.tsx
-    │      BoardCardList.tsx
-    │      BoardHeader.tsx
-    │      IdinquiryComponent.tsx
-    │      MeetingBottomSection.tsx
-    │      MeetingLeftSection.tsx
-    │      MeetingRightSection.tsx
-    │      MyPageBox.tsx
-    │      PasswordFormComponent.tsx
-    │      PwinquiryComponent.tsx
-    │      PwResetComponent.tsx
-    │      SignInComponent.tsx
-    │      SignUpComponent.tsx
-    │      
     └─pages
+        ├─auth
+        ├─star
         ├─admin
         │  ├─board
-        │  │      AdminBoard.tsx
-        │  │      AdminManagement.tsx
-        │  │      AdminMyPage.tsx
-        │  │      
         │  ├─event
-        │  │      AdminEventCreate.tsx
-        │  │      AdminEventDetail.tsx
-        │  │      AdminMonitoring.tsx
-        │  │      
         │  └─signUp
-        │          AdminSignUp.tsx
-        │          
-        ├─auth
-        │      Idinquiry.tsx
-        │      PwInquiry.tsx
-        │      PwReset.tsx
-        │      SignIn.tsx
-        │      SignUp.tsx
-        │      
-        ├─star
-        │      StarVideo.tsx
-        │      
         └─user
             ├─board
-            │      MyPage.tsx
-            │      Remind.tsx
-            │      UserBoard.tsx
-            │      
             └─video
-                    ReadyRoom.tsx
-                    UserVideo.tsx
 ```
 ### Backend
 ```
