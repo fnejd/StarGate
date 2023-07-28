@@ -12,10 +12,20 @@ interface TextButtonProps {
   link?: string;
 }
 
-const TextButtonComponent: React.FC<TextButtonProps> = ({ text, black, link }) => {
+const TextButtonComponent: React.FC<TextButtonProps> = ({
+  text,
+  black,
+  link,
+}) => {
   return (
-    <div className={`m-2 mt-0 ${black ? 'text-black' : 'text-slate-50'} duration-100`}>
-      <a className="text-slate-50 duration-100" href={link}>{text}</a>
+    <div
+      className={`m-2 mt-0 ${
+        black ? 'text-black' : 'text-white'
+      } duration-100`}
+    >
+      <a className="text-white duration-100" href={link}>
+        {text}
+      </a>
     </div>
   );
 };

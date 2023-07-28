@@ -1,45 +1,94 @@
-import React, { useState } from "react";
-import InputComponent from "../atoms/InputComponent";
-import PasswordFormComponent from "./PasswordFormComponent";
-import BtnBlue from "@/atoms/BtnBlue";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import InputComponent from '../atoms/InputComponent';
+import PasswordFormComponent from './PasswordFormComponent';
+import BtnBlue from '@/atoms/BtnBlue';
+import { redirect, useFormAction, useNavigate } from 'react-router-dom';
+import { signUpApi } from '@/services/userService';
+
+interface userType {
+  email: string;
+  name: string;
+  nickname: string;
+  pw: string;
+  pwCheck: string;
+  phone: string;
+  birth: string;
+}
 
 const SignUpComponent = () => {
-  const [emailText, setEmailText] = useState("사용 불가한 이메일입니다.");
-  const [emailState, setEmailState] = useState("red");
+  const [emailText, setEmailText] = useState('');
+  const [emailState, setEmailState] = useState('red');
   const [user, setUser] = useState<object>({
-    email: "",
-    name: "",
-    nickname: "",
-    pw: "",
-    pwCheck: "",
-    phone: "",
-    birth: "",
+    email: '',
+    name: '',
+    nickname: '',
+    pw: '',
+    pwCheck: '',
+    phone: '',
+    birth: '',
   });
 
   const navigate = useNavigate();
 
-  /**
-   * 이메일 인증 결과를 이용해 emailState 값을 변경시켜
-   * Input 컴포넌트에 프로퍼티로 전달해주기
-   * 이메일 값을 함수 매개변수로 가져가야하려나
-   * 그냥 인풋 태그 자체에서 가져가야 하려나
-   * 따로 컴포넌트로 빼둔거라 함수 매개변수로 가져가는게 나으려나?
-   */
   const verify = () => {
-    console.log("api 요청");
+    console.log('api 요청');
+    // get으로 보내달라 함 쿼리스트링으루
+    // 리턴으론 불리언
+    // const response = email 중복 검사 요청 api 호출
+    // if (response가 true라면 ) {
+    //   setEmailText('사용 가능한 이메일입니다.');
+    //   setEmailState('green');
+    // } else {
+    //   setEmailText('사용 불가한 이메일입니다.');
+    //   setEmailState('red');
+    // }
   };
 
   const signUp = () => {
-    // 회원가입 요청 하기 전에 유효성 검사가 이루어져야할까요
-    // 얼마나 이루어져야 할까요?
-    console.log("회원가입 요청");
-    console.log(user);
-    navigate("/");
+    // pw Checking
+    const pw = (user as userType).pw;
+    const pwCheck = (user as userType).pwCheck;
+    // 일치하지 않는 경우
+    if (pw != pwCheck || pw.length == 0) {
+      alert('비밀번호가 일치하지 않습니다.');
+      window.location.reload();
+      return 0;
+    }
+
+    // phoneNumber formatting & Checking
+    const phone = (user as userType).phone;
+    const numArr = phone.split('');
+
+    if (numArr[0] != '0' || numArr[1] != '1' || numArr.length != 11) {
+      alert('잘못된 전화번호 형식입니다.');
+      window.location.reload();
+      return 0;
+    }
+
+    let newPhone = '0';
+    numArr.map((num, i) => {
+      if (i == 0) return;
+      if (i == 3 || i == 7) newPhone += '-';
+      newPhone += num;
+    });
+
+    const formData = new FormData();
+
+    formData.append('email', (user as userType).email);
+    formData.append('name', (user as userType).name);
+    formData.append('nickname', (user as userType).nickname);
+    formData.append('password', (user as userType).pw);
+    formData.append('phone', newPhone);
+    formData.append('birthday', `${(user as userType).birth}T00:00:00.000`);
+
+    const response = signUpApi(formData);
+
+    console.log(response);
+    navigate('/');
   };
 
   return (
-    <div className="m-5">
+    <div className="m-5 max-w-sm ml-auto mr-auto text-center">
       <p className="form-title">회원가입</p>
       <div className="flex items-center">
         <InputComponent
@@ -52,7 +101,7 @@ const SignUpComponent = () => {
           setter={setUser}
         />
         <button
-          className="medium-white p3b w-full h-10 rounded-lg"
+          className="medium-white captionb w-1/3 h-10 rounded-lg"
           onClick={verify}
         >
           이메일 확인
