@@ -2,12 +2,16 @@ import React from 'react';
 import SignInComponent from '@/organisms/SignInComponent';
 import ToolTipComponent from '@/atoms/ToolTipComponent';
 
+/**
+ * @todo
+ * Toggle 버튼 하나 만들어서 로그인 API 요청할 때
+ * 관리자 로그인인지 유저 로그인인지 구분 가능토록
+ */
 const SignIn = () => {
   return (
     <div className="w-screen">
       <div className="ml-auto mr-auto">
-        {/* 하나씩 글자 넣어보려했는데 사이즈 맞추기 힘드러요 다시 해볼게요
-        <div className="flex max-w-md m-5 t2b text-white text-center">
+        {/* <div className="flex max-w-md m-5 t2b text-white text-center">
           <h1 className="w-1/10">S</h1>
           <h1>T</h1>
           <h1>A</h1>
