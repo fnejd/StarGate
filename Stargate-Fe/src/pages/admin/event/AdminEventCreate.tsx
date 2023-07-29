@@ -1,7 +1,4 @@
-import React from 'react';
-import MeetingLeftSection from '@/organisms/MeetingLeftSection.tsx';
-import MeetingRightSection from '@/organisms/MeetingRightSection.tsx';
-import MeetingBottomSection from '@/organisms/MeetingBottomSection.tsx';
+import React from 'react'; 
 
 const AdminEventCreate = () => {
   return (

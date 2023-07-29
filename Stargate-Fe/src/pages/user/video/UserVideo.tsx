@@ -11,14 +11,16 @@ const UserVideo = () => {
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
+  // 통화 진입
   const handleCallStart = useCallback(async () => {
+    // 내 미디어 스트림 설정
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
       video: true,
     });
     setMyStream(stream);
 
-    const peerConnection = new RTCPeerConnection();
+    const peerConnection = new RTCPeerConnection(); // 콜링하는 쪽에서 생성
     peer.peer = peerConnection;
 
     // 멀티스트림 사용 설정

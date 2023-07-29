@@ -1,21 +1,23 @@
 class PeerService {
-  private peer: RTCPeerConnection;
-
   constructor() {
-    // RTCPeerConnection 객체를 생성하여 peer 변수에 할당
-    this.peer = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: [
-            'stun:stun.l.google.com:19302',
-            'stun:global.stun.twilio.com:3478',
-          ],
-        },
-      ],
-    });
+    if (!this.peer) {
+      // RTCPeerConnection 객체를 생성하여 peer 변수에 할당
+      this.peer = new RTCPeerConnection({
+        // P2P 통신을 위한 ICE 서버 제공
+        iceServers: [
+          {
+            urls: [
+              'stun:stun.l.google.com:19302',
+              'stun:global.stun.twilio.com:3478',
+            ],
+          },
+        ],
+      });
+    }
   }
 
   ////////////////////////////메소드////////////////////////////
+
   // 상대방으로부터 받은 offer 정보를 통해 answer을 생성
   async getAnswer(
     offer: RTCSessionDescriptionInit
@@ -28,19 +30,16 @@ class PeerService {
       const ans = await this.peer.createAnswer();
 
       // 생성한 answer를 Local Description으로 설정
-      await this.peer.setLocalDescription(ans);
+      await this.peer.setLocalDescription(new RTCSessionDescription(ans));
       return ans;
     }
     throw new Error('Peer가 초기화 되지 않았습니다');
   }
 
   // 상대방의 answer 정보를 설정
-  async setLocalDescription(ans: RTCSessionDescriptionInit): Promise<void> {
+  async setLocalDescription(ans) {
     if (this.peer) {
-      // 상대방의 answer를 Remote Description으로 설정
-      await this.peer.setRemoteDescription(ans);
-    } else {
-      throw new Error('Peer가 초기화 되지 않았습니다');
+      await this.peer.setRemoteDescription(new RTCSessionDescription(ans));
     }
   }
 
@@ -51,7 +50,7 @@ class PeerService {
       const offer = await this.peer.createOffer();
 
       // 생성한 offer를 Local Description으로 설정
-      await this.peer.setLocalDescription(offer);
+      await this.peer.setLocalDescription(new RTCSessionDescription(offer));
       return offer;
     }
     throw new Error('Peer가 초기화 되지 않았습니다');

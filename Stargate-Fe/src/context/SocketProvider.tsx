@@ -1,6 +1,5 @@
 import React, { createContext, useMemo, useContext } from 'react';
 import { io, Socket } from 'socket.io-client'; // 소켓 라이브러리에서 Socket 타입 추가
-import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 
 // 소켓 컨텍스트 생성
 const SocketContext = createContext<Socket<
@@ -9,6 +8,7 @@ const SocketContext = createContext<Socket<
 > | null>(null); // Socket 타입으로 createContext를 제네릭으로 정의
 
 // 소켓 컨텍스트를 사용하는 Hook
+// 소켓 인스턴스에 접근을 도움
 export const useSocket = (): Socket<
   DefaultEventsMap,
   DefaultEventsMap
@@ -30,7 +30,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
   // useMemo를 사용하여 중복 연결을 방지하고 실제로 한 번만 소켓 인스턴스 생성
   const socket: Socket<DefaultEventsMap, DefaultEventsMap> = useMemo(
     () => io(socketURL),
-    [socketURL]
+    []
   );
 
   return (
