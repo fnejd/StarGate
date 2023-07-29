@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import InputComponent from '../atoms/InputComponent';
 import TextButtonComponent from '../atoms/TextButtonComponent';
 import BtnBlue from '@/atoms/BtnBlue';
+import axios, { AxiosResponse } from 'axios';
+import { loginApi } from '@/services/userService';
 
 interface userType {
   email: string;
@@ -32,6 +34,8 @@ const SignInComponent = () => {
     console.log(user);
   }, [user]);
 
+  
+
   const Login = () => {
     // 로그인 요청 부분
     // if ()
@@ -48,6 +52,11 @@ const SignInComponent = () => {
     // 로그인 유지 체크 박스 값 체크 되었는지 검사한 후
     // 체크 되어 있으면 로컬 스토리지에 토큰 저장해주기
     // 그 후 어드민과 일반 유저 구분하여 대쉬보드로 네비게이트!
+    
+    
+
+    console.log(loginApi(formData));
+
   };
 
   return (
