@@ -5,20 +5,47 @@ import DropDown from '@/atoms/DropDown.tsx';
 import useDropdown from '@/hooks/useDropdown.tsx';
 
 interface FormData {
+  startDate: string | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
   meetingTime: number;
   photoNum: number;
 }
 
 const MeetingLeftSection = () => {
+  // const [startDate, setStartDate] = useState<Date>(new Date());
   const [picSec, setPicSec] = useState<string>('40');
-  const [totalSec, setTotalSec] = useState<string>('80');
+  const [totalSec, setTotalSec] = useState<number>('80');
   const [numbers, setNumbers] = useState<number[]>([4]);
   const [formData, setFormData] = useState<FormData>({
+    startDate: null,
     meetingTime: 0,
     photoNum: 0,
   });
 
-  const setTotalTime: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleStartDate = (value: string) => {
+    const [year, month, day] = value.split('-');
+    const newDate = new Date(Number(year), Number(month) - 1, Number(day));
+
+    if (newDate.getTime() < Date.now()) {
+      // value가 현재보다 과거 날짜일 경우 경고 띄우기
+      alert('과거 날짜는 선택할 수 없습니다.');
+      return;
+    }
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      startDate: value,
+    }));
+    // const [year, month, day] = value.split('-'); // 입력값을 '-'로 분리하여 년, 월, 일로 분리
+    // setFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   startDate: new Date(Number(year), Number(month) - 1, Number(day)), // 월은 0부터 시작하므로 -1 해줌
+    // }));
+    console.log(formData);
+  };
+
+  const handleTotalTime = (
+    event: React.ChangeEventHandler<HTMLInputElement>
+  ) => {
     const newTime: number = parseInt(event.currentTarget.value, 10);
     setTotalSec(newTime);
     console.log(`전체 미팅 시간은 ${newTime}초`);
@@ -40,7 +67,13 @@ const MeetingLeftSection = () => {
 
   return (
     <>
-      <AdminInput labelFor="시작날짜" type="date" placeholder="" />
+      <AdminInput
+        labelFor="시작 날짜"
+        type="date"
+        placeholder=""
+        value={formData.startDate || ''} // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
+        onInputChange={handleStartDate}
+      />
 
       <div className="flex items-end">
         <AdminInput
@@ -48,7 +81,7 @@ const MeetingLeftSection = () => {
           type="text"
           placeholder="80"
           value={setTotalSec}
-          onInputChange={setTotalTime}
+          onInputChange={handleTotalTime}
         />
         <p className="font-suit font-medium text-14 text-white p-1 pl-2">초</p>
       </div>
