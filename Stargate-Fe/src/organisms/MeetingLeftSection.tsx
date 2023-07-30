@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
-import AdminBtn from '@/atoms/AdminBtn.tsx';
+import { useState, useEffect } from 'react';
 import AdminInput from '@/atoms/AdminInput.tsx';
 import DropDown from '@/atoms/DropDown.tsx';
-import useDropdown from '@/hooks/useDropdown.tsx';
+import AdminToggle from '@/atoms/AdminToggle';
 
 interface FormData {
   startDate: string | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
@@ -13,6 +12,7 @@ interface FormData {
 const MeetingLeftSection = () => {
   // const [startDate, setStartDate] = useState<Date>(new Date());
   const [picSec, setPicSec] = useState<number>(40);
+  const [photoTime, setPhotoTime] = useState<boolean>(false);
   const [totalSec, setTotalSec] = useState<number>(80);
   const [numbers, setNumbers] = useState<number[]>([4]);
   const [formData, setFormData] = useState<FormData>({
@@ -20,6 +20,15 @@ const MeetingLeftSection = () => {
     meetingTime: 0,
     photoNum: 0,
   });
+
+  useEffect(() => {
+    // photoTime이 false일 때 picSec를 0으로 업데이트
+    if (!photoTime) {
+      setPicSec(0);
+    } else {
+      setPicSec(40);
+    }
+  }, [photoTime]);
 
   const handleStartDate = (value: string) => {
     const [year, month, day] = value.split('-');
@@ -92,10 +101,14 @@ const MeetingLeftSection = () => {
         </AdminInput>
       </div>
 
-      <div className="w-48 h-8 leading-8 mx-1 mt-4 font-suit font-semibold text-14 text-white text-left">
-        {'사진 촬영'}
+      <div className="flex items-end w-48 h-8 mt-5">
+        <div className="w-32 h-8 leading-8 mx-1 mt-4 font-suit font-semibold text-14 text-white text-left">
+          {'사진 촬영'}
+        </div>
+        <AdminToggle photoTime={photoTime} setPhotoTime={setPhotoTime} />
       </div>
-      <div className="h-8 flex items-center">
+
+      <div className="h-8 flex">
         <div className="flex mx-1 my-2 font-suit font-medium text-14 text-white">
           촬영 컷 수
         </div>
@@ -105,7 +118,11 @@ const MeetingLeftSection = () => {
       </div>
 
       <div className="flex items-end">
-        <DropDown numbers={numbers} onOptionChange={handlePicSecChange} />
+        <DropDown
+          numbers={numbers}
+          onOptionChange={handlePicSecChange}
+          disabled={!photoTime}
+        />
         <p className="font-suit font-medium text-14 text-white p-1 pl-2 mb-1">
           컷
         </p>
