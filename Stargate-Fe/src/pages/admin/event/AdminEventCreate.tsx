@@ -1,7 +1,16 @@
 import React from 'react';
+import MeetingLeftSection from '@/organisms/MeetingLeftSection';
+import MeetingRightSection from '@/organisms/MeetingRightSection';
+import MeetingBottomSection from '@/organisms/MeetingBottomSection';
 
 const AdminEventCreate = () => {
-  return <div>이벤트 생성</div>;
+  return (
+    <>
+      <MeetingLeftSection />
+      <MeetingRightSection />
+      <MeetingBottomSection />
+    </>
+  );
 };
 
 export default AdminEventCreate;

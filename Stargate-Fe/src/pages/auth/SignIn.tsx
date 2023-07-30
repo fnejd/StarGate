@@ -21,9 +21,6 @@ const SignIn = () => {
   return (
     // 임시
     <div className="bg-slate-700">
-      <MeetingLeftSection />
-      {/* <MeetingRightSection /> */}
-      <MeetingBottomSection />
       {/* <RemindTitle /> */}
       {/* <RemindDetail /> */}
       {/* <BtnWhite text="Click me" onClick={handleClick} />
