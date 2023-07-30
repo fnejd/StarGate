@@ -78,7 +78,7 @@ const MeetingLeftSection = () => {
   };
 
   return (
-    <>
+    <div className="w-550 mb-6">
       <AdminInput
         labelFor="시작 날짜"
         type="date"
@@ -87,7 +87,7 @@ const MeetingLeftSection = () => {
         onInputChange={handleStartDate}
       />
 
-      <div className="flex items-end">
+      <div className="flex items-end w-48">
         <AdminInput
           labelFor="총 미팅 시간"
           type="number"
@@ -131,7 +131,7 @@ const MeetingLeftSection = () => {
         연예인 1 명의 미팅 시간은 사인회 시간 {totalSec - picSec} 초와 촬영 시간{' '}
         {picSec} 초를 더한 {totalSec} 초 입니다
       </div>
-    </>
+    </div>
   );
 };
 

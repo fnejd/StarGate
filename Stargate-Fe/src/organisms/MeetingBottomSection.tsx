@@ -66,7 +66,6 @@ const MeetingBottomSection = () => {
 
   const addWatingtime = (value: string) => {
     setFormData({ ...formData, watingTime: value });
-    // setWatingtimeValue('');
   };
 
   const addFans = (name: string) => {
@@ -105,7 +104,7 @@ const MeetingBottomSection = () => {
   };
 
   return (
-    <>
+    <div className="w-550">
       {/* 연예인명 추가 */}
       <div className="flex flex-col items-start">
         <AdminInput
@@ -216,7 +215,7 @@ const MeetingBottomSection = () => {
       {/* <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
         총 미팅 시간은 분 초 입니다
       </div> */}
-    </>
+    </div>
   );
 };
 
