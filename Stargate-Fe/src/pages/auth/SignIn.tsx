@@ -21,11 +21,11 @@ const SignIn = () => {
   return (
     // 임시
     <div className="bg-slate-700">
-      {/* <MeetingLeftSection /> */}
+      <MeetingLeftSection />
       {/* <MeetingRightSection /> */}
-      {/* <MeetingBottomSection /> */}
-      <RemindTitle />
-      <RemindDetail />
+      <MeetingBottomSection />
+      {/* <RemindTitle /> */}
+      {/* <RemindDetail /> */}
       {/* <BtnWhite text="Click me" onClick={handleClick} />
       <BtnBlue text="Click me" onClick={handleClick} />
       <PolariodCard imageUrl={imageUrl} caption={caption} />

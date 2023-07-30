@@ -4,10 +4,19 @@ import AdminInput from '@/atoms/AdminInput.tsx';
 import DropDown from '@/atoms/DropDown.tsx';
 import useDropdown from '@/hooks/useDropdown.tsx';
 
+interface FormData {
+  meetingTime: number;
+  photoNum: number;
+}
+
 const MeetingLeftSection = () => {
-  const [picSec, setPicSec] = useState<number>(40);
-  const [totalSec, setTotalSec] = useState<number>(80);
+  const [picSec, setPicSec] = useState<string>('40');
+  const [totalSec, setTotalSec] = useState<string>('80');
   const [numbers, setNumbers] = useState<number[]>([4]);
+  const [formData, setFormData] = useState<FormData>({
+    meetingTime: 0,
+    photoNum: 0,
+  });
 
   const setTotalTime: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const newTime: number = parseInt(event.currentTarget.value, 10);
@@ -35,22 +44,11 @@ const MeetingLeftSection = () => {
 
       <div className="flex items-end">
         <AdminInput
-          labelFor="다음 통화까지 대기시간"
-          type="number"
-          placeholder="10"
-          min="5"
-          max="60"
-          step="5"
-        />
-        <p className="font-suit font-medium text-14 text-white p-1 pl-2">초</p>
-      </div>
-
-      <div className="flex items-end">
-        <AdminInput
           labelFor="총 미팅 시간"
           type="text"
           placeholder="80"
-          onChange={setTotalTime}
+          value={setTotalSec}
+          onInputChange={setTotalTime}
         />
         <p className="font-suit font-medium text-14 text-white p-1 pl-2">초</p>
       </div>

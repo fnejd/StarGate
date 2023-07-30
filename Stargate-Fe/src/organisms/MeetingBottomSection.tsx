@@ -1,32 +1,41 @@
-import React, { useState, useRef } from 'react';
+import { useState } from 'react';
 import CSVReader from 'react-csv-reader';
 import AdminBtn from '@/atoms/AdminBtn.tsx';
 import AdminInput from '@/atoms/AdminInput.tsx';
 
 interface FormData {
   starName: string;
-  members: (string | undefined)[];
+  meetingMembers: (string | undefined)[];
   fans: (string | undefined)[];
+  watingTime: string;
 }
 
 const MeetingBottomSection = () => {
   const [starValue, setStarValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
+  const [watingtimeValue, setWatingtimeValue] = useState('');
   const [fanValue, setFanValue] = useState('');
   const [formData, setFormData] = useState<FormData>({
     starName: '',
-    members: [],
+    meetingMembers: [],
     fans: [],
+    watingTime: '',
   });
 
   const handleStarvalue = (value: string) => {
     setStarValue(value);
-    console.log(`입력값 ${starValue}`);
+    console.log(`연예인은 ${starValue}`);
   };
 
   const handleMembervalue = (value: string) => {
     setMemberValue(value);
-    console.log(`입력값 ${memberValue}`);
+    console.log(`멤버는 ${memberValue}`);
+    console.log(formData.meetingMembers);
+  };
+
+  const handleWatingtime = (value: string) => {
+    setWatingtimeValue(value);
+    console.log(`대기시간은 ${watingtimeValue}`);
   };
 
   const handleFanValue = (value: string) => {
@@ -41,6 +50,7 @@ const MeetingBottomSection = () => {
   //   setFormData({ ...formData, [fieldName]: e.target.value });
   // };
 
+  // 등록 함수
   const addStar = (name: string) => {
     setFormData({ ...formData, starName: name });
     setStarValue('');
@@ -49,9 +59,14 @@ const MeetingBottomSection = () => {
   const addMember = (name: string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      members: [...prevFormData.members, name],
+      members: [...prevFormData.meetingMembers, name],
     }));
     setMemberValue('');
+  };
+
+  const addWatingtime = (value: string) => {
+    setFormData({ ...formData, watingTime: value });
+    // setWatingtimeValue('');
   };
 
   const addFans = (name: string) => {
@@ -66,9 +81,16 @@ const MeetingBottomSection = () => {
     console.log(data);
   };
 
+  // 삭제 함수
+  const deleteStar = () => {
+    setFormData((prevFormData) => {
+      return { ...prevFormData, starName: '' };
+    });
+  };
+
   const deleteMember = (index: number) => {
     setFormData((prevFormData) => {
-      const updatedMembers = [...prevFormData.members];
+      const updatedMembers = [...prevFormData.meetingMembers];
       updatedMembers.splice(index, 1);
       return { ...prevFormData, members: updatedMembers };
     });
@@ -99,7 +121,7 @@ const MeetingBottomSection = () => {
             <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
               {formData.starName}
             </div>
-            <AdminBtn text="삭제" onClick={() => handle} />
+            <AdminBtn text="삭제" onClick={() => deleteStar()} />
           </div>
         ) : (
           <></>
@@ -117,7 +139,7 @@ const MeetingBottomSection = () => {
         </AdminInput>
       </div>
       <div className="flex flex-col items-start w-52 justify-between">
-        {formData.members.map((item, index) => (
+        {formData.meetingMembers.map((item, index) => (
           <div
             key={index}
             className="w-62 mt-2 flex justify-between items-center"
@@ -129,6 +151,30 @@ const MeetingBottomSection = () => {
           </div>
         ))}
       </div>
+      {/* 멤버가 다수일 경우 다음 통화까지 대기시간 설정 가능 */}
+      {formData.meetingMembers.length >= 1 && (
+        <div className="flex items-end">
+          <AdminInput
+            labelFor="다음 통화까지 대기시간 (초)"
+            type="number"
+            placeholder="10"
+            min="5"
+            max="60"
+            step="5"
+            value={watingtimeValue}
+            onInputChange={handleWatingtime}
+          >
+            {' '}
+            <AdminBtn
+              text="등록"
+              onClick={() => addWatingtime(watingtimeValue)}
+            />
+          </AdminInput>
+          {/* <p className="font-suit font-medium text-14 text-white p-1 pl-2">
+            초
+          </p> */}
+        </div>
+      )}
       {/* 참가자 추가 */}
       <div className="flex flex-col items-start">
         <div className="flex">
@@ -167,9 +213,9 @@ const MeetingBottomSection = () => {
         </div>
       </div>
 
-      <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
+      {/* <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
         총 미팅 시간은 분 초 입니다
-      </div>
+      </div> */}
     </>
   );
 };
