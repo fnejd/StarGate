@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputComponent from '../atoms/InputComponent';
+import InputComponent from '../../atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import { useNavigate } from 'react-router-dom';
 

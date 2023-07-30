@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import InputComponent from '../atoms/InputComponent';
+import InputComponent from '../../atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
-import BtnBlue from '@/atoms/BtnBlue';
+import BtnBlue from '@/atoms/common/BtnBlue';
 import { redirect, useFormAction, useNavigate } from 'react-router-dom';
 import { signUpApi } from '@/services/userService';
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import InputComponent from '../atoms/InputComponent';
-import TextButtonComponent from '../atoms/TextButtonComponent';
-import BtnBlue from '@/atoms/BtnBlue';
+import InputComponent from '../../atoms/common/InputComponent';
+import TextButtonComponent from '../../atoms/common/TextButtonComponent';
+import BtnBlue from '@/atoms/common/BtnBlue';
 import axios, { AxiosResponse } from 'axios';
 import { loginApi } from '@/services/userService';
 

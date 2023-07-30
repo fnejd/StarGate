@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import ModalPlusButton from '../atoms/ModalPlusButton';
-import ManagementModalBox from '../atoms/ManagementModalBox';
-import BtnBlue from '@/atoms/BtnBlue';
+import ModalPlusButton from '../../atoms/board/ModalPlusButton';
+import ManagementModalBox from '../../atoms/board/ManagementModalBox';
+import BtnBlue from '@/atoms/common/BtnBlue';
 
 interface MemberData {
   memberNo: number;
