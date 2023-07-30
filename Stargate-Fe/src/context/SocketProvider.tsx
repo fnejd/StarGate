@@ -29,7 +29,10 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
 }) => {
   // useMemo를 사용하여 중복 연결을 방지하고 실제로 한 번만 소켓 인스턴스 생성
   const socket: Socket<DefaultEventsMap, DefaultEventsMap> = useMemo(
-    () => io(socketURL),
+    () =>
+      io.connect(socketURL, {
+        cors: { origin: '*' },
+      }),
     []
   );
 

@@ -13,7 +13,7 @@ import Board from './pages/user/board/UserBoard.tsx';
 import MyPage from './pages/user/board/MyPage.tsx';
 import Remind from './pages/user/board/Remind.tsx';
 import Ready from './pages/user/video/ReadyRoom.tsx';
-import Video from './pages/user/video/UserVideo.tsx';
+import Video from './pages/user/video/UserVideo.jsx';
 import StarVideo from './pages/star/StarVideo.tsx';
 import AdminSignUp from './pages/admin/signUp/AdminSignUp.tsx';
 import AdminBoard from './pages/admin/board/AdminBoard.tsx';

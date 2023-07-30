@@ -19,6 +19,7 @@ class PeerService {
   ////////////////////////////메소드////////////////////////////
 
   // 상대방으로부터 받은 offer 정보를 통해 answer을 생성
+  // 응답 받으면 리모트 세팅하고 답장 생성해서 로컬 세팅
   async getAnswer(
     offer: RTCSessionDescriptionInit
   ): Promise<RTCSessionDescriptionInit> {
@@ -43,7 +44,7 @@ class PeerService {
     }
   }
 
-  // 자신의 offer을 생성
+  // 자신의 offer을 생성 및 설정
   async getOffer(): Promise<RTCSessionDescriptionInit> {
     if (this.peer) {
       // 자신의 offer를 생성
