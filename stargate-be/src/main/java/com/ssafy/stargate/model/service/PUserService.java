@@ -4,7 +4,7 @@ import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
-import com.ssafy.stargate.model.dto.request.PUserDto;
+import com.ssafy.stargate.model.dto.common.PUserDto;
 
 import java.security.Principal;
 
@@ -19,4 +19,8 @@ public interface PUserService {
     void deletePUser(PUserDto dto, Principal principal);
 
     PUserDto getPUserData(Principal principal);
+
+    int updatePUser(PUserDto pUserDto);
+
+    boolean checkEmailExist(String email);
 }
