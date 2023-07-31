@@ -6,6 +6,7 @@ import com.ssafy.stargate.model.dto.response.JwtResponseDto;
 import com.ssafy.stargate.model.entity.JwtToken;
 import com.ssafy.stargate.model.repository.JwtTokenRepository;
 import com.ssafy.stargate.util.JwtTokenUtil;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,13 +34,14 @@ public class JwtTokenServiceImpl implements JwtTokenService {
      * @throws InvalidTokenException 유효하지 않은 토큰 에러
      */
     @Override
+    @Transactional
     public JwtResponseDto createAccessToken(String refreshToken) throws InvalidTokenException {
 
         if (jwtTokenUtil.validateToken(refreshToken) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
 
             String email = jwtTokenUtil.getEmailFromToken(refreshToken);
 
-            JwtToken jwtToken = jwtTokenRepository.findById(email).orElseThrow();
+            JwtToken jwtToken = jwtTokenRepository.findById(email).orElseThrow(() -> new InvalidTokenException("refreshToken 이 존재하지 않습니다."));
 
             if (jwtToken.getRefreshToken().equals(refreshToken)) {
 

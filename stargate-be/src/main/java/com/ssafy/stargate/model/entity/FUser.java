@@ -45,4 +45,5 @@ public class FUser extends BaseEntity {
     @OneToMany(mappedBy = "fUser")
     @Builder.Default
     private List<Letter> letters = new ArrayList<>();
+
 }

@@ -9,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FUserEmailCheckRequestDto {
+public class UserEmailCheckRequestDto {
     private String email;
 }
