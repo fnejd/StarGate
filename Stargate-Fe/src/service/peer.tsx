@@ -45,6 +45,8 @@ class PeerService {
   }
 
   // 자신의 offer을 생성 및 설정
+  // 오퍼를 원격 피어로 보낼 준비를 마침
+  // 피어의 로컬 오퍼를 반환 => 시그널링 채널을 통해 원격 피어로 전송하여 연결을 협상
   async getOffer(): Promise<RTCSessionDescriptionInit> {
     if (this.peer) {
       // 자신의 offer를 생성
