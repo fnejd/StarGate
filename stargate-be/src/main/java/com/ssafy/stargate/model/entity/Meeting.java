@@ -47,7 +47,7 @@ public class Meeting extends BaseEntity {
     private int photoNum;
 
     @Column
-    private String image; // TODO: multipart로 Testing해보기
+    private String image;
 
     @ManyToOne
     @JoinColumn(name = "email",referencedColumnName = "email")
