@@ -65,13 +65,13 @@ pnpm run dev
 
 ### User
 ![스타게이트_-_14](/uploads/cdb5da8eee0f3e81840d7b497e5598bc/스타게이트_-_14.png)
-![스타게이트_-_15](/uploads/0ab4cf53b2fe45b885d31e45f3d54b81/스타게이트_-_15.png)
+![스타게이트_-_15](/uploads/c7cb3610700b15fe10b363149f8d9a57/스타게이트_-_15.png)
 ![스타게이트_-_16](/uploads/920df4e390656cfb1891531ed3eccb92/스타게이트_-_16.png)
 
 ### Admin
 ![스타게이트_-_17](/uploads/6730fb0fd0f07506f17a5dffeb2dce43/스타게이트_-_17.png)
 ![스타게이트_-_18](/uploads/be76f5bd554c07008b59403722c6ec23/스타게이트_-_18.png)
-![스타게이트_-_19](/uploads/dcbacdcdffd54c4747974d554f634570/스타게이트_-_19.png)
+![스타게이트_-_19](/uploads/911fb5e83a48ee42126fbcd9af4e762b/스타게이트_-_19.png)
 ## Skills
 ### Frontend
  - React
@@ -104,6 +104,7 @@ pnpm run dev
 Atom : 더 이상 분해할 수 없는 기본 컴포넌트<br/>
 Organism : 하나 이상의 Atom을 조합<br/>
 Page : 비즈니스 로직을 관리, 하위 단위에서 필요한 상태값들을 props로 전달.
+
 ```
 C:.
 ├─public    
@@ -111,9 +112,17 @@ C:.
     ├─assets
     │  ├─font    
     │  └─image     
-    ├─atoms 
-    ├─hooks    
+    ├─atoms
+    │  ├─auth
+    │  ├─board
+    │  ├─common
+    │  ├─event
+    │  └─remind
+    ├─hooks
     ├─organisms
+    │  ├─auth
+    │  ├─board
+    │  └─event
     └─pages
         ├─auth
         ├─star
@@ -341,6 +350,65 @@ like this:
     ```
 
 ## Challenges
-- 이슈 및 에러 해결에 대해 노션에 작성했습니다.
+#### FE folder architecture
+##### Before
+
+```
+C:.
+├─public    
+└─src
+    ├─assets
+    │  ├─font    
+    │  └─image     
+    ├─atoms 
+    ├─hooks    
+    ├─organisms
+    └─pages
+        ├─auth
+        ├─star
+        ├─admin
+        │  ├─board
+        │  ├─event
+        │  └─signUp
+        └─user
+            ├─board
+            └─video
+```
+##### after
+```
+C:.
+├─public    
+└─src
+    ├─assets
+    │  ├─font    
+    │  └─image     
+    ├─atoms
+    │  ├─auth
+    │  ├─board
+    │  ├─common
+    │  ├─event
+    │  └─remind
+    ├─hooks
+    ├─organisms
+    │  ├─auth
+    │  ├─board
+    │  └─event
+    └─pages
+        ├─auth
+        ├─star
+        ├─admin
+        │  ├─board
+        │  ├─event
+        │  └─signUp
+        └─user
+            ├─board
+            └─video
+```
+처음에는 상위 컴포넌트에서의 재사용성을 높이기 위해 atoms와 organisms만을 만들어두고 내부를 플랫하게 사용하였습니다.<br>
+작업이 진행되며 지나치게 atoms와 organisms가 늘어났고, 이에 대한 불편함도 늘어났습니다.<br><br>
+이에 FE팀은 폴더 구조를 수정하기로 결정하였고, 계층을 우선으로 분리하는 계층 - 기능 구조와 기능을 우선으로 분리하는 기능 - 계층 구조 중 무엇을 선택할지에 대한 논의가 있었습니다.<br><br>
+이미 Atomic한 구조를 사용하기로 합의하였고, UI 역시도 Atomic Design Pattern에 알맞게 작성된 상태였기에 좀 더 Atomic한 계층 - 기능 구조로 폴더 구조를 변경하였습니다. 자세한 과정에 대해서는 [Blog](https://cksxkr5193.tistory.com/4)에 작성했습니다.
+
+- 기타 이슈 및 에러 해결에 대해 노션에 작성했습니다.
 ### [Frontend](https://denim-meteorite-208.notion.site/FE-7c1661c8b54b4e5cb573f3e864d0c40c?pvs=4)
 ### [Backend](https://denim-meteorite-208.notion.site/BE-9c86abd9585d496e8f7b5c6e682433dc?pvs=4)
