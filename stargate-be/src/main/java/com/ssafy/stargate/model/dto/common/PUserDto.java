@@ -1,4 +1,4 @@
-package com.ssafy.stargate.model.dto.request;
+package com.ssafy.stargate.model.dto.common;
 
 import lombok.*;
 
@@ -18,4 +18,5 @@ public class PUserDto {
     private String password;
     private String code;
     private String name;
+    private String originalPassword;
 }

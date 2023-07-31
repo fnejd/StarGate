@@ -7,11 +7,11 @@ import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.common.FUserDto;
 import com.ssafy.stargate.model.dto.common.FUserFindIdDto;
 import com.ssafy.stargate.model.dto.common.FUserFindPwDto;
-import com.ssafy.stargate.model.dto.request.FUserEmailCheckRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
-import com.ssafy.stargate.model.dto.response.FUserEmailCheckResponseDto;
+import com.ssafy.stargate.model.dto.request.UserEmailCheckRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
+import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
 import com.ssafy.stargate.model.service.FUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -157,7 +157,7 @@ public class FUserController {
      * @return [ResponseEntity<FUserEmailCheckResponseDto>] 이메일 중복 여부 담긴 dto
      */
     @PostMapping("/check-email")
-    public ResponseEntity<FUserEmailCheckResponseDto> checkDuplicateEmail(@RequestBody FUserEmailCheckRequestDto dto){
+    public ResponseEntity<UserEmailCheckResponseDto> checkDuplicateEmail(@RequestBody UserEmailCheckRequestDto dto){
 
         return ResponseEntity.ok(fUserService.checkDuplicateEmail(dto));
     }

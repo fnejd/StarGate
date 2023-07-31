@@ -4,7 +4,8 @@ import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
-import com.ssafy.stargate.model.dto.request.PUserDto;
+import com.ssafy.stargate.model.dto.common.PUserDto;
+import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
 import com.ssafy.stargate.model.service.PUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,13 @@ public class PUserController {
             return ResponseEntity.status(600).build();
         }
     }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<UserEmailCheckResponseDto> checkPuserEmailExist(@RequestParam("email")String email){
+        boolean result = pUserService.checkEmailExist(email);
+        return ResponseEntity.ok(UserEmailCheckResponseDto.builder().exist(result).build());
+    }
+
 
     /**
      * 소속사 유저의 로그인 기능을 수행한다.
@@ -79,6 +87,9 @@ public class PUserController {
         return ResponseEntity.ok(pUserDto);
     }
 
-    // TODO 소속사 계정 업데이트 코드
+    public ResponseEntity<?> updatePUser(@ModelAttribute PUserDto pUserDto){
+        int statusCode = pUserService.updatePUser(pUserDto);
+        return ResponseEntity.status(statusCode).build();
+    }
 
 }
