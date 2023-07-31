@@ -407,7 +407,8 @@ C:.
 처음에는 상위 컴포넌트에서의 재사용성을 높이기 위해 atoms와 organisms만을 만들어두고 내부를 플랫하게 사용하였습니다.<br>
 작업이 진행되며 지나치게 atoms와 organisms가 늘어났고, 이에 대한 불편함도 늘어났습니다.<br><br>
 이에 FE팀은 폴더 구조를 수정하기로 결정하였고, 계층을 우선으로 분리하는 계층 - 기능 구조와 기능을 우선으로 분리하는 기능 - 계층 구조 중 무엇을 선택할지에 대한 논의가 있었습니다.<br><br>
-이미 Atomic한 구조를 사용하기로 합의하였고, UI 역시도 Atomic Design Pattern에 알맞게 작성된 상태였기에 좀 더 Atomic한 계층 - 기능 구조로 폴더 구조를 변경하였습니다. 자세한 과정에 대해서는 [Blog](https://cksxkr5193.tistory.com/4)에 작성했습니다.
+이미 Atomic한 구조를 사용하기로 합의하였고, UI 역시도 Atomic Design Pattern에 알맞게 작성된 상태였기에 좀 더 Atomic한 계층 - 기능 구조로 폴더 구조를 변경하였습니다.<br>
+자세한 과정에 대해서는 [Blog](https://cksxkr5193.tistory.com/4)에 작성했습니다.
 
 ### 기타 이슈 및 에러 해결에 대해 노션에 작성했습니다.
 #### [Frontend](https://denim-meteorite-208.notion.site/FE-7c1661c8b54b4e5cb573f3e864d0c40c?pvs=4)
