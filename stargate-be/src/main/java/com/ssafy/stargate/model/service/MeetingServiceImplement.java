@@ -2,6 +2,7 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.exception.CRUDException;
+import com.ssafy.stargate.handler.FileHandler;
 import com.ssafy.stargate.model.dto.common.*;
 import com.ssafy.stargate.model.dto.response.MeetingDetailResponseDto;
 import com.ssafy.stargate.model.entity.*;
@@ -10,7 +11,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.Iterator;
@@ -20,6 +23,7 @@ import java.util.UUID;
 
 /*
 TODO: Multipart로 이미지 받아오기
+ - RUD 만들어야함
  */
 
 /**
@@ -46,6 +50,13 @@ public class MeetingServiceImplement implements MeetingService {
 
     @Autowired
     private final FUserRepository fUserRepository;
+
+
+    @Value("${s3.filepath.meeting}")
+    private String filePath;
+
+    @Autowired
+    private final FileHandler fileHandler;
 
     /**
      * 미팅 세부정보를 가져온다.
@@ -122,6 +133,14 @@ public class MeetingServiceImplement implements MeetingService {
         log.info("data : {}", dto);
         String email = principal.getName();
 
+        MultipartFile imageFile = dto.getImageFile();
+        String uuidFilename = null;
+        String key = null;
+        if (imageFile != null) {
+            uuidFilename = fileHandler.getUuidFilename(imageFile.getOriginalFilename());
+            key = fileHandler.getKey(filePath, uuidFilename);
+        }
+
         try {
             Meeting meeting = Meeting.builder()
                     .name(dto.getName())
@@ -130,6 +149,7 @@ public class MeetingServiceImplement implements MeetingService {
                     .meetingTime(dto.getMeetingTime())
                     .notice(dto.getNotice())
                     .photoNum(dto.getPhotoNum())
+                    .image(uuidFilename)
                     .pUser(pUserRepository.findById(email)
                             .orElseThrow(() -> new NotFoundException("소속사가 존재하지 않습니다.")))
                     .build();
@@ -150,11 +170,18 @@ public class MeetingServiceImplement implements MeetingService {
             meeting.setMeetingMembers(meetingMembers);
             meeting.setMeetingFUsers(meetingFUsers);
 
+            if (imageFile != null) {
+                fileHandler.uploadFile(key, imageFile);
+            }
             meetingRepository.save(meeting);
 
             return MeetingDto.entityToDto(meeting);
         } catch (Exception e) {
             e.printStackTrace();
+
+            if (imageFile != null) {
+                fileHandler.deleteFile(key);
+            }
             throw new CRUDException("미팅 생성 도중 오류가 발생했습니다.");
         }
     }

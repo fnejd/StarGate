@@ -1,5 +1,6 @@
 package com.ssafy.stargate.model.dto.response;
 
+import com.ssafy.stargate.model.dto.common.SavedFileDto;
 import com.ssafy.stargate.model.dto.common.MeetingFUserBridgeDto;
 import com.ssafy.stargate.model.dto.common.MeetingMemberBridgeDto;
 import lombok.*;
@@ -25,6 +26,7 @@ public class MeetingDetailResponseDto {
     private int meetingTime;
     private int photoNum;
     private String notice;
+    private SavedFileDto imageFileInfo;
     private List<MeetingFUser> meetingFUsers;
     private List<MeetingMember> meetingMembers;
 
