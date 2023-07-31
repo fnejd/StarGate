@@ -1,6 +1,8 @@
 package com.ssafy.stargate.model.dto.response;
 
+import com.ssafy.stargate.model.dto.common.MeetingDto;
 import jakarta.persistence.Entity;
+import java.util.List;
 import lombok.*;
 
 @Builder
@@ -10,7 +12,11 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class DashboardResponseDto {
-    String temp;
+
+    List<MeetingDto> today;
+    List<MeetingDto> future;
+    List<MeetingDto> past;
+
 //    private
     /*{
         "today" : {

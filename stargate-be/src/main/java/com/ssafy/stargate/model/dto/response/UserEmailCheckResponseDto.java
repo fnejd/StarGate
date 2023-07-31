@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FUserEmailCheckResponseDto {
+public class UserEmailCheckResponseDto {
 
     private Boolean exist;
 }

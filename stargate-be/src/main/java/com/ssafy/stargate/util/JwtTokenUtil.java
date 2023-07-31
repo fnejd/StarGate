@@ -4,6 +4,7 @@ package com.ssafy.stargate.util;
 import com.ssafy.stargate.exception.InvalidTokenException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,9 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
 
 import java.nio.charset.StandardCharsets;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.Base64;
 import java.util.Date;
@@ -32,6 +30,7 @@ public class JwtTokenUtil {
     private final static Long ACCESS_TOKEN_VALID_TIME = 24 * 60 * 60 * 1000L;
 
     private final static Long REFRESH_TOKEN_VALID_TIME = 14 * 24 * 60 * 60 * 1000L;
+
 
     /**
      * application-jwt 에 저장되어 있는 secretKey 로 key 초기화
@@ -118,7 +117,8 @@ public class JwtTokenUtil {
     }
     
     /**
-     * 토큰이 유요한지 검증
+     * 토큰이 유요한지 검증 (JwtToken에 해당 유저의 키가 저장되어 있는지도 확인)
+     * JwtToken 에 해당 유저의 이메일이 저장되어 있지 않은 경우는 로그아웃한 경우
      * @param token String 토큰
      * @return boolean 토큰이 유요하면 true
      * @throws InvalidTokenException 토큰 에러
@@ -126,6 +126,9 @@ public class JwtTokenUtil {
     public boolean validateToken(String token) throws InvalidTokenException {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
+
+
             return true;
         } catch (SecurityException e) {
             throw new InvalidTokenException("잘못된 JWT 서명입니다.");
@@ -167,8 +170,18 @@ public class JwtTokenUtil {
      */
     public String getAuthorityFromToken(String token){
         String auth = String.valueOf(parseToken(token, key).get("auth"));
-        log.info(auth);
+        log.info("auth : {} ", auth);
         return auth;
+    }
+
+    /**
+     * JwtToken DB 에 해당 이메일이 저장되어 있는지 확인 (없으면 로그아웃 상태)
+     */
+    private boolean existingJwtToken(String email){
+
+
+        return true;
+
     }
 
 }
