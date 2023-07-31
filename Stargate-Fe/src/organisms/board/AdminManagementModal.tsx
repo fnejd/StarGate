@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import ModalPlusButton from '../../atoms/board/ModalPlusButton';
-import ManagementModalBox from '../../atoms/board/ManagementModalBox';
+import PlusButton from '../../atoms/board/PlusButton';
+import AdminManagementModalBox from './AdminManagementModalBox';
 import BtnBlue from '@/atoms/common/BtnBlue';
 
 interface MemberData {
@@ -61,7 +61,7 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
               return (
                 <div
                   key={groupName}
-                  className="lg:w-1/5 flex justify-center mb-16"
+                  className="lg:w-1/5 flex justify-center mb-14"
                 >
                   <BtnBlue
                     onClick={() => handleCircleClick(groupName)}
@@ -77,11 +77,16 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
           })}
         </div>
         <div className="self-end">
-          <ModalPlusButton onClick={() => handleCircleClick('')} />
+          <PlusButton onClick={() => handleCircleClick('')} />
         </div>
-        <ManagementModalBox
+        <AdminManagementModalBox
           isOpen={isModalOpen}
           onClose={handleModalClose}
+          groupName={
+            selectedGroup !== null
+              ? group.find((data) => data.groupNo === selectedGroup)?.name || ''
+              : ''
+          }
           members={
             selectedGroup
               ? group.find((data) => data.groupNo === selectedGroup)?.members ||

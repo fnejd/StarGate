@@ -1,5 +1,7 @@
 // ManagementModalBox.tsx
 import React, { useRef, MouseEvent } from 'react';
+import AdminMangementPlusButton from '@/atoms/board/AdminMangementPlusButton';
+import AdminManagementDeleteButton from '@/atoms/board/AdminManagementDeleteButton';
 
 interface MemberData {
   memberNo: number;
@@ -15,12 +17,14 @@ interface MemberData {
 interface ManagementModalBoxProps {
   isOpen: boolean;
   onClose: () => void;
+  groupName: string;
   members: MemberData[];
 }
 
-const ManagementModalBox = ({
+const AdminManagementModalBox = ({
   isOpen,
   onClose,
+  groupName,
   members,
 }: ManagementModalBoxProps) => {
   /**
@@ -51,12 +55,16 @@ const ManagementModalBox = ({
             ref={modalRef}
             className="w-l h-500 bg-white rounded-sm flex flex-col items-center"
           >
-            <p className="modal-title">
-              {members.length > 0 ? members[0].name : ''}
-            </p>
+            <div className='flex'>
+            <p className="modal-title flex items-center">{members.length > 0 ? groupName : ''}</p>
+            <AdminMangementPlusButton />
+            </div>
             <ul>
               {members.map((member) => (
-                <li key={member.memberNo}>{member.name}</li>
+                <li className="modal-content text-center flex" key={member.memberNo}>
+                  <p>{member.name}</p>
+                  <AdminManagementDeleteButton />
+                </li>
               ))}
             </ul>
           </div>
@@ -66,4 +74,4 @@ const ManagementModalBox = ({
   );
 };
 
-export default ManagementModalBox;
+export default AdminManagementModalBox;
