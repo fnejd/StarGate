@@ -33,7 +33,7 @@ public class JwtController {
     /**
      * refreshToken 을 받아서 만료된 accessToken 반환
      * @param token HashMap<String, Object> refreshToken
-     * @return [ResponseEntity<JwtResponseDto>] 성공: [200] JWT Response, 실패: [600]
+     * @return [ResponseEntity<JwtResponseDto>] 기존의 refreshToken 과 새로운 accessToken 을 담는 dto (실패 : 600)
      * @throws InvalidTokenException 유효하지 않은 토큰 에러
      */
     @PostMapping("/new-access-token")

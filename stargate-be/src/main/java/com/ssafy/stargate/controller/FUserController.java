@@ -75,13 +75,13 @@ public class FUserController {
 
     /**
      * FUser 회원 정보 변경 (name, nickname, password, birthday 변경 가능)
-     * @param dto FUserUpdateRequestDto 팬회원 정보가 저장된 DTO
+     * @param dto FUserUpdateRequestDto 팬회원 정보가 저장된 dto
      * @param principal Principal 유저 email이 담긴 객체
-     * @return 성공 -> 200 코드 반환
+     * @return [ResponseEntity<FUserDto>] 업데이트된 회원 정보 dto
      * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateFUserInfo(@ModelAttribute @Validated FUserUpdateRequestDto dto, Principal principal) throws NotFoundException {
+    public ResponseEntity<FUserDto> updateFUserInfo(@ModelAttribute @Validated FUserUpdateRequestDto dto, Principal principal) throws NotFoundException {
 
         return ResponseEntity.ok(fUserService.updateFUser(dto, principal));
     }
@@ -162,9 +162,11 @@ public class FUserController {
         return ResponseEntity.ok(fUserService.checkDuplicateEmail(dto));
     }
 
+
     /**
-     * 로그 아웃 (JwtToken 에 저장되어 있는 유저의 refreshToken 삭제)
+     *  로그 아웃 (JwtToken 에 저장되어 있는 유저의 refreshToken 삭제)
      * @return 성공 -> 200
+     * @throws NotFoundException 해당 유저의 refreshToken이 저장되어 있지 않아서 발생
      */
     @PostMapping("/logout")
     public ResponseEntity<?> logout() throws NotFoundException{
