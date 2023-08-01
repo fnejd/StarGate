@@ -75,7 +75,7 @@ pnpm run dev
 ## Skills
 ### Frontend
  - React
-    - Redux
+    - Recoil
     - React Query
  - TypeScript 
  - Tailwind CSS
