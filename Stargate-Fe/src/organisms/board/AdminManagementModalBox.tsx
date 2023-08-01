@@ -1,7 +1,8 @@
 // ManagementModalBox.tsx
-import React, { useRef, MouseEvent } from 'react';
+import React, { useState, useRef, MouseEvent } from 'react';
 import AdminMangementPlusButton from '@/atoms/board/AdminMangementPlusButton';
 import AdminManagementDeleteButton from '@/atoms/board/AdminManagementDeleteButton';
+import AdminManagementInput from '@/atoms/board/AdminManagementInput';
 
 interface MemberData {
   memberNo: number;
@@ -40,18 +41,31 @@ const AdminManagementModalBox = ({
    */
   const handleOutsideClick = (e: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      setShowInput(false);
       onClose();
     }
   };
 
-    /**
+  // InputComponent 렌더링 여부를 결정하는 상태 변수
+  const [showInput, setShowInput] = useState(false);
+  const handlePlusButtonClick = () => {
+    setShowInput(true);
+  };
+
+  /**
+   * handleCancleButtonClick
+   */
+  const handleCancleButtonClick = () => {
+    setShowInput(false);
+  };
+
+  /**
    * AdminManagementDeleteButton을 클릭했을 때 해당 멤버의 memberNo를 console.log로 출력
    */
-    const handleDeleteButtonClick = (memberNo: number) => {
-      console.log(memberNo);
-      // api연결시 back에 memberNo를 던져서 삭제시킴
-    };
-  
+  const handleDeleteButtonClick = (memberNo: number) => {
+    console.log(memberNo);
+    // api연결시 back에 memberNo를 던져서 삭제시킴
+  };
 
   return (
     <>
@@ -68,16 +82,30 @@ const AdminManagementModalBox = ({
               <p className="modal-title flex items-center">
                 {members.length > 0 ? groupName : ''}
               </p>
-              <AdminMangementPlusButton />
+              <AdminMangementPlusButton onClick={handlePlusButtonClick} />
             </div>
             <ul>
+              {showInput && (
+                <li className="modal-content justify-center flex">
+                  <AdminManagementInput
+                    isGroup={false}
+                    // eslint-disable-next-line @typescript-eslint/no-empty-function
+                    setter={() => {}}
+                  />
+                  <AdminManagementDeleteButton
+                    onClick={() => handleCancleButtonClick()}
+                  />
+                </li>
+              )}
               {members.map((member) => (
                 <li
-                  className="modal-content text-center flex"
+                  className="modal-content justify-center flex"
                   key={member.memberNo}
                 >
                   <p>{member.name}</p>
-                  <AdminManagementDeleteButton onClick={() => handleDeleteButtonClick(member.memberNo)} />
+                  <AdminManagementDeleteButton
+                    onClick={() => handleDeleteButtonClick(member.memberNo)}
+                  />
                 </li>
               ))}
             </ul>

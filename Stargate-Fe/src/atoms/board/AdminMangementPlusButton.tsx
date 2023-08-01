@@ -14,7 +14,7 @@ const AdminMangementPlusButton = (props: AdminMangementPlusButtonProps) => {
 
   return (
     <>
-      <p className="t3r flex items-center" onClick={onClick}>
+      <p className="t3r flex items-center cursor-pointer" onClick={onClick}>
         +
       </p>
     </>
