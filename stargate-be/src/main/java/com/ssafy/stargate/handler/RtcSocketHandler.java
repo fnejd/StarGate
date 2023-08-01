@@ -59,6 +59,8 @@ public class RtcSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
+        TextMessage message  = new TextMessage("My Socket id = "+session.getId());
+        session.sendMessage(message);
         log.info("@RtcSocketHandler, meetingInfo = {}", meetingPath);
         List<WebSocketSession> sessions = SESSION_MAP.computeIfAbsent(meetingPath, k -> new ArrayList<>());
         sessions.add(session);
