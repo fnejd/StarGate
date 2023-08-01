@@ -28,13 +28,6 @@ public class MeetingDto {
     private String notice;
     private List<MeetingFUserBridgeDto> meetingFUsers;
     private List<MeetingMemberBridgeDto> meetingMembers;
-    /*
-    TODO: 같은 이미지 처리를 어떻게 해야할까?
-     - 현재는 업데이트 시 기존 것 지우고 새로운 것 넣는 형식으로 되어있음
-     - Client에서 기존에 업로드한 filename을 받아서 비교하는 걸로 해야할까?
-     - 이떄 해당 filename을 통해 s3에 있는 metadata를 통해 Etag를 통해 content 비교해서 같으면 넘어가고 아니면 upload하는 형식으로 하는 건?
-     */
-    private MultipartFile imageFile;
 
     public static MeetingDto entityToDto(Meeting meeting) {
         return MeetingDto.builder()

@@ -50,7 +50,7 @@ public class Meeting extends BaseEntity {
     private String image;
 
     @ManyToOne
-    @JoinColumn(name = "email",referencedColumnName = "email")
+    @JoinColumn(name = "email", referencedColumnName = "email")
     private PUser pUser;
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)

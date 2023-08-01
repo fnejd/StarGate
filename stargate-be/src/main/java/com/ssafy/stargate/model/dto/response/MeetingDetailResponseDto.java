@@ -29,6 +29,8 @@ public class MeetingDetailResponseDto {
     private SavedFileDto imageFileInfo;
     private List<MeetingFUser> meetingFUsers;
     private List<MeetingMember> meetingMembers;
+    private long groupNo;
+    private String groupName;
 
     @SuperBuilder
     @Getter
@@ -49,5 +51,6 @@ public class MeetingDetailResponseDto {
     @ToString
     public static class MeetingMember extends MeetingMemberBridgeDto {
         private String roomId;
+        private String name;
     }
 }
