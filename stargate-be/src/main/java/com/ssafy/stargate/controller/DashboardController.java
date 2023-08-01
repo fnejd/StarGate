@@ -27,7 +27,7 @@ public class DashboardController {
     /**
      * 대시보드 정보 전달
      * @return [ResponseEntity<DashboardResponseDto>] today, past, future 미팅 정보 저장하는 dto
-     * @throws NotFoundException
+     * @throws NotFoundException 토큰에서 해당하는 AUTH 가 USER, PRODUCER 가 아닐 경우
      */
     @GetMapping
     public ResponseEntity<DashboardResponseDto> getDashBoard() throws NotFoundException{

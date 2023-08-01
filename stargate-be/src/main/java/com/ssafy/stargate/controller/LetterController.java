@@ -2,10 +2,6 @@ package com.ssafy.stargate.controller;
 
 import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.model.dto.common.LetterDto;
-import com.ssafy.stargate.model.dto.request.LetterCreateRequestDto;
-import com.ssafy.stargate.model.dto.request.LetterDeleteRequestDto;
-import com.ssafy.stargate.model.dto.request.LetterFindRequestDto;
-import com.ssafy.stargate.model.dto.request.LetterUpdateRequestDto;
 import com.ssafy.stargate.model.service.LetterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 편지 관리 수행하는 컨트롤러
@@ -34,7 +29,7 @@ public class LetterController {
      * @throws NotFoundException 존재하지 않는 회원, 존재하지 않는 멤버, 존재하지 않는 팬미팅 에러
      */
     @PostMapping("/create")
-    public ResponseEntity<?> createLetter(@RequestBody LetterCreateRequestDto dto) throws NotFoundException {
+    public ResponseEntity<?> createLetter(@RequestBody LetterDto dto) throws NotFoundException {
         LetterDto letterDto = letterService.createLetter(dto);
         return ResponseEntity.ok(letterDto);
     }
@@ -46,7 +41,7 @@ public class LetterController {
      * @throws NotFoundException 존재하지 않는 편지 에러
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updateLetter(@RequestBody LetterUpdateRequestDto dto) throws NotFoundException{
+    public ResponseEntity<?> updateLetter(@RequestBody LetterDto dto) throws NotFoundException{
         LetterDto letterDto = letterService.updateLetter(dto);
         return ResponseEntity.ok(letterDto);
     }
@@ -57,7 +52,7 @@ public class LetterController {
      * @return 성공 -> 200
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteLetter(@RequestBody LetterDeleteRequestDto dto){
+    public ResponseEntity<?> deleteLetter(@RequestBody LetterDto dto){
         letterService.deleteLetter(dto);
         return ResponseEntity.ok(null);
     }
@@ -81,7 +76,7 @@ public class LetterController {
      * @return [ResponseEntity<List<LetterDto>>] 팬미팅에 해당하는 편지 목록 정보
      */
     @GetMapping("/get-meeting")
-    public ResponseEntity<?> getMeetingLetter(@RequestBody LetterFindRequestDto dto){
+    public ResponseEntity<?> getMeetingLetter(@RequestBody LetterDto dto){
         List<LetterDto> letterDtos = letterService.getLetterByMeeting(dto);
         return ResponseEntity.ok(letterDtos);
     }
@@ -93,7 +88,7 @@ public class LetterController {
      * @return [ResponseEntity<List<LetterDto>>] 연예인이 받은 편지 목록 정보
      */
     @GetMapping("/get-member")
-    public ResponseEntity<?> getMemberLetter(@RequestBody LetterFindRequestDto dto){
+    public ResponseEntity<?> getMemberLetter(@RequestBody LetterDto dto){
         List<LetterDto> letterDtos = letterService.getLetterByMember(dto);
         return ResponseEntity.ok(letterDtos);
     }
