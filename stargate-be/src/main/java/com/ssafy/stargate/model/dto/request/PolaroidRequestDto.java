@@ -1,5 +1,6 @@
-package com.ssafy.stargate.model.dto.common;
+package com.ssafy.stargate.model.dto.request;
 
+import com.ssafy.stargate.model.dto.common.SavedFileDto;
 import lombok.*;
 import java.util.UUID;
 
@@ -10,10 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PolaroidDto {
-    private long no;
+public class PolaroidRequestDto {
+    private UUID uuid; // meeting
     private String email; // fUser
     private long memberNo; // member
-    private UUID uuid; // meeting
-    private SavedFileDto imageFileInfo;
 }
