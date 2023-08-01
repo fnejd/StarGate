@@ -1,5 +1,5 @@
 import React, { useRef, MouseEvent } from 'react';
-import AuthNumInputComponent from '../../atoms/auth/AuthNumInputComponent';
+import AuthNumInputComponent from '@/atoms/auth/AuthNumInputComponent';
 import BtnWhite from '@/atoms/common/BtnWhite';
 import { useNavigate } from 'react-router-dom';
 

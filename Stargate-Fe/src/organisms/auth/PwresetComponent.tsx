@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import InputComponent from '../../atoms/common/InputComponent';
+import InputComponent from '@/atoms/common/InputComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
 
