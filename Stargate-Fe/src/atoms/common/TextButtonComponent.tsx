@@ -20,10 +20,10 @@ const TextButtonComponent: React.FC<TextButtonProps> = ({
   return (
     <div
       className={`m-2 mt-0 ${
-        black ? 'text-black' : 'text-white'
+        black ? 'text-black' : 'text-slate-50'
       } duration-100`}
     >
-      <a className="text-white duration-100" href={link}>
+      <a className="text-slate-50 duration-100" href={link}>
         {text}
       </a>
     </div>

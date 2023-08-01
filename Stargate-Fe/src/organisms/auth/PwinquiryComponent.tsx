@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputComponent from '../../atoms/common/InputComponent';
+import InputComponent from '@/atoms/common/InputComponent';
 import AuthNumberComponent from './AuthNumberComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 

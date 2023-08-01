@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import InputComponent from '../../atoms/common/InputComponent';
+import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import { useNavigate } from 'react-router-dom';
+import { adminSignUpApi, adminVerifyEmail } from '@/services/userService';
+import { adminValidationCheck } from '@/hooks/useValidation';
 
 interface adminType {
   email: string;
@@ -28,40 +30,34 @@ const AdminSignUpComponent = () => {
     console.log('AdminSignup AUth api 요청');
     // get으로 보내달라 함 쿼리스트링으루
     // 리턴으론 불리언
-    // const response = email 중복 검사 요청 api 호출
-    // if (response가 true라면 ) {
-    //   setEmailText('사용 가능한 이메일입니다.');
-    //   setEmailState('green');
-    // } else {
-    //   setEmailText('사용 불가한 이메일입니다.');
-    //   setEmailState('red');
-    // }
+    const email = (admin as adminType).email;
+
+    const response = adminVerifyEmail(email);
+
+    if (response) {
+      setEmailText('사용 가능한 이메일입니다.');
+      setEmailState('green');
+    } else {
+      setEmailText('사용 불가한 이메일입니다.');
+      setEmailState('red');
+    }
   };
 
-  const submit = () => {
+  const adminSignUp = () => {
+    const validation = adminValidationCheck((admin as adminType));
+    if (validation != 'SUCCESS') {
+      alert(validation);
+      window.location.reload();
+      return 0;
+    }
+
     const formData = new FormData();
     formData.append('email', (admin as adminType).email);
     formData.append('name', (admin as adminType).company);
     formData.append('code', (admin as adminType).bizNum);
     formData.append('password', (admin as adminType).pw);
 
-    console.log(formData);
-  };
-
-  const signUp = () => {
-    // 회원가입 요청 하기 전에 유효성 검사가 이루어져야할까요
-    // 얼마나 이루어져야 할까요?
-
-    // pw Checking
-    const pw = (admin as adminType).pw;
-    const pwCheck = (admin as adminType).pwCheck;
-    // 비밀번호가 일치하지 않는 경우
-    if (pw != pwCheck || pw.length == 0) {
-      alert('비밀번호가 일치하지 않습니다.');
-      return 0;
-    }
-
-    submit();
+    console.log(adminSignUpApi(formData));
     navigate('/');
   };
 
@@ -119,7 +115,7 @@ const AdminSignUpComponent = () => {
           setter={setAdmin}
         />
       </div>
-      <button className="medium-white" onClick={signUp}>
+      <button className="medium-white" onClick={adminSignUp}>
         회원가입
       </button>
     </div>
