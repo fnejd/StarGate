@@ -1,5 +1,6 @@
 package com.ssafy.stargate.model.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.stargate.model.entity.Meeting;
 import com.ssafy.stargate.model.entity.PMember;
 import jakarta.persistence.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 public class MeetingMemberBridgeDto {
+    @JsonIgnore
     private UUID uuid;
     private long memberNo; // PMember
     private int orderNum;

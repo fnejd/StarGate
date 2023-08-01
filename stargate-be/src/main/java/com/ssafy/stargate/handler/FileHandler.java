@@ -3,6 +3,7 @@ package com.ssafy.stargate.handler;
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.model.dto.common.SavedFileDto;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
@@ -39,7 +40,7 @@ public abstract class FileHandler {
     /**
      * 유니크한 파일 이름을 만들어 반환해준다.
      * 주어진 파일이름의 확장자 포함한다.
-     * 유니크 파일 이름: 현재 시간 밀리초 + randomUUID + 확장자
+     * 유니크 파일 이름: 현재 시간 밀리초 + random 3글자 + 확장자
      * @param filename [String] 파일 이름(확장자 포함) ex: test.png
      * @return [String] 생성된 유니크한 파일 이름
      */
@@ -52,7 +53,7 @@ public abstract class FileHandler {
 
         StringBuilder uuidFilename = new StringBuilder();
         uuidFilename.append(System.currentTimeMillis())
-                .append(UUID.randomUUID())
+                .append(RandomStringUtils.randomNumeric(3))
                 .append(((ext != null) ? ("." + ext) : ""));
         return  uuidFilename.toString();
     }

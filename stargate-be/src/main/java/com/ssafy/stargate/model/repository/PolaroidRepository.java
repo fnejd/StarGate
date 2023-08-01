@@ -1,6 +1,5 @@
 package com.ssafy.stargate.model.repository;
 
-import com.ssafy.stargate.model.dto.common.PolaroidDto;
 import com.ssafy.stargate.model.entity.Polaroid;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

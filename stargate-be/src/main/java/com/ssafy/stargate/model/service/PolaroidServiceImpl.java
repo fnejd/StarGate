@@ -2,7 +2,8 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.common.PolaroidDto;
+import com.ssafy.stargate.model.dto.request.PolaroidRequestDto;
+import com.ssafy.stargate.model.dto.response.PolaroidResponseDto;
 import com.ssafy.stargate.model.entity.*;
 import com.ssafy.stargate.model.repository.*;
 import com.ssafy.stargate.util.FileUtil;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -50,18 +52,22 @@ public class PolaroidServiceImpl implements PolaroidService {
      * 저장된 폴라로이드 리스트를 가져온다.
      *
      * @param uuid      [UUID] 미팅 uuid (id)
-     * @param memberNo  [long] 멤버 번호 (id)
      * @param principal [Principal] 유저 이메일이 포함된 객체
-     * @return [List < PolaroidDto>] 저장된 폴라로이드 정보 dto 리스트
+     * @return [List<PolaroidResponseDto>] 저장된 폴라로이드 정보 dto 리스트
      */
     @Override
-    public List<PolaroidDto> getPolaroidList(UUID uuid, long memberNo, Principal principal) {
+    public List<PolaroidResponseDto> getPolaroidList(UUID uuid, Principal principal) {
         String email = principal.getName();
-        List<Polaroid> polaroids = polaroidRepository.findPolaroidList(email, memberNo, uuid);
-        if (polaroids.size() < 1) {
+
+        try {
+            Meeting meeting = getMeeting(uuid);
+
+            List<MeetingMemberBridge> meetingMembers = meeting.getMeetingMembers();
+            return getPolaroidResponseDtoList(meetingMembers, email, uuid);
+        } catch (Exception e) {
+            log.warn(e.getMessage());
             return new ArrayList<>();
         }
-        return polaroidToDtoList(polaroids);
     }
 
     /**
@@ -72,7 +78,7 @@ public class PolaroidServiceImpl implements PolaroidService {
      * @throws CRUDException 폴라로이드 생성 실패
      */
     @Override
-    public void createPolaroid(PolaroidDto dto, MultipartFile imageFile) throws CRUDException {
+    public void createPolaroid(PolaroidRequestDto dto, MultipartFile imageFile) throws CRUDException {
         String filename = fileUtil.uploadFile(filePath, imageFile);
         if (filename == null) {
             throw new CRUDException("이미지 파일이 없어 생성이 불가능합니다.");
@@ -94,20 +100,39 @@ public class PolaroidServiceImpl implements PolaroidService {
     }
 
     /**
-     * 폴라로이드 엔티티 리스트를 통해 dto 리스트를 만든다.
+     * 폴라로이드 엔티티 리스트를 통해 폴라로이드 디테일 response dto 리스트를 만든다.
      *
      * @param polaroids [List<Polaroid> polaroids] 폴라로이드 엔티티 리스트
-     * @return [List<PolaroidDto>] 폴라로이드 dto 리스트
+     * @return [PolaroidResponseDto.PolaroidDetailDto] 폴라로이드 디테일 response dto 리스트
      */
-    private List<PolaroidDto> polaroidToDtoList(List<Polaroid> polaroids) {
-        return polaroids.stream().map(polaroid -> PolaroidDto.builder()
+    private List<PolaroidResponseDto.PolaroidDetailDto> polaroidToDetailDtoList(List<Polaroid> polaroids) {
+        return polaroids.stream().map(polaroid -> PolaroidResponseDto.PolaroidDetailDto.builder()
                         .no(polaroid.getNo())
-                        .email(polaroid.getFUser().getEmail())
-                        .memberNo(polaroid.getPMember().getMemberNo())
-                        .uuid(polaroid.getMeeting().getUuid())
                         .imageFileInfo(fileUtil.getFileInfo(filePath, polaroid.getImage()))
                         .build())
                 .toList();
+    }
+
+    /**
+     * 멤버별로 폴라로이드를 찾아가면서 폴라로이드 response dto를 만든다
+     * @param meetingMembers [List<MeetingMemberBridge>]
+     * @param email [String] 팬 유저 email (id)
+     * @param uuid [String] 미팅 uuid
+     * @return [List<PolaroidResponseDto>] 폴라로이드 response dto
+     */
+    private List<PolaroidResponseDto> getPolaroidResponseDtoList(List<MeetingMemberBridge> meetingMembers, String email, UUID uuid) {
+        return meetingMembers.stream().map(meetingMember -> {
+                    long memberNo = meetingMember.getPMember().getMemberNo();
+
+                    List<Polaroid> polaroids = polaroidRepository.findPolaroidList(email, memberNo, uuid);
+                    List<PolaroidResponseDto.PolaroidDetailDto> polaroidDetailDtos = polaroidToDetailDtoList(polaroids);
+
+                    return PolaroidResponseDto.builder()
+                            .memberNo(memberNo)
+                            .polaroids(polaroidDetailDtos)
+                            .build();
+                }
+        ).toList();
     }
 
     /**

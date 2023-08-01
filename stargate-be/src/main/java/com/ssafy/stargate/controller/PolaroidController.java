@@ -1,7 +1,8 @@
 package com.ssafy.stargate.controller;
 
 import com.ssafy.stargate.exception.CRUDException;
-import com.ssafy.stargate.model.dto.common.PolaroidDto;
+import com.ssafy.stargate.model.dto.request.PolaroidRequestDto;
+import com.ssafy.stargate.model.dto.response.PolaroidResponseDto;
 import com.ssafy.stargate.model.service.PolaroidService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,16 +24,15 @@ public class PolaroidController {
     private final PolaroidService polaroidService;
 
     /**
-     * 저장된 폴라로이드 리스트를 가져온다.
+     * 저장된 폴라로이드 리스트를 가져온다. (전체 멤버 폴라로이드 포함)
      * @param uuid      [UUID] 미팅 uuid (id)
-     * @param memberNo  [long] 멤버 번호 (id)
      * @param principal [Principal] 유저 이메일이 포함된 객체
-     * @return [ResponseEntity<List < PolaroidDto>>] 저장된 폴라로이드 정보 dto 리스트 (성공: 200)
+     * @return [ResponseEntity<List<PolaroidResponseDto>>] 저장된 폴라로이드 정보 dto 리스트 (성공: 200)
      */
     @GetMapping("/get")
-    public ResponseEntity<List<PolaroidDto>> getPolaroidList(@RequestParam("uuid") UUID uuid, @RequestParam("memberNo") long memberNo, Principal principal) {
-        List<PolaroidDto> polaroidDtos = polaroidService.getPolaroidList(uuid, memberNo, principal);
-        return ResponseEntity.ok(polaroidDtos);
+    public ResponseEntity<List<PolaroidResponseDto>> getPolaroidList(@RequestParam("uuid") UUID uuid, Principal principal) {
+        List<PolaroidResponseDto> polaroidRequestDtos = polaroidService.getPolaroidList(uuid, principal);
+        return ResponseEntity.ok(polaroidRequestDtos);
     }
 
     /**
@@ -43,7 +43,7 @@ public class PolaroidController {
      * @throws CRUDException 폴라로이드 생성 실패
      */
     @PostMapping("/create")
-    public ResponseEntity<Void> createPolaroid(@ModelAttribute PolaroidDto dto, @RequestParam("imageFile") MultipartFile imageFile) throws CRUDException {
+    public ResponseEntity<Void> createPolaroid(@ModelAttribute PolaroidRequestDto dto, @RequestParam("imageFile") MultipartFile imageFile) throws CRUDException {
         polaroidService.createPolaroid(dto, imageFile);
         return ResponseEntity.ok(null);
     }
