@@ -55,13 +55,18 @@ const AdminManagementModalBox = ({
             ref={modalRef}
             className="w-l h-500 bg-white rounded-sm flex flex-col items-center"
           >
-            <div className='flex'>
-            <p className="modal-title flex items-center">{members.length > 0 ? groupName : ''}</p>
-            <AdminMangementPlusButton />
+            <div className="flex">
+              <p className="modal-title flex items-center">
+                {members.length > 0 ? groupName : ''}
+              </p>
+              <AdminMangementPlusButton />
             </div>
             <ul>
               {members.map((member) => (
-                <li className="modal-content text-center flex" key={member.memberNo}>
+                <li
+                  className="modal-content text-center flex"
+                  key={member.memberNo}
+                >
                   <p>{member.name}</p>
                   <AdminManagementDeleteButton />
                 </li>

@@ -1,4 +1,11 @@
 import React from 'react';
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 import './index.css';
 import './App.css';
 import ReactDOM from 'react-dom/client';
@@ -48,7 +55,9 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <RecoilRoot>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  </RecoilRoot>
 );
