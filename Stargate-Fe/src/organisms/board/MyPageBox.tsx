@@ -18,23 +18,21 @@ interface MyPageBoxProps {
   isAdmin: boolean;
   email: string;
   name?: string;
-  nickName?: string;
+  nickname?: string;
   phone?: string;
   birth?: string;
-  companyName?: string;
-  companyNum?: number;
+  code?: number;
 }
 
 const MyPageBox = (props: MyPageBoxProps) => {
   const {
+    isAdmin,
     email,
     name,
-    nickName,
+    nickname,
     phone,
     birth,
-    companyName,
-    companyNum,
-    isAdmin,
+    code,
   } = props;
 
   return (
@@ -46,7 +44,7 @@ const MyPageBox = (props: MyPageBoxProps) => {
       {isAdmin ? (
         <>
           <div className='flex'>
-            <InputComponent text='회사명' type='text' value={companyName} />
+            <InputComponent text='회사명' type='text' value={name} />
           </div>
           <div className='flex'>
             <InputComponent
@@ -62,7 +60,7 @@ const MyPageBox = (props: MyPageBoxProps) => {
             <InputComponent text='이름' type='text' value={name} />
           </div>
           <div className='flex'>
-            <InputComponent text='닉네임' type='text' value={nickName} />
+            <InputComponent text='닉네임' type='text' value={nickname} />
           </div>
           <div className='flex'>
             <InputComponent text='전화번호' type='text' value={phone} />

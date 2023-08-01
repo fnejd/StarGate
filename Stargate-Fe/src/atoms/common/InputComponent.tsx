@@ -18,8 +18,8 @@ interface InputProps {
   text: string;
   notice?: string;
   state?: string;
-  keyName: string;
-  getter: object;
+  keyName?: string;
+  getter?: object;
   setter: React.Dispatch<React.SetStateAction<object>>;
   value?: string;
 }
