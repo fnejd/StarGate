@@ -14,7 +14,11 @@ import lombok.*;
 @Getter
 @Setter
 public class Certify extends BaseEntity{
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long no;
+
     @Column(nullable = false)
     private String code;
 
