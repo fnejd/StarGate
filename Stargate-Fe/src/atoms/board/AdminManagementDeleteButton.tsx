@@ -14,8 +14,8 @@ const AdminManagementDeleteButton = (props: AdminManagementDeleteButtonProps) =>
 
   return (
     <>
-      <p className="modal-content flex text-center" onClick={onClick}>
-        X
+      <p className="h2r flex items-center transform -rotate-45" onClick={onClick}>
+        +
       </p>
     </>
   );

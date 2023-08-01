@@ -20,7 +20,7 @@ const MyPage = () => {
           isAdmin={false}
           email={dummy.email}
           name={dummy.name}
-          nickName={dummy.nickname}
+          nickname={dummy.nickname}
           phone={dummy.phone}
           birth={dummy.birthday}
         />

@@ -44,6 +44,15 @@ const AdminManagementModalBox = ({
     }
   };
 
+    /**
+   * AdminManagementDeleteButton을 클릭했을 때 해당 멤버의 memberNo를 console.log로 출력
+   */
+    const handleDeleteButtonClick = (memberNo: number) => {
+      console.log(memberNo);
+      // api연결시 back에 memberNo를 던져서 삭제시킴
+    };
+  
+
   return (
     <>
       {isOpen && (
@@ -68,7 +77,7 @@ const AdminManagementModalBox = ({
                   key={member.memberNo}
                 >
                   <p>{member.name}</p>
-                  <AdminManagementDeleteButton />
+                  <AdminManagementDeleteButton onClick={() => handleDeleteButtonClick(member.memberNo)} />
                 </li>
               ))}
             </ul>
