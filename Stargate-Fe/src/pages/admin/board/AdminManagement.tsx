@@ -21,6 +21,10 @@ const dummy = [
         name: '김도현',
       },
       {
+        memberNo: 2,
+        name: '박찬호처럼체인지업',
+      },
+      {
         memberNo: 3,
         name: '이의찬',
       },

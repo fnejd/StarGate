@@ -40,7 +40,7 @@ const BoardCard = ({ imageSrc, title, date, time }: BoardCardProps) => {
         alt="card image"
       />
       {isHovering && (title || date || time) && (
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 text-white text-center">
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black text-white text-center">
           <div>
             {title && <h2 className="text-lg font-semibold">{title}</h2>}
             {date && <p className="text-sm">{date}</p>}
