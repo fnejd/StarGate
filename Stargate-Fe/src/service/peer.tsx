@@ -31,7 +31,8 @@ class PeerService {
       const ans = await this.peer.createAnswer();
 
       // 생성한 answer를 Local Description으로 설정
-      await this.peer.setLocalDescription(new RTCSessionDescription(ans));
+      // await this.peer.setLocalDescription(new RTCSessionDescription(ans));
+      this.peer.setLocalDescription(new RTCSessionDescription(ans));
       return ans;
     }
     throw new Error('Peer가 초기화 되지 않았습니다');
@@ -40,6 +41,7 @@ class PeerService {
   // 상대방의 answer 정보를 설정
   async setLocalDescription(ans) {
     if (this.peer) {
+      console.log("IM SETLOCALDESCRIPTOR WORK")
       await this.peer.setRemoteDescription(new RTCSessionDescription(ans));
     }
   }
@@ -53,7 +55,8 @@ class PeerService {
       const offer = await this.peer.createOffer();
 
       // 생성한 offer를 Local Description으로 설정
-      await this.peer.setLocalDescription(new RTCSessionDescription(offer));
+      // await this.peer.setLocalDescription(new RTCSessionDescription(offer));
+      this.peer.setLocalDescription(new RTCSessionDescription(offer));
       return offer;
     }
     throw new Error('Peer가 초기화 되지 않았습니다');
