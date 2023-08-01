@@ -14,9 +14,12 @@ import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
 import com.ssafy.stargate.model.entity.Certify;
 import com.ssafy.stargate.model.entity.FUser;
 import com.ssafy.stargate.model.entity.JwtToken;
+import com.ssafy.stargate.model.entity.Polaroid;
 import com.ssafy.stargate.model.repository.CertifyRepository;
 import com.ssafy.stargate.model.repository.FUserRepository;
 import com.ssafy.stargate.model.repository.JwtTokenRepository;
+import com.ssafy.stargate.model.repository.PolaroidRepository;
+import com.ssafy.stargate.util.FileUtil;
 import com.ssafy.stargate.util.JwtTokenUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +53,7 @@ public class FUserServiceImpl implements FUserService {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    
+
     @Autowired
     private CertifyRepository certifyRepository;
 
@@ -62,7 +65,16 @@ public class FUserServiceImpl implements FUserService {
 
     @Value("${spring.mail.username}")
     private String username;
-    
+
+    @Autowired
+    private PolaroidRepository polaroidRepository;
+
+    @Autowired
+    private FileUtil fileUtil;
+
+    @Value("polaroid")
+    private String polaroidFilePath;
+
     /**
      * 팬 유저 회원가입을 진행한다.
      * @param dto [FUserRegisterRequestDto] 유저 회원가입 정보
@@ -355,6 +367,17 @@ public class FUserServiceImpl implements FUserService {
         mailSender.send(message);
     }
 
+    /**
+     * 해당 유저의 모든 폴로라이드 정보를 삭제한다.
+     *
+     * @param email [String] 팬 유저 이메일 (id)
+     */
+    private void deleteAllPolaroid(String email) {
+        for (Polaroid polaroid : polaroidRepository.findPolaroidList(email)) {
+            fileUtil.deleteFile(polaroidFilePath, polaroid.getImage());
+        }
+        polaroidRepository.deleteAllByFUserEmail(email);
+    }
 }
 
 

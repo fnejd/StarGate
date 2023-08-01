@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -35,35 +36,37 @@ public class MeetingController {
     @GetMapping("/get/{uuid}")
     public ResponseEntity<MeetingDetailResponseDto> getMeeting(@PathVariable UUID uuid, Principal principal) throws NotFoundException {
         MeetingDetailResponseDto meetingDetail = meetingService.getMeeting(uuid, principal);
-        return ResponseEntity.status(200).body(meetingDetail);
+        return ResponseEntity.ok(meetingDetail);
     }
 
     /**
      * 신규 미팅을 생성한다.
      * @param dto [MeetingDto] 생성할 신규 미팅 정보
+     * @param imageFile [MultipartFile] 이미지 파일
      * @param principal [Principal] 소속사 이메일이 포함된 객체
      * @return [ResponseEntity<MeetingDto>] 저장된 미팅 결과 dto (성공: 200)
      * @throws CRUDException 데이터 CRUD 에러
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     @PostMapping("/create")
-    public ResponseEntity<MeetingDto> createMeeting(@ModelAttribute MeetingDto dto, Principal principal) throws CRUDException, NotFoundException {
-        MeetingDto meeting = meetingService.createMeeting(dto, principal);
-        return ResponseEntity.status(200).body(meeting);
+    public ResponseEntity<MeetingDto> createMeeting(@ModelAttribute MeetingDto dto, @RequestParam("imageFile") MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException {
+        MeetingDto meeting = meetingService.createMeeting(dto, imageFile, principal);
+        return ResponseEntity.ok(meeting);
     }
 
     /**
      * 미팅 정보를 수정한다.
      * @param dto [MeetingDto] 수정할 미팅 정보
+     * @param imageFile [MultipartFile] 이미지 파일
      * @param principal [Principal] 소속사 이메일이 포함된 객체
      * @return 성공: 200
      * @throws CRUDException 데이터 CRUD 에러
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     @PutMapping("/update")
-    public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingDto dto, Principal principal) throws CRUDException, NotFoundException {
-        meetingService.updateMeeting(dto, principal);
-        return ResponseEntity.status(200).body(null);
+    public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingDto dto, @RequestParam("imageFile") MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException {
+        meetingService.updateMeeting(dto, imageFile, principal);
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -77,6 +80,6 @@ public class MeetingController {
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteMeeting(@RequestBody MeetingDto dto, Principal principal) throws CRUDException, NotFoundException {
         meetingService.deleteMeeting(dto, principal);
-        return ResponseEntity.status(200).body(null);
+        return ResponseEntity.ok(null);
     }
 }

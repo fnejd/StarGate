@@ -2,11 +2,16 @@ package com.ssafy.stargate.model.repository;
 
 import com.ssafy.stargate.model.entity.MeetingMemberBridge;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
 @Repository
 public interface MeetingMemberRepository extends JpaRepository<MeetingMemberBridge, UUID> {
+    @Query("SELECT mmb from MeetingMemberBridge mmb where mmb.pMember.memberNo = :member_no and mmb.meeting.uuid = :uuid")
+    Optional<MeetingMemberBridge> findByMemberNoAndUuid(@Param("member_no") Long memberNo, @Param("uuid") UUID meetingUuid);
 }
