@@ -132,13 +132,7 @@ const UserVideo = () => {
             .addIceCandidate(candidateObject)
             .then(() => {
               console.log('ICE 후보자 추가 성공');
-              setRemoteStream(peerService.peer.getRemoteStreams());
-              if (remoteStream) {
-                console.log(
-                  '&&&&&&&&&&&&&&&&&&&&&&&ICE 후보자 추가 성공후 상대 미디어 등록'
-                );
-                remoteVideoRef.current!.srcObject = remoteStream;
-              }
+              setRemoteStream(peerService.peer.getRemoteStreams()[0]);
             })
             .catch((error) => {
               console.error('ICE 후보자 추가 실패:', error);
@@ -166,14 +160,14 @@ const UserVideo = () => {
             width="300px"
             url={myStream}
           />
-          <video
+          {/* <video
             ref={myVideoRef}
             id="myFace"
             autoPlay
             playsInline
             width={200}
             height={200}
-          ></video>
+          ></video> */}
         </>
       )}
       {remoteStream && (
@@ -186,14 +180,14 @@ const UserVideo = () => {
             width="600px"
             url={remoteStream}
           />
-          <video
+          {/* <video
             ref={remoteVideoRef}
             id="remoteFace"
             autoPlay
             playsInline
             width={200}
             height={200}
-          ></video>
+          ></video> */}
         </>
       )}
     </div>
