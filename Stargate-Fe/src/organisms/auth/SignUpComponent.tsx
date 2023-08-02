@@ -4,7 +4,7 @@ import PasswordFormComponent from './PasswordFormComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
 import { signUpApi, verifyEmail } from '@/services/userService';
-import { userValidationCheck } from '@/hooks/useValidation';
+import { emailVaildationCheck, userValidationCheck } from '@/hooks/useValidation';
 
 interface userType {
   email: string;
@@ -31,11 +31,16 @@ const SignUpComponent = () => {
 
   const navigate = useNavigate();
 
-  // 이메일 중복검사 메서드
   const verify = async () => {
+    // get으로 보내달라 함 쿼리스트링으루
+    // 리턴으론 불리언
     const email = (user as userType).email;
+    const check = emailVaildationCheck(email);
+    if (check != 'SUCCESS') {
+      alert(check);
+      return 0;
+    }
     const result = await verifyEmail(email);
-
     if (result) {
       setEmailText('사용 가능한 이메일입니다.');
       setEmailState('green');
@@ -46,13 +51,16 @@ const SignUpComponent = () => {
   };
 
   const signUp = () => {
+    if (emailState == 'red') {
+      alert('이메일 확인을 해주세요.');
+      return 0;
+    }
     const email = (user as userType).email;
     const pw = (user as userType).pw;
     const phone = (user as userType).phone;
     const name = (user as userType).name;
     const nickName = (user as userType).nickname;
 
-    // 유효성 검사 메서드 호출 => 'SUCCESS'가 리턴되지 않았다면 체크
     const validation = userValidationCheck(user as userType);
     if (validation != 'SUCCESS') {
       alert(validation);
@@ -60,7 +68,6 @@ const SignUpComponent = () => {
       return 0;
     }
 
-    // 전화번호 양식 맞춰주기
     const numArr = phone.split('');
     let newPhone = '0';
     numArr.map((num, i) => {
@@ -69,7 +76,6 @@ const SignUpComponent = () => {
       newPhone += num;
     });
 
-    // 폼데이터로 변환 후 API 호출
     const formData = new FormData();
 
     formData.append('email', email);
@@ -81,7 +87,6 @@ const SignUpComponent = () => {
 
     const response = signUpApi(formData);
 
-    // Api 호출 한 결과 받아와서 성공 시 메인 페이지로 네비게이트
     response
       .then((response) => {
         if (response == 'alreadyToken') {
@@ -91,9 +96,9 @@ const SignUpComponent = () => {
         console.log('SignUp SUCCESS');
         navigate('/');
       })
-      .catch((error) => {
+      .catch((error: string) => {
         console.log(error);
-        alert('회원가입에 문제가 발생했습니다.');
+        alert(error);
         window.location.reload();
       });
   };

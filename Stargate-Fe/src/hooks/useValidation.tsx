@@ -16,11 +16,40 @@ interface adminType {
   pwCheck: string;
 }
 
+const emailVaildationCheck = (email: string) => {
+  // email Checking
+  const regexEmail = new RegExp(
+    // eslint-disable-next-line no-control-regex, no-useless-escape
+    // /^((?:[A-Za-z0-9!#$%&'*+\-\/=?^_`{|}~]|(?<=^|\.)"|"(?=$|\.|@)|(?<=".*)[ .](?=.*")|(?<!\.)\.){1,64})(@)((?:[A-Za-z0-9.\-])*(?:[A-Za-z0-9])\.(?:[A-Za-z0-9]){2,})$/gm
+    // eslint-disable-next-line no-useless-escape
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+  if (email.length == 0 || !regexEmail.test(email)) {
+    return '이메일 형식이 올바르지 않습니다.';
+  }
+  return 'SUCCESS';
+}
+
+const pwValidationCheck = (pw: string, pwCheck: string) => {
+  // pw Checking
+  const regexPw = new RegExp(
+    /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
+  );
+  // 일치하지 않는 경우
+  if (pw != pwCheck || pw.length == 0) {
+    return '비밀번호가 일치하지 않습니다.';
+  }
+  if (!regexPw.test(pw)) {
+    return '비밀번호 형식을 다시 확인해주세요.';
+  }
+  return 'SUCCESS';
+}
+
 const userValidationCheck = (user: userType) => {
   // email Checking
   const regexEmail = new RegExp(
-    // eslint-disable-next-line no-control-regex
-    "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])"
+    // eslint-disable-next-line no-useless-escape
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
   const email = user.email;
   if (email.length == 0 || !regexEmail.test(email)) {
@@ -80,8 +109,8 @@ const userValidationCheck = (user: userType) => {
 const adminValidationCheck = (admin: adminType) => {
   // email Checking
   const regexEmail = new RegExp(
-    // eslint-disable-next-line no-control-regex
-    "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])"
+    // eslint-disable-next-line no-useless-escape
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
   const email = admin.email;
   if (email.length == 0 || !regexEmail.test(email)) {
@@ -116,4 +145,4 @@ const adminValidationCheck = (admin: adminType) => {
   return 'SUCCESS';
 }
 
-export { userValidationCheck, adminValidationCheck };
+export { emailVaildationCheck, pwValidationCheck, userValidationCheck, adminValidationCheck };

@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import AuthNumberComponent from './AuthNumberComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
+import { pwInquiryApi } from '@/services/userService';
+import { emailVaildationCheck } from '@/hooks/useValidation';
+
+interface emailType {
+  email: string;
+  code: string;
+}
 
 const PwinquiryComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,14 +22,25 @@ const PwinquiryComponent = () => {
    */
   const verifyEmail = () => {
     // 이메일 정보 서버에 보내구!
-    // 현재 SMTP 를 싸피에서 막아놔서 이메일 인증 구현 어렵다는 전망!
-    // 이런!
-    // const code = response.code.split("");
-    const code = [3, 5, 1, 7, 6, 9];
-    if (code.length > 5) {
-      setAuthNum(code);
-      setIsOpen(true);
+    const check = emailVaildationCheck((email as emailType).email);
+    if (check != 'SUCCESS') {
+      alert(check);
+      return 0;
     }
+
+    pwInquiryApi((email as emailType).email)
+      .then((response: emailType) => {
+        console.log(response);
+        if (response.email == 'NoData') {
+          alert('이메일 검색 결과가 없습니다.');
+          window.location.reload();
+          return 0;
+        }
+        const arr = response.code.split('');
+        setAuthNum(arr.map((e) => parseInt(e)));
+        setIsOpen(true);
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -39,6 +57,7 @@ const PwinquiryComponent = () => {
         <BtnBlue text="인증번호 받기" onClick={verifyEmail} />
       </div>
       <AuthNumberComponent
+        email={(email as emailType).email}
         authNum={authNum}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

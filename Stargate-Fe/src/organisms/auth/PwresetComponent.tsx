@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
+import { pwValidationCheck } from '@/hooks/useValidation';
+import { pwResetApi } from '@/services/userService';
 
 interface pwCheckType {
   newPw: string;
@@ -16,8 +18,6 @@ const PwResetComponent = () => {
     newPwCheck: '',
   });
 
-  // useEffect 써서 newPw 바뀔때마다
-  // 비빌먼호 일치 여부 체크 해줘도 괜찮을까?
   useEffect(() => {
     const newPw = (pwCheck as pwCheckType).newPw;
     const newPwCheck = (pwCheck as pwCheckType).newPwCheck;
@@ -43,9 +43,33 @@ const PwResetComponent = () => {
     // api 요청 json 형식으루
     // email, password 필요
 
-    // 비밀번호가 일치하지 않는 경우
-    // if (pwText.length >= 16) {}
+    const pw = (pwCheck as pwCheckType).newPw;
+    const pwc = (pwCheck as pwCheckType).newPwCheck;
+    // store에서 이메일 가져오기
+    // const email = useRecoilValue(emailState);??
+    const email = 'l0u0h0@naver.com';
 
+    const validation = pwValidationCheck(pw, pwc);
+
+    // 비밀번호가 일치하지 않는 경우
+    if (validation != 'SUCCESS') {
+      alert(validation);
+      window.location.reload();
+      return 0;
+    }
+
+    // 비밀번호 재설정 API 호출
+    pwResetApi(email, pw)
+      .then((res) => {
+        console.log(res);
+        if (res != '200') {
+          alert('서버에 문제가 발생했습니다.');
+          window.location.reload();
+          return 0;
+        }
+        alert('재설정을 완료했습니다.');
+      })
+      .catch((error) => console.log(error));
     navigate('/');
   };
 

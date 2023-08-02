@@ -56,6 +56,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  
   <React.StrictMode>
     {/* <SocketProvider socketURL="wss://i9a406.p.ssafy.io:8080/rtc/asdf.12"> */}
     <RouterProvider router={router} />
