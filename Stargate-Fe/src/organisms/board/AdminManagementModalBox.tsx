@@ -68,8 +68,8 @@ const AdminManagementModalBox = ({
   };
 
   const handlePlusButtonClick = () => {
-    showInputOpen();
     selectedClear();
+    showInputOpen();
   };
   const handleCancleButtonClick = () => {
     showInputClose();
@@ -82,11 +82,13 @@ const AdminManagementModalBox = ({
     groupNo: number | null,
     groupName: string
   ) => {
+    showInputClose();
     showInputOpen();
     setSelectedGroupNo(groupNo);
     setSelectedGroupName(groupName);
   };
   const handleMemberDoubleClick = (memberNo: number, memberName: string) => {
+    showInputClose();
     showInputOpen();
     setSelectedMemberNo(memberNo);
     setSelectedMemberName(memberName);
@@ -123,7 +125,6 @@ const AdminManagementModalBox = ({
                       isGroup={true}
                       groupNo={groupNo}
                       value={selectedGroupName}
-                      setter={(newValue) => setSelectedGroupName(newValue)}
                     />
                     <AdminMangementPlusButton onClick={handlePlusButtonClick} />
                   </div>
@@ -134,8 +135,6 @@ const AdminManagementModalBox = ({
                 <div className="modal-title flex items-center">
                   <AdminManagementInput
                     isGroup={true}
-                    // eslint-disable-next-line @typescript-eslint/no-empty-function
-                    setter={() => {}}
                   />
                   <AdminMangementPlusButton onClick={handlePlusButtonClick} />
                 </div>
@@ -150,7 +149,6 @@ const AdminManagementModalBox = ({
                       isGroup={false}
                       groupNo={groupNo}
                       value={selectedMemberName}
-                      setter={(newValue) => setSelectedMemberName(newValue)}
                     />
                     <AdminManagementDeleteButton
                       onClick={() => handleCancleButtonClick()}
@@ -169,8 +167,8 @@ const AdminManagementModalBox = ({
                     <AdminManagementInput
                       isGroup={false}
                       groupNo={groupNo}
+                      memberNo={selectedMemberNo}
                       value={selectedMemberName}
-                      setter={(newValue) => setSelectedMemberName(newValue)}
                     />
                   ) : (
                     <p>{member.name}</p>

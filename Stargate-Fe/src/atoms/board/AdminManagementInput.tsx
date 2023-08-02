@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 /**
  * AdminManagementInput
  * @param isGroup => 인풋 태그 타입 설정 변수
- * @param getter => 기존 유저 값
- * @param setter() => 인풋 태그의 값 세팅할 setter(문자열)
  * @param value => 마이페이지에서 기본적으로 들어가 있을 값
  */
 
@@ -16,19 +14,17 @@ import React, { useState, useEffect } from 'react';
 interface AdminManagementInputProps {
   isGroup: boolean;
   groupNo?: number | null;
-  getter?: object;
-  setter: React.Dispatch<React.SetStateAction<string>>;
+  memberNo?: number | null;
   value?: string;
 }
 
 const AdminManagementInput = ({
   isGroup,
   groupNo,
-  getter,
-  setter,
+  memberNo,
   value,
 }: AdminManagementInputProps) => {
-  // Input onChange 시 setter 호출해 state 값 변경해주기
+  // Input onChange 시 value값 변경해주기
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setInputValue(value);
@@ -39,14 +35,22 @@ const AdminManagementInput = ({
     setInputValue(value || '');
   }, [value]);
 
+  const groupInputHandle = () => {
+    console.log(inputValue);
+    console.log(groupNo);
+  }
+  const memberInputHandle = () => {
+    console.log(inputValue);
+    console.log(memberNo);
+  }
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       console.log(isGroup);
       if (isGroup) { 
-        console.log(inputValue);
+        groupInputHandle()
       } else {
-        console.log(inputValue);
-        console.log(groupNo);
+        memberInputHandle()
       }
     }
   };
