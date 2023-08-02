@@ -17,16 +17,15 @@ const UserVideo = () => {
     }
   }, [myStream]);
 
-
-   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
-   peerService.peer.onicecandidate = (e) => {
+  // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
+  peerService.peer.onicecandidate = (e) => {
     if (e.candidate) {
       console.log('#####################################onicecandidate');
       socket.send(
         JSON.stringify({
           type: 'candidate',
           candidate: e.candidate,
-        }),
+        })
       );
     }
   };
@@ -45,15 +44,15 @@ const UserVideo = () => {
   // ontrack 이벤트 핸들러를 등록하여 스트림 정보를 받을 때 사용자 목록을 업데이트
   peerService.peer.ontrack = (e) => {
     console.log('ontrack success');
-    console.log(e.streams);
-    // setUsers((oldUsers) => oldUsers.filter((user) => user.id !== socketID));
-    // setUsers((oldUsers) => [
-    //   ...oldUsers,
-    //   {
-    //     // id: socketID,
-    //     stream: e.streams[0],
-    //   },
-    // ]);
+    // console.log(e.stream);
+    // setRemoteStream(e.stream);
+    // console.log(remoteStream);
+    // 로컬 미디어 스트림 확인
+    console.log('Local media stream:', peerService.peer.getLocalStreams());
+
+    // 원격 미디어 스트림 확인
+    console.log('Remote media stream:', peerService.peer.getRemoteStreams());
+    setRemoteStream(peerService.peer.getRemoteStreams());
   };
 
   // 상대방이 전화에 들어왔을때 실행되는 함수
@@ -75,14 +74,14 @@ const UserVideo = () => {
         console.log('no local stream');
         console.log(stream);
       }
-//       stream.getTracks().forEach(track => {
-//         peerService.peer.addTrack(track, stream);
-//       });
-//       // 로컬 미디어 스트림 확인
-// console.log("Local media stream:", peerService.peer.getLocalStreams());
+      //       stream.getTracks().forEach(track => {
+      //         peerService.peer.addTrack(track, stream);
+      //       });
+      //       // 로컬 미디어 스트림 확인
+      // console.log("Local media stream:", peerService.peer.getLocalStreams());
 
-// // 원격 미디어 스트림 확인
-// console.log("Remote media stream:", peerService.peer.getRemoteStreams());
+      // // 원격 미디어 스트림 확인
+      // console.log("Remote media stream:", peerService.peer.getRemoteStreams());
       setMyStream(stream);
       console.log('1-1. 내 미디어 연결');
       console.log(stream);
@@ -112,6 +111,7 @@ const UserVideo = () => {
     };
     socket.send(JSON.stringify(ansData));
     console.log('3. 응답보냄');
+    console.log(peerService);
   }, []);
 
   // const sendIce = peerService.peer.onicecandidate = (e) => {
@@ -158,14 +158,14 @@ const UserVideo = () => {
         audio: true,
         video: true,
       });
-//       stream.getTracks().forEach(track => {
-//         peerService.peer.addTrack(track, stream);
-//       });
-//       // 로컬 미디어 스트림 확인
-// console.log("Local media stream:", peerService.peer.getLocalStreams());
+      //       stream.getTracks().forEach(track => {
+      //         peerService.peer.addTrack(track, stream);
+      //       });
+      //       // 로컬 미디어 스트림 확인
+      // console.log("Local media stream:", peerService.peer.getLocalStreams());
 
-// // 원격 미디어 스트림 확인
-// console.log("Remote media stream:", peerService.peer.getRemoteStreams());
+      // // 원격 미디어 스트림 확인
+      // console.log("Remote media stream:", peerService.peer.getRemoteStreams());
       setMyStream(stream);
       console.log('1-1. 내 미디어 연결');
       console.log(stream);
@@ -205,26 +205,27 @@ const UserVideo = () => {
         if (receivedData.type === 'ans') {
           console.log('33333333333333333 상대에게 앤써를 받았어요');
           // console.log(receivedData.offer)
-          console.log("fdadfasfasdfadsfa--------",receivedData.ans);
+          console.log('fdadfasfasdfadsfa--------', receivedData.ans);
           await peerService.setLocalDescription(receivedData.ans);
-          console.log("Connection state:", peerService.peer.connectionState);
-          console.log(peerService)
+          console.log('Connection state:', peerService.peer.connectionState);
+          console.log(peerService);
           // sendIce();
           // sendStreams();
         }
         if (receivedData.type === 'ice') {
-          console.log('444444444444444444444 아이스를 받았어요')
-          console.log(receivedData.candidate)
-          
-          // const candidateObject = new RTCIceCandidate(receivedData.candidate);
-          // peerService.peer.addIceCandidate(candidateObject)
-          //   .then(() => {
-          //     console.log('ICE 후보자 추가 성공');
-          //   })
-          //   .catch((error) => {
-          //   console.error('ICE 후보자 추가 실패:', error);
-          // });
-          
+          console.log('444444444444444444444 아이스를 받았어요');
+          console.log(receivedData.candidate);
+
+          const candidateObject = new RTCIceCandidate(receivedData.candidate);
+          peerService.peer
+            .addIceCandidate(candidateObject)
+            .then(() => {
+              console.log('ICE 후보자 추가 성공');
+            })
+            .catch((error) => {
+              console.error('ICE 후보자 추가 실패:', error);
+            });
+          console.log('Connection state:', peerService.peer.connectionState);
         }
       };
       // 컴포넌트 언마운트 시 연결 해제
@@ -233,16 +234,6 @@ const UserVideo = () => {
       };
     };
   }, []);
-
-  // useEffect(() => {
-  //   // 웹소켓으로부터 메시지를 받아 처리하는 이벤트 핸들러를 등록합니다.
-  //   socket?.addEventListener('message', handleMessage);
-
-  //   return () => {
-  //     // 컴포넌트 언마운트 시 이벤트 핸들러 제거
-  //     socket?.removeEventListener('message', handleMessage);
-  //   };
-  // }, [socket, handleMessage]);
 
   return (
     <div>
@@ -265,8 +256,8 @@ const UserVideo = () => {
           <ReactPlayer
             playing
             muted
-            height="100px"
-            width="200px"
+            height="400px"
+            width="600px"
             url={remoteStream}
           />
         </>
