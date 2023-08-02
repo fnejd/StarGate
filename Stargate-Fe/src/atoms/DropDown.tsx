@@ -18,8 +18,6 @@ const DropDown: React.FC<DropdownProps> = ({ numbers, onOptionChange }) => {
     onOptionChange(selectedValue);
   };
 
-  console.log('여기로 전달');
-  console.log(numbers);
   return (
     <>
       <div className="flex items-end">

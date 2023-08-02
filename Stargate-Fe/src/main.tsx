@@ -20,7 +20,7 @@ import Board from './pages/user/board/UserBoard.tsx';
 import MyPage from './pages/user/board/MyPage.tsx';
 import Remind from './pages/user/board/Remind.tsx';
 import Ready from './pages/user/video/ReadyRoom.tsx';
-import Video from './pages/user/video/UserVideo.tsx';
+import Video from './pages/user/video/UserVideo.jsx';
 import StarVideo from './pages/star/StarVideo.tsx';
 import AdminSignUp from './pages/admin/signUp/AdminSignUp.tsx';
 import AdminBoard from './pages/admin/board/AdminBoard.tsx';
@@ -30,6 +30,7 @@ import AdminEventCreate from './pages/admin/event/AdminEventCreate.tsx';
 import AdminEventDetail from './pages/admin/event/AdminEventDetail.tsx';
 import AdminMonitoring from './pages/admin/event/AdminMonitoring.tsx';
 import './index.css'; // CSS 파일을 import
+import { SocketProvider } from '@/context/SocketProvider.tsx';
 
 const router = createBrowserRouter([
   { path: '/', element: <SignIn /> },
@@ -55,9 +56,9 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <RecoilRoot>
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
-  </RecoilRoot>
+  <React.StrictMode>
+    {/* <SocketProvider socketURL="wss://i9a406.p.ssafy.io:8080/rtc/asdf.12"> */}
+    <RouterProvider router={router} />
+    {/* </SocketProvider> */}
+  </React.StrictMode>
 );
