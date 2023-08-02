@@ -167,8 +167,8 @@ const UserVideo = () => {
       // // 원격 미디어 스트림 확인
       // console.log("Remote media stream:", peerService.peer.getRemoteStreams());
       setMyStream(stream);
-      console.log('1-1. 내 미디어 연결');
-      console.log(stream);
+      // console.log('1-1. 내 미디어 연결');
+      // console.log(stream);
 
       const data = {
         type: 'join',
