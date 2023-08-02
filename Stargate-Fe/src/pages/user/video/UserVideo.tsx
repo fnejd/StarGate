@@ -118,11 +118,6 @@ const UserVideo = () => {
   //   socket?.send(e.candidate)
   // }
 
-  // peerService.peer.onicecandidate = (e) => {
-  //   socket?.send(e.candidate)
-  //   console.log('아이스 보낸다')
-  // }
-
   // 웹소켓으로부터 메시지를 받아 처리하는 함수
   // 이 안에 경우 나눌거임
   // const handleMessage = useCallback((event: MessageEvent) => {
@@ -212,7 +207,7 @@ const UserVideo = () => {
           // sendIce();
           // sendStreams();
         }
-        if (receivedData.type === 'ice') {
+        if (receivedData.type === 'candidate') {
           console.log('444444444444444444444 아이스를 받았어요');
           console.log(receivedData.candidate);
 
