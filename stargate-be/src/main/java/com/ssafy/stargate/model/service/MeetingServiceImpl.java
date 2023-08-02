@@ -222,6 +222,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     /**
      * 미팅 정보를 가져온다.
+     * 미팅을 만든 해당 소속사만 미팅 정보를 변경할 수 있도록 소속사 email (id)와 함께 찾는다.
      *
      * @param uuid  [UUID] 미팅 uuid (id)
      * @param email [String] 소속사 email (id)
@@ -361,12 +362,12 @@ public class MeetingServiceImpl implements MeetingService {
         try {
             // create or update (target)
             for (MeetingMemberBridge tg : target) {
-                Optional<MeetingMemberBridge> meetingMemberOptional = source.stream()
+                Optional<MeetingMemberBridge> optionalMeetingMember = source.stream()
                         .filter(org -> org.getPMember().getMemberNo() == tg.getPMember().getMemberNo())
                         .findFirst();
 
-                if (meetingMemberOptional.isPresent()) {
-                    MeetingMemberBridge meetingMember = meetingMemberOptional.get();
+                if (optionalMeetingMember.isPresent()) {
+                    MeetingMemberBridge meetingMember = optionalMeetingMember.get();
                     // update source
                     meetingMember.setOrderNum(tg.getOrderNum());
                     meetingMemberRepository.save(meetingMember);
@@ -414,12 +415,12 @@ public class MeetingServiceImpl implements MeetingService {
         try {
             // create or update (target)
             for (MeetingFUserBridge tg : target) {
-                Optional<MeetingFUserBridge> meetingFUserOptional = source.stream()
+                Optional<MeetingFUserBridge> optionalMeetingFUser = source.stream()
                         .filter(org -> org.getEmail().equals(tg.getEmail()))
                         .findFirst();
 
-                if (meetingFUserOptional.isPresent()) {
-                    MeetingFUserBridge meetingFuser = meetingFUserOptional.get();
+                if (optionalMeetingFUser.isPresent()) {
+                    MeetingFUserBridge meetingFuser = optionalMeetingFUser.get();
                     // update source
                     meetingFuser.setOrderNum(tg.getOrderNum());
                     meetingFUserRepository.save(meetingFuser);

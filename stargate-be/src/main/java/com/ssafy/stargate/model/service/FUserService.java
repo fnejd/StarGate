@@ -11,13 +11,17 @@ import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.request.UserEmailCheckRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
+import com.ssafy.stargate.model.dto.response.RemindResponseDto;
 import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
 import org.springframework.validation.annotation.Validated;
+
 import java.security.Principal;
+import java.util.UUID;
 
 
 /**
  * 팬 유저 서비스 인터페이스
+ *
  * @author 남현실, 김도현
  */
 public interface FUserService {
@@ -27,7 +31,7 @@ public interface FUserService {
 
     public FUserDto getFUser(Principal principal) throws NotFoundException;
 
-    public FUserDto updateFUser(FUserUpdateRequestDto fUserDto, Principal principal) throws NotFoundException ;
+    public FUserDto updateFUser(FUserUpdateRequestDto fUserDto, Principal principal) throws NotFoundException;
 
     public void deleteFUser(Principal principal);
 
@@ -42,8 +46,4 @@ public interface FUserService {
     public UserEmailCheckResponseDto checkDuplicateEmail(UserEmailCheckRequestDto dto);
 
     public void logout() throws NotFoundException;
-
-
-
-
 }

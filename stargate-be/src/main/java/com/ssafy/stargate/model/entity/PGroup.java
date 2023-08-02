@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @DynamicUpdate
 @DynamicInsert
-public class PGroup {
+public class PGroup extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -120,12 +120,15 @@ public class PolaroidServiceImpl implements PolaroidService {
      * @param uuid [String] 미팅 uuid
      * @return [List<PolaroidResponseDto>] 폴라로이드 response dto
      */
-    private List<PolaroidResponseDto> getPolaroidResponseDtoList(List<MeetingMemberBridge> meetingMembers, String email, UUID uuid) {
+    private List<PolaroidResponseDto> getPolaroidResponseDtoList(List<MeetingMemberBridge> meetingMembers, String email, UUID uuid){
         return meetingMembers.stream().map(meetingMember -> {
                     long memberNo = meetingMember.getPMember().getMemberNo();
 
-                    List<Polaroid> polaroids = polaroidRepository.findPolaroidList(email, memberNo, uuid);
-                    List<PolaroidResponseDto.PolaroidDetailDto> polaroidDetailDtos = polaroidToDetailDtoList(polaroids);
+                    Optional<List<Polaroid>> optionalPolaroids = polaroidRepository.findPolaroidList(email, memberNo, uuid);
+                    if(!optionalPolaroids.isPresent()) {
+                        return null;
+                    }
+                    List<PolaroidResponseDto.PolaroidDetailDto> polaroidDetailDtos = polaroidToDetailDtoList(optionalPolaroids.get());
 
                     return PolaroidResponseDto.builder()
                             .memberNo(memberNo)
