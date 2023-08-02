@@ -1,6 +1,6 @@
 import React from 'react';
-import SignInComponent from '@/organisms/SignInComponent';
-import ToolTipComponent from '@/atoms/ToolTipComponent';
+import SignInComponent from '@/organisms/auth/SignInComponent';
+import ToolTipComponent from '@/atoms/auth/ToolTipComponent';
 
 /**
  * @todo

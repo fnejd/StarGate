@@ -1,11 +1,11 @@
 import React from 'react';
-import AdminBoardHeaderNav from '@/atoms/AdminBoardHeaderNav';
-import MyPageBox from '@/organisms/MyPageBox';
+import AdminBoardHeaderNav from '@/atoms/board/AdminBoardHeaderNav';
+import MyPageBox from '@/organisms/board/MyPageBox';
 
 const dummy = {
+  name: '수환컴퍼니',
   email: 'YunHans@ssafy.com',
-  companyName: '수환컴퍼니',
-  companyNum: 123456,
+  code : 123456,
 };
 
 const AdminMyPage = () => {
@@ -16,8 +16,8 @@ const AdminMyPage = () => {
         <MyPageBox
           isAdmin={true}
           email={dummy.email}
-          companyName={dummy.companyName}
-          companyNum={dummy.companyNum}
+          companyName={dummy.name}
+          companyNum={dummy.code}
         />
       </div>
     </div>

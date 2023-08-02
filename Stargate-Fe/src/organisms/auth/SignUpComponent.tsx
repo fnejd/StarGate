@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import InputComponent from '../atoms/InputComponent';
+import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
-import BtnBlue from '@/atoms/BtnBlue';
-import { redirect, useFormAction, useNavigate } from 'react-router-dom';
-import { signUpApi } from '@/services/userService';
+import BtnBlue from '@/atoms/common/BtnBlue';
+import { useNavigate } from 'react-router-dom';
+import { signUpApi, verifyEmail } from '@/services/userService';
+import { userValidationCheck } from '@/hooks/useValidation';
 
 interface userType {
   email: string;
@@ -30,41 +31,37 @@ const SignUpComponent = () => {
 
   const navigate = useNavigate();
 
-  const verify = () => {
-    console.log('api 요청');
-    // get으로 보내달라 함 쿼리스트링으루
-    // 리턴으론 불리언
-    // const response = email 중복 검사 요청 api 호출
-    // if (response가 true라면 ) {
-    //   setEmailText('사용 가능한 이메일입니다.');
-    //   setEmailState('green');
-    // } else {
-    //   setEmailText('사용 불가한 이메일입니다.');
-    //   setEmailState('red');
-    // }
+  // 이메일 중복검사 메서드
+  const verify = async () => {
+    const email = (user as userType).email;
+    const result = await verifyEmail(email);
+
+    if (result) {
+      setEmailText('사용 가능한 이메일입니다.');
+      setEmailState('green');
+    } else {
+      setEmailText('사용 불가한 이메일입니다.');
+      setEmailState('red');
+    }
   };
 
   const signUp = () => {
-    // pw Checking
+    const email = (user as userType).email;
     const pw = (user as userType).pw;
-    const pwCheck = (user as userType).pwCheck;
-    // 일치하지 않는 경우
-    if (pw != pwCheck || pw.length == 0) {
-      alert('비밀번호가 일치하지 않습니다.');
-      window.location.reload();
-      return 0;
-    }
-
-    // phoneNumber formatting & Checking
     const phone = (user as userType).phone;
-    const numArr = phone.split('');
+    const name = (user as userType).name;
+    const nickName = (user as userType).nickname;
 
-    if (numArr[0] != '0' || numArr[1] != '1' || numArr.length != 11) {
-      alert('잘못된 전화번호 형식입니다.');
+    // 유효성 검사 메서드 호출 => 'SUCCESS'가 리턴되지 않았다면 체크
+    const validation = userValidationCheck(user as userType);
+    if (validation != 'SUCCESS') {
+      alert(validation);
       window.location.reload();
       return 0;
     }
 
+    // 전화번호 양식 맞춰주기
+    const numArr = phone.split('');
     let newPhone = '0';
     numArr.map((num, i) => {
       if (i == 0) return;
@@ -72,19 +69,33 @@ const SignUpComponent = () => {
       newPhone += num;
     });
 
+    // 폼데이터로 변환 후 API 호출
     const formData = new FormData();
 
-    formData.append('email', (user as userType).email);
-    formData.append('name', (user as userType).name);
-    formData.append('nickname', (user as userType).nickname);
-    formData.append('password', (user as userType).pw);
+    formData.append('email', email);
+    formData.append('name', name);
+    formData.append('nickname', nickName);
+    formData.append('password', pw);
     formData.append('phone', newPhone);
     formData.append('birthday', `${(user as userType).birth}T00:00:00.000`);
 
     const response = signUpApi(formData);
 
-    console.log(response);
-    navigate('/');
+    // Api 호출 한 결과 받아와서 성공 시 메인 페이지로 네비게이트
+    response
+      .then((response) => {
+        if (response == 'alreadyToken') {
+          alert('로그인 상태로는 회원가입을 할 수 없습니다.');
+          window.location.reload();
+        }
+        console.log('SignUp SUCCESS');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+        alert('회원가입에 문제가 발생했습니다.');
+        window.location.reload();
+      });
   };
 
   return (
@@ -102,7 +113,11 @@ const SignUpComponent = () => {
         />
         <button
           className="medium-white captionb w-1/3 h-10 rounded-lg"
-          onClick={verify}
+          onClick={() => {
+            verify()
+              .then()
+              .catch((error) => console.log(error));
+          }}
         >
           이메일 확인
         </button>

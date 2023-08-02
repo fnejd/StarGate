@@ -1,5 +1,5 @@
 import React from 'react';
-import BoardCard from '../atoms/BoardCard';
+import BoardCard from '../../atoms/board/BoardCard';
 
 /**
  * BoardCardBoxProps

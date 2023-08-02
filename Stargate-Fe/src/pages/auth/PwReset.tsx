@@ -1,5 +1,5 @@
 import React from 'react';
-import PwResetComponent from '@/organisms/PwResetComponent';
+import PwResetComponent from '@/organisms/auth/PwresetComponent';
 
 const PwReset = () => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
-import BoardHeader from '@/organisms/BoardHeader';
-import BoardCardBox from '@/organisms/BoardCardBox';
-import BoardCardList from '@/organisms/BoardCardList';
+import BoardHeader from '@/organisms/board/BoardHeader';
+import BoardCardBox from '@/organisms/board/BoardCardBox';
+import BoardCardList from '@/organisms/board/BoardCardList';
 
 const dummy = {
   today: [

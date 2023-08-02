@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import AdminBtn from '@/atoms/AdminBtn.tsx';
-import AdminInput from '@/atoms/AdminInput.tsx';
+import AdminBtn from '@/atoms/common/AdminBtn';
+import AdminInput from '@/atoms/event/AdminInput';
 import DropDown from '@/atoms/DropDown.tsx';
 import useDropdown from '@/hooks/useDropdown.tsx';
 
