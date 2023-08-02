@@ -127,8 +127,6 @@ public class JwtTokenUtil {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 
-
-
             return true;
         } catch (SecurityException e) {
             throw new InvalidTokenException("잘못된 JWT 서명입니다.");
