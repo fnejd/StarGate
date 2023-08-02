@@ -23,14 +23,14 @@ public class LetterController {
     private LetterService letterService;
 
     /**
-     * 편지 작성
+     * 편지 작성, 이미 있는 편지인 경우 업데이트
      * @param dto LetterCreateRequestDto 팬유저가 작성한 편지 정보 담는 dto
      * @return [ResponseEntity<LetterDto>] 팬유저가 작성한 편지 정보가 저장된 dto
      * @throws NotFoundException 존재하지 않는 회원, 존재하지 않는 멤버, 존재하지 않는 팬미팅 에러
      */
-    @PostMapping("/create")
-    public ResponseEntity<?> createLetter(@RequestBody LetterDto dto) throws NotFoundException {
-        LetterDto letterDto = letterService.createLetter(dto);
+    @PostMapping("/write")
+    public ResponseEntity<?> writeLetter(@RequestBody LetterDto dto) throws NotFoundException {
+        LetterDto letterDto = letterService.writeLetter(dto);
         return ResponseEntity.ok(letterDto);
     }
 
@@ -40,11 +40,11 @@ public class LetterController {
      * @return [ResponseEntity<LetterDto>] 팬유저가 수정한 편지 정보가 저장된 dto
      * @throws NotFoundException 존재하지 않는 편지 에러
      */
-    @PutMapping("/update")
-    public ResponseEntity<?> updateLetter(@RequestBody LetterDto dto) throws NotFoundException{
-        LetterDto letterDto = letterService.updateLetter(dto);
-        return ResponseEntity.ok(letterDto);
-    }
+//    @PutMapping("/update")
+//    public ResponseEntity<?> updateLetter(@RequestBody LetterDto dto) throws NotFoundException{
+//        LetterDto letterDto = letterService.updateLetter(dto);
+//        return ResponseEntity.ok(letterDto);
+//    }
 
     /**
      * 편지 삭제

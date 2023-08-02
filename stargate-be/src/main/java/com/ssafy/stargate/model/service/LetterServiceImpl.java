@@ -37,24 +37,31 @@ public class LetterServiceImpl implements LetterService{
     private PMemberRepository pMemberRepository;
 
     /**
-     * 편지 작성해서 저장
+     * 편지 작성해서 저장 및 수정
      * @param dto LetterDto 팬유저가 작성한 편지 정보 담는 dto
      * @return LetterDto 저장된 편지 정보 dto
      * @throws NotFoundException 존재하지 않는 회원, 존재하지 않는 멤버, 존재하지 않는 팬미팅 에러
      */
     @Override
-    public LetterDto createLetter(LetterDto dto) throws NotFoundException {
+    public LetterDto writeLetter(LetterDto dto) throws NotFoundException {
 
-        FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
-        PMember pMember = pMemberRepository.findById(dto.getMemberNo()).orElseThrow(() -> new NotFoundException("존재하지 않는 멤버입니다."));
-        Meeting meeting = meetingRepository.findById(dto.getUuid()).orElseThrow(() -> new NotFoundException("존재하지 않는 팬미팅입니다."));
+        Letter letter = letterRepository.findLetter(dto.getEmail(), dto.getMemberNo(), dto.getUuid()).orElse(null);
 
-        Letter letter = Letter.builder()
-                .contents(dto.getContents())
-                .fUser(fUser)
-                .pMember(pMember)
-                .meeting(meeting)
-                .build();
+        if(letter == null){
+
+            FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+            PMember pMember = pMemberRepository.findById(dto.getMemberNo()).orElseThrow(() -> new NotFoundException("존재하지 않는 멤버입니다."));
+            Meeting meeting = meetingRepository.findById(dto.getUuid()).orElseThrow(() -> new NotFoundException("존재하지 않는 팬미팅입니다."));
+
+            letter = Letter.builder()
+                    .contents(dto.getContents())
+                    .fUser(fUser)
+                    .pMember(pMember)
+                    .meeting(meeting)
+                    .build();
+        }else{
+            letter.setContents(dto.getContents());
+        }
 
         Letter savedLetter = letterRepository.save(letter);
 
@@ -69,37 +76,7 @@ public class LetterServiceImpl implements LetterService{
                 .createDate(savedLetter.getCreateDate())
                 .build();
     }
-
-    /**
-     * 편지 수정
-     * @param dto LetterDto 편지 정보가 저장된 dto
-     * @return LetterDto 수정 완료된 편지 정보 담는 dto
-     * @throws NotFoundException 존재하지 않는 편지 에러
-     */
-    @Override
-    public LetterDto updateLetter(LetterDto dto) throws NotFoundException {
-
-        Letter letter = letterRepository.findById(dto.getNo()).orElse(null);
-
-        if(letter != null){
-            letter.setContents(dto.getContents());
-
-        }else{
-            throw new NotFoundException("해당하는 편지가 없습니다.");
-        }
-
-        Letter updatedLetter = letterRepository.save(letter);
-
-        return LetterDto.builder()
-                .no(updatedLetter.getNo())
-                .contents(updatedLetter.getContents())
-                .email(updatedLetter.getFUser().getEmail())
-                .memberNo(updatedLetter.getPMember().getMemberNo())
-                .uuid(updatedLetter.getMeeting().getUuid())
-                .createDate(updatedLetter.getCreateDate())
-                .editDate(updatedLetter.getEditDate())
-                .build();
-    }
+    
 
     /**
      * 편지 삭제
@@ -144,14 +121,14 @@ public class LetterServiceImpl implements LetterService{
 
         List<Letter> letters = letterRepository.findByMeeting_Uuid(dto.getUuid()).orElse(null);
 
-        return letters.stream().map((Letter -> LetterDto.builder()
-                .no(Letter.getNo())
-                .contents(Letter.getContents())
-                .email(Letter.getFUser().getEmail())
-                .memberNo(Letter.getPMember().getMemberNo())
-                .uuid(Letter.getMeeting().getUuid())
-                .createDate(Letter.getCreateDate())
-                .editDate(Letter.getEditDate())
+        return letters.stream().map((letter -> LetterDto.builder()
+                .no(letter.getNo())
+                .contents(letter.getContents())
+                .email(letter.getFUser().getEmail())
+                .memberNo(letter.getPMember().getMemberNo())
+                .uuid(letter.getMeeting().getUuid())
+                .createDate(letter.getCreateDate())
+                .editDate(letter.getEditDate())
                 .build()
                 )).toList();
     }
@@ -166,14 +143,14 @@ public class LetterServiceImpl implements LetterService{
 
         List<Letter> letters = letterRepository.findBypMemberMemberNo(dto.getMemberNo()).orElseThrow();
 
-        return letters.stream().map((Letter -> LetterDto.builder()
-                .no(Letter.getNo())
-                .contents(Letter.getContents())
-                .email(Letter.getFUser().getEmail())
-                .memberNo(Letter.getPMember().getMemberNo())
-                .uuid(Letter.getMeeting().getUuid())
-                .createDate(Letter.getCreateDate())
-                .editDate(Letter.getEditDate())
+        return letters.stream().map((letter -> LetterDto.builder()
+                .no(letter.getNo())
+                .contents(letter.getContents())
+                .email(letter.getFUser().getEmail())
+                .memberNo(letter.getPMember().getMemberNo())
+                .uuid(letter.getMeeting().getUuid())
+                .createDate(letter.getCreateDate())
+                .editDate(letter.getEditDate())
                 .build()
                 )).toList();
     }
@@ -188,14 +165,14 @@ public class LetterServiceImpl implements LetterService{
 
         List<Letter> letters = letterRepository.findByfUserEmail(email).orElseThrow();
 
-        return letters.stream().map((Letter -> LetterDto.builder()
-                .no(Letter.getNo())
-                .contents(Letter.getContents())
-                .email(Letter.getFUser().getEmail())
-                .memberNo(Letter.getPMember().getMemberNo())
-                .uuid(Letter.getMeeting().getUuid())
-                .createDate(Letter.getCreateDate())
-                .editDate(Letter.getEditDate())
+        return letters.stream().map((letter -> LetterDto.builder()
+                .no(letter.getNo())
+                .contents(letter.getContents())
+                .email(letter.getFUser().getEmail())
+                .memberNo(letter.getPMember().getMemberNo())
+                .uuid(letter.getMeeting().getUuid())
+                .createDate(letter.getCreateDate())
+                .editDate(letter.getEditDate())
                 .build()
                 )).toList();
     }
