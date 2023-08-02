@@ -49,13 +49,10 @@ const StarVideo = () => {
     console.log('Remote media stream:', peerService.peer.getRemoteStreams());
     setRemoteStream(peerService.peer.getRemoteStreams()[0]);
     // 원격 미디어 스트림이 있을 경우, 원격 비디오를 표시하기 위해 remoteStream을 연결합니다.
-
-    // 원격 미디어 스트림 확인
-    console.log('Remote media stream:', peerService.peer.getRemoteStreams());
-    if (remoteVideoRef.current) {
-      console.log('&&&&&&&&&&&&&&&&&&&&&&&상대 미디어 등록');
-      remoteVideoRef.current.srcObject = peerService.peer.getRemoteStreams()[0];
-    }
+    // if (remoteVideoRef.current) {
+    //   console.log('&&&&&&&&&&&&&&&&&&&&&&&상대 미디어 등록');
+    //   remoteVideoRef.current.srcObject = peerService.peer.getRemoteStreams()[0];
+    // }
   };
 
   // 팬이 전화에 들어왔을때 실행되는 함수
@@ -199,14 +196,14 @@ const StarVideo = () => {
             width="300px"
             url={myStream}
           />
-          <video
+          {/* <video
             ref={myVideoRef}
             id="myFace"
             autoPlay
             playsInline
             width={200}
             height={200}
-          ></video>
+          ></video> */}
         </>
       )}
       {remoteStream && (
@@ -219,14 +216,14 @@ const StarVideo = () => {
             width="600px"
             url={remoteStream}
           />
-          <video
+          {/* <video
             ref={remoteVideoRef}
             id="remoteFace"
             autoPlay
             playsInline
             width={200}
             height={200}
-          ></video>
+          ></video> */}
         </>
       )}
     </div>
