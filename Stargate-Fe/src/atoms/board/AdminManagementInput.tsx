@@ -1,47 +1,66 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /**
- * InputComponent
+ * AdminManagementInput
  * @param isGroup => 인풋 태그 타입 설정 변수
  * @param getter => 기존 유저 값
- * @param setter() => 인풋 태그의 값 세팅할 setter
+ * @param setter() => 인풋 태그의 값 세팅할 setter(문자열)
  * @param value => 마이페이지에서 기본적으로 들어가 있을 값
  */
 
-interface InputProps {
+/**
+ * todo
+ * 추후 함수형 프로그래밍으로 동작 변경하기
+ */
+
+interface AdminManagementInputProps {
   isGroup: boolean;
+  groupNo?: number | null;
   getter?: object;
-  setter: React.Dispatch<React.SetStateAction<object>>;
+  setter: React.Dispatch<React.SetStateAction<string>>;
   value?: string;
 }
 
-const InputComponent = ({ isGroup, getter, setter, value }: InputProps) => {
+const AdminManagementInput = ({
+  isGroup,
+  groupNo,
+  getter,
+  setter,
+  value,
+}: AdminManagementInputProps) => {
   // Input onChange 시 setter 호출해 state 값 변경해주기
-  // 더 좋은 방법 없을까? 고민해보기
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setter({
-      ...getter,
-      [name]: value,
-    });
+    const { value } = e.target;
+    setInputValue(value);
   };
+  const [inputValue, setInputValue] = useState<string>(value || '');
+
+  useEffect(() => {
+    setInputValue(value || '');
+  }, [value]);
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      console.log(value); // Enter 입력이 되면 클릭 이벤트 실행
+      console.log(isGroup);
+      if (isGroup) { 
+        console.log(inputValue);
+      } else {
+        console.log(inputValue);
+        console.log(groupNo);
+      }
     }
   };
 
   return (
-    <div className="p-1 m-2 w-xs h-full flex justify-center">
+    <div className="p-1 m-2 w-xs h-full flex justify-center border-b-2 border-black">
       <input
-        onChange={(e) => onChange(e)}
+        onChange={onChange}
         className="text-center w-xs"
-        value={value}
+        value={inputValue}
         onKeyDown={handleKeyPress}
       />
     </div>
   );
 };
 
-export default InputComponent;
+export default AdminManagementInput;

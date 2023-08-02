@@ -61,7 +61,7 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
               return (
                 <div
                   key={groupName}
-                  className="lg:w-1/5 flex justify-center mb-14"
+                  className="lg:w-1/5 flex justify-center h2r mb-14"
                 >
                   <BtnBlue
                     onClick={() => handleCircleClick(groupName)}
@@ -82,6 +82,7 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
         <AdminManagementModalBox
           isOpen={isModalOpen}
           onClose={handleModalClose}
+          groupNo={selectedGroup}
           groupName={
             selectedGroup !== null
               ? group.find((data) => data.groupNo === selectedGroup)?.name || ''
