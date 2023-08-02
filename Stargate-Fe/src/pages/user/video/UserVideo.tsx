@@ -29,17 +29,6 @@ const UserVideo = () => {
       );
     }
   };
-  //  peerService.peer.onicecandidate = (e) => {
-  //   console.log('ICE CANDIDATE O')
-  //   if (e.candidate) {
-  //     const candidateData = {
-  //       type: 'ice', // ICE candidate 메시지 타입
-  //       candidate: e.candidate,
-  //     };
-  //     console.log('#########################캔디데이트 보낸다')
-  //     socket.send(JSON.stringify(candidateData)); // ICE candidate 서버로 전송
-  //   }
-  // }
 
   // ontrack 이벤트 핸들러를 등록하여 스트림 정보를 받을 때 사용자 목록을 업데이트
   peerService.peer.ontrack = (e) => {
@@ -114,27 +103,6 @@ const UserVideo = () => {
     console.log(peerService);
   }, []);
 
-  // const sendIce = peerService.peer.onicecandidate = (e) => {
-  //   socket?.send(e.candidate)
-  // }
-
-  // 웹소켓으로부터 메시지를 받아 처리하는 함수
-  // 이 안에 경우 나눌거임
-  // const handleMessage = useCallback((event: MessageEvent) => {
-  //   console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
-  //   // const data = JSON.parse(event.data);
-
-  //   // // 상대가 조인했다는 메시지를 받음
-  //   // if (data.message === 'join') {
-  //   //   handleCallStart();
-  //   // }
-
-  //   // if (data.message === 'offer') {
-  //   //   console.log('오퍼받음');
-  //   //   // data.offer로 필요한 처리를 하세요.
-  //   // }
-  // }, []);
-
   useEffect(() => {
     console.log('컴포넌트 실행');
 
@@ -172,11 +140,6 @@ const UserVideo = () => {
       console.log('조인 보낸다');
       socket.send(dataString); // 서버로 들어왔다는 메시지 'join' 전송
 
-      // 웹소켓으로부터 메시지를 받아 처리하는 이벤트 핸들러를 등록합니다.
-      // socket.onmessage = (event) => {
-      //   console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
-      //   handleMessage(event); // handleMessage 함수 실행
-      // };
       socket.onmessage = async (event) => {
         console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
         const receivedData = JSON.parse(event.data);
@@ -216,6 +179,17 @@ const UserVideo = () => {
             .addIceCandidate(candidateObject)
             .then(() => {
               console.log('ICE 후보자 추가 성공');
+              // 로컬 미디어 스트림 확인
+              console.log(
+                'Local media stream:',
+                peerService.peer.getLocalStreams()
+              );
+
+              // 원격 미디어 스트림 확인
+              console.log(
+                'Remote media stream:',
+                peerService.peer.getRemoteStreams()
+              );
             })
             .catch((error) => {
               console.error('ICE 후보자 추가 실패:', error);
