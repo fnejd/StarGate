@@ -8,7 +8,6 @@ interface MemberData {
   memberNo: number;
   name: string;
 }
-
 /**
  * ManagementModalBoxProps
  * @param isOpen => 모달 창이 열려있는지를 나타내는 boolean 값
@@ -48,6 +47,9 @@ const AdminManagementModalBox = ({
     }
   };
   const [showInput, setShowInput] = useState(false);
+  const [selectedGroupNo, setSelectedGroupNo] = useState<number | null>(null);
+  const [selectedGroupName, setSelectedGroupName] = useState('');
+
   const [selectedMemberNo, setSelectedMemberNo] = useState<number | null>(null);
   const [selectedMemberName, setSelectedMemberName] = useState('');
 
@@ -59,6 +61,8 @@ const AdminManagementModalBox = ({
     selectedClear();
   };
   const selectedClear = () => {
+    setSelectedGroupNo(null);
+    setSelectedGroupName('');
     setSelectedMemberNo(null);
     setSelectedMemberName('');
   };
@@ -74,8 +78,15 @@ const AdminManagementModalBox = ({
     showInputClose();
     console.log(memberNo);
   };
-
-  const handleDoubleClick = (memberNo: number, memberName: string) => {
+  const handleGroupDoubleClick = (
+    groupNo: number | null,
+    groupName: string
+  ) => {
+    showInputOpen();
+    setSelectedGroupNo(groupNo);
+    setSelectedGroupName(groupName);
+  };
+  const handleMemberDoubleClick = (memberNo: number, memberName: string) => {
     showInputOpen();
     setSelectedMemberNo(memberNo);
     setSelectedMemberName(memberName);
@@ -93,10 +104,31 @@ const AdminManagementModalBox = ({
             className="w-l h-500 bg-white rounded-sm flex flex-col items-center"
           >
             {groupName ? (
-              <div className="flex">
-                <p className="modal-title flex items-center">{groupName}</p>
-                <AdminMangementPlusButton onClick={handlePlusButtonClick} />
-              </div>
+              selectedGroupNo === null ? (
+                <div className="flex">
+                  <p
+                    className="modal-title flex items-center"
+                    onDoubleClick={() =>
+                      handleGroupDoubleClick(groupNo, groupName)
+                    }
+                  >
+                    {groupName}
+                  </p>
+                  <AdminMangementPlusButton onClick={handlePlusButtonClick} />
+                </div>
+              ) : (
+                <div className="flex">
+                  <div className="modal-title flex items-center">
+                    <AdminManagementInput
+                      isGroup={true}
+                      groupNo={groupNo}
+                      value={selectedGroupName}
+                      setter={(newValue) => setSelectedGroupName(newValue)}
+                    />
+                    <AdminMangementPlusButton onClick={handlePlusButtonClick} />
+                  </div>
+                </div>
+              )
             ) : (
               <div className="flex">
                 <div className="modal-title flex items-center">
@@ -110,25 +142,27 @@ const AdminManagementModalBox = ({
               </div>
             )}
             <ul>
-              {showInput && selectedMemberNo === null && (
-                <li className="modal-content justify-center flex">
-                  <AdminManagementInput
-                    isGroup={false}
-                    groupNo={groupNo}
-                    value={selectedMemberName}
-                    setter={(newValue) => setSelectedMemberName(newValue)}
-                  />
-                  <AdminManagementDeleteButton
-                    onClick={() => handleCancleButtonClick()}
-                  />
-                </li>
-              )}
+              {showInput &&
+                selectedMemberNo === null &&
+                selectedGroupNo === null && (
+                  <li className="modal-content justify-center flex">
+                    <AdminManagementInput
+                      isGroup={false}
+                      groupNo={groupNo}
+                      value={selectedMemberName}
+                      setter={(newValue) => setSelectedMemberName(newValue)}
+                    />
+                    <AdminManagementDeleteButton
+                      onClick={() => handleCancleButtonClick()}
+                    />
+                  </li>
+                )}
               {members.map((member) => (
                 <li
                   className="modal-content justify-center flex"
                   key={member.memberNo}
                   onDoubleClick={() =>
-                    handleDoubleClick(member.memberNo, member.name)
+                    handleMemberDoubleClick(member.memberNo, member.name)
                   }
                 >
                   {selectedMemberNo === member.memberNo ? (
