@@ -10,15 +10,11 @@ import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.request.UserEmailCheckRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
+import com.ssafy.stargate.model.dto.response.PolaroidResponseDto;
+import com.ssafy.stargate.model.dto.response.RemindResponseDto;
 import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
-import com.ssafy.stargate.model.entity.Certify;
-import com.ssafy.stargate.model.entity.FUser;
-import com.ssafy.stargate.model.entity.JwtToken;
-import com.ssafy.stargate.model.entity.Polaroid;
-import com.ssafy.stargate.model.repository.CertifyRepository;
-import com.ssafy.stargate.model.repository.FUserRepository;
-import com.ssafy.stargate.model.repository.JwtTokenRepository;
-import com.ssafy.stargate.model.repository.PolaroidRepository;
+import com.ssafy.stargate.model.entity.*;
+import com.ssafy.stargate.model.repository.*;
 import com.ssafy.stargate.util.FileUtil;
 import com.ssafy.stargate.util.JwtTokenUtil;
 import jakarta.transaction.Transactional;
@@ -33,11 +29,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
 import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 /**
  * 팬 유저 서비스 구현체
+ *
  * @author 남현실, 김도현
  */
 @Service
@@ -77,6 +78,7 @@ public class FUserServiceImpl implements FUserService {
 
     /**
      * 팬 유저 회원가입을 진행한다.
+     *
      * @param dto [FUserRegisterRequestDto] 유저 회원가입 정보
      * @throws EmailDuplicationException 아이디(이메일) 중복 가입 시 발생하는 에러
      */
@@ -102,20 +104,21 @@ public class FUserServiceImpl implements FUserService {
 
     /**
      * 팬 로그인을 진행한다. refreshToken 을 JwtToken 에 저장
+     *
      * @param dto [FUserLoginRequestDto] 유저 로그인 정보
      * @return [JwtResponseDto] 새로 생성한 JWT
      * @throws NotFoundException 존재하지 않는 회원 에러
-     * @throws LoginException 로그인 실패 에러
+     * @throws LoginException    로그인 실패 에러
      */
     @Override
-    public JwtResponseDto login(FUserLoginRequestDto dto) throws NotFoundException, LoginException{
+    public JwtResponseDto login(FUserLoginRequestDto dto) throws NotFoundException, LoginException {
         FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow(() -> new NotFoundException("해당 회원 정보는 존재하지 않는 회원입니다."));
 
-        if(passwordEncoder.matches(dto.getPassword(), fUser.getPassword())) {
+        if (passwordEncoder.matches(dto.getPassword(), fUser.getPassword())) {
 
-            String refreshToken = jwtTokenUtil.createRefreshToken(fUser.getEmail(),"USER");
+            String refreshToken = jwtTokenUtil.createRefreshToken(fUser.getEmail(), "USER");
 
-            String accessToken = jwtTokenUtil.createAccessToken(fUser.getEmail(),"USER");
+            String accessToken = jwtTokenUtil.createAccessToken(fUser.getEmail(), "USER");
 
             JwtToken jwtToken = JwtToken.builder()
                     .email(dto.getEmail())
@@ -124,7 +127,7 @@ public class FUserServiceImpl implements FUserService {
 
             jwtTokenRepository.save(jwtToken);
 
-             return JwtResponseDto.builder()
+            return JwtResponseDto.builder()
                     .refreshToken(refreshToken)
                     .accessToken(accessToken)
                     .build();
@@ -133,15 +136,16 @@ public class FUserServiceImpl implements FUserService {
             throw new LoginException("팬 로그인 실패");
         }
     }
-    
+
     /**
      * FUser 의 회원 정보 반환
+     *
      * @param principal 유저 email이 포함된 principal 객체
      * @return FUserDto 회원정보 객체
      * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @Override
-    public FUserDto getFUser(Principal principal) throws NotFoundException{
+    public FUserDto getFUser(Principal principal) throws NotFoundException {
 
         log.info("principal in getFUser {}", principal.getName());
         String email = principal.getName();
@@ -160,7 +164,8 @@ public class FUserServiceImpl implements FUserService {
 
     /**
      * FUser 회원 정보 수정
-     * @param fUserDto FUserDto 회원 email 정보가 담긴 FUserDto 객체
+     *
+     * @param fUserDto  FUserDto 회원 email 정보가 담긴 FUserDto 객체
      * @param principal Principal 유저 email이 포함된 principal 객체
      * @return FUserDto 업데이트된 회원 정보 dto
      * @throws NotFoundException 존재하지 않는 회원 에러
@@ -173,7 +178,7 @@ public class FUserServiceImpl implements FUserService {
         log.info("팬 유저 비밀번호 {}", fUser.getPassword());
         log.info("팬 유저 새로운 비밀번호 {}", fUserDto.getPassword());
 
-        if(fUserDto.getNewPassword() != null && !passwordEncoder.matches(fUserDto.getNewPassword(), fUser.getPassword())){
+        if (fUserDto.getNewPassword() != null && !passwordEncoder.matches(fUserDto.getNewPassword(), fUser.getPassword())) {
             fUser.setPassword(passwordEncoder.encode(fUserDto.getNewPassword()));
         }
         log.info("팬 유저 입력 받은 이름 {}", fUserDto.getName());
@@ -196,25 +201,28 @@ public class FUserServiceImpl implements FUserService {
 
     /**
      * FUser 회원 탈퇴
+     *
      * @param principal Principal 회원 email 정보가 담긴 FUserDto 객체
      */
     @Override
     public void deleteFUser(Principal principal) {
         fUserRepository.deleteById(principal.getName());
         jwtTokenRepository.deleteById(principal.getName());
+        deleteAllPolaroid(principal.getName());
     }
-    
+
     /**
      * FUser 이름, 전화번호를 바탕으로 아이디 찾기
+     *
      * @param dto FUserFindIdDto 회원 email 을 찾기 위한 FUserFindIdDto 객체
      * @return FUserFindIdDto 회원 아이디가 담긴 dto
      * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @Override
-    public FUserFindIdDto getFUserId(FUserFindIdDto dto) throws NotFoundException{
+    public FUserFindIdDto getFUserId(FUserFindIdDto dto) throws NotFoundException {
         FUser fUser = fUserRepository.findByName(dto.getName()).orElseThrow(() -> new NotFoundException("아이디 찾기 실패 : 해당 아이디와 일치 하는 회원이 없습니다."));
 
-        if(fUser == null || !fUser.getPhone().equals(dto.getPhone())){
+        if (fUser == null || !fUser.getPhone().equals(dto.getPhone())) {
             throw new NotFoundException("입력하신 아이디, 전화번호와 일치하는 회원 정보가 없습니다.");
         }
         return FUserFindIdDto.builder()
@@ -223,15 +231,16 @@ public class FUserServiceImpl implements FUserService {
                 .email(fUser.getEmail())
                 .build();
     }
-    
+
     /**
-     * 비밀번호 찾기를 위한 인증 번호 생성해서 DB 에 저장 및 해당 인증 번호를 팬 유저 이메일로 전송 
+     * 비밀번호 찾기를 위한 인증 번호 생성해서 DB 에 저장 및 해당 인증 번호를 팬 유저 이메일로 전송
+     *
      * @param dto FUserFindPwDto 회원 이메일 정보가 담긴 객체
      * @return FUserFindPwDto 이메일이 일치하는 회원에게 전송할 인증번호가 저장된 객체
      * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @Override
-    public FUserFindPwDto getCertifyCode(FUserFindPwDto dto) throws NotFoundException{
+    public FUserFindPwDto getCertifyCode(FUserFindPwDto dto) throws NotFoundException {
 
         log.info("비밀번호 찾기 {}", dto.getEmail());
 
@@ -240,7 +249,7 @@ public class FUserServiceImpl implements FUserService {
         log.info("이메일로 찾은 회원 정보 {}", fUser.getEmail());
 
 
-        if(fUser != null){
+        if (fUser != null) {
 
             Certify existingUser = certifyRepository.findByfUserEmail(dto.getEmail()).orElse(null);
 
@@ -248,12 +257,12 @@ public class FUserServiceImpl implements FUserService {
 
             Certify code;
 
-            if(existingUser == null){
+            if (existingUser == null) {
                 code = Certify.builder()
                         .code(certify)
                         .fUser(fUser)
                         .build();
-            }else{
+            } else {
                 existingUser.setCode(certify);
                 code = certifyRepository.save(existingUser);
             }
@@ -267,39 +276,41 @@ public class FUserServiceImpl implements FUserService {
                     .code(certify)
                     .email(dto.getEmail())
                     .build();
-        }else{
+        } else {
             throw new NotFoundException("해당 ID 의 회원은 존재하지 않습니다.");
         }
     }
-    
+
     /**
      * 인증 번호 확인, 인증 번호 불일치하면 에러
+     *
      * @param dto FUserFindPwDto 이메일, 인증번호가 담긴 객체
-     * @throws LoginException 인증번호 불일치 에러
+     * @throws LoginException    인증번호 불일치 에러
      * @throws NotFoundException 존재하지 않는 회원 에러
      */
     @Override
-    public void checkCertify(FUserFindPwDto dto) throws LoginException, NotFoundException{
+    public void checkCertify(FUserFindPwDto dto) throws LoginException, NotFoundException {
         String code = dto.getCode();
 
         FUser fUser = certifyRepository.findById(dto.getCode()).get().getFUser();
 
-        if(fUser == null){
+        if (fUser == null) {
             throw new NotFoundException("해당하는 회원 정보를 찾지 못했습니다.");
         }
 
-        if (!dto.getEmail().equals(fUser.getEmail())){
+        if (!dto.getEmail().equals(fUser.getEmail())) {
             throw new LoginException("인증 번호가 일치하지 않습니다.");
         }
     }
 
     /**
      * FUser 비밀 번호 변경
+     *
      * @param dto FUserFindPwDto 회원 이메일과 새로 받은 비밀번호가 있는 객체
      * @throws NotFoundException 존재하지 않는 회원 에러, 존재하지 않는 인증번호 에러
      */
     @Override
-    public void updateFUserPw(FUserFindPwDto dto) throws NotFoundException{
+    public void updateFUserPw(FUserFindPwDto dto) throws NotFoundException {
 
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
@@ -317,6 +328,7 @@ public class FUserServiceImpl implements FUserService {
 
     /**
      * 회원 가입시 이메일 중복 여부 체크
+     *
      * @param dto FUserEmailCheckRequestDto 회원 가입하려는 이메일 정보가 담긴 dto
      * @return FUserEmailCheckResponseDto 이메일 존재 여부가 담긴 dto
      */
@@ -326,20 +338,21 @@ public class FUserServiceImpl implements FUserService {
                 .exist(isDuplicatedEmail(dto.getEmail()))
                 .build();
     }
-    
+
     /**
      * 로그아웃 수행, JwtToken 에서 회원의 refreshToken 삭제
+     *
      * @throws NotFoundException refreshToken 저장되어 있지 않은 상태, 로그아웃 되어 있는 상태
      */
     @Override
-    public void logout() throws NotFoundException{
+    public void logout() throws NotFoundException {
         String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 
         JwtToken refreshToken = jwtTokenRepository.findById(email).orElse(null);
 
-        if(refreshToken != null){
+        if (refreshToken != null) {
             jwtTokenRepository.deleteById(email);
-        }else{
+        } else {
             throw new NotFoundException("해당 유저는 이미 로그아웃 상태입니다.");
         }
 
@@ -347,14 +360,15 @@ public class FUserServiceImpl implements FUserService {
 
     /**
      * 이메일이 중복 확인
+     *
      * @param email String 이메일 정보
      * @return boolean , 해당 이메일이 이미 존재하면 true, 존재하지 않으면 false
      */
-    private boolean isDuplicatedEmail(String email){
+    private boolean isDuplicatedEmail(String email) {
         Boolean isDuplicated = false;
         FUser fUser = fUserRepository.findById(email).orElse(null);
 
-        if(fUser != null){
+        if (fUser != null) {
             isDuplicated = true;
         }
         return isDuplicated;
@@ -362,11 +376,12 @@ public class FUserServiceImpl implements FUserService {
 
     /**
      * 인증 번호가 적힌 이메일 전송
+     *
      * @param stargateEmail String stargate 이메일
-     * @param email String 인증번호를 받을 이메일
-     * @param code String 인증번호
+     * @param email         String 인증번호를 받을 이메일
+     * @param code          String 인증번호
      */
-    private void sendCodeByMail(String stargateEmail, String email, String code){
+    private void sendCodeByMail(String stargateEmail, String email, String code) {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(stargateEmail);
@@ -377,13 +392,18 @@ public class FUserServiceImpl implements FUserService {
         mailSender.send(message);
     }
 
+
     /**
      * 해당 유저의 모든 폴로라이드 정보를 삭제한다.
      *
      * @param email [String] 팬 유저 이메일 (id)
      */
     private void deleteAllPolaroid(String email) {
-        for (Polaroid polaroid : polaroidRepository.findPolaroidList(email)) {
+        Optional<List<Polaroid>> polaroids = polaroidRepository.findPolaroidList(email);
+        if (!polaroids.isPresent()) {
+            return;
+        }
+        for (Polaroid polaroid : polaroids.get()) {
             fileUtil.deleteFile(polaroidFilePath, polaroid.getImage());
         }
         polaroidRepository.deleteAllByFUserEmail(email);

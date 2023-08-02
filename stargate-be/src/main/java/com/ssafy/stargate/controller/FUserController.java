@@ -11,6 +11,7 @@ import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.request.UserEmailCheckRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
+import com.ssafy.stargate.model.dto.response.RemindResponseDto;
 import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
 import com.ssafy.stargate.model.service.FUserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
+import java.util.UUID;
 
 /**
  * 팬 유저에 관한 Controller이다.
@@ -32,7 +34,7 @@ import java.security.Principal;
 public class FUserController {
     @Autowired
     private final FUserService fUserService;
-    
+
     /**
      * 팬 유저 회원가입
      * @param dto [FUserRegisterRequestDto] 팬 유저 회원가입 request
@@ -173,5 +175,4 @@ public class FUserController {
         fUserService.logout();
         return ResponseEntity.ok(null);
     }
-
 }

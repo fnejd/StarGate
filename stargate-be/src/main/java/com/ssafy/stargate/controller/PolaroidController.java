@@ -15,6 +15,10 @@ import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 폴라로이드에 관한 Controller이다.
+ * 폴라로이드 파일을 생성하고 리스트를 가져올 수 있다.
+ */
 @RestController
 @RequiredArgsConstructor
 @Slf4j

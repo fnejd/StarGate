@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/pusers/register", "/pusers/check-email" ,"/pusers/login", "/fusers/register", "/fusers/login", "/fusers/find-id", "/fusers/get-code", "/fusers/check-code", "/fusers/new-pw", "/fusers/check-email").anonymous()
                         .requestMatchers("/pdashboard").hasAuthority("Producer")
                         .requestMatchers("/rtc/**").permitAll()
+                        .requestMatchers("/histories/**").permitAll() // TODO: 멤버 인증 권한 어떻게? 우선 공개로 함
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
