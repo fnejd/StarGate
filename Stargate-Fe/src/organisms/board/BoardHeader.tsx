@@ -1,6 +1,6 @@
 import React from 'react';
-import BoardHeaderNav from '../atoms/BoardHeaderNav';
-import BoardHeaderTitle from '../atoms/BoardHeaderTitle';
+import BoardHeaderNav from '../../atoms/board/BoardHeaderNav';
+import BoardHeaderTitle from '../../atoms/board/BoardHeaderTitle';
 
 const BoardHeader = () => {
   return (

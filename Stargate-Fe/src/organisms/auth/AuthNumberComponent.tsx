@@ -1,6 +1,6 @@
 import React, { useRef, MouseEvent } from 'react';
-import AuthNumInputComponent from '../atoms/AuthNumInputComponent';
-import BtnWhite from '@/atoms/BtnWhite';
+import AuthNumInputComponent from '@/atoms/auth/AuthNumInputComponent';
+import BtnWhite from '@/atoms/common/BtnWhite';
 import { useNavigate } from 'react-router-dom';
 
 interface AuthNumberProps {

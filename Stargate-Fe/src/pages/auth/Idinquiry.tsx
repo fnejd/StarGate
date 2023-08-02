@@ -1,5 +1,5 @@
 import React from 'react';
-import IdinquiryComponent from '@/organisms/IdinquiryComponent';
+import IdinquiryComponent from '@/organisms/auth/IdinquiryComponent';
 
 const Idinquiry = () => {
   return (
