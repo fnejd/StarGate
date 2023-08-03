@@ -29,6 +29,7 @@ interface pwInquiryType {
 
 const api = axios.create({
   baseURL: SERVER_URL,
+  withCredentials: true,
 });
 
 /**
@@ -59,7 +60,7 @@ const checkTokenExpTime = async () => {
 // 로그인 요청 성공 시 엑세스 토큰 헤더에 넣고 리프레쉬 토큰 스토리지에 저장
 const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   const { accessToken, refreshToken } = response.data;
-  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
 
@@ -77,7 +78,7 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
 // AccessToken이 없을 때,(만료됐을 때 재발급)
 const onNewAccessToken = (response: AxiosResponse<newTokenType>) => {
   const { accessToken } = response.data;
-  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
   console.log('AccessToken 재발급');
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
@@ -99,7 +100,7 @@ const loginApi = async (formData: FormData, type: boolean) => {
   await api
     .post('/fusers/login', formData)
     .then((res: AxiosResponse<tokenType>) => {
-      response = onSuccessLogin(res, type);
+      response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
     })
     .catch((error) => {
       console.log(error);
