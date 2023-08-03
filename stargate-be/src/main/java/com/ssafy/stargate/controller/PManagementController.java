@@ -96,6 +96,11 @@ public class PManagementController {
         return ResponseEntity.ok(null);
     }
 
+    /**
+     * 소속사 계정정보를 업데이트한다.
+     * @param dto PMemberDto 소속사 유저정보가 담긴 객체
+     * @return 성공여부 (200), 에러시 (600)
+     */
     @PutMapping("/member/update")
     public ResponseEntity<?> updateMember(@RequestBody PMemberDto dto){
         managementService.updateMember(dto);

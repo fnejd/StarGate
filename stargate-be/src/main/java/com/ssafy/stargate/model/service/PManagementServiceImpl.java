@@ -138,6 +138,10 @@ public class PManagementServiceImpl implements PManagementService {
         memberRepository.deleteMemberByMemberNo(dto.getMemberNo());
     }
 
+    /**
+     * 소속사 계정정보 업데이트
+     * @param dto PMemberDto 소속사 계정정보
+     */
     @Override
     public void updateMember(PMemberDto dto) {
         PMember pMember = memberRepository.findById(dto.getMemberNo()).orElseThrow();

@@ -87,6 +87,11 @@ public class PUserController {
         return ResponseEntity.ok(pUserDto);
     }
 
+    /**
+     * 소속사 유저 정보를 변경한다.
+     * @param pUserDto 소속사 유저 정보 객체
+     * @return 성공여부(200, 600)
+     */
     public ResponseEntity<?> updatePUser(@ModelAttribute PUserDto pUserDto){
         int statusCode = pUserService.updatePUser(pUserDto);
         return ResponseEntity.status(statusCode).build();
