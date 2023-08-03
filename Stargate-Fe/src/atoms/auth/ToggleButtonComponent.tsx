@@ -11,17 +11,14 @@ let prevValue = '';
 const ToggleButtonComponent: React.FC<ToggleProps> = ({ getter, setter }) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let { value } = e.target;
-    console.log(value + " prev " + prevValue);
     if (prevValue == value) {
       value = value == '' ? 'on' : '';
     }
-    console.log(value + " prev " + prevValue);
     setter({
       ...getter,
       ['type']: value,
     });
     prevValue = value;
-    console.log(value + " prev " + prevValue);
   };
 
   return (

@@ -5,8 +5,6 @@ import BtnBlue from '@/atoms/common/BtnBlue';
 import { adminLoginApi, loginApi } from '@/services/userService';
 import { useNavigate } from 'react-router-dom';
 import ToggleButtonComponent from '@/atoms/auth/ToggleButtonComponent';
-import { tokenState, userState } from '@/recoil/userState';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 
 interface userType {
   type: string;
@@ -16,7 +14,7 @@ interface userType {
 
 const SignInComponent = () => {
   const navigate = useNavigate();
-  const setLogin = useSetRecoilState(userState);
+
   const [pwText, setPwText] = useState('일치하지 않는 형식입니다.');
   const [pwState, setPwState] = useState('red');
   const [user, setUser] = useState<object>({
@@ -48,11 +46,14 @@ const SignInComponent = () => {
 
   const Login = () => {
     // 로그인 요청 부분
+    console.log((user as userType).type);
     // User 객체 FormData로 변환
     const formData = new FormData();
 
     formData.append('email', (user as userType).email);
     formData.append('password', (user as userType).pw);
+
+    console.log(formData);
 
     // 로그인 요청 하고 난 뒤 성공 시에
     // 로그인 유지 체크 박스 값 체크 되었는지 검사한 후
@@ -60,33 +61,34 @@ const SignInComponent = () => {
     if ((user as userType).type == 'on') {
       console.log('adminLogin');
       adminLoginApi(formData)
-        .then((res) => {
-          if (res == 'alreadyToken') {
-            alert('이미 로그인 된 상태입니다.');
-          } else if (res == 'FAIL') {
-            alert('로그인에 문제가 발생했습니다.');
-            window.location.reload();
-          } else {
-            setLogin({ token: res, email: (user as userType).email });
-            navigate('/admin/board');
-          }
-        })
-        .catch((error) => console.log(error));
+      .then((res) => {
+        if (res == 'alreadyToken') {
+          alert('이미 로그인 된 상태입니다.');
+        } else if (res == 'FAIL') {
+          alert('로그인에 문제가 발생했습니다.');
+          window.location.reload();
+        } else {
+          // setLogin({ token: res, email: (user as userType).email });
+          navigate('/admin/board');
+        }
+
+      })
+      .catch((error) => console.log(error));
     } else {
       console.log('userLogin');
       loginApi(formData)
-        .then((res) => {
-          if (res == 'alreadyToken') {
-            alert('이미 로그인 된 상태입니다.');
-          } else if (res == 'FAIL') {
-            alert('로그인에 문제가 발생했습니다.');
-            window.location.reload();
-          } else {
-            setLogin({ token: res, email: (user as userType).email });
-            navigate('/board');
-          }
-        })
-        .catch((error) => console.log(error));
+      .then((res) => {
+        if (res == 'alreadyToken') {
+          alert('이미 로그인 된 상태입니다.');
+        } else if (res == 'FAIL') {
+          alert('로그인에 문제가 발생했습니다.');
+          window.location.reload();
+        } else {
+          // setLogin({ token: res, email: (user as userType).email });
+          navigate('/board');
+        }
+      })
+      .catch((error) => console.log(error));
     }
   };
 

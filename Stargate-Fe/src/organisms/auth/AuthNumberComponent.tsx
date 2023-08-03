@@ -1,9 +1,11 @@
-import React, { useRef, MouseEvent } from 'react';
+import React, { useRef, MouseEvent, useEffect, useState } from 'react';
 import AuthNumInputComponent from '@/atoms/auth/AuthNumInputComponent';
 import BtnWhite from '@/atoms/common/BtnWhite';
 import { useNavigate } from 'react-router-dom';
+import { checkAuthNumApi } from '@/services/userService';
 
 interface AuthNumberProps {
+  email: string;
   authNum: number[];
   isOpen: boolean;
   onClose: () => void;
@@ -15,13 +17,43 @@ interface AuthNumberProps {
  * @param onClose() => 모달창 닫아지는 이벤트 담긴 함수
  */
 
-const AuthNumberComponent = ({ authNum, isOpen, onClose }: AuthNumberProps) => {
+const AuthNumberComponent = ({ email, authNum, isOpen, onClose }: AuthNumberProps) => {
+  const [numArr, setNumArr] = useState<number[]>([]);
+  const [curIdx, setCurIdx] = useState<number>(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(curIdx);
+    if (curIdx < 5) {
+      document.getElementById(`NumInput_${curIdx+1}`)?.focus();
+    } else {
+      document.getElementsByTagName('button')[0]?.focus();
+    }
+  }, [numArr, curIdx]);
 
   const AuthNumCheck = () => {
     console.log('인증번호 유효검사');
-    // 인증번호가 유저에겐 못넘어간다네요!
-    navigate('/pwreset');
+    console.log(authNum);
+    let check = true;
+    let code = '';
+
+    numArr.forEach((e, i) => {
+      if (e != authNum[i]) check = false;
+      code += e;
+    })
+
+    if (check && checkAuthNumApi(email, code) == 'SUCCESS') {
+      /**
+       * @TODO 
+       * Store에 (Recoil State)
+       * 해당 유저의 이메일 저장하는 상태 만들어 저장해주기. 
+       * Props로 넘기는거보다 나을듯??
+       */
+      navigate('/pwreset');
+    } else {
+      alert('인증번호가 올바르지 않습니다.');
+      return 0;
+    }
   };
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -46,8 +78,8 @@ const AuthNumberComponent = ({ authNum, isOpen, onClose }: AuthNumberProps) => {
                 이메일로 전송된 인증번호 6자리를 입력해주세요
               </p>
               <div className="flex m-3">
-                {authNum.map((num, i) => (
-                  <AuthNumInputComponent key={i} num={num} />
+                {authNum.map((_, i) => (
+                  <AuthNumInputComponent key={i} index={i} numArr={numArr} setNumArr={setNumArr} setCurIdx={setCurIdx} />
                 ))}
               </div>
               <BtnWhite text="확인" onClick={AuthNumCheck} />
