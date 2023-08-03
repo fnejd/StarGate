@@ -1,5 +1,6 @@
 package com.ssafy.stargate.model.service;
 
+import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.model.dto.common.PostitDto;
 import com.ssafy.stargate.model.entity.FUser;
 import com.ssafy.stargate.model.entity.Meeting;
@@ -32,24 +33,30 @@ public class PostitServiceImpl implements PostitService {
      * 포스트잇을 작성한다.
      * 기존의 포스트잇이 있으면 정보를 업데이트한다.
      * @param postitDto 신규 포스트잇 정보가 담긴 DTO객체
+     * @throws CRUDException 포스트잇 작성 실패
      */
     @Override
-    public void writePostit(PostitDto postitDto) {
-        Postit postit = postitRepository.findPostit(postitDto.getFanEmail(), postitDto.getMemberNo(), postitDto.getMeetingUuid()).orElse(null);
-        if (postit == null) {
-            FUser fUser = fUserRepository.getReferenceById(postitDto.getFanEmail());
-            PMember pMember = pMemberRepository.getReferenceById(postitDto.getMemberNo());
-            Meeting meeting = meetingRepository.getReferenceById(postitDto.getMeetingUuid());
-            postit = Postit.builder()
-                    .fUser(fUser)
-                    .pMember(pMember)
-                    .meeting(meeting)
-                    .contents(postitDto.getContents())
-                    .build();
-            postitRepository.save(postit);
-        } else {
-            postit.setContents(postitDto.getContents());
-            postitRepository.save(postit);
+    public void writePostit(PostitDto postitDto) throws CRUDException {
+        try {
+            Postit postit = postitRepository.findPostit(postitDto.getFanEmail(), postitDto.getMemberNo(), postitDto.getMeetingUuid()).orElse(null);
+            if (postit == null) {
+                FUser fUser = fUserRepository.getReferenceById(postitDto.getFanEmail());
+                PMember pMember = pMemberRepository.getReferenceById(postitDto.getMemberNo());
+                Meeting meeting = meetingRepository.getReferenceById(postitDto.getMeetingUuid());
+                postit = Postit.builder()
+                        .fUser(fUser)
+                        .pMember(pMember)
+                        .meeting(meeting)
+                        .contents(postitDto.getContents())
+                        .build();
+                postitRepository.save(postit);
+            } else {
+                postit.setContents(postitDto.getContents());
+                postitRepository.save(postit);
+            }
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw new CRUDException("포스트잇 작성 중 오류가 발생했습니다.");
         }
     }
 

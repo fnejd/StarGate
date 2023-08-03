@@ -67,14 +67,17 @@ public class RemindServiceImpl implements RemindService {
 
     /**
      * 미팅 정보를 가져온다.
+     * 미팅 팬유저, 멤버의 orderNum을 이용해 각각 오름차순으로 정렬한다.
      *
      * @param uuid [UUID] 미팅 uuid (id)
      * @return [Meeting] 미팅 데이터
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     private Meeting getMeeting(UUID uuid) throws NotFoundException {
-        return meetingRepository.findById(uuid)
+        Meeting meeting = meetingRepository.findById(uuid)
                 .orElseThrow(() -> new NotFoundException("미팅 존재하지 않음"));
+        Meeting.sortMeetingByOrderNum(meeting);
+        return meeting;
     }
 
     /**
