@@ -1,5 +1,6 @@
 package com.ssafy.stargate.handler;
 
+import com.ssafy.stargate.model.dto.response.SimpleDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -39,16 +40,16 @@ public class RtcSocketHandler extends TextWebSocketHandler {
                 webSocketSession.sendMessage(message);
             }
         }
-        int idx;
-        if ((idx = meetingPath.lastIndexOf('.')) != -1) {
-            String meetingUuid = meetingPath.substring(0, idx);
-            for (WebSocketSession webSocketSession : SESSION_MAP.get(meetingUuid)) {
-                if (webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId()) && ((String) webSocketSession.getAttributes().get("meetingPath")).lastIndexOf('.') == -1) {
-                    webSocketSession.sendMessage(message);
-                }
-            }
-
-        }
+//        // 모니터링 룸으로 중계하는 기능
+//        int idx;
+//        if ((idx = meetingPath.lastIndexOf('.')) != -1) {
+//            String meetingUuid = meetingPath.substring(0, idx);
+//            for (WebSocketSession webSocketSession : SESSION_MAP.get(meetingUuid)) {
+//                if (webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId()) && ((String) webSocketSession.getAttributes().get("meetingPath")).lastIndexOf('.') == -1) {
+//                    webSocketSession.sendMessage(message);
+//                }
+//            }
+//        }
     }
 
     /**
@@ -59,17 +60,17 @@ public class RtcSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
-        TextMessage message  = new TextMessage("My Socket id = "+session.getId());
+        TextMessage message  = new TextMessage("{msg : 'My Socket id = "+session.getId()+"'}");
         session.sendMessage(message);
         log.info("@RtcSocketHandler, meetingInfo = {}", meetingPath);
         List<WebSocketSession> sessions = SESSION_MAP.computeIfAbsent(meetingPath, k -> new ArrayList<>());
         sessions.add(session);
-        int idx = -1;
-        if ((idx = meetingPath.lastIndexOf('.')) != -1) {
-            String monitorRoom = meetingPath.substring(0, idx);
-            List<WebSocketSession> monitorSession = SESSION_MAP.computeIfAbsent(monitorRoom, k -> new ArrayList<>());
-            monitorSession.add(session);
-        }
+//        int idx = -1;
+//        if ((idx = meetingPath.lastIndexOf('.')) != -1) {
+//            String monitorRoom = meetingPath.substring(0, idx);
+//            List<WebSocketSession> monitorSession = SESSION_MAP.computeIfAbsent(monitorRoom, k -> new ArrayList<>());
+//            monitorSession.add(session);
+//        }
         log.info("MAP CONNECT SIZE = {}",SESSION_MAP.size());
     }
 
