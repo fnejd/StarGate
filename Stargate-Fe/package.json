@@ -12,18 +12,24 @@
     "watch": "npm run compile -- --watch"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-query": "^4.29.25",
     "axios": "^1.4.0",
+    "degit": "^2.8.4",
+    "peerjs": "^1.4.7",
     "react": "^18.2.0",
+    "react-csv-reader": "^4.0.0",
     "react-dom": "^18.2.0",
+    "react-player": "^2.12.0",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.2",
-    "redux": "^4.2.1"
+    "recoil": "^0.7.7",
+    "simple-peer": "^9.11.1",
+    "socket.io-client": "^4.7.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
+    "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "@vitejs/plugin-react": "^4.0.1",
@@ -32,6 +38,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.1",
     "postcss": "^8.4.26",
+    "postcss-import": "^15.1.0",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.4.1",
     "tailwindcss": "^3.3.3",

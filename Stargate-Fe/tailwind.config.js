@@ -1,8 +1,5 @@
 import { Plugin } from 'tailwindcss';
-<<<<<<< HEAD
-=======
 
->>>>>>> 9abf38bf0b739321b20ba53f6da2720c56214d42
 // tailwindcss 모듈에서 Config라는 타입을 임포트
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -14,22 +11,28 @@ export default {
   ],
   theme: {
     extend: {
-      height: {
+      width: {
+        'xs' : '15vw',
+        's' : '30vw',
+        'm': '50vw',
+        'l': '70vw',
+        'xl': '98vw',
+        62: '241px',
+        300: '300px',
+        350: '350px',
         400: '400px',
         500: '500px',
         550: '550px',
         600: '600px',
       },
-<<<<<<< HEAD
-      width: {
-        '30vw': '30vw',
-        '50vw': '50vw',
-        '70vw': '70vw',
-        '90vw': '90vw',
-        '98vw': '98vw',
+      height: {
+        300: '300px',
+        350: '350px',
+        400: '400px',
+        500: '500px',
+        550: '550px',
+        600: '600px',
       },
-=======
->>>>>>> 9abf38bf0b739321b20ba53f6da2720c56214d42
       colors: {
         g1: '#f6f6f6',
         g2: '#e7e7e7',
@@ -93,16 +96,14 @@ export default {
 
         red: '#DC2626',
         admingray: '#DADADA',
-<<<<<<< HEAD
-=======
-        endbg: '#E7F1FF',
->>>>>>> 9abf38bf0b739321b20ba53f6da2720c56214d42
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],
         kreon: ['KREON', 'sans-serif'],
       },
       fontSize: {
+        10: '10px',
+        11: '11px',
         12: '12px',
         14: '14px',
         16: '16px',
@@ -111,6 +112,7 @@ export default {
         24: '24px',
         28: '28px',
         32: '32px',
+        40: '40px',
         48: '48px',
         60: '60px',
         80: '80px',
@@ -144,7 +146,7 @@ export default {
         md: '8px',
         lg: '16px',
         xl: '32px',
-      }
+      },
     },
   },
   plugins: [
@@ -160,4 +162,3 @@ export default {
     // }),
   ],
 }
-
