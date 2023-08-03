@@ -50,7 +50,7 @@ const MyPageBox = (props: MyPageBoxProps) => {
             <InputComponent
               text='사업자 등록번호'
               type='text'
-              value={companyNum?.toString()}
+              value={code.toString()}
             />
           </div>
         </>
