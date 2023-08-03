@@ -115,17 +115,18 @@ public class PolaroidServiceImpl implements PolaroidService {
 
     /**
      * 멤버별로 폴라로이드를 찾아가면서 폴라로이드 response dto를 만든다
+     *
      * @param meetingMembers [List<MeetingMemberBridge>]
-     * @param email [String] 팬 유저 email (id)
-     * @param uuid [String] 미팅 uuid
+     * @param email          [String] 팬 유저 email (id)
+     * @param uuid           [String] 미팅 uuid
      * @return [List<PolaroidResponseDto>] 폴라로이드 response dto
      */
-    private List<PolaroidResponseDto> getPolaroidResponseDtoList(List<MeetingMemberBridge> meetingMembers, String email, UUID uuid){
+    private List<PolaroidResponseDto> getPolaroidResponseDtoList(List<MeetingMemberBridge> meetingMembers, String email, UUID uuid) {
         return meetingMembers.stream().map(meetingMember -> {
                     long memberNo = meetingMember.getPMember().getMemberNo();
 
                     Optional<List<Polaroid>> optionalPolaroids = polaroidRepository.findPolaroidList(email, memberNo, uuid);
-                    if(!optionalPolaroids.isPresent()) {
+                    if (!optionalPolaroids.isPresent()) {
                         return null;
                     }
                     List<PolaroidResponseDto.PolaroidDetailDto> polaroidDetailDtos = polaroidToDetailDtoList(optionalPolaroids.get());
@@ -140,14 +141,17 @@ public class PolaroidServiceImpl implements PolaroidService {
 
     /**
      * 저장된 미팅을 가져온다.
+     * 미팅 팬유저, 멤버의 orderNum을 이용해 각각 오름차순으로 정렬한다.
      *
      * @param uuid [UUID] 미팅 uuid (id)
      * @return [Meeting] 미팅 데이터
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     private Meeting getMeeting(UUID uuid) throws NotFoundException {
-        return meetingRepository.findById(uuid)
+        Meeting meeting = meetingRepository.findById(uuid)
                 .orElseThrow(() -> new NotFoundException("미팅 존재하지 않음"));
+        Meeting.sortMeetingByOrderNum(meeting);
+        return meeting;
     }
 
     /**

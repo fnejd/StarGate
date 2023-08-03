@@ -1,5 +1,6 @@
 package com.ssafy.stargate.controller;
 
+import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.model.dto.common.PostitDto;
 import com.ssafy.stargate.model.service.PostitService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class PostitController {
      * @return 작성(생성, 수정)성공여부를 반환.
      */
     @PostMapping("/write")
-    public ResponseEntity<Void> writePostit(@RequestBody PostitDto postitDto) {
+    public ResponseEntity<Void> writePostit(@RequestBody PostitDto postitDto) throws CRUDException {
         postitService.writePostit(postitDto);
         return ResponseEntity.status(200).build();
     }

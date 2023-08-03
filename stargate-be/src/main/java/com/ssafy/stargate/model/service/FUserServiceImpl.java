@@ -388,7 +388,7 @@ public class FUserServiceImpl implements FUserService {
 
 
     /**
-     * 해당 유저의 모든 폴로라이드 정보를 삭제한다.
+     * 해당 유저의 모든 폴라로이드 정보를 삭제한다.
      *
      * @param email [String] 팬 유저 이메일 (id)
      */

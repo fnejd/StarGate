@@ -16,6 +16,6 @@ public interface MeetingMemberRepository extends JpaRepository<MeetingMemberBrid
 
     Optional<List<MeetingMemberBridge>> findByUuid(UUID uuid);
 
-    @Query("SELECT mmb from MeetingMemberBridge mmb where mmb.pMember.memberNo = :member_no and mmb.meeting.uuid = :uuid")
+    @Query("SELECT mmb from MeetingMemberBridge mmb where mmb.pMember.memberNo = :member_no and mmb.meeting.uuid = :uuid order by mmb.orderNum")
     Optional<MeetingMemberBridge> findByMemberNoAndUuid(@Param("member_no") Long memberNo, @Param("uuid") UUID meetingUuid);
 }

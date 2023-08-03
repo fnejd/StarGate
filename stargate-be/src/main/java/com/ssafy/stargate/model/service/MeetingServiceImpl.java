@@ -49,7 +49,6 @@ public class MeetingServiceImpl implements MeetingService {
     @Autowired
     private final FileUtil fileUtil;
 
-
     @Value("${s3.filepath.meeting}")
     private String filePath;
 
@@ -76,7 +75,7 @@ public class MeetingServiceImpl implements MeetingService {
 
         List<MeetingDetailResponseDto.MeetingFUser> meetingFUserDtos = getMeetingDetailFUserDtoList(meeting);
 
-        SavedFileDto savedFileDto = fileUtil.getFileInfo(filePath, meeting.getImage());
+        SavedFileDto savedFileDto = (meeting.getImage() != null) ? fileUtil.getFileInfo(filePath, meeting.getImage()) : null;
 
         PGroup group = getGroup(meeting);
         return MeetingDetailResponseDto.builder()
@@ -223,6 +222,7 @@ public class MeetingServiceImpl implements MeetingService {
     /**
      * 미팅 정보를 가져온다.
      * 미팅을 만든 해당 소속사만 미팅 정보를 변경할 수 있도록 소속사 email (id)와 함께 찾는다.
+     * 미팅 팬유저, 멤버의 orderNum을 이용해 각각 오름차순으로 정렬한다.
      *
      * @param uuid  [UUID] 미팅 uuid (id)
      * @param email [String] 소속사 email (id)
@@ -230,8 +230,10 @@ public class MeetingServiceImpl implements MeetingService {
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     private Meeting getMeeting(UUID uuid, String email) throws NotFoundException {
-        return meetingRepository.findByIdAndEmail(uuid, email)
+        Meeting meeting = meetingRepository.findByIdAndEmail(uuid, email)
                 .orElseThrow(() -> new NotFoundException("미팅 존재하지 않음"));
+        Meeting.sortMeetingByOrderNum(meeting);
+        return meeting;
     }
 
     /**
@@ -248,7 +250,7 @@ public class MeetingServiceImpl implements MeetingService {
                         .memberNo(meetingMember.getPMember().getMemberNo())
                         .name(meetingMember.getPMember().getName())
                         .orderNum(meetingMember.getOrderNum())
-                        .roomId(getRoomId(meeting, meetingMember)) // create roomId
+                        .roomId(MeetingMemberBridge.getRoomId(meeting, meetingMember))
                         .build()).toList();
     }
 
@@ -300,19 +302,6 @@ public class MeetingServiceImpl implements MeetingService {
         MeetingMemberBridge meetingMember = meeting.getMeetingMembers().get(0);
         return meetingMember.getPMember().getPGroup();
     }
-
-    /**
-     * 미팅방 id를 생성한다.
-     * 미팅 uuid와 미팅멤버 uuid를 이용한다.
-     *
-     * @param meeting       [Meeting] 미팅
-     * @param meetingMember [MeetingMemberBridge] 미팅 멤버
-     * @return [String] 생성된 미팅방 id
-     */
-    private String getRoomId(Meeting meeting, MeetingMemberBridge meetingMember) {
-        return meeting.getUuid() + "." + meetingMember.getUuid();
-    }
-
 
     /**
      * 미팅 멤버 dto 리스트를 통해 미팅 멤버 엔티티 리스트를 만든다.
