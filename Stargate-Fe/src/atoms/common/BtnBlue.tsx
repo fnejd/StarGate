@@ -7,7 +7,7 @@ interface ButtonProps {
 
 const BtnBlue: React.FC<ButtonProps> = ({ text, onClick }) => {
   return (
-    <button className="medium-white" onClick={onClick}>
+    <button className="medium-white whitespace-nowrap overflow-ellipsis line-clamp-1" onClick={onClick}>
       {text}
     </button>
   );

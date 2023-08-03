@@ -6,11 +6,6 @@ import React, { useState, useEffect } from 'react';
  * @param value => 마이페이지에서 기본적으로 들어가 있을 값
  */
 
-/**
- * todo
- * 추후 함수형 프로그래밍으로 동작 변경하기
- */
-
 interface AdminManagementInputProps {
   isGroup: boolean;
   groupNo?: number | null;
@@ -59,7 +54,7 @@ const AdminManagementInput = ({
     <div className="p-1 m-2 w-xs h-full flex justify-center border-b-2 border-black">
       <input
         onChange={onChange}
-        className="text-center w-xs"
+        className="text-center w-xs outline-none"
         value={inputValue}
         onKeyDown={handleKeyPress}
       />

@@ -109,7 +109,7 @@ const AdminManagementModalBox = ({
               selectedGroupNo === null ? (
                 <div className="flex">
                   <p
-                    className="modal-title flex items-center"
+                    className="modal-title flex items-center my-4"
                     onDoubleClick={() =>
                       handleGroupDoubleClick(groupNo, groupName)
                     }
@@ -133,14 +133,12 @@ const AdminManagementModalBox = ({
             ) : (
               <div className="flex">
                 <div className="modal-title flex items-center">
-                  <AdminManagementInput
-                    isGroup={true}
-                  />
+                  <AdminManagementInput isGroup={true} />
                   <AdminMangementPlusButton onClick={handlePlusButtonClick} />
                 </div>
               </div>
             )}
-            <ul>
+            <ul className='w-full h-400 overflow-y-scroll'>
               {showInput &&
                 selectedMemberNo === null &&
                 selectedGroupNo === null && (
