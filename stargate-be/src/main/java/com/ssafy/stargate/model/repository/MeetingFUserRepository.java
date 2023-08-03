@@ -16,4 +16,7 @@ public interface MeetingFUserRepository extends JpaRepository<MeetingFUserBridge
 
     @Query("SELECT mub from MeetingFUserBridge mub where mub.email = :email and mub.meeting.uuid = :uuid")
     Optional<MeetingFUserBridge> findByEmailAndUuid(@Param("email") String fanEmail, @Param("uuid") UUID meetingUuid);
+
+    @Query("SELECT count(mub) from MeetingFUserBridge mub join FUser f on mub.email = f.email where mub.meeting.uuid = :uuid")
+    int countRegisteredFUsers(@Param("uuid") UUID meetingUuid);
 }
