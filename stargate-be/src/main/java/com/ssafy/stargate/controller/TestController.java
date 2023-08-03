@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 
+import java.security.Principal;
+
 @RequestMapping("/tests")
 @RestController
 @RequiredArgsConstructor
@@ -58,6 +60,12 @@ public class TestController {
     public ResponseEntity<?>  deleteMultipartS3(@RequestParam("filename") String filename) throws CRUDException, NotFoundException {
         String key = fileHandler.getKey(filePath, filename);
         fileHandler.deleteFile(key);
+        return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/jwt-auth")
+    public ResponseEntity<?> getJwtAuth(Principal principal){
+        log.info("JWT 파싱 테스트 : {}",principal.getName());
         return ResponseEntity.ok(null);
     }
 
