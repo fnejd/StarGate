@@ -45,7 +45,9 @@ const AdminBoardHeaderNav = () => {
         >
           마이페이지
         </NavLink>
-        <div className="text-white" onClick={handleLogout}>로그아웃</div>
+        <div className="text-white hover:text-opacity-50 hover:cursor-pointer" onClick={handleLogout}>
+          로그아웃
+        </div>
       </div>
     </div>
   );
