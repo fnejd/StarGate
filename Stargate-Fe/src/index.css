@@ -42,6 +42,7 @@
     @apply cursor-pointer;
   }
 
+
   button:disabled {
     @apply cursor-not-allowed;
   }
@@ -54,21 +55,26 @@
 @layer components {
   .medium-blue {
     @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
+    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
   }
 
   .medium-white {
+    @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
     @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
   }
 
   .form-title {
     @apply font-suit text-32 font-medium text-white;
+    @apply font-suit text-32 font-medium text-white;
   }
 
   .input-warning {
     @apply font-suit text-12 font-medium text-red;
+    @apply font-suit text-12 font-medium text-red;
   }
 
   .page-title-md {
+    @apply font-suit text-16 font-medium text-white;
     @apply font-suit text-16 font-medium text-white;
   }
 
@@ -81,7 +87,7 @@
   }
 
   .csv-btn {
-    @apply w-32 h-8 ml-1 text-12 font-medium bg-admingray text-black rounded-sm flex items-center justify-center cursor-pointer opacity-0;
+    @apply absolute top-0 left-0 z-10 w-32 h-8 ml-1 text-12 font-medium bg-admingray text-black rounded-sm cursor-pointer opacity-0;
   }
 
   .t1b {
@@ -91,6 +97,7 @@
   .t1r {
     @apply font-kreon text-160 font-normal leading-120;
   }
+
 
   .t2b {
     @apply font-kreon text-80 font-semibold leading-120;
@@ -186,6 +193,9 @@
   line-height: 1.5;
   font-weight: 400;
 
+  width: 100vw !important;
+  height: 100vh !important;
+
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -208,6 +218,7 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -250,3 +261,4 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+

@@ -26,15 +26,12 @@ const AdminSignUpComponent = () => {
 
   const navigate = useNavigate();
 
-  const verify = () => {
-    console.log('AdminSignup AUth api 요청');
-    // get으로 보내달라 함 쿼리스트링으루
-    // 리턴으론 불리언
+  // 이메일 중복검사
+  const verify = async () => {
     const email = (admin as adminType).email;
+    const result = await adminVerifyEmail(email);
 
-    const response = adminVerifyEmail(email);
-
-    if (response) {
+    if (result) {
       setEmailText('사용 가능한 이메일입니다.');
       setEmailState('green');
     } else {
@@ -44,21 +41,39 @@ const AdminSignUpComponent = () => {
   };
 
   const adminSignUp = () => {
-    const validation = adminValidationCheck((admin as adminType));
+    // 입력 폼 유효성 검사
+    const validation = adminValidationCheck(admin as adminType);
+    // 'SUCCESS'가 리턴되지 않았다면 리턴값 출력 후 리로드
     if (validation != 'SUCCESS') {
       alert(validation);
       window.location.reload();
       return 0;
     }
 
+    // API 에 담아 보낼 폼데이터 생성
     const formData = new FormData();
     formData.append('email', (admin as adminType).email);
     formData.append('name', (admin as adminType).company);
     formData.append('code', (admin as adminType).bizNum);
     formData.append('password', (admin as adminType).pw);
 
-    console.log(adminSignUpApi(formData));
-    navigate('/');
+    const response = adminSignUpApi(formData);
+
+    // Api 호출 한 결과 받아와서 성공 시 메인 페이지로 네비게이트
+    response
+      .then((response) => {
+        if (response == 'alreadyToken') {
+          alert('로그인 상태로는 회원가입을 할 수 없습니다.');
+          window.location.reload();
+        }
+        console.log('SignUp SUCCESS');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+        alert('회원가입에 문제가 발생했습니다.');
+        window.location.reload();
+      });
   };
 
   return (
@@ -76,7 +91,11 @@ const AdminSignUpComponent = () => {
         />
         <button
           className="medium-white captionb w-1/3 h-10 rounded-lg"
-          onClick={verify}
+          onClick={() => {
+            verify()
+              .then()
+              .catch((error) => console.log(error));
+          }}
         >
           이메일 확인
         </button>
