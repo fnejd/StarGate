@@ -37,6 +37,11 @@ public class PostitController {
         return ResponseEntity.ok(responseDto);
     }
 
+    /**
+     * 포스트잇을 삭제한다.
+     * @param postitDto 포스트잇 정보가 담긴 객체
+     * @return 삭제성공여부(200), 실패시 600
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deletePostit(@RequestBody PostitDto postitDto){
         postitService.deletePostit(postitDto);
