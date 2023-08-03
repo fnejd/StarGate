@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import peerService from '@/service/peer';
+import peerService from '@/peer/peer';
 
 const UserVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
@@ -49,7 +49,7 @@ const UserVideo = () => {
     // 원격 미디어 스트림 확인
     console.log('Remote media stream:', peerService.peer.getRemoteStreams());
     setRemoteStream(peerService.peer.getRemoteStreams()[0]);
-    
+
     // 원격 미디어 스트림이 있을 경우, 원격 비디오를 표시하기 위해 remoteStream을 연결합니다.
     if (remoteStream) {
       console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&상대방 화면 등록');

@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-import peerService from '@/service/peer';
+import peerService from '@/peer/peer';
 
 const StarVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
