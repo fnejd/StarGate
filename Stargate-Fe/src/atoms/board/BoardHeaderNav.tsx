@@ -14,7 +14,8 @@ const BoardHeaderNav = () => {
       const result = await logoutApi();
 
       if (result === 'SUCCESS') {
-        navigate('/admin/board');
+        alert('로그아웃 완료');
+        navigate('/');
       } else {
         alert(result);
       }
