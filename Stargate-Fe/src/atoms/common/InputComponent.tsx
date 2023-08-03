@@ -18,8 +18,8 @@ interface InputProps {
   text: string;
   notice?: string;
   state?: string;
-  keyName: string;
-  getter: object;
+  keyName?: string;
+  getter?: object;
   setter: React.Dispatch<React.SetStateAction<object>>;
   value?: string;
 }
@@ -59,7 +59,7 @@ const InputComponent: React.FC<InputProps> = ({
           <input
             name={keyName}
             onChange={(e) => onChange(e)}
-            className="min-w-full text-white bg-transparent border-b-2 border-white mt-2 placeholder:text-slate-50"
+            className="min-w-full text-white bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
             placeholder={text}
             value={value}
@@ -70,7 +70,7 @@ const InputComponent: React.FC<InputProps> = ({
           <input
             name={keyName}
             onChange={(e) => onChange(e)}
-            className="min-w-full text-white bg-transparent border-b-2 border-white mt-2 placeholder:text-slate-50"
+            className="min-w-full text-white bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
             placeholder={text}
             value={value}
