@@ -17,6 +17,7 @@ const SignInComponent = () => {
 
   const [pwText, setPwText] = useState('일치하지 않는 형식입니다.');
   const [pwState, setPwState] = useState('red');
+  const [checked, setChecked] = useState(false);
   const [user, setUser] = useState<object>({
     type: '',
     email: '',
@@ -60,7 +61,7 @@ const SignInComponent = () => {
     // 체크 되어 있으면 로컬 스토리지에 토큰 저장해주기
     if ((user as userType).type == 'on') {
       console.log('adminLogin');
-      adminLoginApi(formData)
+      adminLoginApi(formData, checked)
       .then((res) => {
         if (res == 'alreadyToken') {
           alert('이미 로그인 된 상태입니다.');
@@ -76,7 +77,7 @@ const SignInComponent = () => {
       .catch((error) => console.log(error));
     } else {
       console.log('userLogin');
-      loginApi(formData)
+      loginApi(formData, checked)
       .then((res) => {
         if (res == 'alreadyToken') {
           alert('이미 로그인 된 상태입니다.');
@@ -112,7 +113,7 @@ const SignInComponent = () => {
       />
       <div className="flex text-white m-2 p2r">
         <div className="w-1/2">
-          <input type="checkbox" id="loginStatus" className="ml-2 mr-2" />
+          <input type="checkbox" id="loginStatus" checked={checked} onChange={() => setChecked(!checked)} className="ml-2 mr-2" />
           로그인 유지
         </div>
         <div className="flex">

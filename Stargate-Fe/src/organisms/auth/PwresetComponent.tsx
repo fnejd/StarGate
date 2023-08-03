@@ -4,6 +4,8 @@ import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
 import { pwValidationCheck } from '@/hooks/useValidation';
 import { pwResetApi } from '@/services/userService';
+import { emailState } from '@/recoil/userState';
+import { useRecoilValue } from 'recoil';
 
 interface pwCheckType {
   newPw: string;
@@ -46,8 +48,8 @@ const PwResetComponent = () => {
     const pw = (pwCheck as pwCheckType).newPw;
     const pwc = (pwCheck as pwCheckType).newPwCheck;
     // store에서 이메일 가져오기
-    // const email = useRecoilValue(emailState);??
-    const email = 'l0u0h0@naver.com';
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const email = useRecoilValue(emailState);
 
     const validation = pwValidationCheck(pw, pwc);
 

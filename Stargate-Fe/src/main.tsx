@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
+import { RecoilRoot } from 'recoil';
 import './index.css';
 import './App.css';
 import ReactDOM from 'react-dom/client';
@@ -56,10 +50,11 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  
   <React.StrictMode>
-    {/* <SocketProvider socketURL="wss://i9a406.p.ssafy.io:8080/rtc/asdf.12"> */}
-    <RouterProvider router={router} />
-    {/* </SocketProvider> */}
+    <RecoilRoot>
+      {/* <SocketProvider socketURL="wss://i9a406.p.ssafy.io:8080/rtc/asdf.12"> */}
+      <RouterProvider router={router} />
+      {/* </SocketProvider> */}
+    </RecoilRoot>
   </React.StrictMode>
 );
