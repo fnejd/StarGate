@@ -1,8 +1,28 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { logoutApi } from '@/services/userService';
 
+/**
+ * @todo 
+ * 추후 react-query 사용해서 리팩토링
+ */
+
 const AdminBoardHeaderNav = () => {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      const result = await logoutApi();
+      
+      if (result === 'SUCCESS') {
+        navigate('/admin/board');
+      } else {
+        alert(result);
+      }
+    } catch (error) {
+      console.log('로그아웃 에러:', error);
+    }
+  };
+
   return (
     <div className="w-xl lg:h-16 sm:h-8 flex justify-end items-center">
       <div className="flex w-1/3 justify-evenly">
@@ -24,7 +44,7 @@ const AdminBoardHeaderNav = () => {
         >
           마이페이지
         </NavLink>
-        <div className="text-white">로그아웃</div>
+        <div className="text-white" onClick={handleLogout}>로그아웃</div>
       </div>
     </div>
   );
