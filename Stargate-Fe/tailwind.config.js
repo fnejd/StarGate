@@ -12,6 +12,8 @@ export default {
   theme: {
     extend: {
       width: {
+        'xs' : '15vw',
+        's' : '30vw',
         'm': '50vw',
         'l': '70vw',
         'xl': '98vw',
@@ -110,6 +112,7 @@ export default {
         24: '24px',
         28: '28px',
         32: '32px',
+        40: '40px',
         48: '48px',
         60: '60px',
         80: '80px',

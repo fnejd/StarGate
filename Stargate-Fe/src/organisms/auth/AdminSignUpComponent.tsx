@@ -3,7 +3,10 @@ import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import { useNavigate } from 'react-router-dom';
 import { adminSignUpApi, adminVerifyEmail } from '@/services/userService';
-import { adminValidationCheck } from '@/hooks/useValidation';
+import {
+  adminValidationCheck,
+  emailVaildationCheck,
+} from '@/hooks/useValidation';
 
 interface adminType {
   email: string;
@@ -29,7 +32,14 @@ const AdminSignUpComponent = () => {
   // 이메일 중복검사
   const verify = async () => {
     const email = (admin as adminType).email;
-    const result = await adminVerifyEmail(email);
+    const check = emailVaildationCheck(email);
+    if (check != 'SUCCESS') {
+      alert(check);
+      return 0;
+    }
+    const result = await adminVerifyEmail(email).catch((error) =>
+      console.log(error)
+    );
 
     if (result) {
       setEmailText('사용 가능한 이메일입니다.');

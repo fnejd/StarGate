@@ -31,15 +31,17 @@ const IdinquiryComponent = () => {
     });
     formData.append('name', (user as userType).name);
     formData.append('phone', newPhone);
-    
-    idInquiryApi(formData).then(res => {
-      if (res.email.length > 0) {
-        setEmail(res.email);
-      } else {
-        setEmail('등록된 이메일 정보를 찾지 못했습니다.');
-      }
-      setIsOpen(true);
-    }).catch(error => console.log(error));
+
+    idInquiryApi(formData)
+      .then((res) => {
+        if (res.email.length > 0 || res.email != 'NoData') {
+          setEmail(res.email);
+        } else {
+          setEmail('등록된 이메일 정보를 찾지 못했습니다.');
+        }
+        setIsOpen(true);
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -62,7 +64,11 @@ const IdinquiryComponent = () => {
         setter={setUser}
       />
       <BtnBlue text="확인" onClick={findId} />
-      <IdResultModal email={email} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <IdResultModal
+        email={email}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
     </div>
   );
 };

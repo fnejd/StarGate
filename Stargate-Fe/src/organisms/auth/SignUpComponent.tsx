@@ -4,7 +4,10 @@ import PasswordFormComponent from './PasswordFormComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
 import { signUpApi, verifyEmail } from '@/services/userService';
-import { emailVaildationCheck, userValidationCheck } from '@/hooks/useValidation';
+import {
+  emailVaildationCheck,
+  userValidationCheck,
+} from '@/hooks/useValidation';
 
 interface userType {
   email: string;
@@ -32,15 +35,16 @@ const SignUpComponent = () => {
   const navigate = useNavigate();
 
   const verify = async () => {
-    // get으로 보내달라 함 쿼리스트링으루
-    // 리턴으론 불리언
     const email = (user as userType).email;
     const check = emailVaildationCheck(email);
+
     if (check != 'SUCCESS') {
       alert(check);
       return 0;
     }
+
     const result = await verifyEmail(email);
+
     if (result) {
       setEmailText('사용 가능한 이메일입니다.');
       setEmailState('green');
@@ -62,6 +66,7 @@ const SignUpComponent = () => {
     const nickName = (user as userType).nickname;
 
     const validation = userValidationCheck(user as userType);
+    
     if (validation != 'SUCCESS') {
       alert(validation);
       window.location.reload();
@@ -70,6 +75,7 @@ const SignUpComponent = () => {
 
     const numArr = phone.split('');
     let newPhone = '0';
+
     numArr.map((num, i) => {
       if (i == 0) return;
       if (i == 3 || i == 7) newPhone += '-';

@@ -16,8 +16,8 @@ const AdminMyPage = () => {
         <MyPageBox
           isAdmin={true}
           email={dummy.email}
-          companyName={dummy.name}
-          companyNum={dummy.code}
+          name={dummy.name}
+          code={dummy.code}
         />
       </div>
     </div>
