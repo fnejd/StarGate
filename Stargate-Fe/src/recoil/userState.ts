@@ -1,16 +1,22 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 interface userStateType {
-  token: string;
-  email: string;
+  refreshToken: string;
+  expTime: string;
 }
 
-export const userState = atom<userStateType>({
-  key: 'userState',
-  default: { token: 'hi', email: '' },
+export const tokenState = atom<userStateType>({
+  key: 'tokenState',
+  default: { refreshToken: '', expTime: '' },
 });
 
-export const tokenState = atom<string>({
-  key: 'tokenState',
-  default: ''
+export const tokenSelector = selector({
+  key: 'tokenSelector',
+  get: ({ get }) => get(tokenState),
+  set: ({ set }, newToken) => set(tokenState, newToken),
+})
+
+export const emailState = atom<string>({
+  key: 'emailState',
+  default: '',
 })
