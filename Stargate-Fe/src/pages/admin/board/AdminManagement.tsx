@@ -96,7 +96,43 @@ const dummy = [
     members: [
       {
         memberNo: 13,
-        name: '프론트',
+        name: '프론트1',
+      },
+      {
+        memberNo: 14,
+        name: '프론트2',
+      },
+      {
+        memberNo: 15,
+        name: '프론트3',
+      },
+      {
+        memberNo: 16,
+        name: '프론트4',
+      },
+      {
+        memberNo: 17,
+        name: '프론트5',
+      },
+      {
+        memberNo: 18,
+        name: '프론트6',
+      },
+      {
+        memberNo: 19,
+        name: '프론트7',
+      },
+      {
+        memberNo: 20,
+        name: '프론트8',
+      },
+      {
+        memberNo: 21,
+        name: '프론트9',
+      },
+      {
+        memberNo: 22,
+        name: '프론트10',
       },
     ],
   },

@@ -79,7 +79,11 @@
   }
 
   .modal-title {
-    @apply font-suit text-16 font-medium text-white;
+    @apply font-suit text-48 font-semibold;
+  }
+
+  .modal-content {
+    @apply font-suit text-40 font-medium;
   }
 
   .csv-btn {

@@ -38,7 +38,7 @@ const dummy = {
   ],
   past: [
     {
-      uuid: '미팅고유번호5',
+      uuid: '미팅고유번호2',
       name: '미팅이름5',
       start_date: '일시5',
       image: 'https://picsum.photos/id/188/720/400/',
@@ -50,19 +50,19 @@ const dummy = {
       image: 'https://picsum.photos/id/188/720/400/',
     },
     {
-      uuid: '미팅고유번호6',
+      uuid: '미팅고유번호7',
       name: '미팅이름6',
       start_date: '일시6',
       image: 'https://picsum.photos/id/188/720/400/',
     },
     {
-      uuid: '미팅고유번호7',
+      uuid: '미팅고유번호8',
       name: '미팅이름7',
       start_date: '일시7',
       image: 'https://picsum.photos/id/188/720/400/',
     },
     {
-      uuid: '미팅고유번호7',
+      uuid: '미팅고유번호9',
       name: '미팅이름7',
       start_date: '일시7',
       image: 'https://picsum.photos/id/188/720/400/',
