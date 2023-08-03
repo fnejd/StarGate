@@ -77,7 +77,7 @@
   }
 
   .modal-content {
-    @apply font-suit text-48 font-medium;
+    @apply font-suit text-40 font-medium;
   }
 
   .csv-btn {
