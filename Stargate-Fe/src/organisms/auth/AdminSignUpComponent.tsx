@@ -53,10 +53,9 @@ const AdminSignUpComponent = () => {
   const adminSignUp = () => {
     // 입력 폼 유효성 검사
     const validation = adminValidationCheck(admin as adminType);
-    // 'SUCCESS'가 리턴되지 않았다면 리턴값 출력 후 리로드
+    // 'SUCCESS'가 리턴되지 않았다면 리턴값 출력
     if (validation != 'SUCCESS') {
       alert(validation);
-      window.location.reload();
       return 0;
     }
 
@@ -74,7 +73,7 @@ const AdminSignUpComponent = () => {
       .then((response) => {
         if (response == 'alreadyToken') {
           alert('로그인 상태로는 회원가입을 할 수 없습니다.');
-          window.location.reload();
+          navigate('/');
         }
         console.log('SignUp SUCCESS');
         navigate('/');
@@ -82,7 +81,6 @@ const AdminSignUpComponent = () => {
       .catch((error) => {
         console.log(error);
         alert('회원가입에 문제가 발생했습니다.');
-        window.location.reload();
       });
   };
 

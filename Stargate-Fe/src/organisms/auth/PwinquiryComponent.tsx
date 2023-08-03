@@ -4,6 +4,8 @@ import AuthNumberComponent from './AuthNumberComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { pwInquiryApi } from '@/services/userService';
 import { emailVaildationCheck } from '@/hooks/useValidation';
+import { useRecoilState } from 'recoil';
+import { emailState } from '@/recoil/userState';
 
 interface emailType {
   email: string;
@@ -13,6 +15,7 @@ interface emailType {
 const PwinquiryComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState<object>({ email: '' });
+  const [emailProp, SetEmailProp] = useRecoilState(emailState);
   const [authNum, setAuthNum] = useState<number[]>([]);
 
   /**
@@ -36,6 +39,7 @@ const PwinquiryComponent = () => {
           window.location.reload();
           return 0;
         }
+        SetEmailProp((email as emailType).email);
         const arr = response.code.split('');
         setAuthNum(arr.map((e) => parseInt(e)));
         setIsOpen(true);
