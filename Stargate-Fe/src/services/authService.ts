@@ -107,16 +107,20 @@ const loginApi = async (formData: FormData, type: boolean) => {
 };
 
 // 로그아웃 요청, 헤더의 Authorization과 로컬 스토리지 비우기
+// 토큰 값 base64로 디코드
+// auth 값이 유저가 아닌 경우 (관리자인 경우)
+// api 요청 보내지 않기.!
 const logoutApi = async () => {
   try {
-    
-    console.log(api.defaults.headers['Authorization']);
+    let result;
     if (api.defaults.headers['Authorization'] != null) {
-      console.log(api.defaults.headers['Authorization']?.toString().split(" ")[1]);
-      // const tokenDecode = decodeURIComponent(atob(api.defaults.headers['Authorization']?.toString().split(" ")[1]));
-      // console.log(tokenDecode);
+      const tokenDecode = api.defaults.headers['Authorization']?.toString().split('.')[1];
+      const payload = atob(tokenDecode);
+      result = JSON.parse(payload.toString());
     }
-    await api.post('/fusers/logout', {}, { withCredentials: false });
+    if (result.auth == 'USER') {
+      await api.post('/fusers/logout', {}, { withCredentials: false });
+    }
     api.defaults.headers['Authorization'] = '';
     localStorage.clear();
     sessionStorage.clear();
