@@ -1,25 +1,17 @@
 import axios, { AxiosResponse } from 'axios';
-
-// 서버 URL 상수
-const SERVER_URL = 'http://i9a406.p.ssafy.io:8080';
-
-/**
- * api
- * @param baseURL => 서버 주소
- * @param withCredentials => 헤더 커스텀 할 수 있게 하는 설정
- */
-
-const api = axios.create({
-  baseURL: SERVER_URL,
-  withCredentials: true,
-});
+import { api } from './api';
 
 /**
  * 소속사 그룹&멤버 data 가져오기
  */
 const fetchGroup = async () => {
   try {
-    const response = await api.get('/pmanagements/');
+    const response = await api.get('/pmanagements/get', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
     console.log(response);
     return response.data;
   } catch (error) {
@@ -27,4 +19,4 @@ const fetchGroup = async () => {
   }
 };
 
-export { fetchGroup };
+export {fetchGroup}

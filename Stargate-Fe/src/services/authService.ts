@@ -24,11 +24,8 @@ interface pwInquiryType {
   email: string;
   code: string;
 }
-/**
- * api
- * @param baseURL => 서버 주소
- * @param withCredentials => 헤더 커스텀 할 수 있게 하는 설정
- */
+
+// const accessTokenSet ()
 
 /**
  * @COMMONAREA
@@ -62,7 +59,7 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
-
+  localStorage.setItem('accessToken', accessToken);
   if (type) {
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('tokenExpTime', `${expTime}`);
@@ -98,7 +95,7 @@ const loginApi = async (formData: FormData, type: boolean) => {
   let response = 'SUCCESS';
   await api
     .post('/fusers/login', formData, {
-      withCredentials: false
+      withCredentials: false,
     })
     .then((res: AxiosResponse<tokenType>) => {
       response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
@@ -114,10 +111,11 @@ const loginApi = async (formData: FormData, type: boolean) => {
 // 로그아웃 요청, 헤더의 Authorization과 로컬 스토리지 비우기
 const logoutApi = async () => {
   try {
-    
     console.log(api.defaults.headers['Authorization']);
     if (api.defaults.headers['Authorization'] != null) {
-      console.log(api.defaults.headers['Authorization']?.toString().split(" ")[1]);
+      console.log(
+        api.defaults.headers['Authorization']?.toString().split(' ')[1]
+      );
       // const tokenDecode = decodeURIComponent(atob(api.defaults.headers['Authorization']?.toString().split(" ")[1]));
       // console.log(tokenDecode);
     }
@@ -171,7 +169,7 @@ const verifyEmail = async (email: string) => {
         'Access-Controll-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      withCredentials: false
+      withCredentials: false,
     })
     .then((response: AxiosResponse<checkEmailType>) => {
       const { exist } = response.data;
@@ -212,7 +210,7 @@ const pwInquiryApi = async (email: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: false
+      withCredentials: false,
     })
     .then((response: AxiosResponse<pwInquiryType>) => {
       console.log(response);
@@ -230,7 +228,7 @@ const checkAuthNumApi = (email: string, code: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: false
+      withCredentials: false,
     })
     .then()
     .catch((error) => {
@@ -284,7 +282,7 @@ const adminLoginApi = async (formData: FormData, type: boolean) => {
   let response = 'SUCCESS';
   await api
     .post('/pusers/login', formData, {
-      withCredentials: false
+      withCredentials: false,
     })
     .then((res: AxiosResponse<tokenType>) => {
       response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
@@ -304,7 +302,7 @@ const adminSignUpApi = async (formData: FormData) => {
   }
   const response = await api
     .post('/pusers/register', formData, {
-      withCredentials: false
+      withCredentials: false,
     })
     .then()
     .catch((error) => console.log(error));
