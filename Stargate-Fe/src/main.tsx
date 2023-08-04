@@ -24,7 +24,7 @@ import AdminEventCreate from './pages/admin/event/AdminEventCreate.tsx';
 import AdminEventDetail from './pages/admin/event/AdminEventDetail.tsx';
 import AdminMonitoring from './pages/admin/event/AdminMonitoring.tsx';
 import './index.css'; // CSS 파일을 import
-import { SocketProvider } from '@/context/SocketProvider.tsx';
+// import { SocketProvider } from '@/context/SocketProvider.tsx';
 
 const router = createBrowserRouter([
   { path: '/', element: <SignIn /> },

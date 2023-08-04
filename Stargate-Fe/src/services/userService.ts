@@ -116,7 +116,7 @@ const logoutApi = async () => {
   await api
     .post('/fusers/logout')
     .then(() => {
-      axios.defaults.headers.common['Authorization'] = '';
+      axios.defaults.headers['Authorization'] = '';
       localStorage.clear();
       sessionStorage.clear();
       result = 'SUCCESS';

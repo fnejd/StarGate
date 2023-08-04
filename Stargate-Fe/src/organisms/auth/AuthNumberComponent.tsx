@@ -1,4 +1,4 @@
-import React, { useRef, MouseEvent, useEffect, useState } from 'react';
+import { useRef, MouseEvent, useEffect, useState } from 'react';
 import AuthNumInputComponent from '@/atoms/auth/AuthNumInputComponent';
 import BtnWhite from '@/atoms/common/BtnWhite';
 import { useNavigate } from 'react-router-dom';
