@@ -3,7 +3,7 @@ import InputComponent from '@/atoms/common/InputComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
 import { pwValidationCheck } from '@/hooks/useValidation';
-import { pwResetApi } from '@/services/userService';
+import { pwResetApi } from '@/services/authService';
 import { emailState } from '@/recoil/userState';
 import { useRecoilValue } from 'recoil';
 

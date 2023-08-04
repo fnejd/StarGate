@@ -2,7 +2,7 @@ import { useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import { useNavigate } from 'react-router-dom';
-import { adminSignUpApi, adminVerifyEmail } from '@/services/userService';
+import { adminSignUpApi, adminVerifyEmail } from '@/services/authService';
 import {
   adminValidationCheck,
   emailVaildationCheck,

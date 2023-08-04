@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { idInquiryApi } from '@/services/userService';
+import { idInquiryApi } from '@/services/authService';
 import IdResultModal from './IdResultModal';
 
 interface userType {

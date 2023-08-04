@@ -2,7 +2,7 @@ import { useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import AuthNumberComponent from './AuthNumberComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { pwInquiryApi } from '@/services/userService';
+import { pwInquiryApi } from '@/services/authService';
 import { emailVaildationCheck } from '@/hooks/useValidation';
 import { useSetRecoilState } from 'recoil';
 import { emailState } from '@/recoil/userState';

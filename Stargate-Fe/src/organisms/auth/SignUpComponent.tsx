@@ -3,7 +3,7 @@ import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
-import { signUpApi, verifyEmail } from '@/services/userService';
+import { signUpApi, verifyEmail } from '@/services/authService';
 import {
   emailVaildationCheck,
   userValidationCheck,
