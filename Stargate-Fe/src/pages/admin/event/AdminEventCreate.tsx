@@ -1,17 +1,115 @@
+import { useEffect, useState, ChangeEvent } from 'react';
 import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
+import BtnBlue from '@/atoms/common/BtnBlue';
+import createEvent from '@/services/event';
+
+interface MeetingFUser {
+  no: number;
+  email: string;
+  orderNum: number;
+  isRegister: string;
+  name: string;
+}
+
+interface MeetingMember {
+  no: number;
+  memberNo: number;
+  orderNum: number;
+  roomId: string;
+}
+
+interface FormData {
+  name: string;
+  startDate: Date | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  waitingTime: number;
+  meetingTime: number;
+  notice: string;
+  photoNum: number;
+  image: File | null;
+  starName: string;
+  meetingFUsers: MeetingFUser[];
+  meetingMembers: MeetingMember[];
+}
 
 const AdminEventCreate = () => {
+  const [group, setGroup] = useState<Array>([]);
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    startDate: null,
+    waitingTime: 10,
+    meetingTime: 80,
+    photoNum: 0,
+    notice: '',
+    image: null,
+    starName: '',
+    meetingFUsers: [],
+    meetingMembers: [],
+  });
+
+  // 그룹명, 그룹멤버 데이터 가져오기
+  useEffect(() => {
+    const getGroup = async() => {
+      const data = await fetchGroup()
+      setGroups(data);
+    }
+    fetchData();
+  }, []);
+  
+  const handleName = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      name: value,
+    }));
+    console.log(`제목 ${formData.name}`);
+  };
+
+  const handleFormDataChange = (data: FormData) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      data,
+    }));
+  };
+
+  // API로 데이터 전송
+  const handleCreateEvent = () => {
+    if (formData) {
+      // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
+      // const mergedFormData = { ...formData, ...eventData };
+      console.log(formData);
+      // 합친 formData를 createEvent 함수에 전달
+      // createEvent(formData);
+    }
+  };
+
   return (
-    <div className="flex flex-col">
-      <div className="text-center form-title">이벤트 생성</div>
-      <div>
-        <MeetingLeftSection />
-        <MeetingRightSection />
+    <div>
+      <div className="my-10 text-center form-title">팬사인회 생성</div>
+      <div className="mb-8">
+        <label htmlFor="제목" className="flex justify-start my-2 ml-1">
+          <span className="font-medium text-white font-suit text-14">제목</span>
+        </label>
+        <div className="flex">
+          <input
+            className="h-8 px-3 py-2 ml-1 mr-1 text-black bg-white border border-gray-300 rounded-sm w-450 text-12 placeholder-pl-5 font-suit focus:outline-none focus:ring-2 focus:ring-mainblue-300 focus:border-transparent"
+            type="text"
+            placeholder=""
+            value={formData.name}
+            onChange={handleName}
+          />
+        </div>
       </div>
-      <div>
+      <div className="flex flex-col justify-center w-full">
+        <div className="flex">
+          <MeetingLeftSection formData={formData} setFormData={setFormData} />
+          <MeetingRightSection formData={formData} setFormData={setFormData} />
+        </div>
         <MeetingBottomSection />
+      </div>
+      <div className="mx-8 my-20 text-center">
+        <BtnBlue text="확인" onClick={handleCreateEvent} />
       </div>
     </div>
   );

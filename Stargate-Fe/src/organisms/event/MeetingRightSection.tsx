@@ -1,17 +1,91 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
+// import { MeetingRightSection } from '@/organisms/MeetingRightSection';
 
-const MeetingRightSection = () => {
+interface MeetingFUser {
+  no: number;
+  email: string;
+  orderNum: number;
+  isRegister: string;
+  name: string;
+}
+
+interface MeetingMember {
+  no: number;
+  memberNo: number;
+  orderNum: number;
+  roomId: string;
+}
+
+interface FormData {
+  name: string;
+  startDate: Date | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  waitingTime: number;
+  meetingTime: number;
+  notice: string;
+  photoNum: number;
+  image: File | null;
+  starName: string;
+  meetingFUsers: MeetingFUser[];
+  meetingMembers: MeetingMember[];
+}
+
+interface MeetingRightSectionProps {
+  formData: FormData;
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+}
+
+const MeetingRightSection = ({
+  formData,
+  setFormData,
+}: MeetingRightSectionProps) => {
   const [textValue, setTextValue] = useState<string>('');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const handleTextareaChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(event.target.value);
   };
 
   return (
     <>
       <div className="w-48 h-8">
+        <div className="mb-6">
+          <div className="flex w-48 mx-1 my-2 font-suit font-medium text-14 text-white">
+            대표사진
+          </div>
+          <button
+            onClick={() => document.getElementById('fileInput')?.click()} // 파일 선택 버튼 클릭 시 input 클릭 이벤트 호출
+            className="w-20 h-8 text-12 font-medium bg-admingray font-suit text-black rounded-sm"
+          >
+            파일 선택
+          </button>
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="sr-only"
+          />
+          {selectedImage && (
+            <div>
+              <img
+                src={selectedImage}
+                alt="미리보기"
+                style={{ maxWidth: '200px', maxHeight: '200px' }}
+              />
+            </div>
+          )}
+        </div>
         <div className="flex w-48 mx-1 my-2 font-suit font-medium text-14 text-white">
           공지사항
         </div>

@@ -10,7 +10,7 @@ interface AdminInputProps {
   onChange?: (value: string) => void;
   onInputChange: (value: string) => void;
   children?: React.ReactNode;
-  value: string;
+  value: string | number;
 }
 
 const AdminInput = ({
