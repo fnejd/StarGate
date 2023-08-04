@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -180,6 +181,19 @@ public class JwtTokenUtil {
 
         return true;
 
+    }
+
+    /**
+     * JwtToken 에서 Bearer 제거
+     * @param bearerToken
+     * @return
+     */
+    public String removeBearer(String bearerToken){
+        
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
 }
