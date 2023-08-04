@@ -250,7 +250,7 @@ const pwResetApi = async (email: string, password: string) => {
 const adminVerifyEmail = async (email: string) => {
   let result = true;
   await api
-    .post('/fusers/check-email', JSON.stringify({ email }), {
+    .post('/pusers/check-email', JSON.stringify({ email }), {
       headers: {
         'Access-Controll-Allow-Origin': '*',
         'Content-Type': 'application/json',
