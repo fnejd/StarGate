@@ -1,4 +1,3 @@
-import React from 'react';
 import AdminSignUpComponent from '@/organisms/auth/AdminSignUpComponent';
 
 const AdminSignUp = () => {

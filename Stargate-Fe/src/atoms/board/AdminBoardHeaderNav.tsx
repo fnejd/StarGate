@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { logoutApi } from '@/services/userService';
+import { logoutApi } from '@/services/authService';
 
 /**
  * @todo 

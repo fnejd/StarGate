@@ -1,7 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
-
-// 서버 URL 상수
-const SERVER_URL = 'http://i9a406.p.ssafy.io:8080';
+import { AxiosResponse } from 'axios';
+import { api } from './api';
 
 interface tokenType {
   accessToken: string;
@@ -32,11 +30,6 @@ interface pwInquiryType {
  * @param withCredentials => 헤더 커스텀 할 수 있게 하는 설정
  */
 
-const api = axios.create({
-  baseURL: SERVER_URL,
-  withCredentials: true,
-});
-
 /**
  * @COMMONAREA
  */
@@ -65,6 +58,7 @@ const checkTokenExpTime = async () => {
 // 로그인 요청 성공 시 엑세스 토큰 헤더에 넣고 리프레쉬 토큰 스토리지에 저장
 const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   const { accessToken, refreshToken } = response.data;
+  console.log(accessToken);
   api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
@@ -103,7 +97,9 @@ const loginApi = async (formData: FormData, type: boolean) => {
   }
   let response = 'SUCCESS';
   await api
-    .post('/fusers/login', formData)
+    .post('/fusers/login', formData, {
+      withCredentials: false
+    })
     .then((res: AxiosResponse<tokenType>) => {
       response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
     })
@@ -118,8 +114,15 @@ const loginApi = async (formData: FormData, type: boolean) => {
 // 로그아웃 요청, 헤더의 Authorization과 로컬 스토리지 비우기
 const logoutApi = async () => {
   try {
-    await api.post('/fusers/logout');
-    axios.defaults.headers.common['Authorization'] = '';
+    
+    console.log(api.defaults.headers['Authorization']);
+    if (api.defaults.headers['Authorization'] != null) {
+      console.log(api.defaults.headers['Authorization']?.toString().split(" ")[1]);
+      // const tokenDecode = decodeURIComponent(atob(api.defaults.headers['Authorization']?.toString().split(" ")[1]));
+      // console.log(tokenDecode);
+    }
+    await api.post('/fusers/logout', {}, { withCredentials: false });
+    api.defaults.headers['Authorization'] = '';
     localStorage.clear();
     sessionStorage.clear();
     return 'SUCCESS';
@@ -135,7 +138,7 @@ const signUpApi = async (formData: FormData) => {
     return 'alreadyToken';
   }
   const response = await api
-    .post('/fusers/register', formData)
+    .post('/fusers/register', formData, { withCredentials: false })
     .then((response) => console.log(response.status))
     .catch((error) => {
       console.log(error);
@@ -154,7 +157,7 @@ const reAccessApi = async () => {
   );
 
   await api
-    .post('/jwt/new-access-token', refreshToken)
+    .post('/jwt/new-access-token', refreshToken, { withCredentials: false })
     .then(onNewAccessToken)
     .catch((error) => console.log(error));
 };
@@ -168,6 +171,7 @@ const verifyEmail = async (email: string) => {
         'Access-Controll-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
+      withCredentials: false
     })
     .then((response: AxiosResponse<checkEmailType>) => {
       const { exist } = response.data;
@@ -185,7 +189,7 @@ const idInquiryApi = async (formData: FormData) => {
     phone: '',
   };
   await api
-    .post('/fusers/find-id', formData)
+    .post('/fusers/find-id', formData, { withCredentials: false })
     .then((response: AxiosResponse<idInquiryType>) => {
       result = { ...response.data };
     })
@@ -208,6 +212,7 @@ const pwInquiryApi = async (email: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: false
     })
     .then((response: AxiosResponse<pwInquiryType>) => {
       console.log(response);
@@ -225,6 +230,7 @@ const checkAuthNumApi = (email: string, code: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: false
     })
     .then()
     .catch((error) => {
@@ -255,11 +261,12 @@ const pwResetApi = async (email: string, password: string) => {
 const adminVerifyEmail = async (email: string) => {
   let result = true;
   await api
-    .post('/fusers/check-email', JSON.stringify({ email }), {
+    .post('/pusers/check-email', JSON.stringify({ email }), {
       headers: {
         'Access-Controll-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
+      withCredentials: false,
     })
     .then((response: AxiosResponse<checkEmailType>) => {
       const { exist } = response.data;
@@ -276,9 +283,11 @@ const adminLoginApi = async (formData: FormData, type: boolean) => {
   }
   let response = 'SUCCESS';
   await api
-    .post('/pusers/login', formData)
+    .post('/pusers/login', formData, {
+      withCredentials: false
+    })
     .then((res: AxiosResponse<tokenType>) => {
-      response = onSuccessLogin(res, type);
+      response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
     })
     .catch((error) => {
       console.log(error);
@@ -294,7 +303,9 @@ const adminSignUpApi = async (formData: FormData) => {
     return 'alreadyToken';
   }
   const response = await api
-    .post('/pusers/register', formData)
+    .post('/pusers/register', formData, {
+      withCredentials: false
+    })
     .then()
     .catch((error) => console.log(error));
 

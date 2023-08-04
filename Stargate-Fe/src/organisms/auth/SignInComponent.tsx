@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import TextButtonComponent from '@/atoms/common/TextButtonComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { adminLoginApi, loginApi } from '@/services/userService';
+import { adminLoginApi, loginApi } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
 import ToggleButtonComponent from '@/atoms/auth/ToggleButtonComponent';
 
