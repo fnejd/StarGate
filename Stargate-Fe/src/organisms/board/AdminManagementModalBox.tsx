@@ -49,7 +49,6 @@ const AdminManagementModalBox = ({
   const [showInput, setShowInput] = useState(false);
   const [selectedGroupNo, setSelectedGroupNo] = useState<number | null>(null);
   const [selectedGroupName, setSelectedGroupName] = useState('');
-
   const [selectedMemberNo, setSelectedMemberNo] = useState<number | null>(null);
   const [selectedMemberName, setSelectedMemberName] = useState('');
 
@@ -71,10 +70,17 @@ const AdminManagementModalBox = ({
     selectedClear();
     showInputOpen();
   };
-  const handleCancleButtonClick = () => {
+  const handleXButtonClick = (memberNo: number | void) => {
+    if (showInput) {
+      handleXButtonClicktoCancle();
+    } else {
+      handleXButtonClicktoDelete(memberNo);
+    }
+  };
+  const handleXButtonClicktoCancle = () => {
     showInputClose();
   };
-  const handleDeleteButtonClick = (memberNo: number) => {
+  const handleXButtonClicktoDelete = (memberNo: number | void) => {
     showInputClose();
     console.log(memberNo);
   };
@@ -138,7 +144,7 @@ const AdminManagementModalBox = ({
                 </div>
               </div>
             )}
-            <ul className='w-full h-400 overflow-y-scroll'>
+            <ul className="w-full h-400 overflow-y-scroll">
               {showInput &&
                 selectedMemberNo === null &&
                 selectedGroupNo === null && (
@@ -149,7 +155,7 @@ const AdminManagementModalBox = ({
                       value={selectedMemberName}
                     />
                     <AdminManagementDeleteButton
-                      onClick={() => handleCancleButtonClick()}
+                      onClick={() => handleXButtonClick()}
                     />
                   </li>
                 )}
@@ -172,7 +178,7 @@ const AdminManagementModalBox = ({
                     <p>{member.name}</p>
                   )}
                   <AdminManagementDeleteButton
-                    onClick={() => handleDeleteButtonClick(member.memberNo)}
+                    onClick={() => handleXButtonClick(member.memberNo)}
                   />
                 </li>
               ))}
