@@ -30,7 +30,7 @@ public class FUserDto {
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*])[a-zA-Z\\d!@#$%^&*]{8,}$")
     private String password;
 
-    @Pattern(regexp = "^[a-zA-Z\\d]{3,20}$")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z\\d]{3,20}$")
     private String nickname;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
