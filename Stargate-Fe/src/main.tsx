@@ -42,9 +42,9 @@ const router = createBrowserRouter([
   { path: '/admin/board', element: <AdminBoard /> },
   { path: '/admin/management', element: <AdminManagement /> },
   { path: '/admin/myPage', element: <AdminMyPage /> },
-  { path: '/Admin/eventcreate', element: <AdminEventCreate /> },
-  { path: '/admin/eventdetail', element: <AdminEventDetail /> },
-  { path: '/admin/adminmonitoring', element: <AdminMonitoring /> },
+  { path: '/admin/event/create', element: <AdminEventCreate /> },
+  { path: '/admin/event/detail', element: <AdminEventDetail /> },
+  { path: '/admin/monitoring', element: <AdminMonitoring /> },
 
   { path: '/star/video', element: <StarVideo /> },
 ]);
