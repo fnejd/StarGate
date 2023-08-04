@@ -1,4 +1,4 @@
-import React, { useRef, MouseEvent } from 'react';
+import { useRef, MouseEvent } from 'react';
 import BtnWhite from '@/atoms/common/BtnWhite';
 
 interface IdResultModal {

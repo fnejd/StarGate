@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import AuthNumberComponent from './AuthNumberComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { pwInquiryApi } from '@/services/userService';
+import { pwInquiryApi } from '@/services/authService';
 import { emailVaildationCheck } from '@/hooks/useValidation';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { emailState } from '@/recoil/userState';
 
 interface emailType {
@@ -15,7 +15,7 @@ interface emailType {
 const PwinquiryComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState<object>({ email: '' });
-  const [emailProp, SetEmailProp] = useRecoilState(emailState);
+  const SetEmailProp = useSetRecoilState(emailState);
   const [authNum, setAuthNum] = useState<number[]>([]);
 
   /**

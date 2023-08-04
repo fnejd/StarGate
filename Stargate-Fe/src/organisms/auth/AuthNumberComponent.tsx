@@ -1,8 +1,8 @@
-import React, { useRef, MouseEvent, useEffect, useState } from 'react';
+import { useRef, MouseEvent, useEffect, useState } from 'react';
 import AuthNumInputComponent from '@/atoms/auth/AuthNumInputComponent';
 import BtnWhite from '@/atoms/common/BtnWhite';
 import { useNavigate } from 'react-router-dom';
-import { checkAuthNumApi } from '@/services/userService';
+import { checkAuthNumApi } from '@/services/authService';
 
 interface AuthNumberProps {
   email: string;
