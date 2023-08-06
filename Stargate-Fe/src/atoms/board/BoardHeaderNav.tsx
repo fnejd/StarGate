@@ -32,7 +32,7 @@ const BoardHeaderNav = () => {
         <NavLink className="text-white aria-[current=page]:p1b" to="/mypage">
           마이페이지
         </NavLink>
-        <div className="text-white" onClick={handleLogout}>
+        <div className="text-white hover:text-opacity-50 hover:cursor-pointer" onClick={handleLogout}>
           로그아웃
         </div>
       </div>
