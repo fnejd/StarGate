@@ -4,8 +4,6 @@ import AdminMangementPlusButton from '@/atoms/board/AdminMangementPlusButton';
 import AdminManagementDeleteButton from '@/atoms/board/AdminManagementDeleteButton';
 import AdminManagementInput from '@/atoms/board/AdminManagementInput';
 import {
-  createMember,
-  updateMember,
   deleteMember,
 } from '@/services/adminBoardService';
 
@@ -94,7 +92,7 @@ const AdminManagementModalBox = ({
         console.log('멤버 삭제 에러:', error);
       }
     } else {
-      console.log('memberNo가 없음')
+      console.log('memberNo 없음')
     }
   };
   const handleGroupDoubleClick = (
