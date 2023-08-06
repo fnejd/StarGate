@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.25",
+    "@types/react-beautiful-dnd": "^13.1.4",
     "axios": "^1.4.0",
     "degit": "^2.8.4",
     "peerjs": "^1.4.7",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-csv-reader": "^4.0.0",
     "react-dom": "^18.2.0",
     "react-player": "^2.12.0",
