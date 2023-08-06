@@ -50,6 +50,9 @@ const deleteMember = async (memberNo: number) => {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
       withCredentials: false,
+      data: {
+        memberNo: memberNo,
+      },
     });
     console.log(response);
   } catch (error) {
