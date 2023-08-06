@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
+/**
+ * 수정이랑 생성을 어떻게 구분할거?
+ * 입력 부분에 따라서? 
+ */
 /**
  * AdminManagementInput
  * @param isGroup => 인풋 태그 타입 설정 변수

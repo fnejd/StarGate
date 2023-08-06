@@ -3,6 +3,11 @@ import React, { useState, useRef, MouseEvent } from 'react';
 import AdminMangementPlusButton from '@/atoms/board/AdminMangementPlusButton';
 import AdminManagementDeleteButton from '@/atoms/board/AdminManagementDeleteButton';
 import AdminManagementInput from '@/atoms/board/AdminManagementInput';
+import {
+  createMember,
+  updateMember,
+  deleteMember,
+} from '@/services/adminBoardService';
 
 interface MemberData {
   memberNo: number;
@@ -80,9 +85,17 @@ const AdminManagementModalBox = ({
   const handleXButtonClicktoCancle = () => {
     showInputClose();
   };
-  const handleXButtonClicktoDelete = (memberNo: number | void) => {
+  const handleXButtonClicktoDelete = async (memberNo: number | void) => {
     showInputClose();
-    console.log(memberNo);
+    if (memberNo) {
+      try {
+        await deleteMember(memberNo);
+      } catch (error) {
+        console.log('멤버 삭제 에러:', error);
+      }
+    } else {
+      console.log('memberNo가 없음')
+    }
   };
   const handleGroupDoubleClick = (
     groupNo: number | null,
