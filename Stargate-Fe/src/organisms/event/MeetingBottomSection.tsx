@@ -1,26 +1,110 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CSVReader from 'react-csv-reader';
 import AdminBtn from '@/atoms/common/AdminBtn';
 import AdminInput from '@/atoms/event/AdminInput';
+import DropDown from '@/atoms/event/DropDown';
 
-interface FormData {
-  starName: string;
-  meetingMembers: (string | undefined)[];
-  fans: (string | undefined)[];
-  watingTime: string;
+interface MeetingFUser {
+  no: number;
+  email: string;
+  orderNum: number;
+  isRegister: string;
+  name: string;
 }
 
-const MeetingBottomSection = () => {
+interface MeetingMember {
+  no: number;
+  memberNo: number;
+  orderNum: number;
+  roomId: string;
+}
+
+interface FormData {
+  name: string;
+  startDate: Date | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  waitingTime: number;
+  meetingTime: number;
+  notice: string;
+  photoNum: number;
+  image: File | null;
+  starName: string;
+  meetingFUsers: MeetingFUser[];
+  meetingMembers: MeetingMember[];
+}
+
+interface Member {
+  memberNo: number;
+  name: string;
+}
+
+interface Group {
+  groupNo: number;
+  name: string;
+  members: Member[];
+}
+
+interface MeetingBottomSectionProps {
+  formData: FormData;
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  group: Group[];
+  // group: [
+  //   {
+  //     groupNo: 20; // [long] 그룹번호  // 고유 아이디
+  //     name: '406s'; // [String] 그룹명
+  //     members: [
+  //       {
+  //         memberNo: 29; // [long]   멤버번호
+  //         name: '이유한'; // [String]  멤버이름
+  //       },
+  //       {
+  //         memberNo: 30; // [long]  멤버번호
+  //         name: '이름이름'; // [String] 멤버이름
+  //       },
+  //     ];
+  //   },
+  // ];
+}
+
+const MeetingBottomSection = ({
+  formData,
+  setFormData,
+  group,
+}: MeetingBottomSectionProps) => {
   const [starValue, setStarValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
   const [watingtimeValue, setWatingtimeValue] = useState('');
   const [fanValue, setFanValue] = useState('');
-  const [formData, setFormData] = useState<FormData>({
-    starName: '',
-    meetingMembers: [],
-    fans: [],
-    watingTime: '',
-  });
+
+  console.log('바텀에서 그룹', group);
+
+  // useEffect를 사용하여 formData.starName 설정
+  useEffect(() => {
+    if (group && group.length > 0 && !formData.starName) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        starName: group[0].name,
+      }));
+      console.log('첫번째 이름 지정 실행');
+    }
+  }, [group]);
+  // [
+  //   {
+  //     groupNo: 20, // [long] 그룹번호  // 고유 아이디
+  //     name : "406s", // [String] 그룹명
+  //     members: [
+  //       {
+  //         memberNo : 29,    // [long]   멤버번호
+  //         name : "이유한",  // [String]  멤버이름
+  //       },
+  //       {
+  //         memberNo : 30,      // [long]  멤버번호
+  //         name : "이름이름",  // [String] 멤버이름
+  //       },
+  //         ...
+  //     ]
+  //   },
+  //   ...
+  // ]
 
   const handleStarvalue = (value: string) => {
     setStarValue(value);
@@ -51,9 +135,26 @@ const MeetingBottomSection = () => {
   // };
 
   // 등록 함수
-  const addStar = (name: string) => {
-    setFormData({ ...formData, starName: name });
-    setStarValue('');
+  const handleGroupChange = (value: number | string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      starName: value,
+    }));
+  };
+
+  const handleMemberChange = (value: number | string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      meetingMembers: [
+        ...prevFormData.meetingMembers,
+        {
+          memberNo: Number(value), // 매개변수 value를 number 타입으로 변환하여 사용
+          name: '유한', // 멤버 번호 설정
+          orderNum: prevFormData.meetingMembers.length + 1, // 멤버 순서 설정
+          roomId: 2374324, // 회의 방 번호 설정 (임의의 값)
+        },
+      ],
+    }));
   };
 
   const addMember = (name: string) => {
@@ -107,15 +208,18 @@ const MeetingBottomSection = () => {
     <div className="w-550">
       {/* 연예인명 추가 */}
       <div className="flex flex-col items-start">
-        <AdminInput
-          labelFor="연예인명 / 그룹명"
-          type="text"
-          onInputChange={handleStarvalue}
-          value={starValue}
-        >
-          <AdminBtn text="등록" onClick={() => addStar(starValue)} />
-        </AdminInput>
-        {formData.starName ? (
+        {/* <div className="flex h-8"> */}
+        <div className="flex mx-1 my-2 font-medium text-white font-suit text-14">
+          그룹 / 솔로명
+        </div>
+        {/* </div> */}
+        {group && (
+          <DropDown
+            options={group.map((item) => item.name)}
+            onOptionChange={handleGroupChange}
+          />
+        )}
+        {/* {formData.starName ? (
           <div className="w-62 mt-2 flex justify-between items-center">
             <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
               {formData.starName}
@@ -124,31 +228,36 @@ const MeetingBottomSection = () => {
           </div>
         ) : (
           <></>
-        )}
+        )} */}
       </div>
       {/* 멤버명 추가 */}
-      <div className="flex flex-col items-start">
-        <AdminInput
-          labelFor="그룹 멤버명"
-          type="text"
-          onInputChange={handleMembervalue}
-          value={memberValue}
-        >
-          <AdminBtn text="등록" onClick={() => addMember(memberValue)} />
-        </AdminInput>
+      <div className="flex h-8">
+        <div className="flex mx-1 my-2 font-medium text-white font-suit text-14">
+          멤버명
+        </div>
+        <p className="ml-1 leading-9 input-warning">
+          팬사인회 순서는 위에서부터 아래로 진행됩니다
+        </p>
       </div>
       <div className="flex flex-col items-start w-52 justify-between">
-        {formData.meetingMembers.map((item, index) => (
-          <div
-            key={index}
-            className="w-62 mt-2 flex justify-between items-center"
-          >
-            <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
-              {item}
-            </div>
-            <AdminBtn text="삭제" onClick={() => deleteMember(index)} />
-          </div>
-        ))}
+        {formData.starName &&
+          group &&
+          group
+            .find((groupItem) => groupItem.name === formData.starName)
+            .members.map((item, index) => (
+              <div
+                key={index}
+                className="w-62 mt-2 flex justify-between items-center"
+              >
+                <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
+                  {index}
+                </div>
+                <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
+                  {item.name}
+                </div>
+                <AdminBtn text="삭제" onClick={() => deleteMember(index)} />
+              </div>
+            ))}
       </div>
       {/* 멤버가 다수일 경우 다음 통화까지 대기시간 설정 가능 */}
       {formData.meetingMembers.length >= 1 && (
@@ -198,7 +307,7 @@ const MeetingBottomSection = () => {
           </div>
         </div>
         <div className="flex flex-col items-start w-52 justify-between">
-          {formData.fans.map((item, index) => (
+          {/* {formData.fans.map((item, index) => (
             <div
               key={index}
               className="w-62 mt-2 flex justify-between items-center"
@@ -208,7 +317,7 @@ const MeetingBottomSection = () => {
               </div>
               <AdminBtn text="삭제" onClick={() => deleteFan(index)} />
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
 

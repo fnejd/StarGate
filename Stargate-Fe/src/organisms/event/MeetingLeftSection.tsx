@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AdminInput from '@/atoms/event/AdminInput';
-import DropDown from '@/atoms/DropDown.tsx';
+import DropDown from '@/atoms/event/DropDown';
 import AdminToggle from '@/atoms/AdminToggle';
 
 interface MeetingFUser {
@@ -105,7 +105,7 @@ const MeetingLeftSection = ({
     setNumbers(newNumbers);
   };
 
-  const handlePicSecChange = (value: number) => {
+  const handlePicSecChange = (value: number | string) => {
     setPicSec(value * 10);
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -152,14 +152,14 @@ const MeetingLeftSection = ({
         <div className="flex mx-1 my-2 font-medium text-white font-suit text-14">
           촬영 컷 수
         </div>
-        <p className="ml-1 leading-8 input-warning">
+        <p className="ml-1 leading-9 input-warning">
           한 컷당 촬영 시간은 10초 입니다
         </p>
       </div>
 
       <div className="flex items-end">
         <DropDown
-          numbers={numbers}
+          options={numbers}
           onOptionChange={handlePicSecChange}
           disabled={!photoTime}
         />

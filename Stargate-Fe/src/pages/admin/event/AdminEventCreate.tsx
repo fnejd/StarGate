@@ -4,6 +4,8 @@ import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import createEvent from '@/services/event';
+import { getEvent } from '@/services/admin';
+import { fetchGroup } from '@/services/adminBoard';
 
 interface MeetingFUser {
   no: number;
@@ -20,6 +22,16 @@ interface MeetingMember {
   roomId: string;
 }
 
+interface GroupMember {
+  memberNo: number;
+  name: string;
+}
+
+interface Group {
+  groupNo: number;
+  members: GroupMember[];
+}
+
 interface FormData {
   name: string;
   startDate: Date | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
@@ -34,7 +46,7 @@ interface FormData {
 }
 
 const AdminEventCreate = () => {
-  const [group, setGroup] = useState<Array>([]);
+  const [group, setGroup] = useState<Group[]>([]);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     startDate: null,
@@ -50,13 +62,17 @@ const AdminEventCreate = () => {
 
   // 그룹명, 그룹멤버 데이터 가져오기
   useEffect(() => {
-    const getGroup = async() => {
-      const data = await fetchGroup()
-      setGroups(data);
-    }
-    fetchData();
+    const getGroup = async () => {
+      const data = await fetchGroup();
+      console.log('데이터', data);
+      setGroup(data);
+      console.log(group);
+    };
+    getGroup();
   }, []);
-  
+
+  console.log('그룹', group);
+
   const handleName = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setFormData((prevFormData) => ({
@@ -106,7 +122,11 @@ const AdminEventCreate = () => {
           <MeetingLeftSection formData={formData} setFormData={setFormData} />
           <MeetingRightSection formData={formData} setFormData={setFormData} />
         </div>
-        <MeetingBottomSection />
+        <MeetingBottomSection
+          formData={formData}
+          setFormData={setFormData}
+          group={group}
+        />
       </div>
       <div className="mx-8 my-20 text-center">
         <BtnBlue text="확인" onClick={handleCreateEvent} />
