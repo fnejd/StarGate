@@ -277,15 +277,12 @@ const pwResetApi = async (email: string, password: string) => {
  * @ADMINAREA
  */
 // 관리자 이메일 중복검사
-// formData 형식으로 요청 보내달라함
-const adminVerifyEmail = async (email: string) => {
+const adminVerifyEmail = async (formData: FormData) => {
   let result = true;
-  const formData = new FormData();
-  formData.append('email', email);
   await api
     .post('/pusers/check-email', formData, {
       headers: {
-        'Access-Controll-Allow-Origin': 'http://localhost:3000',
+        'Access-Controll-Allow-Origin': '*',
       },
       withCredentials: false,
     })
