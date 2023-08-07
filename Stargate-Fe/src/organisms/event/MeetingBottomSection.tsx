@@ -88,6 +88,7 @@ const MeetingBottomSection = ({
   const [watingtimeValue, setWatingtimeValue] = useState('');
   const [fanValue, setFanValue] = useState('');
   const [members, setMembers] = useState<Members[]>([]);
+  const [csvData, setCsvData] = useState([]);
 
   console.log('바텀에서 그룹', group);
 
@@ -197,7 +198,11 @@ const MeetingBottomSection = ({
   };
 
   const handleCsvData = (data, fileInfo) => {
-    console.log(data);
+    // 2열(인덱스 1)에 있는 이메일 값들을 추출하여 emailList에 저장
+    const emails = data.slice(1).map((row) => row[1]);
+    // 빈 값이 아닌 것들만 필터링하여 저장
+    const nonEmptyEmails = emails.filter((email) => email && email.trim() !== '');
+    setCsvData(nonEmptyEmails);
   };
 
   // 삭제 함수
@@ -256,16 +261,6 @@ const MeetingBottomSection = ({
             onOptionChange={handleGroupChange}
           />
         )}
-        {/* {formData.starName ? (
-          <div className="flex items-center justify-between mt-2 w-62">
-            <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
-              {formData.starName}
-            </div>
-            <AdminBtn text="삭제" onClick={() => deleteStar()} />
-          </div>
-        ) : (
-          <></>
-        )} */}
       </div>
       {/* 멤버명 추가 */}
       <div className="flex h-8">
@@ -314,38 +309,6 @@ const MeetingBottomSection = ({
                     )}
                   </Draggable>
                 ))}
-              {/* {formData.starName &&
-                group &&
-                group
-                  .find((groupItem) => groupItem.name === formData.starName)
-                  .members.map((item, index) => (
-                    <Draggable
-                      key={index}
-                      draggableId={index.toString()}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          // key={index}
-                          className="flex items-center justify-between mt-2 w-62"
-                        >
-                          <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
-                            {index}
-                          </div>
-                          <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
-                            {item.name}
-                          </div>
-                          <AdminBtn
-                            text="삭제"
-                            onClick={() => deleteMember(index)}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))} */}
               {provided.placeholder}
             </div>
           )}
@@ -399,17 +362,20 @@ const MeetingBottomSection = ({
           </div>
         </div>
         <div className="flex flex-col items-start justify-between w-52">
-          {/* {formData.fans.map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between mt-2 w-62"
-            >
-              <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
-                {item}
-              </div>
-              <AdminBtn text="삭제" onClick={() => deleteFan(index)} />
-            </div>
-          ))} */}
+          {csvData.map(
+            (item, index) =>
+              item && (
+                <div
+                  key={index}
+                  className="flex items-center justify-between mt-2 w-62"
+                >
+                  <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
+                    {item}
+                  </div>
+                  <AdminBtn text="삭제" onClick={() => deleteFan(index)} />
+                </div>
+              )
+          )}
         </div>
       </div>
 
