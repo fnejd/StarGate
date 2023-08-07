@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,8 @@ const PwResetComponent = () => {
     newPw: '',
     newPwCheck: '',
   });
+  // store에서 이메일 가져오기
+  const email = useRecoilValue(emailState);
 
   useEffect(() => {
     const newPw = (pwCheck as pwCheckType).newPw;
@@ -34,22 +36,11 @@ const PwResetComponent = () => {
 
   const navigate = useNavigate();
 
-  /**
-   * @TODO
-   * 비밀번호 업데이트하는 API 요청 보내기!
-   * ?? =>> 이전 모달에서 리스폰스로 받은 비번 찾기 진행중인 유저의
-   * 이메일은 스토어에 넣어다니는게 나을까 아님 프로퍼티로 넘겨 받는게 나을까?
-   */
   const resetPw = () => {
-    console.log('비밀번호 재설정');
     // api 요청 json 형식으루
     // email, password 필요
-
     const pw = (pwCheck as pwCheckType).newPw;
     const pwc = (pwCheck as pwCheckType).newPwCheck;
-    // store에서 이메일 가져오기
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const email = useRecoilValue(emailState);
 
     const validation = pwValidationCheck(pw, pwc);
 
@@ -65,7 +56,7 @@ const PwResetComponent = () => {
       .then((res) => {
         console.log(res);
         if (res != '200') {
-          alert('서버에 문제가 발생했습니다.');
+          alert('비밀번호 재설정에 문제가 발생했습니다.');
           window.location.reload();
           return 0;
         }
@@ -96,7 +87,9 @@ const PwResetComponent = () => {
           setter={setPwCheck}
         />
       </div>
-      <BtnBlue text="확인" onClick={resetPw} />
+      <p className='w-fit mr-auto ml-auto'>
+        <BtnBlue text="확인" onClick={resetPw} />
+      </p>
     </div>
   );
 };
