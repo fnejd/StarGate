@@ -119,7 +119,6 @@ const logoutApi = async () => {
       result = JSON.parse(payload.toString());
     }
 
-    // auth의 타입을 읽지 못해 어드민 로그아웃 시 에러 발생
     if (result.auth && result.auth == 'USER') {
       await api.post('/fusers/logout', {}, { withCredentials: false });
     }
