@@ -55,9 +55,6 @@ public class FUserServiceImpl implements FUserService {
     private CertifyRepository certifyRepository;
 
     @Autowired
-    private JwtTokenRepository jwtTokenRepository;
-
-    @Autowired
     private JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
@@ -68,6 +65,9 @@ public class FUserServiceImpl implements FUserService {
 
     @Autowired
     private FileUtil fileUtil;
+
+    @Autowired
+    private JwtTokenRepository jwtTokenRepository;
 
     @Value("polaroid")
     private String polaroidFilePath;
@@ -116,12 +116,12 @@ public class FUserServiceImpl implements FUserService {
 
             String accessToken = jwtTokenUtil.createAccessToken(fUser.getEmail(), "USER");
 
-            JwtToken jwtToken = JwtToken.builder()
+            JwtToken token = JwtToken.builder()
                     .email(dto.getEmail())
                     .refreshToken(refreshToken)
                     .build();
 
-            jwtTokenRepository.save(jwtToken);
+            jwtTokenRepository.save(token);
 
             return JwtResponseDto.builder()
                     .refreshToken(refreshToken)
@@ -342,6 +342,7 @@ public class FUserServiceImpl implements FUserService {
     public void logout() throws NotFoundException {
         String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 
+
         JwtToken refreshToken = jwtTokenRepository.findById(email).orElse(null);
 
         if (refreshToken != null) {
@@ -351,7 +352,6 @@ public class FUserServiceImpl implements FUserService {
         }
 
         log.info("로그아웃 되었습니다");
-
     }
 
     /**

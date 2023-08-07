@@ -1,29 +1,22 @@
 package com.ssafy.stargate.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.*;
+
+import org.springframework.data.annotation.Id;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
 /**
- * refreshToken 저장을 위한 엔티티
+ * refreshToken 을 redis 에 저장하기 위한 entity
  */
-@Entity
-@Table(name = "jwt_token")
-@AllArgsConstructor
-@NoArgsConstructor
+@RedisHash(value = "token", timeToLive = 14 * 24 * 60 * 60)
 @Builder
 @Getter
 @Setter
 public class JwtToken {
 
     @Id
-    @Column(nullable = false)
     private String email;
-
-    @Column
     private String refreshToken;
-
-
 }
