@@ -1,4 +1,10 @@
 import { useState, useEffect } from 'react';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from 'react-beautiful-dnd';
 import CSVReader from 'react-csv-reader';
 import AdminBtn from '@/atoms/common/AdminBtn';
 import AdminInput from '@/atoms/event/AdminInput';
@@ -17,6 +23,11 @@ interface MeetingMember {
   memberNo: number;
   orderNum: number;
   roomId: string;
+}
+
+interface Members {
+  memberNo: number;
+  name: string;
 }
 
 interface FormData {
@@ -47,6 +58,7 @@ interface MeetingBottomSectionProps {
   formData: FormData;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
   group: Group[];
+  setGroup: React.Dispatch<React.SetStateAction<Group>>;
   // group: [
   //   {
   //     groupNo: 20; // [long] 그룹번호  // 고유 아이디
@@ -69,11 +81,13 @@ const MeetingBottomSection = ({
   formData,
   setFormData,
   group,
+  setGroup,
 }: MeetingBottomSectionProps) => {
   const [starValue, setStarValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
   const [watingtimeValue, setWatingtimeValue] = useState('');
   const [fanValue, setFanValue] = useState('');
+  const [members, setMembers] = useState<Members[]>([]);
 
   console.log('바텀에서 그룹', group);
 
@@ -84,7 +98,8 @@ const MeetingBottomSection = ({
         ...prevFormData,
         starName: group[0].name,
       }));
-      console.log('첫번째 이름 지정 실행');
+      setMembers(group[0].members);
+      console.log('첫번째 그룹과 멤버로 폼데이터 디폴트 값 지정');
     }
   }, [group]);
   // [
@@ -138,8 +153,12 @@ const MeetingBottomSection = ({
   const handleGroupChange = (value: number | string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      starName: value,
+      starName: value as string,
     }));
+    const selectedGroup = group.find((item) => item.name === value);
+    if (selectedGroup) {
+      setMembers(selectedGroup.members);
+    }
   };
 
   const handleMemberChange = (value: number | string) => {
@@ -204,6 +223,24 @@ const MeetingBottomSection = ({
     });
   };
 
+  // --- Draggable이 Droppable로 드래그 되었을 때 실행되는 이벤트
+  const handleDragEnd = ({ source, destination }: DropResult) => {
+    if (!destination) return;
+
+    // 깊은 복사
+    const _items = JSON.parse(JSON.stringify(members)) as typeof members;
+    console.log('깊은복사', _items);
+    // 기존 아이템 뽑아내기
+    const [targetItem] = _items.splice(source.index, 1);
+    console.log('기존아이템', targetItem);
+    // 기존 아이템을 새로운 위치에 삽입하기
+    _items.splice(destination.index, 0, targetItem);
+    // 상태 변경
+    setMembers(_items);
+  };
+
+  console.log('아이템##############', members);
+
   return (
     <div className="w-550">
       {/* 연예인명 추가 */}
@@ -220,8 +257,8 @@ const MeetingBottomSection = ({
           />
         )}
         {/* {formData.starName ? (
-          <div className="w-62 mt-2 flex justify-between items-center">
-            <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
+          <div className="flex items-center justify-between mt-2 w-62">
+            <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
               {formData.starName}
             </div>
             <AdminBtn text="삭제" onClick={() => deleteStar()} />
@@ -239,26 +276,81 @@ const MeetingBottomSection = ({
           팬사인회 순서는 위에서부터 아래로 진행됩니다
         </p>
       </div>
-      <div className="flex flex-col items-start w-52 justify-between">
-        {formData.starName &&
-          group &&
-          group
-            .find((groupItem) => groupItem.name === formData.starName)
-            .members.map((item, index) => (
-              <div
-                key={index}
-                className="w-62 mt-2 flex justify-between items-center"
-              >
-                <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
-                  {index}
-                </div>
-                <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
-                  {item.name}
-                </div>
-                <AdminBtn text="삭제" onClick={() => deleteMember(index)} />
-              </div>
-            ))}
-      </div>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              // style={{ background: snapshot.isDraggingOver ? 'red' : 'blue' }}
+              className="flex flex-col items-start justify-between w-52"
+            >
+              {members &&
+                members.map((item, index) => (
+                  <Draggable
+                    key={index}
+                    draggableId={index.toString()}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        // key={index}
+                        className="flex items-center justify-between mt-2 w-62"
+                      >
+                        <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
+                          {index + 1} 번
+                        </div>
+                        <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
+                          {item.name}
+                        </div>
+                        <AdminBtn
+                          text="삭제"
+                          onClick={() => deleteMember(index)}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              {/* {formData.starName &&
+                group &&
+                group
+                  .find((groupItem) => groupItem.name === formData.starName)
+                  .members.map((item, index) => (
+                    <Draggable
+                      key={index}
+                      draggableId={index.toString()}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          // key={index}
+                          className="flex items-center justify-between mt-2 w-62"
+                        >
+                          <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
+                            {index}
+                          </div>
+                          <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
+                            {item.name}
+                          </div>
+                          <AdminBtn
+                            text="삭제"
+                            onClick={() => deleteMember(index)}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))} */}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
       {/* 멤버가 다수일 경우 다음 통화까지 대기시간 설정 가능 */}
       {formData.meetingMembers.length >= 1 && (
         <div className="flex items-end">
@@ -278,7 +370,7 @@ const MeetingBottomSection = ({
               onClick={() => addWatingtime(watingtimeValue)}
             />
           </AdminInput>
-          {/* <p className="font-suit font-medium text-14 text-white p-1 pl-2">
+          {/* <p className="p-1 pl-2 font-medium text-white font-suit text-14">
             초
           </p> */}
         </div>
@@ -295,24 +387,24 @@ const MeetingBottomSection = ({
           >
             <AdminBtn text="등록" onClick={() => addFans(fanValue)} />
           </AdminInput>
-          <div className="relative top-9 inline-block w-32 h-8 cursor-pointer">
+          <div className="relative inline-block w-32 h-8 cursor-pointer top-9">
             <CSVReader
               cssClass="csv-btn"
               label="CSV 파일 불러오기"
               onFileLoaded={handleCsvData}
             />
-            <div className="w-32 h-8 leading-8 text-12 font-medium bg-admingray font-suit text-black rounded-sm text-center">
+            <div className="w-32 h-8 font-medium leading-8 text-center text-black rounded-sm text-12 bg-admingray font-suit">
               CSV 파일 불러오기
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-start w-52 justify-between">
+        <div className="flex flex-col items-start justify-between w-52">
           {/* {formData.fans.map((item, index) => (
             <div
               key={index}
-              className="w-62 mt-2 flex justify-between items-center"
+              className="flex items-center justify-between mt-2 w-62"
             >
-              <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
+              <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
                 {item}
               </div>
               <AdminBtn text="삭제" onClick={() => deleteFan(index)} />
@@ -321,7 +413,7 @@ const MeetingBottomSection = ({
         </div>
       </div>
 
-      {/* <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
+      {/* <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
         총 미팅 시간은 분 초 입니다
       </div> */}
     </div>

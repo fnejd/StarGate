@@ -126,6 +126,7 @@ const AdminEventCreate = () => {
           formData={formData}
           setFormData={setFormData}
           group={group}
+          setGroup={setGroup}
         />
       </div>
       <div className="mx-8 my-20 text-center">
