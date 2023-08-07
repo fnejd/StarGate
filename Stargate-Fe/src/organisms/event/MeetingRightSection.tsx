@@ -24,7 +24,6 @@ interface FormData {
   notice: string;
   photoNum: number;
   image: File | null;
-  starName: string;
   meetingFUsers: MeetingFUser[];
   meetingMembers: MeetingMember[];
 }
@@ -60,12 +59,12 @@ const MeetingRightSection = ({
     <>
       <div className="w-48 h-8">
         <div className="mb-6">
-          <div className="flex w-48 mx-1 my-2 font-suit font-medium text-14 text-white">
+          <div className="flex w-48 mx-1 my-2 font-medium text-white font-suit text-14">
             대표사진
           </div>
           <button
             onClick={() => document.getElementById('fileInput')?.click()} // 파일 선택 버튼 클릭 시 input 클릭 이벤트 호출
-            className="w-20 h-8 text-12 font-medium bg-admingray font-suit text-black rounded-sm"
+            className="w-20 h-8 mb-2 font-medium text-black rounded-sm text-12 bg-admingray font-suit"
           >
             파일 선택
           </button>
@@ -86,7 +85,7 @@ const MeetingRightSection = ({
             </div>
           )}
         </div>
-        <div className="flex w-48 mx-1 my-2 font-suit font-medium text-14 text-white">
+        <div className="flex w-48 mx-1 my-2 font-medium text-white font-suit text-14">
           공지사항
         </div>
         <textarea
@@ -94,7 +93,7 @@ const MeetingRightSection = ({
           value={textValue}
           onChange={handleTextareaChange}
           placeholder="대기화면에 띄워질 공지를 작성해주세요"
-          className="w-400 h-350 text-12 ml-1 px-3 py-2 border border-gray-300 rounded-sm bg-white text-black placeholder-pl-5 font-suit focus:outline-none focus:ring-2 focus:ring-mainblue-300 focus:border-transparent"
+          className="px-3 py-2 ml-1 text-black bg-white border border-gray-300 rounded-sm w-400 h-350 text-12 placeholder-pl-5 font-suit focus:outline-none focus:ring-2 focus:ring-mainblue-300 focus:border-transparent"
         />
       </div>
     </>

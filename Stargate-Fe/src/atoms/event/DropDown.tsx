@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 interface DropdownProps {
   options: (string | number)[];
-  onOptionChange: (value: number | string) => void;
+  onOptionChange: (value: number) => void;
   disabled?: boolean;
 }
 
@@ -15,7 +15,7 @@ const DropDown: React.FC<DropdownProps> = ({
   // const [cutCount, setCutCount] = useState<number>(4);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
+    const selectedValue = Number(event.target.value);
     // setSelectedValue(selectedValue);
     onOptionChange(selectedValue);
   };

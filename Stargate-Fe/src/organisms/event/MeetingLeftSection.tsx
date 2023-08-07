@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminInput from '@/atoms/event/AdminInput';
 import DropDown from '@/atoms/event/DropDown';
-import AdminToggle from '@/atoms/AdminToggle';
+import AdminToggle from '@/atoms/common/AdminToggle';
 
 interface MeetingFUser {
   no: number;
@@ -26,7 +26,7 @@ interface FormData {
   notice: string;
   photoNum: number;
   image: File | null;
-  starName: string;
+  // starName: string;
   meetingFUsers: MeetingFUser[];
   meetingMembers: MeetingMember[];
 }
@@ -44,12 +44,6 @@ const MeetingLeftSection = ({
   const [photoTime, setPhotoTime] = useState<boolean>(false);
   // const [totalSec, setTotalSec] = useState<number>(80);
   const [numbers, setNumbers] = useState<number[]>([4]);
-  // const [formData, setFormData] = useState<FormData>({
-  //   startDate: null,
-  //   meetingTime: 80,
-  //   photoNum: 0,
-  // });
-
   useEffect(() => {
     // photoTime이 false일 때 picSec를 0으로 업데이트
     if (!photoTime) {
@@ -58,12 +52,6 @@ const MeetingLeftSection = ({
       setPicSec(40);
     }
   }, [photoTime]);
-
-  // useEffect(() => {
-  //   onChange(formData);
-  //   console.log(formData);
-  //   console.log('변경');
-  // }, [formData, onChange]);
 
   const handleStartDate = (value: string): void => {
     const [year, month, day] = value.split('-');
@@ -84,9 +72,9 @@ const MeetingLeftSection = ({
   };
 
   const handleTotalTime = (value: number): void => {
-    if (value <= 80) {
-      alert('전체 미팅 시간은 80초보다 커야 합니다.');
-    }
+    // if (value <= 80) {
+    //   alert('전체 미팅 시간은 80초보다 커야 합니다.');
+    // }
 
     // 상위로 전달
     setFormData((prevFormData) => ({
@@ -105,7 +93,14 @@ const MeetingLeftSection = ({
     setNumbers(newNumbers);
   };
 
-  const handlePicSecChange = (value: number | string) => {
+  const handleTimeBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value <= 80) {
+      alert('전체 미팅 시간은 80초보다 커야 합니다.');
+    }
+  };
+
+  const handlePicSecChange = (value: number) => {
     setPicSec(value * 10);
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -119,9 +114,10 @@ const MeetingLeftSection = ({
         labelFor="시작 날짜"
         type="date"
         placeholder=""
+        max="9999-12-31"
         value={
-          formData.startDate
-            ? formData.startDate.toISOString().substring(0, 10)
+          formData.startDate instanceof Date
+            ? formData.startDate.toISOString().split('T')[0]
             : ''
         } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
         onInputChange={handleStartDate}
@@ -134,6 +130,7 @@ const MeetingLeftSection = ({
           placeholder="80"
           value={formData.meetingTime}
           onInputChange={(value) => handleTotalTime(Number(value))}
+          onBlur={handleTimeBlur}
         >
           <p className="p-1 pl-2 font-medium text-white font-suit text-14">
             초

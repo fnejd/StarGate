@@ -38,7 +38,6 @@ interface FormData {
   notice: string;
   photoNum: number;
   image: File | null;
-  starName: string;
   meetingFUsers: MeetingFUser[];
   meetingMembers: MeetingMember[];
 }
@@ -76,13 +75,9 @@ const MeetingBottomSection = ({
 
   console.log('바텀에서 그룹', group);
 
-  // useEffect를 사용하여 formData.starName 설정
+  // group 데이터가 변경되면 그룹의 멤버도 변경
   useEffect(() => {
-    if (group && group.length > 0 && !formData.starName) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        starName: group[0].name,
-      }));
+    if (group && group.length > 0) {
       setMembers(group[0].members);
       console.log('첫번째 그룹과 멤버로 폼데이터 디폴트 값 지정');
     }
@@ -118,38 +113,38 @@ const MeetingBottomSection = ({
 
   // 등록 함수
   const handleGroupChange = (value: number | string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      starName: value as string,
-    }));
     const selectedGroup = group.find((item) => item.name === value);
     if (selectedGroup) {
       setMembers(selectedGroup.members);
     }
   };
 
-  const handleMemberChange = (value: number | string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      meetingMembers: [
-        ...prevFormData.meetingMembers,
-        {
-          memberNo: Number(value), // 매개변수 value를 number 타입으로 변환하여 사용
-          name: '유한', // 멤버 번호 설정
-          orderNum: prevFormData.meetingMembers.length + 1, // 멤버 순서 설정
-          roomId: 2374324, // 회의 방 번호 설정 (임의의 값)
-        },
-      ],
-    }));
-  };
+  useEffect(() => {
+    setFormData(())
+  }, [members])
 
-  const addMember = (name: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      members: [...prevFormData.meetingMembers, name],
-    }));
-    setMemberValue('');
-  };
+  // const handleMemberChange = (value: number | string) => {
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     meetingMembers: [
+  //       ...prevFormData.meetingMembers,
+  //       {
+  //         memberNo: Number(value), // 매개변수 value를 number 타입으로 변환하여 사용
+  //         name: '유한', // 멤버 번호 설정
+  //         orderNum: prevFormData.meetingMembers.length + 1, // 멤버 순서 설정
+  //         roomId: 2374324, // 회의 방 번호 설정 (임의의 값)
+  //       },
+  //     ],
+  //   }));
+  // };
+
+  // const addMember = (name: string) => {
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     members: [...prevFormData.meetingMembers, name],
+  //   }));
+  //   setMemberValue('');
+  // };
 
   const addWatingtime = (value: string) => {
     setFormData({ ...formData, watingTime: value });
@@ -169,21 +164,11 @@ const MeetingBottomSection = ({
     );
     console.log('nonEmptyEmails', nonEmptyEmails);
     setFanData([...nonEmptyEmails, ...fanData]);
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   meetingFUsers: [nonEmptyEmails, ...fanData],
-    // }));
   };
 
   console.log('팬 데이터 업로드', fanData);
 
   console.log(formData.meetingFUsers);
-  // 삭제 함수
-  const deleteStar = () => {
-    setFormData((prevFormData) => {
-      return { ...prevFormData, starName: '' };
-    });
-  };
 
   const deleteMember = (index: number) => {
     setFormData((prevFormData) => {
@@ -274,10 +259,10 @@ const MeetingBottomSection = ({
                         <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
                           {item.name}
                         </div>
-                        <AdminBtn
+                        {/* <AdminBtn
                           text="삭제"
                           onClick={() => deleteMember(index)}
-                        />
+                        /> */}
                       </div>
                     )}
                   </Draggable>
