@@ -216,7 +216,7 @@ public class FUserServiceImpl implements FUserService {
      */
     @Override
     public FUserFindIdDto getFUserId(FUserFindIdDto dto) throws NotFoundException {
-        FUser fUser = fUserRepository.findByName(dto.getName()).orElseThrow(() -> new NotFoundException("아이디 찾기 실패 : 해당 아이디와 일치 하는 회원이 없습니다."));
+        FUser fUser = fUserRepository.findByNameAndPhone(dto.getName(), dto.getPhone()).orElseThrow(() -> new NotFoundException("아이디 찾기 실패 : 해당 아이디와 일치 하는 회원이 없습니다."));
 
         if (fUser == null || !fUser.getPhone().equals(dto.getPhone())) {
             throw new NotFoundException("입력하신 아이디, 전화번호와 일치하는 회원 정보가 없습니다.");
@@ -340,8 +340,7 @@ public class FUserServiceImpl implements FUserService {
      */
     @Override
     public void logout() throws NotFoundException {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
-
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         JwtToken refreshToken = jwtTokenRepository.findById(email).orElse(null);
 

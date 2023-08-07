@@ -172,7 +172,6 @@ public class FUserController {
      */
     @PostMapping("/logout")
     public ResponseEntity<?> logout() throws NotFoundException{
-        log.info("잘가요. 로그아웃!");
         fUserService.logout();
         return ResponseEntity.ok(null);
     }
