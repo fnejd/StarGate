@@ -286,13 +286,13 @@ public class FUserServiceImpl implements FUserService {
     public void checkCertify(FUserFindPwDto dto) throws LoginException, NotFoundException {
         String code = dto.getCode();
 
-        FUser fUser = certifyRepository.findById(dto.getCode()).get().getFUser();
+        Certify certify = certifyRepository.findByfUserEmail(dto.getEmail()).orElse(null);
 
-        if (fUser == null) {
+        if (certify == null) {
             throw new NotFoundException("해당하는 회원 정보를 찾지 못했습니다.");
         }
 
-        if (!dto.getEmail().equals(fUser.getEmail())) {
+        if (!dto.getCode().equals(certify.getCode())) {
             throw new LoginException("인증 번호가 일치하지 않습니다.");
         }
     }
@@ -349,6 +349,8 @@ public class FUserServiceImpl implements FUserService {
         } else {
             throw new NotFoundException("해당 유저는 이미 로그아웃 상태입니다.");
         }
+
+        log.info("로그아웃 되었습니다");
 
     }
 
