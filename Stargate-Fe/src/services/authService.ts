@@ -56,7 +56,7 @@ const checkTokenExpTime = async () => {
 const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   const { accessToken, refreshToken } = response.data;
   console.log(accessToken);
-  api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
+  api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
   localStorage.setItem('accessToken', accessToken);
@@ -74,7 +74,7 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
 // AccessToken이 없을 때,(만료됐을 때 재발급)
 const onNewAccessToken = (response: AxiosResponse<newTokenType>) => {
   const { accessToken } = response.data;
-  api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
+  api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   console.log('AccessToken 재발급');
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
@@ -115,16 +115,28 @@ const loginApi = async (formData: FormData, type: boolean) => {
 const logoutApi = async () => {
   try {
     let result;
-    if (api.defaults.headers['Authorization'] != null) {
-      const tokenDecode = api.defaults.headers['Authorization']?.toString().split('.')[1];
-      const payload = atob(tokenDecode);
-      result = JSON.parse(payload.toString());
+    if (localStorage.getItem('accessToken') != null) {
+      const tokenDecode = localStorage.getItem('accessToken')
+        ?.toString()
+        .split('.');
+      if (tokenDecode != undefined && tokenDecode.length > 0) {
+        const payload = atob(tokenDecode[1]);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        result = JSON.parse(payload.toString());
+        console.log(result);
+      }
     }
-
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (result.auth && result.auth == 'USER') {
-      await api.post('/fusers/logout', {}, { withCredentials: false });
+      await api.post('/fusers/logout', {}, {
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        },
+        withCredentials: false
+      });
     }
-    api.defaults.headers['Authorization'] = '';
+    api.defaults.headers.common['Authorization'] = '';
     localStorage.clear();
     sessionStorage.clear();
     return 'SUCCESS';
@@ -173,7 +185,7 @@ const verifyEmail = async (email: string) => {
         'Access-Controll-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      withCredentials: false,
+      // withCredentials: false,
     })
     .then((response: AxiosResponse<checkEmailType>) => {
       const { exist } = response.data;
@@ -234,7 +246,7 @@ const checkAuthNumApi = (email: string, code: string) => {
       },
       withCredentials: false,
     })
-    .then()
+    .then((res) => console.log(res))
     .catch((error) => {
       console.log(error);
       result = 'FAIL';
@@ -248,7 +260,12 @@ const checkAuthNumApi = (email: string, code: string) => {
 const pwResetApi = async (email: string, password: string) => {
   let status = 0;
   await api
-    .post('/fusers/new-pw', JSON.stringify({ email, password }))
+    .post('/fusers/new-pw', JSON.stringify({ email, password }), {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: false,
+    })
     .then((res) => {
       status = res.status;
     })
@@ -269,7 +286,6 @@ const adminVerifyEmail = async (email: string) => {
     .post('/pusers/check-email', formData, {
       headers: {
         'Access-Controll-Allow-Origin': 'http://localhost:3000',
-        'Content-Type': 'application/json',
       },
       withCredentials: false,
     })
