@@ -21,11 +21,14 @@ module.exports = {
     "@typescript-eslint/no-misused-promises": [
       "error",
       {"checksVoidReturn": false }
-    ]
+    ],
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
     '@typescript-eslint/no-non-null-assertion': 'off',
+    'no-unused-vars': ['off'],
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
   },
 }

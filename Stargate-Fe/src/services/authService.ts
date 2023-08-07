@@ -118,7 +118,9 @@ const logoutApi = async () => {
       const payload = atob(tokenDecode);
       result = JSON.parse(payload.toString());
     }
-    if (result.auth == 'USER') {
+
+    // auth의 타입을 읽지 못해 어드민 로그아웃 시 에러 발생
+    if (result.auth && result.auth == 'USER') {
       await api.post('/fusers/logout', {}, { withCredentials: false });
     }
     api.defaults.headers['Authorization'] = '';
@@ -150,7 +152,7 @@ const signUpApi = async (formData: FormData) => {
 // 토큰 재발행 요청, 리프레쉬 토큰을 보내 엑세스 토큰 받아오기
 const reAccessApi = async () => {
   const refreshToken = JSON.stringify(
-    sessionStorage.getItem('refreashToken') != null
+    sessionStorage.getItem('refreshToken') != null
       ? sessionStorage.getItem('refreshToken')
       : localStorage.getItem('refreshToken')
   );
@@ -257,12 +259,15 @@ const pwResetApi = async (email: string, password: string) => {
  * @ADMINAREA
  */
 // 관리자 이메일 중복검사
+// formData 형식으로 요청 보내달라함
 const adminVerifyEmail = async (email: string) => {
   let result = true;
+  const formData = new FormData();
+  formData.append('email', email);
   await api
-    .post('/pusers/check-email', JSON.stringify({ email }), {
+    .post('/pusers/check-email', formData, {
       headers: {
-        'Access-Controll-Allow-Origin': '*',
+        'Access-Controll-Allow-Origin': 'http://localhost:3000',
         'Content-Type': 'application/json',
       },
       withCredentials: false,
