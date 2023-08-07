@@ -25,6 +25,8 @@ interface pwInquiryType {
   code: string;
 }
 
+// const accessTokenSet ()
+
 /**
  * @COMMONAREA
  */
@@ -57,7 +59,7 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
-
+  localStorage.setItem('accessToken', accessToken);
   if (type) {
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('tokenExpTime', `${expTime}`);
@@ -93,7 +95,7 @@ const loginApi = async (formData: FormData, type: boolean) => {
   let response = 'SUCCESS';
   await api
     .post('/fusers/login', formData, {
-      withCredentials: false
+      withCredentials: false,
     })
     .then((res: AxiosResponse<tokenType>) => {
       response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
@@ -171,7 +173,7 @@ const verifyEmail = async (email: string) => {
         'Access-Controll-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      withCredentials: false
+      withCredentials: false,
     })
     .then((response: AxiosResponse<checkEmailType>) => {
       const { exist } = response.data;
@@ -212,7 +214,7 @@ const pwInquiryApi = async (email: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: false
+      withCredentials: false,
     })
     .then((response: AxiosResponse<pwInquiryType>) => {
       console.log(response);
@@ -230,7 +232,7 @@ const checkAuthNumApi = (email: string, code: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: false
+      withCredentials: false,
     })
     .then()
     .catch((error) => {
@@ -287,7 +289,7 @@ const adminLoginApi = async (formData: FormData, type: boolean) => {
   let response = 'SUCCESS';
   await api
     .post('/pusers/login', formData, {
-      withCredentials: false
+      withCredentials: false,
     })
     .then((res: AxiosResponse<tokenType>) => {
       response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
@@ -307,7 +309,7 @@ const adminSignUpApi = async (formData: FormData) => {
   }
   const response = await api
     .post('/pusers/register', formData, {
-      withCredentials: false
+      withCredentials: false,
     })
     .then()
     .catch((error) => console.log(error));
