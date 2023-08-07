@@ -179,14 +179,15 @@ public class JwtTokenUtil {
     private boolean existingJwtToken(String email){
 
 
-        return true;
 
+
+        return true;
     }
 
     /**
      * JwtToken 에서 Bearer 제거
-     * @param bearerToken
-     * @return
+     * @param bearerToken Bearer 가 붙어 있는 토큰
+     * @return Bearer 를 제거한 토큰
      */
     public String removeBearer(String bearerToken){
         

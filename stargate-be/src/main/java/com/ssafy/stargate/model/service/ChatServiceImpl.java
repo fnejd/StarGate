@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class ChatServiceImpl implements ChatService{
 
     @Autowired
-    private SimpMessagingTemplate template;
+    private SimpMessageSendingOperations messageSendingOperations;
 
     @Override
     public void send(MessageDto message) {
 
-        template.convertAndSend("/topic/chat", message);
+        messageSendingOperations.convertAndSend("/topic/chat", message);
     }
 }

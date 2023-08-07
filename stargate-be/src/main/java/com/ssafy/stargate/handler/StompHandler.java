@@ -1,5 +1,7 @@
 package com.ssafy.stargate.handler;
 
+import com.ssafy.stargate.exception.InvalidTokenException;
+import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +28,27 @@ public class StompHandler implements ChannelInterceptor {
      * @return
      */
     @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+    public Message<?> preSend(Message<?> message, MessageChannel channel) throws NotFoundException, InvalidTokenException{
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
-        if(StompCommand.CONNECT.equals(accessor.getCommand())){
+//        if(StompCommand.CONNECT.equals(accessor.getCommand())){
 
-            String token = jwtTokenUtil.removeBearer(extractAccessor(accessor));
+        String header = extractAccessor(accessor);
 
-            jwtTokenUtil.validateToken(token);
+        if(header == null){
+            throw new NotFoundException("유효하지 않은 헤더입니다.");
         }
+
+        String token = jwtTokenUtil.removeBearer(header);
+
+//        jwtTokenUtil.validateToken(token);
+
+//        }
         return message;
     }
 
     private String extractAccessor(StompHeaderAccessor accessor){
-        return accessor.getFirstNativeHeader("Authorization");
+        return accessor.getFirstNativeHeader("Authorization").toString();
     }
 }
 
