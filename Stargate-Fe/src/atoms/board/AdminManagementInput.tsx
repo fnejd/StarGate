@@ -5,16 +5,15 @@ import {
   createGroup,
   updateGroup,
 } from '@/services/adminBoardService';
-/**
- * 수정이랑 생성을 어떻게 구분할거?
- * 입력 부분에 따라서?
- */
+import { useRecoilState } from 'recoil';
+import { selectedGroupMembersState } from '@/recoil/adminManagementState';
 /**
  * AdminManagementInput
  * @param isGroup => 인풋 태그 타입 설정 변수
  * @param groupNo => group번호. isGroup가 True일 때, group번호가 없다면 생성
  * @param memberNo => member번호, isGroup가 False일 때, member번호가 없다면 생성
  * @param value => 마이페이지에서 기본적으로 들어가 있을 값
+ * @param onEnter => Enter 키 입력 시 호출되는 콜백 함수
  */
 
 interface AdminManagementInputProps {
@@ -22,6 +21,12 @@ interface AdminManagementInputProps {
   groupNo?: number | null;
   memberNo?: number | null;
   value?: string;
+  onEnter: () => void;
+}
+
+interface MemberData {
+  memberNo: number;
+  name: string;
 }
 
 const AdminManagementInput = ({
@@ -29,8 +34,12 @@ const AdminManagementInput = ({
   groupNo,
   memberNo,
   value,
+  onEnter,
 }: AdminManagementInputProps) => {
   const [inputValue, setInputValue] = useState<string>(value || '');
+  const [selectedGroupMembers, setSelectedGroupMembers] = useRecoilState<
+    MemberData[]
+  >(selectedGroupMembersState);
 
   useEffect(() => {
     setInputValue(value || '');
@@ -62,13 +71,22 @@ const AdminManagementInput = ({
     if (memberNo) {
       try {
         await updateMember(memberNo, inputValue);
+        const updatedMembers = selectedGroupMembers.map((member) =>
+          member.memberNo === memberNo
+            ? { ...member, name: inputValue }
+            : member
+        );
+        setSelectedGroupMembers(updatedMembers);
       } catch (error) {
         console.log('멤버 업데이트 에러:', error);
       }
     } else {
       if (groupNo)
         try {
-          await createMember(groupNo, inputValue);
+          const newMember = await createMember(groupNo, inputValue);
+          if (newMember !== undefined) {
+            setSelectedGroupMembers([newMember, ...selectedGroupMembers]);
+          }
         } catch (error) {
           console.log('멤버 생성 에러:', error);
         }
@@ -80,12 +98,13 @@ const AdminManagementInput = ({
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      console.log(isGroup);
       if (isGroup) {
         groupInputHandle();
       } else {
         memberInputHandle();
       }
+      console.log('엔터');
+      onEnter();
     }
   };
 

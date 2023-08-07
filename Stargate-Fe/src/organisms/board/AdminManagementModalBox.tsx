@@ -1,11 +1,10 @@
-// ManagementModalBox.tsx
-import React, { useState, useRef, MouseEvent } from 'react';
+import { useState, useEffect, useRef, MouseEvent } from 'react';
 import AdminMangementPlusButton from '@/atoms/board/AdminMangementPlusButton';
 import AdminManagementDeleteButton from '@/atoms/board/AdminManagementDeleteButton';
 import AdminManagementInput from '@/atoms/board/AdminManagementInput';
-import {
-  deleteMember,
-} from '@/services/adminBoardService';
+import { deleteMember } from '@/services/adminBoardService';
+import { useRecoilState } from 'recoil';
+import { selectedGroupMembersState } from '@/recoil/adminManagementState';
 
 interface MemberData {
   memberNo: number;
@@ -33,10 +32,17 @@ const AdminManagementModalBox = ({
   members,
 }: ManagementModalBoxProps) => {
   /**
-   * useRef훅을 사용해서 생성된 변수
-   * Dom요소에 대한 참조를 보관할 수 있는 객체
+   * useRef훅을 사용해서 생성된 변수, Dom요소에 대한 참조를 보관할 수 있는 객체
    */
   const modalRef = useRef<HTMLDivElement>(null);
+  const [showInput, setShowInput] = useState(false);
+  const [selectedGroupNo, setSelectedGroupNo] = useState<number | null>(null);
+  const [selectedGroupName, setSelectedGroupName] = useState('');
+  const [selectedMemberNo, setSelectedMemberNo] = useState<number | null>(null);
+  const [selectedMemberName, setSelectedMemberName] = useState('');
+  const [selectedGroupMembers, setSelectedGroupMembers] = useRecoilState(
+    selectedGroupMembersState
+  );
 
   /**
    * MouseEvent 객체를 가져와서 실행
@@ -49,12 +55,9 @@ const AdminManagementModalBox = ({
       onClose();
     }
   };
-  const [showInput, setShowInput] = useState(false);
-  const [selectedGroupNo, setSelectedGroupNo] = useState<number | null>(null);
-  const [selectedGroupName, setSelectedGroupName] = useState('');
-  const [selectedMemberNo, setSelectedMemberNo] = useState<number | null>(null);
-  const [selectedMemberName, setSelectedMemberName] = useState('');
-
+  useEffect(() => {
+    setSelectedGroupMembers(members);
+  }, [members]);
   const showInputOpen = () => {
     setShowInput(true);
   };
@@ -88,11 +91,15 @@ const AdminManagementModalBox = ({
     if (memberNo) {
       try {
         await deleteMember(memberNo);
+        const updatedMembers = selectedGroupMembers.filter(
+          (member) => member.memberNo !== memberNo
+        );
+        setSelectedGroupMembers(updatedMembers);
       } catch (error) {
         console.log('멤버 삭제 에러:', error);
       }
     } else {
-      console.log('memberNo 없음')
+      console.log('memberNo 없음');
     }
   };
   const handleGroupDoubleClick = (
@@ -110,7 +117,9 @@ const AdminManagementModalBox = ({
     setSelectedMemberNo(memberNo);
     setSelectedMemberName(memberName);
   };
-
+  const handleInputEnter = () => {
+    showInputClose();
+  };
   return (
     <>
       {isOpen && (
@@ -142,6 +151,7 @@ const AdminManagementModalBox = ({
                       isGroup={true}
                       groupNo={groupNo}
                       value={selectedGroupName}
+                      onEnter={handleInputEnter}
                     />
                     <AdminMangementPlusButton onClick={handlePlusButtonClick} />
                   </div>
@@ -150,7 +160,10 @@ const AdminManagementModalBox = ({
             ) : (
               <div className="flex">
                 <div className="modal-title flex items-center">
-                  <AdminManagementInput isGroup={true} />
+                  <AdminManagementInput
+                    isGroup={true}
+                    onEnter={handleInputEnter}
+                  />
                   <AdminMangementPlusButton onClick={handlePlusButtonClick} />
                 </div>
               </div>
@@ -164,13 +177,14 @@ const AdminManagementModalBox = ({
                       isGroup={false}
                       groupNo={groupNo}
                       value={selectedMemberName}
+                      onEnter={handleInputEnter}
                     />
                     <AdminManagementDeleteButton
                       onClick={() => handleXButtonClick()}
                     />
                   </li>
                 )}
-              {members.map((member) => (
+              {selectedGroupMembers.map((member) => (
                 <li
                   className="modal-content justify-center flex"
                   key={member.memberNo}
@@ -184,6 +198,7 @@ const AdminManagementModalBox = ({
                       groupNo={groupNo}
                       memberNo={selectedMemberNo}
                       value={selectedMemberName}
+                      onEnter={handleInputEnter}
                     />
                   ) : (
                     <p>{member.name}</p>

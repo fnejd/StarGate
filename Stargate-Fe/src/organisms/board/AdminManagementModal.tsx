@@ -1,24 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PlusButton from '../../atoms/board/PlusButton';
 import AdminManagementModalBox from './AdminManagementModalBox';
 import BtnBlue from '@/atoms/common/BtnBlue';
-
-interface MemberData {
-  memberNo: number;
-  name: string;
-}
-interface GroupData {
-  groupNo: number;
-  name: string;
-  members: MemberData[];
-}
-/**
- * AdminManagementModalProps
- * @param group => AdminManagement에서 props로 넘겨받은 그룹과 멤버 정보가 있는 배열
- */
-interface AdminManagementModalProps {
-  group: GroupData[];
-}
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { groupsState, selectedGroupState } from '@/recoil/adminManagementState'; // 경로는 실제 파일 위치에 따라 조정해야 합니다.
 
 /**
  * AdminManagementModal
@@ -26,9 +11,10 @@ interface AdminManagementModalProps {
  * 버튼을 click하면, setSelectedGroup에 group을 state로 넣어줌
  */
 
-const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
+const AdminManagementModal = () => {
+  const group = useRecoilValue(groupsState);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
+  const [selectedGroup, setSelectedGroup] = useRecoilState(selectedGroupState); // Recoil 상태 사용
   const groupNames = group.map((data) => data.name);
   const totalButtons = Math.ceil(groupNames.length / 5) * 5;
 
