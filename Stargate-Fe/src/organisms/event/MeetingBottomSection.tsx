@@ -59,22 +59,6 @@ interface MeetingBottomSectionProps {
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
   group: Group[];
   setGroup: React.Dispatch<React.SetStateAction<Group>>;
-  // group: [
-  //   {
-  //     groupNo: 20; // [long] 그룹번호  // 고유 아이디
-  //     name: '406s'; // [String] 그룹명
-  //     members: [
-  //       {
-  //         memberNo: 29; // [long]   멤버번호
-  //         name: '이유한'; // [String]  멤버이름
-  //       },
-  //       {
-  //         memberNo: 30; // [long]  멤버번호
-  //         name: '이름이름'; // [String] 멤버이름
-  //       },
-  //     ];
-  //   },
-  // ];
 }
 
 const MeetingBottomSection = ({
@@ -88,7 +72,7 @@ const MeetingBottomSection = ({
   const [watingtimeValue, setWatingtimeValue] = useState('');
   const [fanValue, setFanValue] = useState('');
   const [members, setMembers] = useState<Members[]>([]);
-  const [csvData, setCsvData] = useState([]);
+  const [fanData, setFanData] = useState([]);
 
   console.log('바텀에서 그룹', group);
 
@@ -103,24 +87,6 @@ const MeetingBottomSection = ({
       console.log('첫번째 그룹과 멤버로 폼데이터 디폴트 값 지정');
     }
   }, [group]);
-  // [
-  //   {
-  //     groupNo: 20, // [long] 그룹번호  // 고유 아이디
-  //     name : "406s", // [String] 그룹명
-  //     members: [
-  //       {
-  //         memberNo : 29,    // [long]   멤버번호
-  //         name : "이유한",  // [String]  멤버이름
-  //       },
-  //       {
-  //         memberNo : 30,      // [long]  멤버번호
-  //         name : "이름이름",  // [String] 멤버이름
-  //       },
-  //         ...
-  //     ]
-  //   },
-  //   ...
-  // ]
 
   const handleStarvalue = (value: string) => {
     setStarValue(value);
@@ -189,11 +155,8 @@ const MeetingBottomSection = ({
     setFormData({ ...formData, watingTime: value });
   };
 
-  const addFans = (name: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      fans: [...prevFormData.fans, name],
-    }));
+  const addFans = (email: string) => {
+    setFanData([email, ...fanData]);
     setFanValue('');
   };
 
@@ -201,8 +164,14 @@ const MeetingBottomSection = ({
     // 2열(인덱스 1)에 있는 이메일 값들을 추출하여 emailList에 저장
     const emails = data.slice(1).map((row) => row[1]);
     // 빈 값이 아닌 것들만 필터링하여 저장
-    const nonEmptyEmails = emails.filter((email) => email && email.trim() !== '');
-    setCsvData(nonEmptyEmails);
+    const nonEmptyEmails = emails.filter(
+      (email) => email && email.trim() !== ''
+    );
+    setFanData(nonEmptyEmails);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      meetingFUsers: [nonEmptyEmails, ...fanData],
+    }));
   };
 
   // 삭제 함수
@@ -362,7 +331,7 @@ const MeetingBottomSection = ({
           </div>
         </div>
         <div className="flex flex-col items-start justify-between w-52">
-          {csvData.map(
+          {fanData.map(
             (item, index) =>
               item && (
                 <div
