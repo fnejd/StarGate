@@ -167,13 +167,17 @@ const MeetingBottomSection = ({
     const nonEmptyEmails = emails.filter(
       (email) => email && email.trim() !== ''
     );
-    setFanData(nonEmptyEmails);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      meetingFUsers: [nonEmptyEmails, ...fanData],
-    }));
+    console.log('nonEmptyEmails', nonEmptyEmails);
+    setFanData([...nonEmptyEmails, ...fanData]);
+    // setFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   meetingFUsers: [nonEmptyEmails, ...fanData],
+    // }));
   };
 
+  console.log('팬 데이터 업로드', fanData);
+
+  console.log(formData.meetingFUsers);
   // 삭제 함수
   const deleteStar = () => {
     setFormData((prevFormData) => {
@@ -190,10 +194,10 @@ const MeetingBottomSection = ({
   };
 
   const deleteFan = (index: number) => {
-    setFormData((prevFormData) => {
-      const updatedFans = [...prevFormData.fans];
+    setFanData((prevFandata) => {
+      const updatedFans = [...prevFandata];
       updatedFans.splice(index, 1);
-      return { ...prevFormData, fans: updatedFans };
+      return updatedFans;
     });
   };
 
