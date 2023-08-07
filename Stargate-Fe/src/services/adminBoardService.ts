@@ -1,6 +1,21 @@
 import axios, { AxiosResponse } from 'axios';
 import { api } from './api';
 
+const fetchAdminBoard = async () => {
+  try {
+    const response = await api.get('/dashboard', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log('에러발생', error);
+  }
+};
+
 /**
  * 소속사 그룹&멤버 data 가져오기
  */
@@ -21,15 +36,19 @@ const fetchGroup = async () => {
 
 const createGroup = async (name: string) => {
   try {
-    const response = await api.post('/pmanagements/group/creat', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-      data: {
+    const response = await api.post(
+      '/pmanagements/group/create',
+      {
         name: name,
+        members: [],
       },
-      withCredentials: false,
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        withCredentials: false,
+      }
+    );
     console.log(response);
   } catch (error) {
     console.log('그룹 생성 에러:', error);
@@ -38,16 +57,19 @@ const createGroup = async (name: string) => {
 
 const updateGroup = async (groupNo: number, name: string) => {
   try {
-    const response = await api.put('/pmanagements/group/update', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-      data: {
+    const response = await api.put(
+      '/pmanagements/group/update',
+      {
         groupNo: groupNo,
         name: name,
       },
-      withCredentials: false,
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        withCredentials: false,
+      }
+    );
     console.log(response);
   } catch (error) {
     console.log('그룹 업데이트 에러:', error);
@@ -56,18 +78,23 @@ const updateGroup = async (groupNo: number, name: string) => {
 
 const createMember = async (groupNo: number, name: string) => {
   try {
-    const response = await api.post('/pmanagements/member/update', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-      data: {
+    const response = await api.post(
+      '/pmanagements/member/create',
+      {
         groupNo: groupNo,
-        members: {
-          name: name,
-        },
+        members: [
+          {
+            name: name,
+          },
+        ],
       },
-      withCredentials: false,
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        withCredentials: false,
+      }
+    );
     console.log(response);
   } catch (error) {
     console.log('멤버 생성 에러:', error);
@@ -76,16 +103,19 @@ const createMember = async (groupNo: number, name: string) => {
 
 const updateMember = async (memberNo: number, name: string) => {
   try {
-    const response = await api.put('/pmanagements/member/update', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-      data: {
+    const response = await api.put(
+      '/pmanagements/member/update',
+      {
         memberNo: memberNo,
         name: name,
       },
-      withCredentials: false,
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        withCredentials: false,
+      }
+    );
     console.log(response);
   } catch (error) {
     console.log('멤버 업데이트 에러:', error);
@@ -110,6 +140,7 @@ const deleteMember = async (memberNo: number) => {
 };
 
 export {
+  fetchAdminBoard,
   fetchGroup,
   createGroup,
   updateGroup,

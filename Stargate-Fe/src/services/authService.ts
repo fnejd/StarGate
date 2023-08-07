@@ -57,6 +57,7 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   const { accessToken, refreshToken } = response.data;
   console.log(accessToken);
   api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
+  console.log(api.defaults.headers['Authorization']);
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
   localStorage.setItem('accessToken', accessToken);
