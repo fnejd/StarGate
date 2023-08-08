@@ -3,6 +3,7 @@ package com.ssafy.stargate.model.service;
 import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.NotFoundException;
+import com.ssafy.stargate.exception.RegisterException;
 import com.ssafy.stargate.model.dto.common.FUserDto;
 import com.ssafy.stargate.model.dto.common.FUserFindIdDto;
 import com.ssafy.stargate.model.dto.common.FUserFindPwDto;
@@ -71,18 +72,27 @@ public class FUserServiceImpl implements FUserService {
 
     @Value("polaroid")
     private String polaroidFilePath;
-
+    
+    
     /**
      * 팬 유저 회원가입을 진행한다.
-     *
-     * @param dto [FUserRegisterRequestDto] 유저 회원가입 정보
+     * 이미 해당 전화 번호와 이름의 회원이 가입되어 있는지 확인
+     * 
+     * @param dto [FUserDto] 유저 회원가입 정보
      * @throws EmailDuplicationException 아이디(이메일) 중복 가입 시 발생하는 에러
+     * @throws LoginException 이미 해당 이름과 전화번호로 회원 가입되어 있는 회원이 존재할 때 발생하는 에러
      */
 
-    public void create(@Validated FUserDto dto) throws EmailDuplicationException {
+    public void create(@Validated FUserDto dto) throws EmailDuplicationException ,RegisterException {
 
         if (isDuplicatedEmail(dto.getEmail())) {
             throw new EmailDuplicationException("아이디 중복");
+        }
+
+        FUser existingFUser = fUserRepository.findByNameAndPhone(dto.getName(), dto.getPhone()).orElse(null);
+        
+        if(existingFUser != null){
+            throw new RegisterException("해당 이름과 전화번호 정보를 가진 회원이 존재합니다. 아이디 찾기를 해주세요");
         }
 
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -95,6 +105,7 @@ public class FUserServiceImpl implements FUserService {
                 .birthday(dto.getBirthday())
                 .phone(dto.getPhone())
                 .build();
+
         fUserRepository.save(fuser);
     }
 
@@ -154,6 +165,7 @@ public class FUserServiceImpl implements FUserService {
                 .nickname(fUser.getNickname())
                 .password(fUser.getPassword())
                 .birthday(fUser.getBirthday())
+                .phone(fUser.getPhone())
                 .build();
     }
 
@@ -209,6 +221,7 @@ public class FUserServiceImpl implements FUserService {
 
     /**
      * FUser 이름, 전화번호를 바탕으로 아이디 찾기
+     * 동명이인 있을 경우 고려해서 아이디 & 전화번호 일치하는 회원으로 찾기
      *
      * @param dto FUserFindIdDto 회원 email 을 찾기 위한 FUserFindIdDto 객체
      * @return FUserFindIdDto 회원 아이디가 담긴 dto
@@ -216,11 +229,9 @@ public class FUserServiceImpl implements FUserService {
      */
     @Override
     public FUserFindIdDto getFUserId(FUserFindIdDto dto) throws NotFoundException {
-        FUser fUser = fUserRepository.findByNameAndPhone(dto.getName(), dto.getPhone()).orElseThrow(() -> new NotFoundException("아이디 찾기 실패 : 해당 아이디와 일치 하는 회원이 없습니다."));
 
-        if (fUser == null || !fUser.getPhone().equals(dto.getPhone())) {
-            throw new NotFoundException("입력하신 아이디, 전화번호와 일치하는 회원 정보가 없습니다.");
-        }
+        FUser fUser = fUserRepository.findByNameAndPhone(dto.getName(), dto.getPhone()).orElseThrow(() -> new NotFoundException("아이디 찾기 실패 : 해당 이름, 전화번호로 가입되어 있는 회원이 없습니다."));
+        
         return FUserFindIdDto.builder()
                 .name(fUser.getName())
                 .phone(fUser.getPhone())
@@ -403,6 +414,7 @@ public class FUserServiceImpl implements FUserService {
         }
         polaroidRepository.deleteAllByFUserEmail(email);
     }
+
 }
 
 
