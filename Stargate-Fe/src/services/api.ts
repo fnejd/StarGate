@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 // 서버 URL 상수
 const SERVER_URL = 'https://www.stargate-a406.kro.kr/api';
@@ -14,6 +14,6 @@ const SERVER_URL = 'https://www.stargate-a406.kro.kr/api';
 const api = axios.create({
   baseURL: SERVER_URL,
   withCredentials: true,
-})
+});
 
 export { api };

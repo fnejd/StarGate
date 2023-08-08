@@ -63,7 +63,7 @@ const IdinquiryComponent = () => {
         getter={user}
         setter={setUser}
       />
-      <p className='w-fit mr-auto ml-auto'>
+      <p className="w-fit mr-auto ml-auto">
         <BtnBlue text="확인" onClick={findId} />
       </p>
       <IdResultModal
