@@ -73,7 +73,7 @@ public class PolaroidServiceImpl implements PolaroidService {
     /**
      * 폴라로이드 이미지를 저장한다.
      *
-     * @param dto       [MeetingDto] 생성할 폴라로이드 정보
+     * @param dto       [PolaroidRequestDto] 생성할 폴라로이드 정보
      * @param imageFile [MultipartFile] 폴라로이드 이미지 파일
      * @throws CRUDException 폴라로이드 생성 실패
      */
