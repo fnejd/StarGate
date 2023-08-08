@@ -33,7 +33,7 @@ interface Group {
 
 interface FormData {
   name: string;
-  startDate: Date | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
   waitingTime: number;
   meetingTime: number;
   notice: string;
