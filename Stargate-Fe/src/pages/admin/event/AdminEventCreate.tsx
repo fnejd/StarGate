@@ -3,8 +3,7 @@ import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import createEvent from '@/services/event';
-import { getEvent } from '@/services/admin';
+import { createEvent } from '@/services/adminEvent';
 import { fetchGroup } from '@/services/adminBoard';
 
 interface MeetingFUser {
@@ -90,14 +89,17 @@ const AdminEventCreate = () => {
   };
 
   // API로 데이터 전송
-  const handleCreateEvent = () => {
+  const handleCreateEvent = async () => {
     if (formData) {
       // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
       // const mergedFormData = { ...formData, ...eventData };
-      console.log(formData);
-      
-      // 합친 formData를 createEvent 함수에 전달
-      // createEvent(formData);
+      try {
+        console.log(formData);
+        await createEvent(formData);
+        console.log('이벤트 전송 성공');
+      } catch (error) {
+        console.error('이벤트 전송 실패:', error);
+      }
     }
   };
 
