@@ -135,7 +135,7 @@ const AdminManagementModalBox = ({
               selectedGroupNo === null ? (
                 <div className="flex">
                   <p
-                    className="modal-title flex items-center my-4"
+                    className="modal-title flex items-center my-2"
                     onDoubleClick={() =>
                       handleGroupDoubleClick(groupNo, groupName)
                     }
@@ -168,22 +168,7 @@ const AdminManagementModalBox = ({
                 </div>
               </div>
             )}
-            <ul className="w-full h-400 overflow-y-scroll">
-              {showInput &&
-                selectedMemberNo === null &&
-                selectedGroupNo === null && (
-                  <li className="modal-content justify-center flex">
-                    <AdminManagementInput
-                      isGroup={false}
-                      groupNo={groupNo}
-                      value={selectedMemberName}
-                      onEnter={handleInputEnter}
-                    />
-                    <AdminManagementDeleteButton
-                      onClick={() => handleXButtonClick()}
-                    />
-                  </li>
-                )}
+            <ul className="w-full h-400 overflow-y-scroll flex flex-col-reverse justify-end">
               {selectedGroupMembers.map((member) => (
                 <li
                   className="modal-content justify-center flex"
@@ -208,6 +193,21 @@ const AdminManagementModalBox = ({
                   />
                 </li>
               ))}
+              {showInput &&
+                selectedMemberNo === null &&
+                selectedGroupNo === null && (
+                  <li className="modal-content justify-center flex">
+                    <AdminManagementInput
+                      isGroup={false}
+                      groupNo={groupNo}
+                      value={selectedMemberName}
+                      onEnter={handleInputEnter}
+                    />
+                    <AdminManagementDeleteButton
+                      onClick={() => handleXButtonClick()}
+                    />
+                  </li>
+                )}
             </ul>
           </div>
         </div>
