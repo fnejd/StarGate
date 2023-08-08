@@ -47,6 +47,13 @@ const MeetingRightSection = ({
       reader.onloadend = () => {
         setSelectedImage(reader.result as string);
       };
+
+       // formData 업데이트
+       setFormData((prevFormData) => ({
+        ...prevFormData,
+        image: file, // 선택된 파일로 이미지 업데이트
+      }));
+    
       reader.readAsDataURL(file);
     }
   };
@@ -54,6 +61,16 @@ const MeetingRightSection = ({
   const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(event.target.value);
   };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    console.log('공지', value);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      notice: textValue,
+    }));
+  }
 
   return (
     <>
@@ -92,6 +109,7 @@ const MeetingRightSection = ({
           id="myTextarea"
           value={textValue}
           onChange={handleTextareaChange}
+          onBlur={handleBlur}
           placeholder="대기화면에 띄워질 공지를 작성해주세요"
           className="px-3 py-2 ml-1 text-black bg-white border border-gray-300 rounded-sm w-400 h-350 text-12 placeholder-pl-5 font-suit focus:outline-none focus:ring-2 focus:ring-mainblue-300 focus:border-transparent"
         />

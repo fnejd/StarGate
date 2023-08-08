@@ -41,8 +41,8 @@ interface FormData {
   photoNum: number;
   image: File | null;
   starName: string;
-  meetingFUsers: MeetingFUser[];
-  meetingMembers: MeetingMember[];
+  meetingFUsers: string;
+  meetingMembers: string;
 }
 
 const AdminEventCreate = () => {
@@ -56,8 +56,8 @@ const AdminEventCreate = () => {
     notice: '',
     image: null,
     starName: '',
-    meetingFUsers: [],
-    meetingMembers: [],
+    meetingFUsers: '',
+    meetingMembers: '',
   });
 
   // 그룹명, 그룹멤버 데이터 가져오기
@@ -71,7 +71,7 @@ const AdminEventCreate = () => {
     getGroup();
   }, []);
 
-  console.log('그룹', group);
+  console.log('폼데이터', formData);
 
   const handleName = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -95,6 +95,7 @@ const AdminEventCreate = () => {
       // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
       // const mergedFormData = { ...formData, ...eventData };
       console.log(formData);
+      
       // 합친 formData를 createEvent 함수에 전달
       // createEvent(formData);
     }

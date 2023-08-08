@@ -38,8 +38,8 @@ interface FormData {
   notice: string;
   photoNum: number;
   image: File | null;
-  meetingFUsers: MeetingFUser[];
-  meetingMembers: MeetingMember[];
+  meetingFUsers: string;
+  meetingMembers: string;
 }
 
 interface Member {
@@ -97,6 +97,11 @@ const MeetingBottomSection = ({
   const handleWatingtime = (value: string) => {
     setWatingtimeValue(value);
     console.log(`대기시간은 ${watingtimeValue}`);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      waitingTime: Number(value),
+    }));
   };
 
   const handleFanValue = (value: string) => {
@@ -118,10 +123,33 @@ const MeetingBottomSection = ({
       setMembers(selectedGroup.members);
     }
   };
-
+  
+  // 멤버 변수가 바뀌변 폼데이터 업데이트
   useEffect(() => {
-    setFormData(())
-  }, [members])
+    setFormData((prevFormData) => {
+      const updatedMembers = JSON.stringify([...prevFormData.meetingMembers, ...members]);
+      console.log(updatedMembers);
+      
+      return {
+        ...prevFormData,
+        meetingMembers: updatedMembers,
+      };
+    });
+  }, [members]);
+
+    // 팬 변수가 바뀌면 폼데이터 업데이트
+    useEffect(() => {
+      setFormData((prevFormData) => {
+        const updatedFans = JSON.stringify([...prevFormData.meetingFUsers, ...fanData]);
+        console.log(updatedFans);
+        
+        return {
+          ...prevFormData,
+          meetingFUsers: updatedFans,
+        };
+      });
+    }, [fanData]);
+  
 
   // const handleMemberChange = (value: number | string) => {
   //   setFormData((prevFormData) => ({
@@ -145,10 +173,6 @@ const MeetingBottomSection = ({
   //   }));
   //   setMemberValue('');
   // };
-
-  const addWatingtime = (value: string) => {
-    setFormData({ ...formData, watingTime: value });
-  };
 
   const addFans = (email: string) => {
     setFanData([email, ...fanData]);
@@ -286,10 +310,10 @@ const MeetingBottomSection = ({
             onInputChange={handleWatingtime}
           >
             {' '}
-            <AdminBtn
+            {/* <AdminBtn
               text="등록"
               onClick={() => addWatingtime(watingtimeValue)}
-            />
+            /> */}
           </AdminInput>
           {/* <p className="p-1 pl-2 font-medium text-white font-suit text-14">
             초

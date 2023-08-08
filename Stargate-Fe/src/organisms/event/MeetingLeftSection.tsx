@@ -27,8 +27,8 @@ interface FormData {
   photoNum: number;
   image: File | null;
   // starName: string;
-  meetingFUsers: MeetingFUser[];
-  meetingMembers: MeetingMember[];
+  meetingFUsers: string;
+  meetingMembers: string;
 }
 
 interface MeetingLeftSectionProps {
@@ -95,7 +95,7 @@ const MeetingLeftSection = ({
 
   const handleTimeBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value <= 80) {
+    if (typeof value == 'number' && value <= 80) {
       alert('전체 미팅 시간은 80초보다 커야 합니다.');
     }
   };
