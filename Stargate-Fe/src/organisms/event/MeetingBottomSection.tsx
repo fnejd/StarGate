@@ -133,7 +133,7 @@ const MeetingBottomSection = ({
       return {
         ...prevFormData,
         // 배열 순서 보장을 위한 stringify 처리
-        meetingMembers: JSON.stringify(updatedMembers),
+        meetingMembers: updatedMembers,
       };
     });
   }, [members]);
@@ -146,8 +146,7 @@ const MeetingBottomSection = ({
         
         return {
           ...prevFormData,
-        // 배열 순서 보장을 위한 stringify 처리
-          meetingFUsers: JSON.stringify(updatedFans),
+          meetingFUsers: updatedFans,
         };
       });
     }, [fanData]);

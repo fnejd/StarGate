@@ -10,7 +10,11 @@ const createEvent = async (meetingData: FormData | null) => {
 
       for (const key in meetingData) {
         if (meetingData.hasOwnProperty(key)) {
-          formDataToSend.append(key, meetingData[key])
+          if (meetingData[key] === ('meetingFUsers' || 'meetingMembers')) {
+            formDataToSend.append(key, JSON.stringify(meetingData[key]))
+          } else {
+            formDataToSend.append(key, meetingData[key])
+          }
         }
       }
 
@@ -35,7 +39,7 @@ const createEvent = async (meetingData: FormData | null) => {
 // 미팅 상세정보 불러오기
 const getEvent = async () => {
   try {
-    const response = await api.get('/meetings/create', formDataToSend, {
+    // const response = await api.get('/meetings/create', formDataToSend, {
   } catch (error) {
     console.error('미팅 생성 실패 ', error);
   }

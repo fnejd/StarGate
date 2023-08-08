@@ -61,7 +61,8 @@ const AdminEventDetail = () => {
 
   // 미팅 디테일 가져오기
   useEffect(() => {
-    
+    const currentUrl = window.location.href; 
+    console.log(currentUrl); 
   }, []);
 
   // const handleName = (event: ChangeEvent<HTMLInputElement>) => {
