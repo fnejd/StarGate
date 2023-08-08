@@ -11,7 +11,6 @@ import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.request.UserEmailCheckRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
-import com.ssafy.stargate.model.dto.response.RemindResponseDto;
 import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
 import com.ssafy.stargate.model.service.FUserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
-import java.util.UUID;
 
 /**
  * 팬 유저에 관한 Controller이다.
@@ -32,14 +30,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class FUserController {
+
     @Autowired
     private final FUserService fUserService;
 
+
     /**
      * 팬 유저 회원가입
-     * @param dto [FUserRegisterRequestDto] 팬 유저 회원가입 request
+     * @param dto [FUserDto] 팬 유저 회원가입 request
      * @return [ResponseEntity<?>]성공: [200], 실패: [600]
      * @throws EmailDuplicationException 아이디(이메일) 중복 가입 시 발생하는 에러
+     * @throws RegisterException 해당 이름, 전화번호의 회원이 이미 존재할 때 발생하는 에러
      */
     @PostMapping("/register")
     public ResponseEntity<Void> createFUsers(@ModelAttribute @Validated FUserDto dto) throws EmailDuplicationException, RegisterException {

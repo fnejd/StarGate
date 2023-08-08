@@ -58,9 +58,9 @@ public class DashboardServiceImpl implements DashboardService{
     LocalDateTime today;
 
 
-
     /**
-     * 회원 (email) 와 관련된 meeting 정보 조회 
+     * 회원 (email) 와 관련된 meeting 정보 조회
+     *
      * USER 일 경우 MeetingFUserBridge 를 통해서 Meeting 조회, PRODUCER 는 바로 Meeting 조회
      * @return DashboardResponseDto 과거, 현재, 미래 meeting 정보 저장하고 있는 dto
      * @throws NotFoundException 해당하는 AUTH 가 USER, PRODUCER 가 아닐 경우
@@ -119,16 +119,17 @@ public class DashboardServiceImpl implements DashboardService{
     }
 
     /**
-     * meeting의 날짜와 오늘 날짜를 비교해 오늘 미팅, 과거 미팅, 미래 미팅으로 분류
+     * meeting의 날짜와 오늘 날짜를 비교해 예정 중인 미팅, 진행 중인 미팅, 완료된 미팅으로 분류
+     *
+     * 예정 인 미팅 ->  [ 미팅 시작 - 현재 > 0 ]
+     * 진행 중인 미팅 -> [ 미팅 시작 - 현재 < 0  && (미팅 시작 - 현재) + 총 미팅 시간 > 0 ]
+     * 완료된 미팅 -> [ 미팅 시작 - 현재 < 0 && (미팅 시작 - 현재) + 총 미팅 시간 <= 0 ]
+     *          총 미팅 시간 계산 :  ( 미팅 시간 + 대기시간 ) * 미팅 팬 유저(가입한 사람)
+     *
      * @param meeting Meeting 미팅 정보
      */
     private void classifyMeetings(Meeting meeting){
 
-        //          미팅 시작 - 현재 > 0 : 예정
-        //          미팅 시작 - 현재 < 0:
-        //              1) 진행 중 -> (미팅 시작 - 현재) + 총 미팅 시간 > 0 : 진행 중
-        //              2) (미팅 시작 - 현재) + 총 미팅 시간 <= 0 : 완료
-        //         총 미팅 시간 : ( 미팅 시간 + 대기시간 ) * 미팅 팬 유저(가입한 사람)
         
         if(meeting != null){
 
@@ -137,28 +138,38 @@ public class DashboardServiceImpl implements DashboardService{
 
             if(remainingSecond> 0){
                 expectedMeetings.add(setMeetingInfo(meeting , remainingSecond));
+                
             }else{
+
                 log.info("totalMeetingTime : {}", totalMeetingTime);
                 log.info("remainingSecond + totalMeetingTime : {}", remainingSecond + totalMeetingTime);
+                
                 if(remainingSecond + totalMeetingTime > 0){
                     ongoingMeetings.add(setMeetingInfo(meeting, remainingSecond));
+                    
                 }else{
                     finishedMeetings.add(setMeetingInfo(meeting, remainingSecond));
                 }
             }
         }
     }
+    
 
     /**
-     * 미팅 정보 전달하기 위해 dto 에 정보 저장
+     * 미팅 정보 전달하기 위해 dto 에 정보 저장, 이미지 파일 정보 가져와서 dto 에 저장
+     * 사진이 있을 경우와 없을 경우 분리
      * @param meeting Meeting 미팅 정보
+     * @param remainingSecond long 미팅 시작까지 남은 시간
      * @return DashboardMeetingResponseDto 대시보드에 있는 미팅 정보 담는 dto
      */
     private DashboardMeetingResponseDto setMeetingInfo(Meeting meeting, long remainingSecond){
 
-        SavedFileDto savedFileDto = fileUtil.getFileInfo(filePath, meeting.getImage());
 
         log.info("초 : {}",remainingSecond);
+
+        if(meeting.getImage() != null){
+
+            SavedFileDto savedFileDto = fileUtil.getFileInfo(filePath, meeting.getImage());
 
             return DashboardMeetingResponseDto.builder()
                     .uuid(meeting.getUuid())
@@ -167,5 +178,15 @@ public class DashboardServiceImpl implements DashboardService{
                     .remainingTime(remainingSecond)
                     .imageFileInfo(savedFileDto)
                     .build();
+
+        }else{
+
+            return DashboardMeetingResponseDto.builder()
+                    .uuid(meeting.getUuid())
+                    .name(meeting.getName())
+                    .startDate(meeting.getStartDate())
+                    .remainingTime(remainingSecond)
+                    .build();
+        }
     }
 }

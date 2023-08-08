@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException , InvalidTokenException {
 
         String token = getToken(request);
-        log.info("info log= {} bearer 뺸 token",token);
+        log.info("bearer 뺸 token = {} ",token);
 
         if (token != null && jwtTokenUtil.validateToken(token)) {
             Authentication authentication = jwtTokenUtil.getAuthentication(token);
