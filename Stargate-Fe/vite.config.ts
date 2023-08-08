@@ -20,6 +20,9 @@ const viteConfig = defineConfig({
   resolve: {
     alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
   },
+  esbuild: {
+    
+  }
 });
 
 export default viteConfig;
