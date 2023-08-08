@@ -4,7 +4,7 @@ import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { createEvent } from '@/services/adminEvent';
-import { fetchGroup } from '@/services/adminBoard';
+import { fetchGroup } from '@/services/adminBoardService';
 
 interface MeetingFUser {
   no: number;

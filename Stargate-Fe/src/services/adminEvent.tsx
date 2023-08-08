@@ -5,7 +5,7 @@ import { api } from './api';
 const createEvent = async (meetingData: FormData | null) => {
   if (meetingData) {
     // meetingData가 null이 아닐 때 API로 데이터 전송
-    await api.post('/meetings/create')
+    await api.post('/meetings/create', meetingData)
     .then((res) => {
       console.log(res)
     })
