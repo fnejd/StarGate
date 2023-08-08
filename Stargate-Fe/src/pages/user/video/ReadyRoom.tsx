@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import ReadyTab from '@/organisms/video/ReadyTab';
 import { useSocket } from '@/context/SocketProvider';
 
 const ReadyRoom = () => {
@@ -106,7 +107,11 @@ const ReadyRoom = () => {
   //   };
   // }, [socket, handleJoinRoom]); // 소켓 객체와 이벤트 처리 함수가 변경될 때마다 useEffect 재실행
 
-  return <div>대기방</div>;
+  return (
+  <div>대기방
+    <ReadyTab />
+  </div>
+  )
 };
 
 export default ReadyRoom;

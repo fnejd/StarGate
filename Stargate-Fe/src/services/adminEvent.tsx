@@ -10,7 +10,7 @@ const createEvent = async (meetingData: FormData | null) => {
 
       for (const key in meetingData) {
         if (meetingData.hasOwnProperty(key)) {
-          if (meetingData[key] === ('meetingFUsers' || 'meetingMembers')) {
+          if (key === ('meetingFUsers' || 'meetingMembers')) {
             formDataToSend.append(key, JSON.stringify(meetingData[key]))
           } else {
             formDataToSend.append(key, meetingData[key])
