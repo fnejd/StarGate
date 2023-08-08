@@ -55,9 +55,9 @@ const UserBoard = () => {
         />
       )}
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
-      <BoardCardList meetings={data.expected.slice(1)} />
+      <BoardCardList meetings={data.expected.slice(1)} isAdmin={false} isOver={false} />
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
-      <BoardCardList meetings={data.finished} />
+      <BoardCardList meetings={data.finished} isAdmin={false} isOver={true}/>
     </div>
   );
 };

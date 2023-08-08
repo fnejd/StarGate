@@ -16,9 +16,14 @@ export const groupsState = atom<GroupData[]>({
   default: [],
 });
 
-export const selectedGroupState = atom<number | null>({
-  key: 'selectedGroupState',
+export const selectedGroupNoState = atom<number | null>({
+  key: 'selectedGroupNoState',
   default: null,
+});
+
+export const selectedGroupNameState = atom<string>({
+  key: 'selectedGroupNameState',
+  default: '',
 });
 
 export const selectedGroupMembersState = atom<MemberData[]>({
@@ -26,30 +31,22 @@ export const selectedGroupMembersState = atom<MemberData[]>({
   default: [],
 });
 
-export const selectedGroupNameState = atom<string | null>({
-  key: 'selectedGroupNameState',
-  default: null,
-});
-
-
 export const selectedGroupName = selector({
   key: 'selectedGroupName',
   get: ({ get }) => {
     const groups = get(groupsState);
-    const selectedGroupNo = get(selectedGroupState);
-    const group = groups.find(group => group.groupNo === selectedGroupNo);
+    const selectedGroupNo = get(selectedGroupNoState);
+    const group = groups.find((group) => group.groupNo === selectedGroupNo);
     return group?.name || '';
-  }
+  },
 });
 
 export const selectedGroupMembers = selector({
   key: 'selectedGroupMembers',
   get: ({ get }) => {
     const groups = get(groupsState);
-    const selectedGroupNo = get(selectedGroupState);
-    const group = groups.find(group => group.groupNo === selectedGroupNo);
+    const selectedGroupNo = get(selectedGroupNoState);
+    const group = groups.find((group) => group.groupNo === selectedGroupNo);
     return group?.members || [];
-  }
+  },
 });
-
-

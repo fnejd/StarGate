@@ -1,21 +1,7 @@
-import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
 import AdminBoardHeaderNav from '../../../atoms/board/AdminBoardHeaderNav';
 import AdminManagementModal from '@/organisms/board/AdminManagementModal';
-import { fetchGroup } from '@/services/adminBoardService';
-import { groupsState } from '@/recoil/adminManagementState';
 
 const AdminManagement = () => {
-  const [groups, setGroups] = useRecoilState(groupsState);
-
-  useEffect(() => {
-    const fetchData = async() => {
-      const data = await fetchGroup();
-      setGroups(data);
-    }
-    fetchData();
-  }, []);
-
   return (
     <div className="w-xl h-screen">
       <AdminBoardHeaderNav />

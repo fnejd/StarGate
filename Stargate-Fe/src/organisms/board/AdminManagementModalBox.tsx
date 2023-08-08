@@ -43,7 +43,6 @@ const AdminManagementModalBox = ({
   const [selectedGroupMembers, setSelectedGroupMembers] = useRecoilState(
     selectedGroupMembersState
   );
-
   /**
    * MouseEvent 객체를 가져와서 실행
    * 모달 창 바깥을 클릭했을때, 모달창이 존재하고 클릭 이벤트가 모달 창 밖에서 실행됐다면
@@ -56,6 +55,7 @@ const AdminManagementModalBox = ({
     }
   };
   useEffect(() => {
+    console.log(members);
     setSelectedGroupMembers(members);
   }, [members]);
   const showInputOpen = () => {
