@@ -13,7 +13,7 @@ import BoardCard from '../../atoms/board/BoardCard';
 
 interface BoardCardBoxProps {
   uuid: string;
-  imageSrc: string;
+  imageSrc?: string;
   title: string;
   date: string;
   time: string;

@@ -14,7 +14,7 @@ interface MeetingData {
   name: string;
   startDate: string;
   remainingTime: string;
-  imageFileInfo: ImageFileInfo;
+  imageFileInfo?: ImageFileInfo;
 }
 
 interface AdminBoardData {
@@ -47,7 +47,7 @@ const AdminBoard = () => {
       {cardData && (
         <BoardCardBox
           uuid={cardData.uuid}
-          imageSrc={cardData.imageFileInfo.fileUrl}
+          imageSrc={cardData.imageFileInfo?.fileUrl}
           title={cardData.name}
           date={cardData.startDate}
           time={cardData.remainingTime}

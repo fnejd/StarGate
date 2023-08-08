@@ -9,7 +9,7 @@ import React, { useState } from 'react';
  */
 
 interface BoardCardProps {
-  imageSrc: string;
+  imageSrc?: string;
   title?: string;
   date?: string;
   time?: string;
