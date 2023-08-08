@@ -59,49 +59,41 @@ const AdminEventDetail = () => {
     meetingMembers: '',
   });
 
-  // 그룹명, 그룹멤버 데이터 가져오기
+  // 미팅 디테일 가져오기
   useEffect(() => {
-    const getGroup = async () => {
-      const data = await fetchGroup();
-      console.log('데이터', data);
-      setGroup(data);
-      console.log(group);
-    };
-    getGroup();
+    
   }, []);
 
-  console.log('폼데이터', formData);
+  // const handleName = (event: ChangeEvent<HTMLInputElement>) => {
+  //   const value = event.target.value;
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     name: value,
+  //   }));
+  //   console.log(`제목 ${formData.name}`);
+  // };
 
-  const handleName = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      name: value,
-    }));
-    console.log(`제목 ${formData.name}`);
-  };
-
-  const handleFormDataChange = (data: FormData) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      data,
-    }));
-  };
+  // const handleFormDataChange = (data: FormData) => {
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     data,
+  //   }));
+  // };
 
   // API로 데이터 전송
-  const handleCreateEvent = async () => {
-    if (formData) {
-      // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
-      // const mergedFormData = { ...formData, ...eventData };
-      try {
-        console.log(formData);
-        await createEvent(formData);
-        console.log('이벤트 전송 성공');
-      } catch (error) {
-        console.error('이벤트 전송 실패:', error);
-      }
-    }
-  };
+  // const handleCreateEvent = async () => {
+  //   if (formData) {
+  //     // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
+  //     // const mergedFormData = { ...formData, ...eventData };
+  //     try {
+  //       console.log(formData);
+  //       await createEvent(formData);
+  //       console.log('이벤트 전송 성공');
+  //     } catch (error) {
+  //       console.error('이벤트 전송 실패:', error);
+  //     }
+  //   }
+  // };
 
   return (
     <div>
