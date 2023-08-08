@@ -138,7 +138,6 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
         UUID uuid = dto.getUuid();
         meetingFUserRepository.findByEmailAndUuid(email, uuid).orElseThrow(() -> new NotFoundException("미팅 팬유저를 찾을 수 없습니다."));
 
-        System.out.println(dto);
         try {
             for (PolaroidEnableDto.MeetingMemberDto meetingMemberDto : dto.getMeetingMembers()) {
 
