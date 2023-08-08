@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 interface BoardCardListProps {
   meetings: MeetingData[];
+  isAdmin: boolean;
+  isOver?: boolean;
 }
 
 /**
@@ -32,7 +34,11 @@ interface imageFileInfo {
   fileUrl: string;
 }
 
-const BoardCardList = ({ meetings }: BoardCardListProps) => {
+const BoardCardList = (
+  { meetings }: BoardCardListProps,
+  isAdmin: boolean,
+  isOver?: boolean
+) => {
   const navigate = useNavigate();
   const remainder = meetings.length % 4;
   const emptyCardCount = remainder === 0 ? 0 : 4 - remainder;
@@ -45,6 +51,19 @@ const BoardCardList = ({ meetings }: BoardCardListProps) => {
 
   const handleCardClick = (uuid: string) => {
     navigate(`/remind/${uuid}`); // navigate 함수를 사용하여 원하는 경로로 이동합니다.
+    if (isAdmin) {
+      linkToDetail(uuid);
+    } else {
+      if (isOver) {
+        linkToRemind(uuid);
+      }
+    }
+  };
+  const linkToRemind = (uuid: string) => {
+    navigate(`/admin/event/detail/${uuid}`);
+  };
+  const linkToDetail = (uuid: string) => {
+    navigate(`/remind/${uuid}`);
   };
 
   return (
