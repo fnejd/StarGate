@@ -1,8 +1,10 @@
-import { useRef, MouseEvent, useEffect, useState } from 'react';
+import React, { useRef, MouseEvent, useEffect, useState } from 'react';
 import AuthNumInputComponent from '@/atoms/auth/AuthNumInputComponent';
 import BtnWhite from '@/atoms/common/BtnWhite';
 import { useNavigate } from 'react-router-dom';
 import { checkAuthNumApi } from '@/services/authService';
+import { useSetRecoilState } from 'recoil';
+import { emailState } from '@/recoil/userState';
 
 interface AuthNumberProps {
   email: string;
@@ -20,6 +22,7 @@ interface AuthNumberProps {
 const AuthNumberComponent = ({ email, authNum, isOpen, onClose }: AuthNumberProps) => {
   const [numArr, setNumArr] = useState<number[]>([]);
   const [curIdx, setCurIdx] = useState<number>(0);
+  const setEmail = useSetRecoilState(emailState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,13 +45,9 @@ const AuthNumberComponent = ({ email, authNum, isOpen, onClose }: AuthNumberProp
       code += e;
     })
 
-    if (check && checkAuthNumApi(email, code) == 'SUCCESS') {
-      /**
-       * @TODO 
-       * Store에 (Recoil State)
-       * 해당 유저의 이메일 저장하는 상태 만들어 저장해주기. 
-       * Props로 넘기는거보다 나을듯??
-       */
+    const result = checkAuthNumApi(email,code);
+    if (check && result == 'SUCCESS') {
+      setEmail(email);
       navigate('/pwreset');
     } else {
       alert('인증번호가 올바르지 않습니다.');
@@ -73,11 +72,11 @@ const AuthNumberComponent = ({ email, authNum, isOpen, onClose }: AuthNumberProp
         >
           <div ref={modalRef} className="w-fit h-fit bg-white rounded-lg p-4">
             <div className="text-black backdrop:card bg-white p-5 rounded-lg m-5">
-              <p className="mt-4 form-title text-black">인증번호 입력</p>
-              <p className="mt-4 modal-title text-black">
+              <p className="mt-4 modal-title text-black">인증번호 입력</p>
+              <p className="mt-4 form-title text-black">
                 이메일로 전송된 인증번호 6자리를 입력해주세요
               </p>
-              <div className="flex m-3">
+              <div className="flex m-3 justify-center">
                 {authNum.map((_, i) => (
                   <AuthNumInputComponent key={i} index={i} numArr={numArr} setNumArr={setNumArr} setCurIdx={setCurIdx} />
                 ))}

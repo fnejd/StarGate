@@ -7,9 +7,9 @@ import { api } from './api';
 const fetchGroup = async () => {
   try {
     const response = await api.get('/pmanagements/get', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      // },
       withCredentials: false,
     });
     console.log(response);

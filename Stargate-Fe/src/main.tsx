@@ -4,7 +4,6 @@ import './index.css';
 import './App.css';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './index.css';
 import SignIn from './pages/auth/SignIn.tsx';
 import SignUp from './pages/auth/SignUp.tsx';
 import IdInquiry from './pages/auth/Idinquiry.tsx';
@@ -23,7 +22,6 @@ import AdminMyPage from './pages/admin/board/AdminMyPage.tsx';
 import AdminEventCreate from './pages/admin/event/AdminEventCreate.tsx';
 import AdminEventDetail from './pages/admin/event/AdminEventDetail.tsx';
 import AdminMonitoring from './pages/admin/event/AdminMonitoring.tsx';
-import './index.css'; // CSS 파일을 import
 // import { SocketProvider } from '@/context/SocketProvider.tsx';
 
 const router = createBrowserRouter([
@@ -42,9 +40,9 @@ const router = createBrowserRouter([
   { path: '/admin/board', element: <AdminBoard /> },
   { path: '/admin/management', element: <AdminManagement /> },
   { path: '/admin/myPage', element: <AdminMyPage /> },
-  { path: '/Admin/eventcreate', element: <AdminEventCreate /> },
-  { path: '/admin/eventdetail', element: <AdminEventDetail /> },
-  { path: '/admin/adminmonitoring', element: <AdminMonitoring /> },
+  { path: '/Admin/event/create', element: <AdminEventCreate /> },
+  { path: '/admin/event/detail', element: <AdminEventDetail /> },
+  { path: '/admin/monitoring', element: <AdminMonitoring /> },
 
   { path: '/star/video', element: <StarVideo /> },
 ]);

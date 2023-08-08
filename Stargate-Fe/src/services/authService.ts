@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
-import { api } from './api';
+import axios, { AxiosResponse } from 'axios';
+// import { api } from './api';
 
 interface tokenType {
   accessToken: string;
@@ -25,7 +25,11 @@ interface pwInquiryType {
   code: string;
 }
 
-// const accessTokenSet ()
+const SERVER_URL = 'https://www.stargate-a406.kro.kr/api';
+
+// instance 사용 않고 axios에 디폴트 값 넣어 사용해보기
+axios.defaults.baseURL = SERVER_URL;
+axios.defaults.withCredentials = true;
 
 /**
  * @COMMONAREA
@@ -56,10 +60,13 @@ const checkTokenExpTime = async () => {
 const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   const { accessToken, refreshToken } = response.data;
   console.log(accessToken);
-  api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
+  // api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
+
   localStorage.setItem('accessToken', accessToken);
+
   if (type) {
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('tokenExpTime', `${expTime}`);
@@ -74,7 +81,9 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
 // AccessToken이 없을 때,(만료됐을 때 재발급)
 const onNewAccessToken = (response: AxiosResponse<newTokenType>) => {
   const { accessToken } = response.data;
-  api.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
+  // api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
   console.log('AccessToken 재발급');
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
@@ -93,7 +102,8 @@ const loginApi = async (formData: FormData, type: boolean) => {
     return 'alreadyToken';
   }
   let response = 'SUCCESS';
-  await api
+  // await api
+  await axios
     .post('/fusers/login', formData, {
       withCredentials: false,
     })
@@ -113,17 +123,38 @@ const loginApi = async (formData: FormData, type: boolean) => {
 // auth 값이 유저가 아닌 경우 (관리자인 경우)
 // api 요청 보내지 않기.!
 const logoutApi = async () => {
+  await checkTokenExpTime();
   try {
     let result;
-    if (api.defaults.headers['Authorization'] != null) {
-      const tokenDecode = api.defaults.headers['Authorization']?.toString().split('.')[1];
-      const payload = atob(tokenDecode);
-      result = JSON.parse(payload.toString());
+    if (localStorage.getItem('accessToken') != null) {
+      const tokenDecode = localStorage
+        .getItem('accessToken')
+        ?.toString()
+        .split('.');
+      if (tokenDecode != undefined && tokenDecode.length > 0) {
+        const payload = atob(tokenDecode[1]);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        result = JSON.parse(payload.toString());
+        console.log(result);
+      }
     }
-    if (result.auth == 'USER') {
-      await api.post('/fusers/logout', {}, { withCredentials: false });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (result.auth && result.auth == 'USER') {
+      // await api.post('/fusers/logout', {}, {
+      await axios.post(
+        '/fusers/logout',
+        {},
+        {
+          headers: {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+          withCredentials: false,
+        }
+      );
     }
-    api.defaults.headers['Authorization'] = '';
+    // api.defaults.headers.common['Authorization'] = '';
+    axios.defaults.headers.common['Authorization'] = '';
     localStorage.clear();
     sessionStorage.clear();
     return 'SUCCESS';
@@ -138,8 +169,11 @@ const signUpApi = async (formData: FormData) => {
   if ((await checkTokenExpTime()) == 'SUCCESS') {
     return 'alreadyToken';
   }
-  const response = await api
-    .post('/fusers/register', formData, { withCredentials: false })
+  // const response = await api
+  const response = await axios
+    .post('/fusers/register', formData, {
+      // withCredentials: false,
+    })
     .then((response) => console.log(response.status))
     .catch((error) => {
       console.log(error);
@@ -152,13 +186,14 @@ const signUpApi = async (formData: FormData) => {
 // 토큰 재발행 요청, 리프레쉬 토큰을 보내 엑세스 토큰 받아오기
 const reAccessApi = async () => {
   const refreshToken = JSON.stringify(
-    sessionStorage.getItem('refreashToken') != null
+    sessionStorage.getItem('refreshToken') != null
       ? sessionStorage.getItem('refreshToken')
       : localStorage.getItem('refreshToken')
   );
 
-  await api
-    .post('/jwt/new-access-token', refreshToken, { withCredentials: false })
+  // await api
+  await axios
+    .post('/jwt/new-access-token', refreshToken)
     .then(onNewAccessToken)
     .catch((error) => console.log(error));
 };
@@ -166,13 +201,14 @@ const reAccessApi = async () => {
 // 유저 이메일 중복검사
 const verifyEmail = async (email: string) => {
   let result = true;
-  await api
+  // await api
+  await axios
     .post('/fusers/check-email', JSON.stringify({ email }), {
       headers: {
         'Access-Controll-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      withCredentials: false,
+      // withCredentials: false,
     })
     .then((response: AxiosResponse<checkEmailType>) => {
       const { exist } = response.data;
@@ -189,8 +225,9 @@ const idInquiryApi = async (formData: FormData) => {
     name: '',
     phone: '',
   };
-  await api
-    .post('/fusers/find-id', formData, { withCredentials: false })
+  // await api
+  await axios
+    .post('/fusers/find-id', formData)
     .then((response: AxiosResponse<idInquiryType>) => {
       result = { ...response.data };
     })
@@ -208,7 +245,8 @@ const pwInquiryApi = async (email: string) => {
     email: 'NoData',
     code: '',
   };
-  await api
+  // await api
+  await axios
     .post('/fusers/get-code', JSON.stringify({ email }), {
       headers: {
         'Content-Type': 'application/json',
@@ -226,14 +264,15 @@ const pwInquiryApi = async (email: string) => {
 const checkAuthNumApi = (email: string, code: string) => {
   let result = 'SUCCESS';
 
-  api
+  // api
+  axios
     .post('/fusers/check-code', JSON.stringify({ email, code }), {
       headers: {
         'Content-Type': 'application/json',
       },
       withCredentials: false,
     })
-    .then()
+    .then((res) => console.log(res))
     .catch((error) => {
       console.log(error);
       result = 'FAIL';
@@ -243,11 +282,18 @@ const checkAuthNumApi = (email: string, code: string) => {
 };
 
 // 유저 비밀번호 재설정 API
-// => JSON 타입으로 이멜, 비밀번호로 요청
+// => JSON 타입으로 이멜, 비밀번호로 재설정 요청
 const pwResetApi = async (email: string, password: string) => {
   let status = 0;
-  await api
-    .post('/fusers/new-pw', JSON.stringify({ email, password }))
+  console.log('service ' + email, password);
+  // await api
+  await axios
+    .post('/fusers/new-pw', JSON.stringify({ email, password }), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: false,
+    })
     .then((res) => {
       status = res.status;
     })
@@ -259,13 +305,13 @@ const pwResetApi = async (email: string, password: string) => {
  * @ADMINAREA
  */
 // 관리자 이메일 중복검사
-const adminVerifyEmail = async (email: string) => {
+const adminVerifyEmail = async (formData: FormData) => {
   let result = true;
-  await api
-    .post('/pusers/check-email', JSON.stringify({ email }), {
+  // await api
+  await axios
+    .post('/pusers/check-email', formData, {
       headers: {
         'Access-Controll-Allow-Origin': '*',
-        'Content-Type': 'application/json',
       },
       withCredentials: false,
     })
@@ -283,7 +329,8 @@ const adminLoginApi = async (formData: FormData, type: boolean) => {
     return 'alreadyToken';
   }
   let response = 'SUCCESS';
-  await api
+  // await api
+  await axios
     .post('/pusers/login', formData, {
       withCredentials: false,
     })
@@ -303,7 +350,8 @@ const adminSignUpApi = async (formData: FormData) => {
   if ((await checkTokenExpTime()) == 'SUCCESS') {
     return 'alreadyToken';
   }
-  const response = await api
+  // const response = await api
+  const response = await axios
     .post('/pusers/register', formData, {
       withCredentials: false,
     })
