@@ -41,6 +41,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/histories/**").permitAll() // TODO: 멤버 인증 권한 어떻게? 우선 공개로 함
                         .anyRequest().authenticated()
                 )
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
