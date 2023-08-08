@@ -87,7 +87,7 @@ const PwResetComponent = () => {
           setter={setPwCheck}
         />
       </div>
-      <p className='w-fit mr-auto ml-auto'>
+      <p className="w-fit mr-auto ml-auto">
         <BtnBlue text="확인" onClick={resetPw} />
       </p>
     </div>

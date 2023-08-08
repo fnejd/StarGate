@@ -78,7 +78,7 @@ const SignUpComponent = () => {
     const nickName = (user as userType).nickname;
 
     const validation = userValidationCheck(user as userType);
-    
+
     if (validation != 'SUCCESS') {
       alert(validation);
       return 0;
@@ -196,7 +196,7 @@ const SignUpComponent = () => {
           setter={setUser}
         />
       </div>
-      <p className='w-fit mr-auto ml-auto'>
+      <p className="w-fit mr-auto ml-auto">
         <BtnBlue text="회원가입" onClick={signUp} />
       </p>
     </div>
