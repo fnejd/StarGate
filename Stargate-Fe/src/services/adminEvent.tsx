@@ -4,13 +4,39 @@ import { api } from './api';
 // 미팅 생성하기
 const createEvent = async (meetingData: FormData | null) => {
   if (meetingData) {
-    // meetingData가 null이 아닐 때 API로 데이터 전송
-    await api.post('/meetings/create', meetingData)
-    .then((res) => {
-      console.log(res)
-    })
+    try {
+      console.log('미팅데이터&&&&&&&&&&&&&&&&&&&&&&&&&&', meetingData)
+      const formDataToSend = new FormData();
+      const access = localStorage.getItem('accessToken');
+
+      // formDataToSend.append('meetingData', JSON.stringify(meetingData));
+      for (const key in meetingData) {
+        if (meetingData.hasOwnProperty(key)) {
+          if (key !== 'imageFile') {
+            formDataToSend.append(key, JSON.stringify(meetingData[key]))
+          } else {
+            formDataToSend.append(key, meetingData[key])
+          } 
+        }
+      }
+
+      for (let key of formDataToSend.keys()) {
+        console.log(key, ":", formDataToSend.get(key));
+      }
+      const response = await api.post('/meetings/create', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${access}`,
+          withCredentials: false,
+        },
+      });
+
+      console.log('미팅 생성 성공', response.data);
+    } catch (error) {
+      console.error('미팅 생성 실패 ', error);
+    }
   }
-};
+}
 
 // 미팅 상세정보 불러오기
 const getEvent = async () => {

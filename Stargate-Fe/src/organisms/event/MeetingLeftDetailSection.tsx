@@ -25,7 +25,7 @@ interface FormData {
   meetingTime: number;
   notice: string;
   photoNum: number;
-  imageFile: File | null;
+  image: File | null;
   // starName: string;
   meetingFUsers: string;
   meetingMembers: string;

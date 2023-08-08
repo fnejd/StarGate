@@ -37,7 +37,7 @@ interface FormData {
   meetingTime: number;
   notice: string;
   photoNum: number;
-  imageFile: File | null;
+  image: File | null;
   meetingFUsers: string;
   meetingMembers: string;
 }
@@ -127,7 +127,7 @@ const MeetingBottomSection = ({
   // 멤버 변수가 바뀌변 폼데이터 업데이트
   useEffect(() => {
     setFormData((prevFormData) => {
-      const updatedMembers = [...prevFormData.meetingMembers, ...members];
+      const updatedMembers = JSON.stringify([...prevFormData.meetingMembers, ...members]);
       console.log(updatedMembers);
       
       return {
@@ -139,15 +139,16 @@ const MeetingBottomSection = ({
 
     // 팬 변수가 바뀌면 폼데이터 업데이트
     useEffect(() => {
-      setFormData((prevFormData) => {
-        const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
-        console.log(updatedFans);
-        
-        return {
-          ...prevFormData,
-          meetingFUsers: updatedFans,
-        };
-      });
+      // setFormData((prevFormData) => {
+      //     const updatedFans = JSON.stringify([...prevFormData.meetingFUsers, ...fanData]);
+      //     console.log('원래', prevFormData.meetingFUsers)
+      //     console.log('팬데이터 업데이트', updatedFans)
+      //   return {
+      //     ...prevFormData,
+      //     meetingFUsers: updatedFans,
+      //   };
+      // });
+      setFormData(fanData);
     }, [fanData]);
   
 
@@ -175,10 +176,8 @@ const MeetingBottomSection = ({
   // };
 
   const addFans = (email: string) => {
-    if (email.trim() !== '') { // 빈 문자열이 아닌 경우에만 추가
-      setFanData([email, ...fanData]);
-      setFanValue('');
-    }
+    setFanData([email, ...fanData]);
+    setFanValue('');
   };
 
   const handleCsvData = (data, fileInfo) => {

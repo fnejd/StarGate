@@ -38,7 +38,7 @@ interface FormData {
   meetingTime: number;
   notice: string;
   photoNum: number;
-  image: File | null;
+  imageFile: File | null;
   starName: string;
   meetingFUsers: string;
   meetingMembers: string;
@@ -53,7 +53,7 @@ const AdminEventCreate = () => {
     meetingTime: 80,
     photoNum: 0,
     notice: '',
-    image: null,
+    imageFile: null,
     starName: '',
     meetingFUsers: '',
     meetingMembers: '',

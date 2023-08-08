@@ -23,7 +23,7 @@ interface FormData {
   meetingTime: number;
   notice: string;
   photoNum: number;
-  imageFile: File | null;
+  image: File | null;
   meetingFUsers: MeetingFUser[];
   meetingMembers: MeetingMember[];
 }
@@ -51,7 +51,7 @@ const MeetingRightSection = ({
        // formData 업데이트
        setFormData((prevFormData) => ({
         ...prevFormData,
-        imageFile: file, // 선택된 파일로 이미지 업데이트
+        image: file, // 선택된 파일로 이미지 업데이트
       }));
     
       reader.readAsDataURL(file);
