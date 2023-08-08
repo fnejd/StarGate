@@ -113,6 +113,8 @@ const loginApi = async (formData: FormData, type: boolean) => {
 // auth 값이 유저가 아닌 경우 (관리자인 경우)
 // api 요청 보내지 않기.!
 const logoutApi = async () => {
+  // 토큰 만료 검사
+  await checkTokenExpTime();
   try {
     let result;
     if (localStorage.getItem('accessToken') != null) {
