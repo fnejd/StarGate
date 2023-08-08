@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
-
+import {
+  createMember,
+  updateMember,
+  createGroup,
+  updateGroup,
+} from '@/services/adminBoardService';
+import { useRecoilState } from 'recoil';
+import { selectedGroupMembersState } from '@/recoil/adminManagementState';
 /**
  * AdminManagementInput
  * @param isGroup => 인풋 태그 타입 설정 변수
+ * @param groupNo => group번호. isGroup가 True일 때, group번호가 없다면 생성
+ * @param memberNo => member번호, isGroup가 False일 때, member번호가 없다면 생성
  * @param value => 마이페이지에서 기본적으로 들어가 있을 값
+ * @param onEnter => Enter 키 입력 시 호출되는 콜백 함수
  */
 
 interface AdminManagementInputProps {
@@ -11,6 +21,12 @@ interface AdminManagementInputProps {
   groupNo?: number | null;
   memberNo?: number | null;
   value?: string;
+  onEnter: () => void;
+}
+
+interface MemberData {
+  memberNo: number;
+  name: string;
 }
 
 const AdminManagementInput = ({
@@ -18,35 +34,77 @@ const AdminManagementInput = ({
   groupNo,
   memberNo,
   value,
+  onEnter,
 }: AdminManagementInputProps) => {
-  // Input onChange 시 value값 변경해주기
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setInputValue(value);
-  };
   const [inputValue, setInputValue] = useState<string>(value || '');
+  const [selectedGroupMembers, setSelectedGroupMembers] = useRecoilState<
+    MemberData[]
+  >(selectedGroupMembersState);
 
   useEffect(() => {
     setInputValue(value || '');
   }, [value]);
 
-  const groupInputHandle = () => {
-    console.log(inputValue);
-    console.log(groupNo);
-  }
-  const memberInputHandle = () => {
-    console.log(inputValue);
-    console.log(memberNo);
-  }
+  // Input onChange 시 value값 변경해주기
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setInputValue(value);
+  };
+
+  const groupInputHandle = async () => {
+    if (groupNo) {
+      try {
+        await updateGroup(groupNo, inputValue);
+      } catch (error) {
+        console.log('그룹 업데이트 에러:', error);
+      }
+    } else {
+      try {
+        await createGroup(inputValue);
+      } catch (error) {
+        console.log('그룹 생성 에러:', error);
+      }
+    }
+  };
+
+  const memberInputHandle = async () => {
+    if (memberNo) {
+      try {
+        await updateMember(memberNo, inputValue);
+        const updatedMembers = selectedGroupMembers.map((member) =>
+          member.memberNo === memberNo
+            ? { ...member, name: inputValue }
+            : member
+        );
+        setSelectedGroupMembers(updatedMembers);
+      } catch (error) {
+        console.log('멤버 업데이트 에러:', error);
+      }
+    } else {
+      if (groupNo)
+        try {
+          const newMember = await createMember(groupNo, inputValue);
+          if (newMember !== undefined) {
+            setSelectedGroupMembers([newMember, ...selectedGroupMembers]);
+          }
+        } catch (error) {
+          console.log('멤버 생성 에러:', error);
+        }
+      else {
+        console.log('그룹번호없음');
+      }
+    }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      console.log(isGroup);
-      if (isGroup) { 
-        groupInputHandle()
+      if (isGroup) {
+        groupInputHandle();
       } else {
-        memberInputHandle()
+        memberInputHandle();
       }
+      console.log('엔터');
+      onEnter();
     }
   };
 

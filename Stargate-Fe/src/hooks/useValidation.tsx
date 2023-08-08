@@ -31,7 +31,7 @@ const emailVaildationCheck = (email: string) => {
 const pwValidationCheck = (pw: string, pwCheck: string) => {
   // pw Checking
   const regexPw = new RegExp(
-    /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
+    /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/
   );
   // 일치하지 않는 경우
   if (pw != pwCheck || pw.length == 0) {
@@ -58,7 +58,7 @@ const userValidationCheck = (user: userType) => {
   const pw = user.pw;
   const pwCheck = user.pwCheck;
   const regexPw = new RegExp(
-    /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
+    /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/
   );
   // 일치하지 않는 경우
   if (pw != pwCheck || pw.length == 0) {
@@ -119,7 +119,7 @@ const adminValidationCheck = (admin: adminType) => {
   const pw = admin.pw;
   const pwCheck = admin.pwCheck;
   const regexPw = new RegExp(
-    /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
+    /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/
   );
   // 일치하지 않는 경우
   if (pw != pwCheck || pw.length == 0) {

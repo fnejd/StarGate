@@ -1,91 +1,63 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import BoardHeader from '@/organisms/board/BoardHeader';
 import BoardCardBox from '@/organisms/board/BoardCardBox';
 import BoardCardList from '@/organisms/board/BoardCardList';
+import { fetchUserBoard } from '@/services/userBoardService';
 
-const dummy = {
-  today: [
-    {
-      uuid: '미팅고유번호1',
-      name: '유한스의 하입보이',
-      start_date: '7월 24일',
-      waiting_time: '00:05',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-  ],
-  future: [
-    {
-      uuid: '미팅고유번호3',
-      name: '미팅이름3',
-      start_date: '일시3',
-      waiting_time: '남은시간3',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-    {
-      uuid: '미팅고유번호4',
-      name: '미팅이름4',
-      start_date: '일시4',
-      waiting_time: '남은시간4',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-    {
-      uuid: '미팅고유번호5',
-      name: '미팅이름5',
-      start_date: '일시5',
-      waiting_time: '남은시간5',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-  ],
-  past: [
-    {
-      uuid: '미팅고유번호2',
-      name: '미팅이름5',
-      start_date: '일시5',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-    {
-      uuid: '미팅고유번호6',
-      name: '미팅이름6',
-      start_date: '일시6',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-    {
-      uuid: '미팅고유번호7',
-      name: '미팅이름6',
-      start_date: '일시6',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-    {
-      uuid: '미팅고유번호8',
-      name: '미팅이름7',
-      start_date: '일시7',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-    {
-      uuid: '미팅고유번호9',
-      name: '미팅이름7',
-      start_date: '일시7',
-      image: 'https://picsum.photos/id/188/720/400/',
-    },
-  ],
-};
+interface ImageFileInfo {
+  filename: string;
+  fileUrl: string;
+}
+
+interface MeetingData {
+  uuid: string;
+  name: string;
+  startDate: string;
+  remainingTime: string;
+  imageFileInfo: ImageFileInfo;
+}
+
+interface AdminBoardData {
+  ongoing: MeetingData[];
+  expected: MeetingData[];
+  finished: MeetingData[];
+}
 
 const UserBoard = () => {
+  const [data, setData] = useState<AdminBoardData>({
+    ongoing: [],
+    expected: [],
+    finished: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedData = await fetchUserBoard();
+      if (fetchedData) {
+        setData(fetchedData);
+      }
+    };
+    fetchData();
+  }, []);
+  const cardData = data.ongoing[0] || data.expected[0];
+
   return (
-    <div className='w-xl h-screen'>
+    <div className="w-xl h-screen">
       <BoardHeader />
-      <BoardCardBox
-        uuid={dummy.today[0].uuid}
-        imageSrc={dummy.today[0].image}
-        title={dummy.today[0].name}
-        date={dummy.today[0].start_date}
-        time={dummy.today[0].waiting_time}
-        isAdmin={false}
-      />
+      {cardData && (
+        <BoardCardBox
+          uuid={cardData.uuid}
+          imageSrc={cardData.imageFileInfo.fileUrl}
+          title={cardData.name}
+          date={cardData.startDate}
+          time={cardData.remainingTime}
+          isAdmin={true}
+        />
+      )}
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
-      <BoardCardList meetings={dummy.future} />
+      <BoardCardList meetings={data.expected.slice(1)} />
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
-      <BoardCardList meetings={dummy.past} />
+      <BoardCardList meetings={data.finished} />
     </div>
   );
 };
