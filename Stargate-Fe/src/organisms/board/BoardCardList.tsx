@@ -17,7 +17,7 @@ interface BoardCardListProps {
  * @param uuid => 사인회 고유번호
  * @param name => Card flip시 보여줄 사인회 제목
  * @param start_date => Card flip시 보여줄 사인회 날짜
- * @param waiting_time => Card flip시 보여줄 남은 시간
+ * @param remainingTime => Card flip시 보여줄 남은 시간
  * @param imageFileInfo => 이미지 api 주소
  */
 
@@ -25,7 +25,7 @@ interface MeetingData {
   uuid: string;
   name: string;
   startDate: string;
-  remainingTime?: string;
+  remainingTime?: number;
   imageFileInfo?: imageFileInfo;
 }
 

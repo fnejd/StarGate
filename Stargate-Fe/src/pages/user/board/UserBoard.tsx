@@ -13,7 +13,7 @@ interface MeetingData {
   uuid: string;
   name: string;
   startDate: string;
-  remainingTime: string;
+  remainingTime: number;
   imageFileInfo: ImageFileInfo;
 }
 
@@ -41,23 +41,51 @@ const UserBoard = () => {
   }, []);
   const cardData = data.ongoing[0] || data.expected[0];
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setData((prevData) => ({
+        ...prevData,
+        ongoing: prevData.ongoing.map((meeting) => {
+          if (meeting.remainingTime > 0) {
+            return {
+              ...meeting,
+              remainingTime: meeting.remainingTime - 1,
+            };
+          }
+          return meeting;
+        }),
+        expected: prevData.expected.map((meeting) => {
+          if (meeting.remainingTime > 0) {
+            return {
+              ...meeting,
+              remainingTime: meeting.remainingTime - 1,
+            };
+          }
+          return meeting;
+        }),
+      }));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [data]);
+
   return (
     <div className="w-xl h-screen">
       <BoardHeader />
       {cardData && (
         <BoardCardBox
           uuid={cardData.uuid}
-          imageSrc={cardData.imageFileInfo.fileUrl}
+          imageSrc={cardData.imageFileInfo?.fileUrl}
           title={cardData.name}
           date={cardData.startDate}
-          time={cardData.remainingTime}
+          remainingTime={cardData.remainingTime}
           isAdmin={true}
         />
       )}
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
-      <BoardCardList meetings={data.expected.slice(1)} isAdmin={false} isOver={false} />
+      <BoardCardList meetings={data.expected.slice(1)} isAdmin={true} />
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
-      <BoardCardList meetings={data.finished} isAdmin={false} isOver={true}/>
+      <BoardCardList meetings={data.finished} isAdmin={true} />
     </div>
   );
 };
