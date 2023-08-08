@@ -32,8 +32,8 @@ const router = createBrowserRouter([
   { path: '/pwreset', element: <PwReset /> },
   { path: '/board', element: <Board /> },
   { path: '/mypage', element: <MyPage /> },
-  { path: '/remind', element: <Remind /> },
-  { path: '/ready', element: <Ready /> },
+  { path: '/remind/:uuid', element: <Remind /> },
+  { path: '/ready/:uuid', element: <Ready /> },
   { path: '/video', element: <Video /> },
 
   { path: '/admin/signup', element: <AdminSignUp /> },
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
   { path: '/admin/management', element: <AdminManagement /> },
   { path: '/admin/myPage', element: <AdminMyPage /> },
   { path: '/Admin/event/create', element: <AdminEventCreate /> },
-  { path: '/admin/event/detail', element: <AdminEventDetail /> },
+  { path: '/admin/event/detail/:uuid', element: <AdminEventDetail /> },
   { path: '/admin/monitoring', element: <AdminMonitoring /> },
 
   { path: '/star/video', element: <StarVideo /> },

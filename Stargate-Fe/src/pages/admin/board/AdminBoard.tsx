@@ -14,7 +14,7 @@ interface MeetingData {
   name: string;
   startDate: string;
   remainingTime: string;
-  imageFileInfo: ImageFileInfo;
+  imageFileInfo?: ImageFileInfo;
 }
 
 interface AdminBoardData {
@@ -47,7 +47,7 @@ const AdminBoard = () => {
       {cardData && (
         <BoardCardBox
           uuid={cardData.uuid}
-          imageSrc={cardData.imageFileInfo.fileUrl}
+          imageSrc={cardData.imageFileInfo?.fileUrl}
           title={cardData.name}
           date={cardData.startDate}
           time={cardData.remainingTime}
@@ -55,9 +55,9 @@ const AdminBoard = () => {
         />
       )}
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
-      <BoardCardList meetings={data.expected.slice(1)} />
+      <BoardCardList meetings={data.expected.slice(1)} isAdmin={true} />
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
-      <BoardCardList meetings={data.finished} />
+      <BoardCardList meetings={data.finished} isAdmin={true}/>
     </div>
   );
 };
