@@ -62,34 +62,33 @@ const SignInComponent = () => {
     if ((user as userType).type == 'on') {
       console.log('adminLogin');
       adminLoginApi(formData, checked)
-      .then((res) => {
-        if (res == 'alreadyToken') {
-          alert('이미 로그인 된 상태입니다.');
-        } else if (res == 'FAIL') {
-          alert('로그인에 문제가 발생했습니다.');
-          window.location.reload();
-        } else {
-          // setLogin({ token: res, email: (user as userType).email });
-          navigate('/admin/board');
-        }
-
-      })
-      .catch((error) => console.log(error));
+        .then((res) => {
+          if (res == 'alreadyToken') {
+            alert('이미 로그인 된 상태입니다.');
+          } else if (res == 'FAIL') {
+            alert('로그인에 문제가 발생했습니다.');
+            window.location.reload();
+          } else {
+            // setLogin({ token: res, email: (user as userType).email });
+            navigate('/admin/board');
+          }
+        })
+        .catch((error) => console.log(error));
     } else {
       console.log('userLogin');
       loginApi(formData, checked)
-      .then((res) => {
-        if (res == 'alreadyToken') {
-          alert('이미 로그인 된 상태입니다.');
-        } else if (res == 'FAIL') {
-          alert('로그인에 문제가 발생했습니다.');
-          window.location.reload();
-        } else {
-          // setLogin({ token: res, email: (user as userType).email });
-          navigate('/board');
-        }
-      })
-      .catch((error) => console.log(error));
+        .then((res) => {
+          if (res == 'alreadyToken') {
+            alert('이미 로그인 된 상태입니다.');
+          } else if (res == 'FAIL') {
+            alert('로그인에 문제가 발생했습니다.');
+            window.location.reload();
+          } else {
+            // setLogin({ token: res, email: (user as userType).email });
+            navigate('/board');
+          }
+        })
+        .catch((error) => console.log(error));
     }
   };
 
@@ -113,7 +112,13 @@ const SignInComponent = () => {
       />
       <div className="flex text-white m-2 p2r">
         <div className="w-1/2">
-          <input type="checkbox" id="loginStatus" checked={checked} onChange={() => setChecked(!checked)} className="ml-2 mr-2" />
+          <input
+            type="checkbox"
+            id="loginStatus"
+            checked={checked}
+            onChange={() => setChecked(!checked)}
+            className="ml-2 mr-2"
+          />
           로그인 유지
         </div>
         <div className="flex">

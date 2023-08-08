@@ -19,7 +19,12 @@ interface AuthNumberProps {
  * @param onClose() => 모달창 닫아지는 이벤트 담긴 함수
  */
 
-const AuthNumberComponent = ({ email, authNum, isOpen, onClose }: AuthNumberProps) => {
+const AuthNumberComponent = ({
+  email,
+  authNum,
+  isOpen,
+  onClose,
+}: AuthNumberProps) => {
   const [numArr, setNumArr] = useState<number[]>([]);
   const [curIdx, setCurIdx] = useState<number>(0);
   const setEmail = useSetRecoilState(emailState);
@@ -28,7 +33,7 @@ const AuthNumberComponent = ({ email, authNum, isOpen, onClose }: AuthNumberProp
   useEffect(() => {
     console.log(curIdx);
     if (curIdx < 5) {
-      document.getElementById(`NumInput_${curIdx+1}`)?.focus();
+      document.getElementById(`NumInput_${curIdx + 1}`)?.focus();
     } else {
       document.getElementsByTagName('button')[0]?.focus();
     }
@@ -43,9 +48,9 @@ const AuthNumberComponent = ({ email, authNum, isOpen, onClose }: AuthNumberProp
     numArr.forEach((e, i) => {
       if (e != authNum[i]) check = false;
       code += e;
-    })
+    });
 
-    const result = checkAuthNumApi(email,code);
+    const result = checkAuthNumApi(email, code);
     if (check && result == 'SUCCESS') {
       setEmail(email);
       navigate('/pwreset');
@@ -78,7 +83,13 @@ const AuthNumberComponent = ({ email, authNum, isOpen, onClose }: AuthNumberProp
               </p>
               <div className="flex m-3 justify-center">
                 {authNum.map((_, i) => (
-                  <AuthNumInputComponent key={i} index={i} numArr={numArr} setNumArr={setNumArr} setCurIdx={setCurIdx} />
+                  <AuthNumInputComponent
+                    key={i}
+                    index={i}
+                    numArr={numArr}
+                    setNumArr={setNumArr}
+                    setCurIdx={setCurIdx}
+                  />
                 ))}
               </div>
               <BtnWhite text="확인" onClick={AuthNumCheck} />

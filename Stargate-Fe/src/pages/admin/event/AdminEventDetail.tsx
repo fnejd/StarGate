@@ -3,8 +3,7 @@ import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { createEvent } from '@/services/adminEvent';
-import { fetchGroup } from '@/services/adminBoardService';
+import { getEvent } from '@/services/adminEvent';
 
 interface MeetingFUser {
   no: number;
@@ -45,24 +44,28 @@ interface FormData {
 }
 
 const AdminEventDetail = () => {
-  const [group, setGroup] = useState<Group[]>([]);
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    startDate: null,
-    waitingTime: 10,
-    meetingTime: 80,
-    photoNum: 0,
-    notice: '',
-    imageFile: null,
-    starName: '',
-    meetingFUsers: '',
-    meetingMembers: '',
-  });
+  // const [group, setGroup] = useState<Group[]>([]);
+  // const [formData, setFormData] = useState<FormData>({
+  //   name: '',
+  //   startDate: null,
+  //   waitingTime: 10,
+  //   meetingTime: 80,
+  //   photoNum: 0,
+  //   notice: '',
+  //   imageFile: null,
+  //   starName: '',
+  //   meetingFUsers: '',
+  //   meetingMembers: '',
+  // });
 
   // 미팅 디테일 가져오기
-  useEffect(() => {
+  useEffect(async () => {
     const currentUrl = window.location.href; 
     console.log(currentUrl); 
+    const data = await getEvent();
+
+    console.log(data)
+    
   }, []);
 
   // const handleName = (event: ChangeEvent<HTMLInputElement>) => {
