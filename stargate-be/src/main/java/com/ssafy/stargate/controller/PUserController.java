@@ -92,6 +92,7 @@ public class PUserController {
      * @param pUserDto 소속사 유저 정보 객체
      * @return 성공여부(200, 600)
      */
+    @PutMapping("/update")
     public ResponseEntity<?> updatePUser(@ModelAttribute PUserDto pUserDto){
         int statusCode = pUserService.updatePUser(pUserDto);
         return ResponseEntity.status(statusCode).build();
