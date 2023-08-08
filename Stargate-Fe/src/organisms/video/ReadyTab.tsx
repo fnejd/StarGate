@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // interface RemindTitleProps {
 //   name: string; // 팬사인회 제목
@@ -7,6 +7,7 @@ import React from 'react';
 // }
 
 const ReadyTab = () => {
+  const [activeTab, setActiveTab] = useState<Number>(0);
   const tabList = [
     '공지사항',
     '카메라 및 마이크 테스트',
@@ -16,17 +17,29 @@ const ReadyTab = () => {
     '입장 대기존',
   ];
 
+  const handleTabClick = (index: number) => {
+    setActiveTab(index);
+  };
+
   return (
     <div className="mx-auto">
       <div className="font-medium text-white font-suit text-40">
         이유한 스무살 기념 팬사인회
       </div>
-      <div className="bg-white rounded-md w-l h-550">
-        {tabList.map((tab, index) => (
-          <div key={index} className="w-1/4 h-200 text-black p-4">
-            {tab}
-          </div>
-        ))}
+      <div className="flex flex-col flex-wrap w-l h-550 bg-white rounded-md cursor-pointer">
+        <div>
+          {tabList.map((tab, index) => (
+            <div
+              className="w-2/4 h-200"
+              key={index}
+              onClick={() => handleTabClick(index)}
+            >
+              <span className="material-icons"></span>
+              <div className="text-black p-4">{tab}</div>
+            </div>
+          ))}
+        </div>
+        <div className="my-auto w-2/4 h-500 text-black p-4 border border-black"></div>
       </div>
     </div>
   );

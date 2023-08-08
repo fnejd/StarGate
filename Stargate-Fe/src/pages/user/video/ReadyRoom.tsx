@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReadyTab from '@/organisms/video/ReadyTab';
 import { useSocket } from '@/context/SocketProvider';
@@ -138,6 +138,7 @@ const ReadyRoom = () => {
         const parts = currentUrl.split('/');
         const uuid = parts[parts.length - 1];
         const readyData = await getReady(uuid);
+        console.log('대기방 데이터', readyData);
         setReadyData(readyData);
         // 여기서 readyData를 사용하거나 처리할 수 있음
       } catch (error) {
