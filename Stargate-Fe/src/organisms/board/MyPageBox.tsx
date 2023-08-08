@@ -20,8 +20,8 @@ interface MyPageBoxProps {
   name?: string;
   nickname?: string;
   phone?: string;
-  birth?: string;
-  code?: number;
+  birthday?: string;
+  code?: string;
 }
 
 const MyPageBox = (props: MyPageBoxProps) => {
@@ -31,7 +31,7 @@ const MyPageBox = (props: MyPageBoxProps) => {
     name,
     nickname,
     phone,
-    birth,
+    birthday,
     code,
   } = props;
 
@@ -66,7 +66,7 @@ const MyPageBox = (props: MyPageBoxProps) => {
             <InputComponent text='전화번호' type='text' value={phone} />
           </div>
           <div className='flex'>
-            <InputComponent text='생년월일' type='text' value={birth} />
+            <InputComponent text='생년월일' type='text' value={birthday} />
           </div>
         </>
       )}

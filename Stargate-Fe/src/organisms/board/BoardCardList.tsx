@@ -16,15 +16,20 @@ interface BoardCardListProps {
  * @param name => Card flip시 보여줄 사인회 제목
  * @param start_date => Card flip시 보여줄 사인회 날짜
  * @param waiting_time => Card flip시 보여줄 남은 시간
- * @param image => 이미지 api 주소
+ * @param imageFileInfo => 이미지 api 주소
  */
 
 interface MeetingData {
   uuid: string;
   name: string;
-  start_date: string;
-  waiting_time?: string;
-  image: string;
+  startDate: string;
+  remainingTime?: string;
+  imageFileInfo: imageFileInfo;
+}
+
+interface imageFileInfo {
+  filename: string;
+  fileUrl: string;
 }
 
 const BoardCardList = ({ meetings }: BoardCardListProps) => {
@@ -43,10 +48,10 @@ const BoardCardList = ({ meetings }: BoardCardListProps) => {
         {meetings.map((meeting) => (
           <div className="w-1/4 h-full" key={meeting.uuid}>
             <BoardCard
-              imageSrc={meeting.image}
+              imageSrc={meeting.imageFileInfo.fileUrl}
               title={meeting.name}
-              date={meeting.start_date}
-              {...(meeting.waiting_time && { time: meeting.waiting_time })}
+              date={meeting.startDate}
+              {...(meeting.remainingTime && { time: meeting.remainingTime })}
             />
           </div>
         ))}

@@ -1,9 +1,23 @@
-import axios, { AxiosResponse } from 'axios';
 import { api } from './api';
 
 const fetchAdminBoard = async () => {
   try {
     const response = await api.get('/dashboard', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log('에러발생', error);
+  }
+};
+
+const fetchAdminData = async () => {
+  try {
+    const response = await api.get('/pusers/get', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
@@ -141,6 +155,7 @@ const deleteMember = async (memberNo: number) => {
 
 export {
   fetchAdminBoard,
+  fetchAdminData,
   fetchGroup,
   createGroup,
   updateGroup,
