@@ -12,12 +12,7 @@ const createEvent = async (meetingData: FormData | null) => {
       // formDataToSend.append('meetingData', JSON.stringify(meetingData));
       for (const key in meetingData) {
         if (meetingData.hasOwnProperty(key)) {
-          if (key !== 'imageFile') {
-            formDataToSend.append(key, JSON.stringify(meetingData[key]))
-          } 
-          else {
-            formDataToSend.append(key, meetingData[key])
-          } 
+          formDataToSend.append(key, meetingData[key])
         }
       }
 

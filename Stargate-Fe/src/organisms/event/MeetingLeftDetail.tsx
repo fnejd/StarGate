@@ -20,12 +20,12 @@ interface MeetingMember {
 
 interface FormData {
   name: string;
-  startDate: Date | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
   waitingTime: number;
   meetingTime: number;
   notice: string;
   photoNum: number;
-  image: File | null;
+  imageFile: File | null;
   // starName: string;
   meetingFUsers: string;
   meetingMembers: string;
@@ -55,8 +55,8 @@ const MeetingLeftSection = ({
 
   const handleStartDate = (value: string): void => {
     const [year, month, day] = value.split('-');
-    const newDate = new Date(Number(year), Number(month) - 1, Number(day));
-
+    const newDate: Date = new Date(Number(year), Number(month) - 1, Number(day));
+    const stringDate: string = newDate.toISOString().slice(0, -1)
     if (newDate.getTime() < Date.now()) {
       // value가 현재보다 과거 날짜일 경우 경고 띄우기
       alert('과거 날짜는 선택할 수 없습니다.');
@@ -66,7 +66,7 @@ const MeetingLeftSection = ({
     // 상위로 전달
     setFormData((prevFormData) => ({
       ...prevFormData,
-      startDate: newDate,
+      startDate: stringDate,
     }));
     console.log(`시작 날짜 ${value}`);
   };

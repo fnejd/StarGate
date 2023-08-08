@@ -37,7 +37,7 @@ interface FormData {
   meetingTime: number;
   notice: string;
   photoNum: number;
-  image: File | null;
+  imageFile: File | null;
   meetingFUsers: string;
   meetingMembers: string;
 }
@@ -60,7 +60,7 @@ interface MeetingBottomSectionProps {
   setGroup: React.Dispatch<React.SetStateAction<Group>>;
 }
 
-const MeetingBottomSection = ({
+const MeetingBottomDetail = ({
   formData,
   setFormData,
   group,
@@ -109,13 +109,6 @@ const MeetingBottomSection = ({
     console.log(`입력값 ${fanValue}`);
   };
 
-  // const handleForm = (
-  //   e: React.ChangeEvent<HTMLInputElement>,
-  //   fieldName: keyof FormData
-  // ) => {
-  //   setFormData({ ...formData, [fieldName]: e.target.value });
-  // };
-
   // 등록 함수
   const handleGroupChange = (value: number | string) => {
     const selectedGroup = group.find((item) => item.name === value);
@@ -127,7 +120,7 @@ const MeetingBottomSection = ({
   // 멤버 변수가 바뀌변 폼데이터 업데이트
   useEffect(() => {
     setFormData((prevFormData) => {
-      const updatedMembers = JSON.stringify([...prevFormData.meetingMembers, ...members]);
+      const updatedMembers = [...prevFormData.meetingMembers, ...members];
       console.log(updatedMembers);
       
       return {
@@ -139,45 +132,22 @@ const MeetingBottomSection = ({
 
     // 팬 변수가 바뀌면 폼데이터 업데이트
     useEffect(() => {
-      // setFormData((prevFormData) => {
-      //     const updatedFans = JSON.stringify([...prevFormData.meetingFUsers, ...fanData]);
-      //     console.log('원래', prevFormData.meetingFUsers)
-      //     console.log('팬데이터 업데이트', updatedFans)
-      //   return {
-      //     ...prevFormData,
-      //     meetingFUsers: updatedFans,
-      //   };
-      // });
-      setFormData(fanData);
+      setFormData((prevFormData) => {
+        const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
+        console.log(updatedFans);
+        
+        return {
+          ...prevFormData,
+          meetingFUsers: updatedFans,
+        };
+      });
     }, [fanData]);
-  
-
-  // const handleMemberChange = (value: number | string) => {
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     meetingMembers: [
-  //       ...prevFormData.meetingMembers,
-  //       {
-  //         memberNo: Number(value), // 매개변수 value를 number 타입으로 변환하여 사용
-  //         name: '유한', // 멤버 번호 설정
-  //         orderNum: prevFormData.meetingMembers.length + 1, // 멤버 순서 설정
-  //         roomId: 2374324, // 회의 방 번호 설정 (임의의 값)
-  //       },
-  //     ],
-  //   }));
-  // };
-
-  // const addMember = (name: string) => {
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     members: [...prevFormData.meetingMembers, name],
-  //   }));
-  //   setMemberValue('');
-  // };
 
   const addFans = (email: string) => {
-    setFanData([email, ...fanData]);
-    setFanValue('');
+    if (email.trim() !== '') { // 빈 문자열이 아닌 경우에만 추가
+      setFanData([email, ...fanData]);
+      setFanValue('');
+    }
   };
 
   const handleCsvData = (data, fileInfo) => {
@@ -369,4 +339,4 @@ const MeetingBottomSection = ({
   );
 };
 
-export default MeetingBottomSection;
+export default MeetingBottomDetail;

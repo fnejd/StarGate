@@ -1,7 +1,10 @@
-import React from 'react'
-import MeetingLeftDetailSection from '@/organisms/event/MeetingLeftDetailSection';
-import MeetingRightDetailSection from '@/organisms/event/MeetingRightDetailSection';
-import MeetingBottomDetailSection from '@/organisms/event/MeetingBottomDetailSection';
+import { useEffect, useState, ChangeEvent } from 'react';
+import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
+import MeetingRightSection from '@/organisms/event/MeetingRightSection';
+import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
+import BtnBlue from '@/atoms/common/BtnBlue';
+import { createEvent } from '@/services/adminEvent';
+import { fetchGroup } from '@/services/adminBoardService';
 
 interface MeetingFUser {
   no: number;
@@ -30,12 +33,12 @@ interface Group {
 
 interface FormData {
   name: string;
-  startDate: Date | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
   waitingTime: number;
   meetingTime: number;
   notice: string;
   photoNum: number;
-  image: File | null;
+  imageFile: File | null;
   starName: string;
   meetingFUsers: string;
   meetingMembers: string;
@@ -50,7 +53,7 @@ const AdminEventDetail = () => {
     meetingTime: 80,
     photoNum: 0,
     notice: '',
-    image: null,
+    imageFile: null,
     starName: '',
     meetingFUsers: '',
     meetingMembers: '',

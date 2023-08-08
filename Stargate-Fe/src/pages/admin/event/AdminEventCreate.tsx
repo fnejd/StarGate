@@ -32,7 +32,7 @@ interface Group {
 }
 
 interface FormData {
-  name: string;
+  name: null;
   startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
   waitingTime: number;
   meetingTime: number;
@@ -47,7 +47,7 @@ interface FormData {
 const AdminEventCreate = () => {
   const [group, setGroup] = useState<Group[]>([]);
   const [formData, setFormData] = useState<FormData>({
-    name: '',
+    name: null,
     startDate: null,
     waitingTime: 10,
     meetingTime: 80,
