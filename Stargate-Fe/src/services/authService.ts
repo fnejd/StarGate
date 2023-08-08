@@ -60,7 +60,6 @@ const checkTokenExpTime = async () => {
 const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   const { accessToken, refreshToken } = response.data;
   console.log(accessToken);
-  // api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
@@ -81,7 +80,6 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
 // AccessToken이 없을 때,(만료됐을 때 재발급)
 const onNewAccessToken = (response: AxiosResponse<newTokenType>) => {
   const { accessToken } = response.data;
-  // api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
   console.log('AccessToken 재발급');
