@@ -123,13 +123,16 @@ const MeetingBottomSection = ({
       setMembers(selectedGroup.members);
     }
   };
-  
+
   // 멤버 변수가 바뀌변 폼데이터 업데이트
   useEffect(() => {
     setFormData((prevFormData) => {
-      const updatedMembers = [...prevFormData.meetingMembers, ...members];
+      const updatedMembers = [
+        ...prevFormData.meetingMembers,
+        ...members.map((member) => member.memberNo),
+      ];
       console.log(updatedMembers);
-      
+
       return {
         ...prevFormData,
         // 배열 순서 보장을 위한 stringify 처리
@@ -138,19 +141,18 @@ const MeetingBottomSection = ({
     });
   }, [members]);
 
-    // 팬 변수가 바뀌면 폼데이터 업데이트
-    useEffect(() => {
-      setFormData((prevFormData) => {
-        const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
-        console.log(updatedFans);
-        
-        return {
-          ...prevFormData,
-          meetingFUsers: updatedFans,
-        };
-      });
-    }, [fanData]);
-  
+  // 팬 변수가 바뀌면 폼데이터 업데이트
+  useEffect(() => {
+    setFormData((prevFormData) => {
+      const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
+      console.log(updatedFans);
+
+      return {
+        ...prevFormData,
+        meetingFUsers: updatedFans,
+      };
+    });
+  }, [fanData]);
 
   // const handleMemberChange = (value: number | string) => {
   //   setFormData((prevFormData) => ({
@@ -176,7 +178,8 @@ const MeetingBottomSection = ({
   // };
 
   const addFans = (email: string) => {
-    if (email.trim() !== '') { // 빈 문자열이 아닌 경우에만 추가
+    if (email.trim() !== '') {
+      // 빈 문자열이 아닌 경우에만 추가
       setFanData([email, ...fanData]);
       setFanValue('');
     }

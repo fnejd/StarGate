@@ -61,6 +61,8 @@ const AdminEventDetail = () => {
   // 미팅 디테일 가져오기
   useEffect(async () => {
     const currentUrl = window.location.href; 
+    const parts = currentUrl.split('/'); 
+    const uuid = parts[parts.length - 1]; 
     console.log(currentUrl); 
     const data = await getEvent();
 

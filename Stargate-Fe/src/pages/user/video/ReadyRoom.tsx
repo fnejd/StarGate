@@ -1,8 +1,48 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReadyTab from '@/organisms/video/ReadyTab';
 import { useSocket } from '@/context/SocketProvider';
+import { getReady } from '@/services/userVideo';
+interface ImageFileInfo {
+  filename: string;
+  fileUrl: string;
+}
+
+interface MeetingFUser {
+  email: string;
+  orderNum: number;
+  name: string;
+  remainingTime: number;
+  remainingFanNum: number;
+  memoContents: string;
+}
+interface MeetingMember {
+  memberNo: number;
+  name: string;
+  orderNum: number;
+  roomId: string;
+  isPolaroidEnable: boolean;
+  postitContents: string;
+}
+
+interface MeetingData {
+  uuid: string;
+  name: string;
+  startDate: string;
+  waitingTime: number;
+  meetingTime: number;
+  notice: string;
+  photoNum: number;
+  groupNo: number;
+  groupName: string;
+  imageFileInfo: ImageFileInfo;
+  meetingFUsers: MeetingFUser[];
+  meetingMembers: MeetingMember[];
+}
 
 const ReadyRoom = () => {
+  const [readyData, setReadyData] = useState<MeetingData | null>(null); // 대기방 정보 담는 변수
+
   // // 유저가 탭에 있는 내용 순서대로 다 작성했을 경우,
   // // 마지막 탭을 띄워놓는다
   // // 그 상황에서 남은 시간이 5초 전일경우
@@ -90,15 +130,23 @@ const ReadyRoom = () => {
   //   }
   // }, [timeLeft]);
 
-  // // 1초마다 시간 확인 및 업데이트
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setTimeLeft((prevTime) => prevTime - 1);
-  //   }, 1000);
+  // 1초마다 시간 확인 및 업데이트
+  useEffect(() => {
+    const fetchReadyData = async () => {
+      try {
+        const currentUrl = window.location.href;
+        const parts = currentUrl.split('/');
+        const uuid = parts[parts.length - 1];
+        const readyData = await getReady(uuid);
+        setReadyData(readyData);
+        // 여기서 readyData를 사용하거나 처리할 수 있음
+      } catch (error) {
+        console.error('데이터 가져오기 실패 ', error);
+      }
+    };
 
-  //   // 컴포넌트가 언마운트되면 타이머 해제
-  //   return () => clearInterval(timer);
-  // }, []);
+    fetchReadyData(); // async 함수 호출
+  }, []);
 
   // useEffect(() => {
   //   socket.on('room:join', handleJoinRoom); // "room:join" 이벤트에 대한 리스너 등록
@@ -108,10 +156,10 @@ const ReadyRoom = () => {
   // }, [socket, handleJoinRoom]); // 소켓 객체와 이벤트 처리 함수가 변경될 때마다 useEffect 재실행
 
   return (
-  <div>대기방
-    <ReadyTab />
-  </div>
-  )
+    <div>
+      <ReadyTab />
+    </div>
+  );
 };
 
 export default ReadyRoom;
