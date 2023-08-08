@@ -58,7 +58,9 @@ const PwinquiryComponent = () => {
           getter={email}
           setter={setEmail}
         />
-        <BtnBlue text="인증번호 받기" onClick={verifyEmail} />
+        <p className='w-fit mr-auto ml-auto'>
+          <BtnBlue text="인증번호 받기" onClick={verifyEmail} />
+        </p>
       </div>
       <AuthNumberComponent
         email={(email as emailType).email}

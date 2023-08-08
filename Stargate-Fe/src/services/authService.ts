@@ -47,7 +47,10 @@ const checkTokenExpTime = async () => {
         : localStorage.getItem('tokenExpTime')
     )
   );
-  if (expTime < Date.now() / 1000) {
+  // Header나 LocalStorage에 AccessToken이 있다면 True, 없다면 False;
+  const flag = axios.defaults.headers.common['Authorization'] || localStorage.getItem('accessToken') ? true : false;
+  // 만료시간이 지나지 않았거나 AccessToken이 없다면 재발급 메서드 호출
+  if (expTime < Date.now() / 1000 && !flag) {
     await reAccessApi();
   }
   return 'SUCCESS';
