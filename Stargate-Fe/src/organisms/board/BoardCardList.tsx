@@ -67,11 +67,11 @@ const BoardCardList = (
   };
 
   return (
-    <div className="w-xl h-5/6 lg:h-96 sm:h-56 flex justify-center">
+    <div className="w-xl  flex justify-center">
       <div className="w-5/6 flex justify-evenly flex-wrap">
         {meetings.map((meeting) => (
           <div
-            className="w-1/4 h-full cursor-pointer" // 커서를 포인터로 변경합니다.
+            className="w-1/4 lg:h-96 sm:h-56 cursor-pointer" // 커서를 포인터로 변경합니다.
             key={meeting.uuid}
             onClick={() => handleCardClick(meeting.uuid)} // 카드 클릭 시 handleCardClick 함수를 호출합니다.
           >
@@ -84,7 +84,7 @@ const BoardCardList = (
           </div>
         ))}
         {Array.from({ length: emptyCardCount }).map((_, index) => (
-          <div key={index} className="w-1/4 h-full"></div>
+          <div key={index} className="w-1/4 lg:h-96 sm:h-56"></div>
         ))}
       </div>
     </div>

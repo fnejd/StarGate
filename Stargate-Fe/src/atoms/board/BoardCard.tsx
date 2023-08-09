@@ -15,8 +15,14 @@ interface BoardCardProps {
   remainingTime?: number;
 }
 
-const BoardCard = ({ imageSrc = 'https://i.playboard.app/p/8ea962315230c3873d9666b1bc7913bb/default.jpg', title, date, remainingTime }: BoardCardProps) => {
+const BoardCard = ({
+  imageSrc = 'https://i.playboard.app/p/8ea962315230c3873d9666b1bc7913bb/default.jpg',
+  title,
+  date,
+  remainingTime,
+}: BoardCardProps) => {
   const [isHovering, setIsHovering] = useState(false);
+  const isLoading = imageSrc;
 
   const handleMouseEnter = () => {
     if (title && date) {
@@ -34,19 +40,26 @@ const BoardCard = ({ imageSrc = 'https://i.playboard.app/p/8ea962315230c3873d966
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <img
-        className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 object-cover object-center"
-        src={imageSrc}
-        alt="card image"
-      />
-      {isHovering && (title || date || remainingTime) && (
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black text-white text-center">
-          <div>
-            {title && <h2 className="text-lg font-semibold">{title}</h2>}
-            {date && <p className="text-sm">{date}</p>}
-            {remainingTime && <p className="text-sm">{remainingTime}</p>}
-          </div>
-        </div>
+      {isLoading ? (
+        // 스켈레톤 UI
+        <div className="animate-pulse bg-gray-50 lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 rounded-md"></div>
+      ) : (
+        <>
+          <img
+            className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 object-cover object-center rounded-md"
+            src={imageSrc}
+            alt="card image"
+          />
+          {isHovering && (title || date || remainingTime) && (
+            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black text-white text-center rounded-md">
+              <div>
+                {title && <h2 className="text-lg font-semibold">{title}</h2>}
+                {date && <p className="text-sm">{date}</p>}
+                {remainingTime && <p className="text-sm">{remainingTime}</p>}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
