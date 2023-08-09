@@ -4,8 +4,8 @@ import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
 import { pwValidationCheck } from '@/hooks/useValidation';
 import { pwResetApi } from '@/services/authService';
-import { emailState } from '@/recoil/userState';
-import { useRecoilValue } from 'recoil';
+// import { emailState } from '@/recoil/userState';
+// import { useRecoilValue } from 'recoil';
 
 interface pwCheckType {
   newPw: string;
@@ -20,7 +20,9 @@ const PwResetComponent = () => {
     newPwCheck: '',
   });
   // store에서 이메일 가져오기
-  const email = useRecoilValue(emailState);
+  // reload 되면 store 값 날라가서 이메일 정보 없어지네,,????
+  // session에 저장하는것으로 바꿀게요
+  const email = sessionStorage.getItem('emailStore');
 
   useEffect(() => {
     const newPw = (pwCheck as pwCheckType).newPw;
@@ -48,6 +50,12 @@ const PwResetComponent = () => {
     if (validation != 'SUCCESS') {
       alert(validation);
       window.location.reload();
+      return 0;
+    }
+
+    if (email == null) {
+      alert('이메일 정보가 저장되지않았습니다.');
+      navigate('/pwinquiry');
       return 0;
     }
 
