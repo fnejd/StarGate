@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import TextButtonComponent from '@/atoms/common/TextButtonComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
@@ -15,7 +15,7 @@ interface userType {
 const SignInComponent = () => {
   const navigate = useNavigate();
 
-  const [pwText, setPwText] = useState('일치하지 않는 형식입니다.');
+  const [pwText, setPwText] = useState('');
   const [pwState, setPwState] = useState('red');
   const [checked, setChecked] = useState(false);
   const [user, setUser] = useState<object>({
@@ -40,7 +40,7 @@ const SignInComponent = () => {
       setPwText('올바른 비밀번호 형식입니다.');
     } else {
       setPwState('red');
-      setPwText('일치하지 않는 형식입니다.');
+      setPwText('올바르지 않은 형식입니다.');
     }
     console.log(user);
   }, [user]);
@@ -65,11 +65,10 @@ const SignInComponent = () => {
         .then((res) => {
           if (res == 'alreadyToken') {
             alert('이미 로그인 된 상태입니다.');
+            navigate('/admin/board');
           } else if (res == 'FAIL') {
             alert('로그인에 문제가 발생했습니다.');
-            window.location.reload();
           } else {
-            // setLogin({ token: res, email: (user as userType).email });
             navigate('/admin/board');
           }
         })
@@ -80,11 +79,10 @@ const SignInComponent = () => {
         .then((res) => {
           if (res == 'alreadyToken') {
             alert('이미 로그인 된 상태입니다.');
+            navigate('/board');
           } else if (res == 'FAIL') {
             alert('로그인에 문제가 발생했습니다.');
-            window.location.reload();
           } else {
-            // setLogin({ token: res, email: (user as userType).email });
             navigate('/board');
           }
         })
