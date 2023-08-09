@@ -41,7 +41,7 @@ const fetchGroup = async () => {
       },
       withCredentials: false,
     });
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (error) {
     console.log('에러발생', error);
@@ -109,7 +109,7 @@ const createMember = async (groupNo: number, name: string) => {
         withCredentials: false,
       }
     );
-    console.log(response);
+    console.log('멤버 생성 response', response);
   } catch (error) {
     console.log('멤버 생성 에러:', error);
   }
@@ -147,7 +147,7 @@ const deleteMember = async (memberNo: number) => {
       },
       withCredentials: false,
     });
-    console.log(response);
+    console.log('멤버 삭제', response);
   } catch (error) {
     console.log('멤버 삭제 에러:', error);
   }

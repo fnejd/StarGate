@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PlusButton from '../../atoms/board/PlusButton';
 import AdminManagementModalBox from './AdminManagementModalBox';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { fetchGroup } from '@/services/adminBoardService';
 import { useRecoilState } from 'recoil';
 import {
-  groupsState,
   selectedGroupNoState,
 } from '@/recoil/adminManagementState';
 /**
@@ -13,20 +11,26 @@ import {
  * group의 이름들을 가져와서 버튼으로 출력, 만약 5의 배수가 아니라면 비어있는 <div>를 이용해 공간을 채워줌
  * 버튼을 click하면, setSelectedGroup에 group을 state로 넣어줌
  */
-const AdminManagementModal = () => {
-  const [groups, setGroups] = useRecoilState(groupsState);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchGroup();
-      setGroups(data);
-    };
-    fetchData();
-  }, [groups]);
+interface MemberData {
+  memberNo: number;
+  name: string;
+}
+interface GroupData {
+  groupNo: number;
+  name: string;
+  members: MemberData[];
+}
+interface AdminManagementModalProps {
+  group: GroupData[];
+}
+
+const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] =
     useRecoilState(selectedGroupNoState);
-  const groupNames = groups.map((data) => data.name);
+  const groupNames = group.map((data) => data.name);
   const totalButtons = Math.ceil(groupNames.length / 5) * 5;
 
   /**
@@ -38,7 +42,7 @@ const AdminManagementModal = () => {
 
   const handleCircleClick = (groupName: string) => {
     const selectedGroupNo =
-      groups.find((data) => data.name === groupName)?.groupNo || null;
+      group.find((data) => data.name === groupName)?.groupNo || null;
     setSelectedGroup(selectedGroupNo);
     setIsModalOpen(true);
   };
@@ -82,13 +86,13 @@ const AdminManagementModal = () => {
           groupNo={selectedGroup}
           groupName={
             selectedGroup !== null
-              ? groups.find((data) => data.groupNo === selectedGroup)?.name ||
+              ? group.find((data) => data.groupNo === selectedGroup)?.name ||
                 ''
               : ''
           }
           members={
             selectedGroup
-              ? groups.find((data) => data.groupNo === selectedGroup)
+              ? group.find((data) => data.groupNo === selectedGroup)
                   ?.members || []
               : []
           }

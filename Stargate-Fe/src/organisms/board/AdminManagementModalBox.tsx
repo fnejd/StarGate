@@ -4,7 +4,7 @@ import AdminManagementDeleteButton from '@/atoms/board/AdminManagementDeleteButt
 import AdminManagementInput from '@/atoms/board/AdminManagementInput';
 import { deleteMember } from '@/services/adminBoardService';
 import { useRecoilState } from 'recoil';
-import { selectedGroupMembersState } from '@/recoil/adminManagementState';
+import { selectedGroupMembersState, groupsShouldFetch } from '@/recoil/adminManagementState';
 
 interface MemberData {
   memberNo: number;
@@ -43,6 +43,7 @@ const AdminManagementModalBox = ({
   const [selectedGroupMembers, setSelectedGroupMembers] = useRecoilState(
     selectedGroupMembersState
   );
+  const [groupsFetch, setGroupsFetch] = useRecoilState(groupsShouldFetch);
   /**
    * MouseEvent 객체를 가져와서 실행
    * 모달 창 바깥을 클릭했을때, 모달창이 존재하고 클릭 이벤트가 모달 창 밖에서 실행됐다면
@@ -96,6 +97,7 @@ const AdminManagementModalBox = ({
           (member) => member.memberNo !== memberNo
         );
         setSelectedGroupMembers(updatedMembers);
+        setGroupsFetch(true);
       } catch (error) {
         console.log('멤버 삭제 에러:', error);
       }
