@@ -1,5 +1,6 @@
 import React, { useRef, MouseEvent } from 'react';
 import BtnWhite from '@/atoms/common/BtnWhite';
+import { useNavigate } from 'react-router-dom';
 
 interface IdResultModal {
   email: string;
@@ -14,11 +15,17 @@ interface IdResultModal {
 
 const IdResultModal = ({ email, isOpen, onClose }: IdResultModal) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const handleOutsideClick = (e: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
       onClose();
     }
+  };
+
+  const closeIdModal = () => {
+    onClose();
+    navigate('/');
   };
 
   return (
@@ -45,7 +52,7 @@ const IdResultModal = ({ email, isOpen, onClose }: IdResultModal) => {
                 <div className="flex m-3 mb-8 justify-center">
                   <p className="">ID: {email}</p>
                 </div>
-                <BtnWhite text="확인" onClick={onClose} />
+                <BtnWhite text="확인" onClick={closeIdModal} />
               </div>
             </div>
           )}
