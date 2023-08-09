@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
  * @param imageSrc => 이미지 api 주소
  * @param title => Box 측면에서 보여줄 사인회 제목
  * @param date => Box 측면에서 보여줄 사인회 날짜
- * @param time => Box 측면에서 보여줄 남은 시간
+ * @param remainingTime => Box 측면에서 보여줄 남은 시간
  * @param isAdmin => admin 여부에 따라 확인 후 버튼 이름 변경
  */
 
@@ -17,7 +17,7 @@ interface BoardCardBoxProps {
   imageSrc?: string;
   title: string;
   date: string;
-  time: string;
+  remainingTime: number;
   isAdmin: boolean;
 }
 
@@ -26,17 +26,24 @@ const BoardCardBox = ({
   imageSrc,
   title,
   date,
-  time,
+  remainingTime,
   isAdmin,
 }: BoardCardBoxProps) => {
   const navigate = useNavigate();
-  const handleToReady = () => {
-    navigate(`/ready/${uuid}`);
-  };
 
+  const handleToReady = () => {
+    if (remainingTime <= 1800) {
+      navigate(`/ready/${uuid}`);
+    }
+  };
   const handleToMonitoring = () => {
     navigate(`/admin/monitoring`);
   };
+  /**
+   * isTimeExceeded가 1800초 초과라면
+   * 색깔 회색 + 사용 불가로 막아놓음 
+   */
+  const isTimeExceeded = remainingTime > 1800;
 
   return (
     <div className="flex justify-center">
@@ -53,14 +60,26 @@ const BoardCardBox = ({
                 </div>
                 <div className="flex justify-between">
                   <p>남은시간</p>
-                  <p>{time}</p>
+                  <p>{remainingTime}</p>
                 </div>
               </div>
               <div className="w-2/3 flex justify-end">
                 {isAdmin ? (
-                  <button onClick={handleToMonitoring}>상세보기</button>
+                  <button
+                    onClick={handleToMonitoring}
+                    className={isTimeExceeded ? 'bg-admingray' : ''}
+                    disabled={isTimeExceeded}
+                  >
+                    상세보기
+                  </button>
                 ) : (
-                  <button onClick={handleToReady}>입장하기</button>
+                  <button
+                    onClick={handleToReady}
+                    className={isTimeExceeded ? 'bg-admingray' : ''}
+                    disabled={isTimeExceeded}
+                  >
+                    입장하기
+                  </button>
                 )}
               </div>
             </div>
