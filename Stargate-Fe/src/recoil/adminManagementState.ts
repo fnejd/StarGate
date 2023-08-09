@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil';
 
 interface GroupData {
   groupNo: number;
@@ -29,24 +29,4 @@ export const selectedGroupNameState = atom<string>({
 export const selectedGroupMembersState = atom<MemberData[]>({
   key: 'selectedGroupMembersState',
   default: [],
-});
-
-export const selectedGroupName = selector({
-  key: 'selectedGroupName',
-  get: ({ get }) => {
-    const groups = get(groupsState);
-    const selectedGroupNo = get(selectedGroupNoState);
-    const group = groups.find((group) => group.groupNo === selectedGroupNo);
-    return group?.name || '';
-  },
-});
-
-export const selectedGroupMembers = selector({
-  key: 'selectedGroupMembers',
-  get: ({ get }) => {
-    const groups = get(groupsState);
-    const selectedGroupNo = get(selectedGroupNoState);
-    const group = groups.find((group) => group.groupNo === selectedGroupNo);
-    return group?.members || [];
-  },
 });
