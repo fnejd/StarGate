@@ -15,7 +15,7 @@ interface BoardCardProps {
   remainingTime?: number;
 }
 
-const BoardCard = ({ imageSrc, title, date, remainingTime }: BoardCardProps) => {
+const BoardCard = ({ imageSrc = 'https://i.playboard.app/p/8ea962315230c3873d9666b1bc7913bb/default.jpg', title, date, remainingTime }: BoardCardProps) => {
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseEnter = () => {

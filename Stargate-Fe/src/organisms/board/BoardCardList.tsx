@@ -1,4 +1,3 @@
-import React from 'react';
 import BoardCard from '../../atoms/board/BoardCard';
 import { useNavigate } from 'react-router-dom';
 

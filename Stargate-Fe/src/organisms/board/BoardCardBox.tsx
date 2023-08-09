@@ -41,9 +41,16 @@ const BoardCardBox = ({
   };
   /**
    * isTimeExceeded가 1800초 초과라면
-   * 색깔 회색 + 사용 불가로 막아놓음 
+   * 색깔 회색 + 사용 불가로 막아놓음
    */
   const isTimeExceeded = remainingTime > 1800;
+
+  const days = Math.floor(remainingTime / 86400);
+  const hours = Math.floor((remainingTime - days * 86400) / 3600);
+  const minutes = Math.floor(
+    (remainingTime - days * 86400 - hours * 3600) / 60
+  );
+  const seconds = remainingTime - days * 86400 - hours * 3600 - minutes * 60;
 
   return (
     <div className="flex justify-center">
@@ -60,7 +67,12 @@ const BoardCardBox = ({
                 </div>
                 <div className="flex justify-between">
                   <p>남은시간</p>
-                  <p>{remainingTime}</p>
+                  <p>
+                    {days > 0 && `${days}일 `}
+                    {hours > 0 && `${hours}시간 `}
+                    {minutes > 0 && `${minutes}분 `}
+                    {seconds > 0 && `${seconds}초`}
+                  </p>
                 </div>
               </div>
               <div className="w-2/3 flex justify-end">
