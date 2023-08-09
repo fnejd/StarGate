@@ -1,5 +1,6 @@
 package com.ssafy.stargate.model.service;
 
+import com.ssafy.stargate.exception.InputDataDuplicationException;
 import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.model.dto.common.*;
@@ -8,18 +9,13 @@ import com.ssafy.stargate.model.entity.*;
 import com.ssafy.stargate.model.repository.*;
 import com.ssafy.stargate.util.FileUtil;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
@@ -152,9 +148,9 @@ public class MeetingServiceImpl implements MeetingService {
             return MeetingDto.entityToDto(meeting);
         } catch (Exception e) {
             e.printStackTrace();
-
             fileUtil.deleteFile(filePath, filename);
-            throw new CRUDException("미팅 생성 도중 오류가 발생했습니다.");
+
+            throw new CRUDException("미팅 생성 도중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 
@@ -200,7 +196,7 @@ public class MeetingServiceImpl implements MeetingService {
         } catch (Exception e) {
             e.printStackTrace();
             fileUtil.deleteFile(filePath, newFilename);
-            throw new CRUDException("미팅 수정 도중 오류가 발생했습니다.");
+            throw new CRUDException("미팅 생성 도중 오류가 발생했습니다: " + e.getMessage());
         }
 
     }
@@ -321,13 +317,18 @@ public class MeetingServiceImpl implements MeetingService {
      * @param meeting           [Meeting] 미팅
      * @param meetingMemberDtos [List<MeetingMemberBridgeDto>] 미팅 멤버 dto 리스트
      * @return List<MeetingMemberBridge> 미팅 멤버 엔티티 리스트
-     * @throws NotFoundException NotFoundException 데이터 찾기 실패 에러
+     * @throws NotFoundException             NotFoundException 데이터 찾기 실패 에러
+     * @throws InputDataDuplicationException 미팅 멤버 리스트에 번호(id) 중복 발생 시 던져주는 에러
      */
-    private List<MeetingMemberBridge> dtoToMeetingMemberList(Meeting meeting, List<Long> meetingMemberDtos) throws NotFoundException {
-        log.info("HELP = {}", meetingMemberDtos.get(0).getClass());
+    private List<MeetingMemberBridge> dtoToMeetingMemberList(Meeting meeting, List<Long> meetingMemberDtos) throws NotFoundException, InputDataDuplicationException {
+        Set<Long> uniqueMemberNos = new HashSet<>();
         return IntStream.range(0, meetingMemberDtos.size())
                 .mapToObj(index -> {
-                    Long memberNo = meetingMemberDtos.get(index); // Corrected code
+                    Long memberNo = meetingMemberDtos.get(index);
+                    if (!uniqueMemberNos.add(memberNo)) {
+                        throw new InputDataDuplicationException("해당 멤버는 미팅 참가 리스트에 이미 존재합니다.");
+                    }
+
                     return MeetingMemberBridge.builder()
                             .meeting(meeting)
                             .pMember(pMemberRepository.findById(memberNo)
@@ -345,11 +346,17 @@ public class MeetingServiceImpl implements MeetingService {
      * @param meeting          [Meeting] 미팅
      * @param meetingFUserDtos [List<MeetingMemberBridgeDto>] 미팅 팬유저 dto 리스트
      * @return List<MeetingMemberBridge> 미팅 팬유저 엔티티 리스트
+     * @throws InputDataDuplicationException 미팅 팬유저 리스트에 이메일(id) 중복 발생 시 던져주는 에러
      */
-    private List<MeetingFUserBridge> dtoToMeetingFUserList(Meeting meeting, List<String> meetingFUserDtos) {
+    private List<MeetingFUserBridge> dtoToMeetingFUserList(Meeting meeting, List<String> meetingFUserDtos) throws InputDataDuplicationException {
+        Set<String> uniqueEmails = new HashSet<>();
         return IntStream.range(0, meetingFUserDtos.size())
                 .mapToObj(index -> {
                     String email = meetingFUserDtos.get(index);
+                    if (!uniqueEmails.add(email)) {
+                        throw new InputDataDuplicationException("해당 팬유저는 미팅 참가 리스트에 이미 존재합니다.");
+                    }
+
                     return MeetingFUserBridge.builder()
                             .meeting(meeting)
                             .email(email)
