@@ -22,6 +22,7 @@ interface InputProps {
   getter?: object;
   setter: React.Dispatch<React.SetStateAction<object>>;
   value?: string;
+  placehoder?: string;
 }
 
 const InputComponent: React.FC<InputProps> = ({
@@ -33,6 +34,7 @@ const InputComponent: React.FC<InputProps> = ({
   getter,
   setter,
   value,
+  placehoder,
 }) => {
   // state 값 class 지정 분기
   if (state == 'red') {
@@ -61,7 +63,7 @@ const InputComponent: React.FC<InputProps> = ({
             onChange={(e) => onChange(e)}
             className="min-w-full text-white bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
-            placeholder={text}
+            placeholder={placehoder != undefined ? placehoder : text}
             value={value}
           />
         </div>
@@ -72,17 +74,12 @@ const InputComponent: React.FC<InputProps> = ({
             onChange={(e) => onChange(e)}
             className="min-w-full text-white bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
-            placeholder={text}
+            placeholder={placehoder != undefined ? placehoder : text}
             value={value}
           />
         </div>
       )}
-
-      {notice != null ? (
-        <p className={`mt-1 ${state}`}>{notice}</p>
-      ) : (
-        <p className="ml-3 mt-3"></p>
-      )}
+      <p className={`mt-1 ${state} block h-4`}>{notice}</p>
     </div>
   );
 };
