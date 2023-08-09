@@ -12,13 +12,14 @@ export default {
   theme: {
     extend: {
       width: {
-        'xs' : '15vw',
-        's' : '30vw',
-        'm': '50vw',
-        'l': '70vw',
-        'xl': '98vw',
+        xs: '15vw',
+        s: '30vw',
         m: '50vw',
         l: '70vw',
+        xl: '98vw',
+        m: '50vw',
+        l: '70vw',
+        ml: '80vw',
         xl: '98vw',
         62: '241px',
         300: '300px',
