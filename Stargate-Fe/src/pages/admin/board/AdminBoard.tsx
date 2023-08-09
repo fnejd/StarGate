@@ -91,7 +91,7 @@ const AdminBoard = () => {
   }, [data]);
 
   return (
-    <div className="w-screen flex flex-col justify-center">
+    <div className="w-xl flex flex-col justify-center">
       <AdminBoardHeader />
       {loading ? (
         <BoardCardBox

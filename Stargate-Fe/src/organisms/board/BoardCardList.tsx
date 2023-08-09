@@ -74,7 +74,7 @@ const BoardCardList = ({
   };
 
   return (
-    <div className="w-xl  flex justify-center">
+    <div className="w-xl flex justify-center">
       {isLoading ? (
         <div className="w-5/6 flex justify-evenly flex-wrap">
           {Array.from({ length: skeleton }).map((_, index) => (
@@ -88,7 +88,7 @@ const BoardCardList = ({
           {meetings &&
             meetings.map((meeting) => (
               <div
-                className="w-1/4 lg:h-96 sm:h-56 cursor-pointer"
+                className="w-1/4 flex justify-center lg:h-96 sm:h-56 cursor-pointer"
                 key={meeting.uuid}
                 onClick={() => handleCardClick(meeting.uuid)}
               >
