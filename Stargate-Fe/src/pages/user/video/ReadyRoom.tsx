@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ReadyTab from '@/organisms/video/ReadyTab';
-import { useSocket } from '@/context/SocketProvider';
 import { getReady } from '@/services/userVideo';
+
 interface ImageFileInfo {
   filename: string;
   fileUrl: string;

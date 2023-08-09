@@ -1,44 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tab0, Tab1, Tab2, Tab3, Tab4, Tab5 } from './TabContent';
 
-interface ImageFileInfo {
-  filename: string;
-  fileUrl: string;
-}
-
-interface MeetingFUser {
-  email: string;
-  orderNum: number;
-  name: string;
-  remainingTime: number;
-  remainingFanNum: number;
-  memoContents: string;
-}
-
-interface MeetingMember {
-  memberNo: number;
-  name: string;
-  orderNum: number;
-  roomId: string;
-  isPolaroidEnable: boolean;
-  postitContents: string;
-}
-
-interface MeetingData {
-  uuid: string;
-  name: string;
-  startDate: string;
-  waitingTime: number;
-  meetingTime: number;
-  notice: string;
-  photoNum: number;
-  groupNo: number;
-  groupName: string;
-  imageFileInfo: ImageFileInfo;
-  meetingFUsers: MeetingFUser[];
-  meetingMembers: MeetingMember[];
-}
-
 interface RedayDataProps {
   readyData: MeetingData;
 }
@@ -53,13 +15,21 @@ const ReadyTab = ({ readyData }: RedayDataProps) => {
     false,
     false,
   ]);
+
+  // 탭 콘텐트에서 확인을 누르면... 위에있는 스테이트랑 액티브 탭이 바뀜... 그럼 함수 하나보내주는게 낫지않나?
   const tabContent: Record<number, React.ReactNode> = {
-    0: <Tab0 />,
-    1: <Tab1 />,
-    2: <Tab2 />,
-    3: <Tab3 />,
-    4: <Tab4 />,
-    5: <Tab5 />,
+    0: <Tab0 readyData={readyData} handleConfirm={() => handleConfirm(1)} />,
+    1: <Tab1 readyData={readyData} handleConfirm={() => handleConfirm(2)} />,
+    2: <Tab2 readyData={readyData} handleConfirm={() => handleConfirm(3)} />,
+    3: <Tab3 readyData={readyData} handleConfirm={() => handleConfirm(4)} />,
+    4: <Tab4 readyData={readyData} handleConfirm={() => handleConfirm(5)} />,
+    5: (
+      <Tab5
+        readyData={readyData}
+        setTabState={setTabState}
+        tabState={tabState}
+      />
+    ),
   };
   const tabList = [
     '공지사항',
@@ -70,12 +40,30 @@ const ReadyTab = ({ readyData }: RedayDataProps) => {
     '입장 대기존',
   ];
 
-  const handleTabClick = (index: number) => {
-    setActiveTab(index);
+  // 클릭된 인덱스 이전의 탭들을 모두 false로 설정하는 함수
+  const handleResetTabs = (tabIndex: number) => {
+    setTabState((prevTabState) =>
+      prevTabState.map((state, index) => (index < tabIndex ? true : false))
+    );
   };
 
+  // 탭을 클릭했을 때 활성화된 탭 번호가 바뀌고
+  // 클릭된 탭 이후의 탭들은 모두 비활성화 설정하는 함수
+  const handleTabClick = (clickedIndex: number) => {
+    setActiveTab(clickedIndex);
+    // handleResetTabs(clickedIndex);
+  };
+
+  // 탭 확인 버튼 함수
+  const handleConfirm = (tabIndex: number) => {
+    setActiveTab(tabIndex);
+    handleResetTabs(tabIndex);
+  };
+
+  console.log('탭 상태', tabState);
   console.log('활성화된 탭', activeTab);
   console.log('레디 데이터', readyData);
+
   return (
     readyData && (
       <div className="mx-auto">
