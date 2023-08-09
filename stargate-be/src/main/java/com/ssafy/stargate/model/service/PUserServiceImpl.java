@@ -9,6 +9,7 @@ import com.ssafy.stargate.model.dto.common.PUserDto;
 import com.ssafy.stargate.model.entity.PUser;
 import com.ssafy.stargate.model.repository.PUserRepository;
 import com.ssafy.stargate.util.JwtTokenUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,16 +25,16 @@ import java.time.LocalDateTime;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PUserServiceImpl implements PUserService {
 
-    @Autowired
-    private PUserRepository pUserRepository;
+    private final PUserRepository pUserRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final PasswordEncoder passwordEncoder;
+
+
+    private final JwtTokenUtil jwtTokenUtil;
 
     /**
      * 소속사 직원에 대한 회원가입을 수행한다.

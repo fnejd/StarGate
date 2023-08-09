@@ -10,24 +10,23 @@ import com.ssafy.stargate.model.repository.FUserRepository;
 import com.ssafy.stargate.model.repository.MeetingRepository;
 import com.ssafy.stargate.model.repository.PMemberRepository;
 import com.ssafy.stargate.model.repository.PostitRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PostitServiceImpl implements PostitService {
-    @Autowired
-    PostitRepository postitRepository;
 
-    @Autowired
-    MeetingRepository meetingRepository;
+    private final PostitRepository postitRepository;
 
-    @Autowired
-    PMemberRepository pMemberRepository;
+    private final MeetingRepository meetingRepository;
 
-    @Autowired
-    FUserRepository fUserRepository;
+    private final PMemberRepository pMemberRepository;
+
+    private final FUserRepository fUserRepository;
 
     /**
      * 포스트잇을 작성한다.

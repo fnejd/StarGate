@@ -11,6 +11,7 @@ import com.ssafy.stargate.model.repository.LetterRepository;
 import com.ssafy.stargate.model.repository.MeetingRepository;
 import com.ssafy.stargate.model.repository.PMemberRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,19 +23,16 @@ import java.util.List;
 @Service
 @Slf4j
 @Transactional
+@RequiredArgsConstructor
 public class LetterServiceImpl implements LetterService{
 
-    @Autowired
-    private LetterRepository letterRepository;
+    private final LetterRepository letterRepository;
 
-    @Autowired
-    private FUserRepository fUserRepository;
+    private final FUserRepository fUserRepository;
 
-    @Autowired
-    private MeetingRepository meetingRepository;
+    private final MeetingRepository meetingRepository;
 
-    @Autowired
-    private PMemberRepository pMemberRepository;
+    private final PMemberRepository pMemberRepository;
 
     /**
      * 편지 작성해서 저장 및 수정

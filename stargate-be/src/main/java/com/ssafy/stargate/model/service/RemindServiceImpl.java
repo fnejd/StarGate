@@ -8,6 +8,7 @@ import com.ssafy.stargate.model.repository.MeetingRepository;
 import com.ssafy.stargate.model.repository.PolaroidRepository;
 import com.ssafy.stargate.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,22 +23,32 @@ import java.util.UUID;
  * 팬유저 팬미팅 리마인드 관련 서비스 구현체
  */
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class RemindServiceImpl implements RemindService {
-    @Autowired
-    private FileUtil fileUtil;
 
-    @Value("polaroid")
-    private String polaroidFilePath;
+    private final FileUtil fileUtil;
 
-    @Autowired
+    private final String polaroidFilePath;
+
     private final PolaroidRepository polaroidRepository;
 
-    @Autowired
     private final MeetingRepository meetingRepository;
 
-    @Autowired
     private final LetterRepository letterRepository;
+
+    public RemindServiceImpl(
+            FileUtil fileUtil,
+            @Value("${s3.filepath.polaroid}") String polaroidFilePath,
+            PolaroidRepository polaroidRepository,
+            MeetingRepository meetingRepository,
+            LetterRepository letterRepository
+    ) {
+        this.fileUtil = fileUtil;
+        this.polaroidFilePath = polaroidFilePath;
+        this.polaroidRepository = polaroidRepository;
+        this.meetingRepository = meetingRepository;
+        this.letterRepository = letterRepository;
+    }
 
     /**
      * 해당 팬미팅의 리마인드 정보를 가져온다.

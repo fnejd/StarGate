@@ -7,6 +7,7 @@ import com.ssafy.stargate.model.entity.JwtToken;
 import com.ssafy.stargate.model.repository.JwtTokenRepository;
 import com.ssafy.stargate.util.JwtTokenUtil;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class JwtTokenServiceImpl implements JwtTokenService {
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private JwtTokenRepository jwtTokenRepository;
+    private final JwtTokenRepository jwtTokenRepository;
     
     /**
      * refreshToken 을 바탕으로 accessToken 새로 생성 (JwtToken 에 저장되어 있는 refreshToken 과 비교)

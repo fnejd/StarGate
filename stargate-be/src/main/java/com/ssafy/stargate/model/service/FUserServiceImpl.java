@@ -40,40 +40,53 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
-@RequiredArgsConstructor
 @Transactional
 public class FUserServiceImpl implements FUserService {
-    @Autowired
-    private FUserRepository fUserRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final FUserRepository fUserRepository;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private CertifyRepository certifyRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final CertifyRepository certifyRepository;
 
-    @Value("${spring.mail.username}")
-    private String username;
+    private final JavaMailSender mailSender;
 
-    @Autowired
-    private PolaroidRepository polaroidRepository;
+    private final PolaroidRepository polaroidRepository;
 
-    @Autowired
-    private FileUtil fileUtil;
+    private final FileUtil fileUtil;
 
-    @Autowired
-    private JwtTokenRepository jwtTokenRepository;
+    private final JwtTokenRepository jwtTokenRepository;
 
-    @Value("polaroid")
-    private String polaroidFilePath;
-    
-    
+    private final String polaroidFilePath;
+
+    private final String username;
+
+    public FUserServiceImpl(
+            FUserRepository fUserRepository,
+            PasswordEncoder passwordEncoder,
+            JwtTokenUtil jwtTokenUtil,
+            CertifyRepository certifyRepository,
+            JavaMailSender mailSender,
+            PolaroidRepository polaroidRepository,
+            FileUtil fileUtil,
+            JwtTokenRepository jwtTokenRepository,
+            @Value("${s3.filepath.polaroid}") String polaroidFilePath,
+            @Value("${spring.mail.username}") String username
+    ) {
+        this.fUserRepository = fUserRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.certifyRepository = certifyRepository;
+        this.mailSender = mailSender;
+        this.polaroidRepository = polaroidRepository;
+        this.fileUtil = fileUtil;
+        this.jwtTokenRepository = jwtTokenRepository;
+        this.polaroidFilePath = polaroidFilePath;
+        this.username = username;
+    }
+
     /**
      * 팬 유저 회원가입을 진행한다.
      * 이미 해당 전화 번호와 이름의 회원이 가입되어 있는지 확인

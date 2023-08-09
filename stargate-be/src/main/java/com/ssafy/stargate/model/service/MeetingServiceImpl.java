@@ -27,31 +27,44 @@ import java.util.stream.IntStream;
  */
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
-    @Autowired
+
+
     private final MeetingRepository meetingRepository;
 
-    @Autowired
     private final MeetingFUserRepository meetingFUserRepository;
 
-    @Autowired
     private final MeetingMemberRepository meetingMemberRepository;
 
-    @Autowired
     private final PMemberRepository pMemberRepository;
 
-    @Autowired
     private final PUserRepository pUserRepository;
 
-    @Autowired
     private final FUserRepository fUserRepository;
 
-    @Autowired
     private final FileUtil fileUtil;
 
-    @Value("${s3.filepath.meeting}")
-    private String filePath;
+    private final String filePath;
+
+    public MeetingServiceImpl(
+            MeetingRepository meetingRepository,
+            MeetingFUserRepository meetingFUserRepository,
+            MeetingMemberRepository meetingMemberRepository,
+            PMemberRepository pMemberRepository,
+            PUserRepository pUserRepository,
+            FUserRepository fUserRepository,
+            FileUtil fileUtil,
+            @Value("${s3.filepath.meeting}") String filePath
+    ) {
+        this.meetingRepository = meetingRepository;
+        this.meetingFUserRepository = meetingFUserRepository;
+        this.meetingMemberRepository = meetingMemberRepository;
+        this.pMemberRepository = pMemberRepository;
+        this.pUserRepository = pUserRepository;
+        this.fUserRepository = fUserRepository;
+        this.fileUtil = fileUtil;
+        this.filePath = filePath;
+    }
 
     /**
      * 미팅 세부정보를 가져온다.

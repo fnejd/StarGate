@@ -25,28 +25,40 @@ import java.util.UUID;
  */
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class PolaroidServiceImpl implements PolaroidService {
-    @Autowired
+
+
     private final PolaroidRepository polaroidRepository;
 
-    @Autowired
     private final MeetingRepository meetingRepository;
 
-    @Autowired
     private final MeetingMemberRepository meetingMemberRepository;
 
-    @Autowired
     private final MeetingFUserRepository meetingFUserRepository;
 
-    @Autowired
     private final FUserRepository fUserRepository;
 
-    @Autowired
     private final FileUtil fileUtil;
 
-    @Value("polaroid")
     private String filePath;
+
+    public PolaroidServiceImpl(
+            PolaroidRepository polaroidRepository,
+            MeetingRepository meetingRepository,
+            MeetingMemberRepository meetingMemberRepository,
+            MeetingFUserRepository meetingFUserRepository,
+            FUserRepository fUserRepository,
+            FileUtil fileUtil,
+            @Value("${s3.filepath.polaroid}") String filePath
+    ) {
+        this.polaroidRepository = polaroidRepository;
+        this.meetingRepository = meetingRepository;
+        this.meetingMemberRepository = meetingMemberRepository;
+        this.meetingFUserRepository = meetingFUserRepository;
+        this.fUserRepository = fUserRepository;
+        this.fileUtil = fileUtil;
+        this.filePath = filePath;
+    }
 
     /**
      * 저장된 폴라로이드 리스트를 가져온다.

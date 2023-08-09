@@ -8,6 +8,7 @@ import com.ssafy.stargate.model.entity.PUser;
 import com.ssafy.stargate.model.repository.PGroupRepository;
 import com.ssafy.stargate.model.repository.PMemberRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,13 @@ import java.util.List;
 @Service
 @Transactional
 @Slf4j
+@RequiredArgsConstructor
 public class PManagementServiceImpl implements PManagementService {
-    @Autowired
-    PMemberRepository memberRepository;
-    @Autowired
-    PGroupRepository groupRepository;
+
+
+    private final PMemberRepository memberRepository;
+
+    private final PGroupRepository groupRepository;
 
 
     /**

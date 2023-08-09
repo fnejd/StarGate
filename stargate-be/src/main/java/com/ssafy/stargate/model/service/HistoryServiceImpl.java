@@ -20,17 +20,15 @@ import java.util.Optional;
  * 히스토리 서비스 구현체
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class HistoryServiceImpl implements HistoryService {
-    @Autowired
-    HistoryRepository historyRepository;
 
-    @Autowired
-    PMemberRepository pMemberRepository;
+    private final HistoryRepository historyRepository;
 
-    @Autowired
-    FUserRepository fUserRepository;
+    private final PMemberRepository pMemberRepository;
+
+    private final FUserRepository fUserRepository;
 
     /**
      * 멤버가 해당 유저에 대한 히스토리 정보 리스트를 가져온다.
