@@ -55,7 +55,6 @@ const AdminManagementModalBox = ({
     }
   };
   useEffect(() => {
-    console.log(members);
     setSelectedGroupMembers(members);
   }, [members]);
   const showInputOpen = () => {
@@ -76,15 +75,17 @@ const AdminManagementModalBox = ({
     selectedClear();
     showInputOpen();
   };
+  /**
+   * handleXButtonClick
+   * Input이 열려있다면 handleXButtonClicktoCancle를 이용해 창을 닫음
+   * 아니라면 멤버 삭제 함수 실행
+   */
   const handleXButtonClick = (memberNo: number | void) => {
     if (showInput) {
-      handleXButtonClicktoCancle();
+      showInputClose();
     } else {
       handleXButtonClicktoDelete(memberNo);
     }
-  };
-  const handleXButtonClicktoCancle = () => {
-    showInputClose();
   };
   const handleXButtonClicktoDelete = async (memberNo: number | void) => {
     showInputClose();

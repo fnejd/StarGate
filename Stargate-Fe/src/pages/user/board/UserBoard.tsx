@@ -9,14 +9,24 @@ interface ImageFileInfo {
   fileUrl: string;
 }
 
+/**
+ * @param uuid => 미팅 구분할 uuid
+ * @param remainingTime => 남은 시간(초)
+ * @param imageFileInfo => 이미지 정보
+ */
 interface MeetingData {
   uuid: string;
   name: string;
   startDate: string;
   remainingTime: number;
-  imageFileInfo: ImageFileInfo;
+  imageFileInfo?: ImageFileInfo;
 }
 
+/**
+ * @param ongoing => 진행중
+ * @param expected => 예정
+ * @param finished => 완료
+ */
 interface AdminBoardData {
   ongoing: MeetingData[];
   expected: MeetingData[];
@@ -41,6 +51,11 @@ const UserBoard = () => {
   }, []);
   const cardData = data.ongoing[0] || data.expected[0];
 
+
+  /**
+   * @todo => 추후에 useInterval로 수정
+   */
+
   useEffect(() => {
     const interval = setInterval(() => {
       setData((prevData) => ({
@@ -64,9 +79,9 @@ const UserBoard = () => {
           return meeting;
         }),
       }));
-    }, 1000);
+    }, 1000); // 1초에 1씩 줄어듬
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // 메모리 누수 방지를 위해 clearInterval
   }, [data]);
 
   return (

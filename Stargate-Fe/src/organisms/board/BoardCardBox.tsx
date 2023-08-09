@@ -30,6 +30,7 @@ const BoardCardBox = ({
   isAdmin,
 }: BoardCardBoxProps) => {
   const navigate = useNavigate();
+
   const handleToReady = () => {
     if (remainingTime <= 1800) {
       navigate(`/ready/${uuid}`);
@@ -38,7 +39,10 @@ const BoardCardBox = ({
   const handleToMonitoring = () => {
     navigate(`/admin/monitoring`);
   };
-
+  /**
+   * isTimeExceeded가 1800초 초과라면
+   * 색깔 회색 + 사용 불가로 막아놓음 
+   */
   const isTimeExceeded = remainingTime > 1800;
 
   return (
