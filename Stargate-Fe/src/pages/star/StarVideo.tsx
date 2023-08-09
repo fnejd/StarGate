@@ -18,7 +18,7 @@ const StarVideo = () => {
   // 연결상태 변경시 콘솔에 출력
   peerService.peer.onconnectionstatechange = () => {
     console.log('state changed');
-    console.log(peerService.peer.connectionState);
+    console.log(peerService.peer.connecticonState);
   };
 
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정

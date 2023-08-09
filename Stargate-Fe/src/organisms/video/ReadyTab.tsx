@@ -23,13 +23,7 @@ const ReadyTab = ({ readyData }: RedayDataProps) => {
     2: <Tab2 readyData={readyData} handleConfirm={() => handleConfirm(3)} />,
     3: <Tab3 readyData={readyData} handleConfirm={() => handleConfirm(4)} />,
     4: <Tab4 readyData={readyData} handleConfirm={() => handleConfirm(5)} />,
-    5: (
-      <Tab5
-        readyData={readyData}
-        setTabState={setTabState}
-        tabState={tabState}
-      />
-    ),
+    5: <Tab5 readyData={readyData} />,
   };
   const tabList = [
     '공지사항',
@@ -74,11 +68,11 @@ const ReadyTab = ({ readyData }: RedayDataProps) => {
           <div className="flex flex-col w-1/4">
             {tabList.map((tab, index) => (
               <div
-                className={`flex items-center h-200 cursor-pointer ml-2 my-2 ${
+                className={`flex items-center h-200 my-2 rounded-tr-lg rounded-br-lg ${
                   tabState[index] ? 'text-mainblue' : 'text-gray-500'
-                }`}
+                } ${activeTab === index ? 'bg-mainblue bg-opacity-20' : ''}`}
                 key={index}
-                onClick={() => handleTabClick(index)}
+                // onClick={handleTabClick(index)}
               >
                 {/* 현재 상태가 true면 무조건 메인블루
               현재 상태가 false지만 현재 액티브 되어있으면 투명도 있는 블루
@@ -87,9 +81,7 @@ const ReadyTab = ({ readyData }: RedayDataProps) => {
               그리고 액티브된 숫자보다 큰 숫자들은 무조건 상태 false */}
                 <span
                   className={`material-icons text-center ${
-                    tabState[index] && activeTab === index
-                      ? 'bg-opacity-50'
-                      : ''
+                    activeTab === index ? 'text-white' : ''
                   }`}
                 >
                   check_circle
