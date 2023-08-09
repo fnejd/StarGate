@@ -1,14 +1,15 @@
-import React from 'react';
 import BoardCard from '../../atoms/board/BoardCard';
 import { useNavigate } from 'react-router-dom';
+
 /**
  * BoardCardListProps
  * @param meetings => 통째로 넘겨받은 meeting data
  */
 
 interface BoardCardListProps {
-  meetings: MeetingData[];
-  isAdmin: boolean;
+  meetings?: MeetingData[];
+  isAdmin?: boolean;
+  isLoading: boolean;
   isOver?: boolean;
 }
 
@@ -34,14 +35,20 @@ interface imageFileInfo {
   fileUrl: string;
 }
 
-const BoardCardList = (
-  { meetings }: BoardCardListProps,
-  isAdmin: boolean,
-  isOver?: boolean
-) => {
+const BoardCardList = ({
+  meetings,
+  isAdmin,
+  isLoading,
+  isOver,
+}: BoardCardListProps & {
+  isAdmin: boolean;
+  isLoading: boolean;
+  isOver?: boolean;
+}) => {
   const navigate = useNavigate();
-  const remainder = meetings.length % 4;
+  const remainder = meetings === undefined ? 0 : meetings.length % 4;
   const emptyCardCount = remainder === 0 ? 0 : 4 - remainder;
+  const skeleton = 8;
 
   /**
    * remainder에 전체 미팅 길이를 나눈 나머지를 넣어주고
@@ -60,33 +67,47 @@ const BoardCardList = (
     }
   };
   const linkToRemind = (uuid: string) => {
-    navigate(`/admin/event/detail/${uuid}`);
+    navigate(`/remind/${uuid}`);
   };
   const linkToDetail = (uuid: string) => {
-    navigate(`/remind/${uuid}`);
+    navigate(`/admin/event/detail/${uuid}`);
   };
 
   return (
-    <div className="w-98vw h-5/6 lg:h-96 sm:h-56 flex justify-center">
-      <div className="w-5/6 flex justify-evenly flex-wrap">
-        {meetings.map((meeting) => (
-          <div
-            className="w-1/4 h-full cursor-pointer" // 커서를 포인터로 변경합니다.
-            key={meeting.uuid}
-            onClick={() => handleCardClick(meeting.uuid)} // 카드 클릭 시 handleCardClick 함수를 호출합니다.
-          >
-            <BoardCard
-              imageSrc={meeting.imageFileInfo?.fileUrl}
-              title={meeting.name}
-              date={meeting.startDate}
-              {...(meeting.remainingTime && { time: meeting.remainingTime })}
-            />
-          </div>
-        ))}
-        {Array.from({ length: emptyCardCount }).map((_, index) => (
-          <div key={index} className="w-1/4 h-full"></div>
-        ))}
-      </div>
+    <div className="w-xl flex justify-center">
+      {isLoading ? (
+        <div className="w-5/6 flex justify-evenly flex-wrap">
+          {Array.from({ length: skeleton }).map((_, index) => (
+            <div key={index} className="w-1/4 lg:h-96 sm:h-56">
+              <BoardCard isLoading={isLoading} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="w-5/6 flex justify-evenly flex-wrap">
+          {meetings &&
+            meetings.map((meeting) => (
+              <div
+                className="w-1/4 flex justify-center lg:h-96 sm:h-56 cursor-pointer"
+                key={meeting.uuid}
+                onClick={() => handleCardClick(meeting.uuid)}
+              >
+                <BoardCard
+                  imageSrc={meeting.imageFileInfo?.fileUrl}
+                  title={meeting.name}
+                  date={meeting.startDate}
+                  {...(meeting.remainingTime && {
+                    time: meeting.remainingTime,
+                  })}
+                  isLoading={isLoading}
+                />
+              </div>
+            ))}
+          {Array.from({ length: emptyCardCount }).map((_, index) => (
+            <div key={index} className="w-1/4 lg:h-96 sm:h-56"></div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

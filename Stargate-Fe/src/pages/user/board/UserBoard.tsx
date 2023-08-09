@@ -34,6 +34,7 @@ interface AdminBoardData {
 }
 
 const UserBoard = () => {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<AdminBoardData>({
     ongoing: [],
     expected: [],
@@ -48,9 +49,10 @@ const UserBoard = () => {
       }
     };
     fetchData();
+    setLoading(false);
+    console.log('로딩완료')
   }, []);
   const cardData = data.ongoing[0] || data.expected[0];
-
 
   /**
    * @todo => 추후에 useInterval로 수정
@@ -85,22 +87,40 @@ const UserBoard = () => {
   }, [data]);
 
   return (
-    <div className="w-xl h-screen">
+    <div className="w-xl flex flex-col justify-center">
       <BoardHeader />
-      {cardData && (
+      {loading ? (
         <BoardCardBox
+          isAdmin={false}
+          isLoading={loading}
+        />
+      ) : (
+        cardData && <BoardCardBox
           uuid={cardData.uuid}
           imageSrc={cardData.imageFileInfo?.fileUrl}
           title={cardData.name}
           date={cardData.startDate}
           remainingTime={cardData.remainingTime}
-          isAdmin={true}
+          isAdmin={false}
+          isLoading={loading}
         />
       )}
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
-      <BoardCardList meetings={data.expected.slice(1)} isAdmin={true} />
+      {loading ? (
+        <BoardCardList isLoading={loading} isAdmin={false} />
+      ) : (
+        data.expected[1] && <BoardCardList
+          meetings={data.expected.slice(1)}
+          isAdmin={false}
+          isLoading={loading}
+        />
+      )}
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
-      <BoardCardList meetings={data.finished} isAdmin={true} />
+      {data.finished && <BoardCardList
+        meetings={data.finished}
+        isAdmin={false}
+        isLoading={loading}
+      />} 
     </div>
   );
 };
