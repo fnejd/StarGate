@@ -1,12 +1,15 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
-import com.ssafy.stargate.model.dto.common.PostitDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitDeleteRequestDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitRequestDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitWriteRequestDto;
+import com.ssafy.stargate.model.dto.response.postit.PostitResponseDto;
 
 public interface PostitService {
-    void writePostit(PostitDto postitDto) throws CRUDException;
+    void writePostit(PostitWriteRequestDto postitDto) throws CRUDException;
 
-    PostitDto getPostit(PostitDto postitDto);
+    PostitResponseDto getPostit(PostitRequestDto postitDto);
 
-    void deletePostit(PostitDto postitDto);
+    void deletePostit(PostitDeleteRequestDto postitDto);
 }

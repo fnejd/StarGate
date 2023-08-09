@@ -3,8 +3,12 @@ package com.ssafy.stargate.model.service;
 import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
+import com.ssafy.stargate.model.dto.request.puser.PUserCreateRequestDto;
+import com.ssafy.stargate.model.dto.request.puser.PUserDeleteRequestDto;
+import com.ssafy.stargate.model.dto.request.puser.PUserLoginRequestDto;
+import com.ssafy.stargate.model.dto.request.puser.PUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
-import com.ssafy.stargate.model.dto.common.PUserDto;
+import com.ssafy.stargate.model.dto.response.puser.PUserResponseDto;
 
 import java.security.Principal;
 
@@ -13,14 +17,14 @@ import java.security.Principal;
  * @author 백승윤
  */
 public interface PUserService {
-    void register(PUserDto dto) throws EmailDuplicationException, RegisterException;
-    JwtResponseDto login(PUserDto dto) throws LoginException;
+    void register(PUserCreateRequestDto dto) throws EmailDuplicationException, RegisterException;
+    JwtResponseDto login(PUserLoginRequestDto dto) throws LoginException;
 
-    void deletePUser(PUserDto dto, Principal principal);
+    void deletePUser(PUserDeleteRequestDto dto, Principal principal);
 
-    PUserDto getPUserData(Principal principal);
+    PUserResponseDto getPUserData(Principal principal);
 
-    int updatePUser(PUserDto pUserDto);
+    int updatePUser(PUserUpdateRequestDto pUserDto);
 
     boolean checkEmailExist(String email);
 }
