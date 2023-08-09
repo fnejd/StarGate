@@ -23,14 +23,17 @@ import java.io.InputStream;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class S3FileHandler extends FileHandler {
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucketName;
-
-    @Autowired
+    private final String bucketName;
     private final AmazonS3Client amazonS3Client;
 
+    public S3FileHandler(
+            @Value("${cloud.aws.s3.bucket}") String bucketName,
+            AmazonS3Client amazonS3Client
+    ) {
+        this.bucketName = bucketName;
+        this.amazonS3Client = amazonS3Client;
+    }
 
     /**
      * 저장된 파일 정보를 가져온다.

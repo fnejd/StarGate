@@ -15,9 +15,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class StompConfig implements WebSocketMessageBrokerConfigurer {
 
-//    @Autowired
-//    private StompHandler stompHandler;
-
     /**
      * 엔드 포인트 설정
      * @param registry

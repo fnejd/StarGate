@@ -17,10 +17,7 @@ import java.nio.file.AccessDeniedException;
 @Component
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
+    private final JwtTokenUtil jwtTokenUtil;
     /**
      * 메세지가 전송되기 전 jwt 토큰이 유효한지 확인
      * @param message

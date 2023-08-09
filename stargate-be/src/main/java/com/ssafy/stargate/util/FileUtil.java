@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 @RequiredArgsConstructor
 public class FileUtil {
-    @Autowired
+
     private final FileHandler fileHandler;
 
     /**
