@@ -6,7 +6,12 @@ import {
   updateGroup,
 } from '@/services/adminBoardService';
 import { useRecoilState } from 'recoil';
-import { selectedGroupMembersState } from '@/recoil/adminManagementState';
+import {
+  groupsState,
+  selectedGroupMembersState,
+  selectedGroupNoState,
+  selectedGroupNameState
+} from '@/recoil/adminManagementState';
 /**
  * AdminManagementInput
  * @param isGroup => 인풋 태그 타입 설정 변수
@@ -29,6 +34,11 @@ interface MemberData {
   name: string;
 }
 
+interface newGroup {
+  groupNo: number;
+  name: string;
+}
+
 const AdminManagementInput = ({
   isGroup,
   groupNo,
@@ -40,6 +50,9 @@ const AdminManagementInput = ({
   const [selectedGroupMembers, setSelectedGroupMembers] = useRecoilState<
     MemberData[]
   >(selectedGroupMembersState);
+  const [groups, setGroups] = useRecoilState(groupsState);
+  const [selectedGroupNo, setSelectedGroupNo] = useRecoilState(selectedGroupNoState);
+  const [selectedGroupName, setSelectedGroupName] = useRecoilState(selectedGroupNameState);
 
   useEffect(() => {
     setInputValue(value || '');
@@ -60,7 +73,13 @@ const AdminManagementInput = ({
       }
     } else {
       try {
-        await createGroup(inputValue);
+        const newGroup = await createGroup(inputValue);
+        console.log(newGroup)
+        if (newGroup !== undefined){
+          setGroups([...groups, newGroup])
+          // setSelectedGroupNo(newGroup.groupNo);
+          // setSelectedGroupName(newGroup.name);
+        }
       } catch (error) {
         console.log('그룹 생성 에러:', error);
       }
@@ -85,7 +104,7 @@ const AdminManagementInput = ({
         try {
           const newMember = await createMember(groupNo, inputValue);
           if (newMember !== undefined) {
-            setSelectedGroupMembers([newMember, ...selectedGroupMembers]);
+            setSelectedGroupMembers([...selectedGroupMembers, newMember]);
           }
         } catch (error) {
           console.log('멤버 생성 에러:', error);

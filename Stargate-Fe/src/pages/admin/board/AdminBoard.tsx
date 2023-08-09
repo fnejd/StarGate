@@ -85,9 +85,9 @@ const AdminBoard = () => {
           return meeting;
         }),
       }));
-    }, 1000);
+    }, 1000); // 1초에 1씩 줄어듬
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // 메모리 누수 방지를 위해 clearInterval
   }, [data]);
 
   return (
