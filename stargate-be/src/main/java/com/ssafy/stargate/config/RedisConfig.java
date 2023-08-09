@@ -9,14 +9,19 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 
 @Configuration
 public class RedisConfig {
-    @Value("${spring.data.redis.host}")
-    private String host;
+    private final String host;
+    private final int port;
+    private final String password;
 
-    @Value("${spring.data.redis.port}")
-    private int port;
-
-    @Value("${spring.data.redis.password}")
-    private String password;
+    public RedisConfig(
+            @Value("${spring.data.redis.host}") String host,
+            @Value("${spring.data.redis.port}") int port,
+            @Value("${spring.data.redis.password}") String password
+    ) {
+        this.host = host;
+        this.port = port;
+        this.password = password;
+    }
 
     /**
      * 레디스 서버를 연결한다.

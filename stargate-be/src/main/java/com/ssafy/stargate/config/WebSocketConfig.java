@@ -1,6 +1,7 @@
 package com.ssafy.stargate.config;
 
 import com.ssafy.stargate.handler.RtcSocketHandler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,13 +22,14 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @EnableWebSocket
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    @Autowired
-    RtcSocketHandler rtcSocketHandler;
+    private final RtcSocketHandler rtcSocketHandler;
 
     /**
      * 웹소켓의 경로를 등록한다.
+     *
      * @param registry 웹소캣 핸들러 레지스트리(기본값)
      */
     @Override

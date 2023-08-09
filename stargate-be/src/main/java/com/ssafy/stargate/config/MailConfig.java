@@ -1,6 +1,7 @@
 package com.ssafy.stargate.config;
 
 import java.util.Properties;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,36 +15,40 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 @Slf4j
 public class MailConfig {
+    private final String host;
+    private final int port;
+    private final String username;
+    private final String password;
+    private final boolean auth;
+    private final boolean starttlsEnable;
+    private final String protocol;
+    private final boolean debug;
+    private final String encoding;
 
-    @Value("${spring.mail.host}")
-    private String host;
-
-    @Value("${spring.mail.port}")
-    private int port;
-
-    @Value("${spring.mail.username}")
-    private String username;
-
-    @Value("${spring.mail.password}")
-    private String password;
-
-    @Value("${spring.mail.properties.mail.smtp.auth}")
-    private boolean auth;
-
-    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
-    private boolean starttlsEnable;
-
-    @Value("${spring.mail.transport.protocol}")
-    private String protocol;
-
-    @Value("${spring.mail.debug}")
-    private boolean debug;
-
-    @Value("${spring.mail.default.encoding}")
-    private String encoding;
+    public MailConfig(
+            @Value("${spring.mail.host}") String host,
+            @Value("${spring.mail.port}") int port,
+            @Value("${spring.mail.username}") String username,
+            @Value("${spring.mail.password}") String password,
+            @Value("${spring.mail.properties.mail.smtp.auth}") boolean auth,
+            @Value("${spring.mail.properties.mail.smtp.starttls.enable}") boolean starttlsEnable,
+            @Value("${spring.mail.transport.protocol}") String protocol,
+            @Value("${spring.mail.debug}") boolean debug,
+            @Value("${spring.mail.default.encoding}") String encoding
+    ) {
+        this.host = host;
+        this.port = port;
+        this.username = username;
+        this.password = password;
+        this.auth = auth;
+        this.starttlsEnable = starttlsEnable;
+        this.protocol = protocol;
+        this.debug = debug;
+        this.encoding = encoding;
+    }
 
     @Bean
-    public JavaMailSender javaMailSender(){
+    public JavaMailSender javaMailSender() {
 
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(host);
@@ -56,7 +61,7 @@ public class MailConfig {
         return javaMailSender;
     }
 
-    private Properties getProperties(){
+    private Properties getProperties() {
 
         Properties properties = new Properties();
         properties.setProperty("mail.transport.protocol", protocol);
