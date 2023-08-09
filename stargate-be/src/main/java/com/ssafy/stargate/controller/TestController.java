@@ -5,22 +5,20 @@ import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.handler.FileHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 
-@RequestMapping("/tests")
 @RestController
+@RequestMapping("/tests")
 @RequiredArgsConstructor
 @Slf4j
 public class TestController {
-    @Autowired
     private final FileHandler fileHandler;
 
-    final private String filePath = "test";
+    private final String filePath = "test";
 
     @GetMapping("/get-test")
     public ResponseEntity<?> getTest() {
@@ -42,20 +40,20 @@ public class TestController {
 
 
     @GetMapping("/multipart/s3/get-url")
-    public ResponseEntity<?>  getUrlMultipartS3(@RequestParam("filename") String filename) throws CRUDException, NotFoundException {
+    public ResponseEntity<?> getUrlMultipartS3(@RequestParam("filename") String filename) throws CRUDException, NotFoundException {
         String key = fileHandler.getKey(filePath, filename);
         return ResponseEntity.ok(fileHandler.getFileInfo(key));
     }
 
     @PostMapping("/multipart/s3/upload")
-    public ResponseEntity<?>  uploadMultipartS3(@RequestParam("file") MultipartFile file) throws CRUDException {
+    public ResponseEntity<?> uploadMultipartS3(@RequestParam("file") MultipartFile file) throws CRUDException {
         String key = fileHandler.getKey(filePath, fileHandler.getUuidFilename(file.getOriginalFilename()));
         fileHandler.uploadFile(key, file);
         return ResponseEntity.ok(null);
     }
 
     @GetMapping("/multipart/s3/delete")
-    public ResponseEntity<?>  deleteMultipartS3(@RequestParam("filename") String filename) throws CRUDException, NotFoundException {
+    public ResponseEntity<?> deleteMultipartS3(@RequestParam("filename") String filename) throws CRUDException, NotFoundException {
         String key = fileHandler.getKey(filePath, filename);
         fileHandler.deleteFile(key);
         return ResponseEntity.ok(null);

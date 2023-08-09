@@ -3,7 +3,6 @@ package com.ssafy.stargate.controller;
 import com.ssafy.stargate.model.dto.response.RemindResponseDto;
 import com.ssafy.stargate.model.service.RemindService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,13 +14,11 @@ import java.util.UUID;
 
 /**
  * 팬유저 팬미팅 리마인드 관련 Controller 이다.
- *
  */
 @RestController
 @RequestMapping("/reminds")
 @RequiredArgsConstructor
 public class RemindController {
-    @Autowired
     private final RemindService remindService;
 
     /**

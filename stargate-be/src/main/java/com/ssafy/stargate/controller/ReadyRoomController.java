@@ -7,7 +7,6 @@ import com.ssafy.stargate.model.dto.common.PolaroidEnableDto;
 import com.ssafy.stargate.model.dto.response.ReadyRoomResponseDto;
 import com.ssafy.stargate.model.service.ReadyRoomService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +17,9 @@ import java.util.UUID;
  * 팬유저 대기방에 관련 Controller이다.
  */
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/readyroom")
+@RequiredArgsConstructor
 public class ReadyRoomController {
-    @Autowired
     private final ReadyRoomService readyRoomService;
 
     /**
@@ -46,7 +44,7 @@ public class ReadyRoomController {
      * @param principal [Principal] 팬유저 이메일이 포함된 객체
      * @return 성공: 200
      * @throws NotFoundException 데이터 CRUD 에러
-     * @throws CRUDException 데이터 찾기 실패 에러
+     * @throws CRUDException     데이터 찾기 실패 에러
      */
     @PostMapping("/memo/write")
     public ResponseEntity<Void> writeMemo(@RequestBody MemoDto dto, Principal principal) throws NotFoundException, CRUDException {
@@ -57,11 +55,11 @@ public class ReadyRoomController {
     /**
      * 멤버별 폴라로이드 활성화 여부를 작성한다.
      *
-     * @param dto [PolaroidEnableDto] 멤버별 폴라로이드 활성화 여부 정보가 담긴 dto
+     * @param dto       [PolaroidEnableDto] 멤버별 폴라로이드 활성화 여부 정보가 담긴 dto
      * @param principal [Principal] 팬유저 이메일이 포함된 객체
      * @return 성공: 200
      * @throws NotFoundException 데이터 CRUD 에러
-     * @throws CRUDException 데이터 찾기 실패 에러
+     * @throws CRUDException     데이터 찾기 실패 에러
      */
     @PostMapping("/polaroid-enable/write")
     public ResponseEntity<Void> writePolaroidEnable(@RequestBody PolaroidEnableDto dto, Principal principal) throws NotFoundException, CRUDException {
