@@ -110,7 +110,8 @@ const loginApi = async (formData: FormData, type: boolean) => {
     })
     .catch((error) => {
       console.log(error);
-      response = 'FAIL';
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+      response = error['response'].data;
     });
 
   return response;
