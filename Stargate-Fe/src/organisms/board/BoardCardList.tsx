@@ -1,6 +1,7 @@
 import React from 'react';
 import BoardCard from '../../atoms/board/BoardCard';
 import { useNavigate } from 'react-router-dom';
+
 /**
  * BoardCardListProps
  * @param meetings => 통째로 넘겨받은 meeting data
@@ -67,7 +68,7 @@ const BoardCardList = (
   };
 
   return (
-    <div className="w-98vw h-5/6 lg:h-96 sm:h-56 flex justify-center">
+    <div className="w-xl h-5/6 lg:h-96 sm:h-56 flex justify-center">
       <div className="w-5/6 flex justify-evenly flex-wrap">
         {meetings.map((meeting) => (
           <div

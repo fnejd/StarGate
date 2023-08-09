@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import AdminBoardHeader from '@/organisms/board/AdminBoardHeader';
 import BoardCardBox from '@/organisms/board/BoardCardBox';
 import BoardCardList from '@/organisms/board/BoardCardList';
 import { fetchAdminBoard } from '@/services/adminBoardService';
+import PlusButton from '@/atoms/board/PlusButton';
 
 interface ImageFileInfo {
   filename: string;
@@ -80,11 +82,11 @@ const AdminBoard = () => {
       }));
     }, 1000);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [data]);
 
   return (
-    <div className="w-xl h-screen">
+    <div className="w-screen flex flex-col justify-center">
       <AdminBoardHeader />
       {cardData && (
         <BoardCardBox
@@ -96,6 +98,9 @@ const AdminBoard = () => {
           isAdmin={true}
         />
       )}
+      <Link to='/admin/event/create' className="fixed right-5 bottom-5">
+        <PlusButton />
+      </Link>
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
       <BoardCardList meetings={data.expected.slice(1)} isAdmin={true} />
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
