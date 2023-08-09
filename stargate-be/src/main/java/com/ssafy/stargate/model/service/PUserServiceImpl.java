@@ -55,6 +55,7 @@ public class PUserServiceImpl implements PUserService {
                 .joinDate(LocalDateTime.now())
                 .build();
         pUserRepository.save(pUser);
+        log.info("TEST FOR JPA TIMEZONE : {}",pUser.getCreateDate());
     }
 
     /**
@@ -77,6 +78,7 @@ public class PUserServiceImpl implements PUserService {
     public JwtResponseDto login(PUserDto dto) throws LoginException {
         PUser pUser = pUserRepository.findById(dto.getEmail()).orElseThrow(() -> new LoginException("해당 이메일 없음"));
         if (passwordEncoder.matches(dto.getPassword(), pUser.getPassword())) {
+            log.info("CreateDate = {}",pUser.getCreateDate());
             return JwtResponseDto.builder()
                     .refreshToken(jwtTokenUtil.createRefreshToken(pUser.getEmail(), "PRODUCER"))
                     .accessToken(jwtTokenUtil.createAccessToken(pUser.getEmail(), "PRODUCER"))
