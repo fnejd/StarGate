@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,20 +36,30 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DashboardServiceImpl implements DashboardService{
 
-    @Autowired
-    MeetingRepository meetingRepository;
+    private final MeetingRepository meetingRepository;
 
-    @Autowired
-    MeetingFUserRepository meetingFUserRepository;
+    private final MeetingFUserRepository meetingFUserRepository;
 
-    @Autowired
-    TimeUtil timeUtil;
+    private final TimeUtil timeUtil;
 
-    @Autowired
-    private FileUtil fileUtil;
+    private final FileUtil fileUtil;
 
-    @Value("${s3.filepath.meeting}")
-    private String filePath;
+    private final String filePath;
+
+    public DashboardServiceImpl(
+            MeetingRepository meetingRepository,
+            MeetingFUserRepository meetingFUserRepository,
+            TimeUtil timeUtil,
+            FileUtil fileUtil,
+            @Value("${s3.filepath.meeting}") String filePath
+    ) {
+        this.meetingRepository = meetingRepository;
+        this.meetingFUserRepository = meetingFUserRepository;
+        this.timeUtil = timeUtil;
+        this.fileUtil = fileUtil;
+        this.filePath = filePath;
+    }
+
 
     List<DashboardMeetingResponseDto> ongoingMeetings;
 

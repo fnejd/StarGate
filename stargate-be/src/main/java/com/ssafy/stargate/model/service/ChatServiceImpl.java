@@ -8,6 +8,8 @@ import com.ssafy.stargate.model.entity.ChatMessage;
 import com.ssafy.stargate.model.entity.ChattingRoom;
 import com.ssafy.stargate.model.repository.ChatMessageRepository;
 import com.ssafy.stargate.model.repository.ChattingRoomRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -17,16 +19,15 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
+@Transactional
 public class ChatServiceImpl implements ChatService{
 
-    @Autowired
-    private SimpMessageSendingOperations messageSendingOperations;
+    private final SimpMessageSendingOperations messageSendingOperations;
 
-    @Autowired
-    private ChattingRoomRepository chattingRoomRepository;
+    private final ChattingRoomRepository chattingRoomRepository;
 
-    @Autowired
-    private ChatMessageRepository chatMessageRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     /**
      * 채팅룸 생성

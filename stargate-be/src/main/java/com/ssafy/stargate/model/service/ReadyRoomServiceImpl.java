@@ -25,38 +25,60 @@ import java.util.UUID;
  * 팬유저 대기방에 관련된 서비스의 구현체
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ReadyRoomServiceImpl implements ReadyRoomService {
-    @Autowired
+
     private final MemoRepository memoRepository;
 
-    @Autowired
+
     private final MeetingRepository meetingRepository;
 
-    @Autowired
+
     private final MeetingFUserRepository meetingFUserRepository;
 
-    @Autowired
+
     private final FUserRepository fUserRepository;
 
-    @Autowired
+
     private final PolaroidEnableRepository polaroidEnableRepository;
 
-    @Autowired
+
     private final MeetingMemberRepository meetingMemberRepository;
 
-    @Autowired
+
     private final PostitRepository postitRepository;
 
-    @Autowired
+
     private final FileUtil fileUtil;
 
-    @Value("${s3.filepath.meeting}")
-    private String filePath;
 
-    @Autowired
+    private final String filePath;
+
     private final TimeUtil timeUtil;
+
+    public ReadyRoomServiceImpl(
+            MemoRepository memoRepository,
+            MeetingRepository meetingRepository,
+            MeetingFUserRepository meetingFUserRepository,
+            FUserRepository fUserRepository,
+            PolaroidEnableRepository polaroidEnableRepository,
+            MeetingMemberRepository meetingMemberRepository,
+            PostitRepository postitRepository,
+            FileUtil fileUtil,
+            @Value("${s3.filepath.meeting}") String filePath,
+            TimeUtil timeUtil
+    ) {
+        this.memoRepository = memoRepository;
+        this.meetingRepository = meetingRepository;
+        this.meetingFUserRepository = meetingFUserRepository;
+        this.fUserRepository = fUserRepository;
+        this.polaroidEnableRepository = polaroidEnableRepository;
+        this.meetingMemberRepository = meetingMemberRepository;
+        this.postitRepository = postitRepository;
+        this.fileUtil = fileUtil;
+        this.filePath = filePath;
+        this.timeUtil = timeUtil;
+    }
 
     /**
      * 팬유저가 참가한 해당 미팅 대기방 정보를 가져온다.
