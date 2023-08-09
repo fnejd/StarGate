@@ -116,20 +116,23 @@ const MeetingBottomSection = ({
   //   setFormData({ ...formData, [fieldName]: e.target.value });
   // };
 
-  // 등록 함수
+  // 등록 함수8
   const handleGroupChange = (value: number | string) => {
     const selectedGroup = group.find((item) => item.name === value);
     if (selectedGroup) {
       setMembers(selectedGroup.members);
     }
   };
-  
+
   // 멤버 변수가 바뀌변 폼데이터 업데이트
   useEffect(() => {
     setFormData((prevFormData) => {
-      const updatedMembers = [...prevFormData.meetingMembers, ...members];
+      const updatedMembers = [
+        ...prevFormData.meetingMembers,
+        ...members.map((member) => member.memberNo),
+      ];
       console.log(updatedMembers);
-      
+
       return {
         ...prevFormData,
         // 배열 순서 보장을 위한 stringify 처리
@@ -138,19 +141,18 @@ const MeetingBottomSection = ({
     });
   }, [members]);
 
-    // 팬 변수가 바뀌면 폼데이터 업데이트
-    useEffect(() => {
-      setFormData((prevFormData) => {
-        const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
-        console.log(updatedFans);
-        
-        return {
-          ...prevFormData,
-          meetingFUsers: updatedFans,
-        };
-      });
-    }, [fanData]);
-  
+  // 팬 변수가 바뀌면 폼데이터 업데이트
+  useEffect(() => {
+    setFormData((prevFormData) => {
+      const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
+      console.log(updatedFans);
+
+      return {
+        ...prevFormData,
+        meetingFUsers: updatedFans,
+      };
+    });
+  }, [fanData]);
 
   // const handleMemberChange = (value: number | string) => {
   //   setFormData((prevFormData) => ({
@@ -176,11 +178,23 @@ const MeetingBottomSection = ({
   // };
 
   const addFans = (email: string) => {
-    if (email.trim() !== '') { // 빈 문자열이 아닌 경우에만 추가
-      setFanData([email, ...fanData]);
-      setFanValue('');
+    if (email.trim() !== '') {
+      // 공백 제거
+      const emailValue: string = email.trim();
+      // 중복 체크
+      if (!fanData.includes(emailValue)) {
+        const updateFanData = [...fanData];
+        updateFanData.push(emailValue);
+        setFanData(updateFanData);
+        setFanValue('');
+      } else {
+        // 이미 존재하는 이메일인 경우 처리
+        alert('이미 존재하는 이메일입니다.');
+      }
     }
   };
+
+  console.log(fanData);
 
   const handleCsvData = (data, fileInfo) => {
     // 2열(인덱스 1)에 있는 이메일 값들을 추출하여 emailList에 저장
@@ -190,7 +204,7 @@ const MeetingBottomSection = ({
       (email) => email && email.trim() !== ''
     );
     console.log('nonEmptyEmails', nonEmptyEmails);
-    setFanData([...nonEmptyEmails, ...fanData]);
+    setFanData([...nonEmptyEmails]);
   };
 
   console.log('팬 데이터 업로드', fanData);
