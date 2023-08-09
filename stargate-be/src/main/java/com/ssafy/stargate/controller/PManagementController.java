@@ -3,8 +3,8 @@ package com.ssafy.stargate.controller;
 import com.ssafy.stargate.model.dto.common.PGroupDto;
 import com.ssafy.stargate.model.dto.common.PMemberDto;
 import com.ssafy.stargate.model.service.PManagementService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +14,12 @@ import java.util.List;
 /**
  * 소속사의 그룹, 멤버 관리를 수행하는 컨트롤러
  */
-@RequestMapping("/pmanagements")
 @RestController
+@RequestMapping("/pmanagements")
+@RequiredArgsConstructor
 @Slf4j
 public class PManagementController {
-    @Autowired
-    PManagementService managementService;
+    private final PManagementService managementService;
 
     /**
      * 소속사이메일 기준으로 보유한 모든 그룹의 목록을 반환한다.
