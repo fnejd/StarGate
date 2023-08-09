@@ -3,9 +3,13 @@ package com.ssafy.stargate.controller;
 import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.RegisterException;
+import com.ssafy.stargate.model.dto.request.puser.PUserCreateRequestDto;
+import com.ssafy.stargate.model.dto.request.puser.PUserDeleteRequestDto;
+import com.ssafy.stargate.model.dto.request.puser.PUserLoginRequestDto;
+import com.ssafy.stargate.model.dto.request.puser.PUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.response.JwtResponseDto;
-import com.ssafy.stargate.model.dto.common.PUserDto;
 import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
+import com.ssafy.stargate.model.dto.response.puser.PUserResponseDto;
 import com.ssafy.stargate.model.service.PUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +36,7 @@ public class PUserController {
      * @return 성공시 200, 실패시 600
      */
     @PostMapping("/register")
-    public ResponseEntity<?> createPUser(@ModelAttribute PUserDto dto) throws EmailDuplicationException, RegisterException {
+    public ResponseEntity<Void> createPUser(@ModelAttribute PUserCreateRequestDto dto) throws EmailDuplicationException, RegisterException {
         try {
             pUserService.register(dto);
             return ResponseEntity.ok(null);
@@ -55,7 +59,7 @@ public class PUserController {
      * @return 로그인 성공시 SimpleDto에 JWT를 담아 보낸다. 실패시 401 코드 반환
      */
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDto> loginPUser(@ModelAttribute PUserDto dto) {
+    public ResponseEntity<JwtResponseDto> loginPUser(@ModelAttribute PUserLoginRequestDto dto) {
         try {
             return ResponseEntity.ok(pUserService.login(dto));
         } catch (LoginException e) {
@@ -71,7 +75,7 @@ public class PUserController {
      * @return 성공시 200
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deletePUser(@RequestBody PUserDto dto, Principal principal) {
+    public ResponseEntity<Void> deletePUser(@RequestBody PUserDeleteRequestDto dto, Principal principal) {
         pUserService.deletePUser(dto, principal);
         return ResponseEntity.ok(null);
     }
@@ -83,8 +87,8 @@ public class PUserController {
      * @return 소속사 계정 정보
      */
     @GetMapping("/get")
-    public ResponseEntity<PUserDto> getPUserData(Principal principal) {
-        PUserDto pUserDto = pUserService.getPUserData(principal);
+    public ResponseEntity<PUserResponseDto> getPUserData(Principal principal) {
+        PUserResponseDto pUserDto = pUserService.getPUserData(principal);
         return ResponseEntity.ok(pUserDto);
     }
 
@@ -95,7 +99,7 @@ public class PUserController {
      * @return 성공여부(200, 600)
      */
     @PutMapping("/update")
-    public ResponseEntity<?> updatePUser(@ModelAttribute PUserDto pUserDto) {
+    public ResponseEntity<?> updatePUser(@ModelAttribute PUserUpdateRequestDto pUserDto) {
         int statusCode = pUserService.updatePUser(pUserDto);
         return ResponseEntity.status(statusCode).build();
     }

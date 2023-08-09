@@ -1,7 +1,9 @@
 package com.ssafy.stargate.controller;
 
-import com.ssafy.stargate.model.dto.common.PGroupDto;
-import com.ssafy.stargate.model.dto.common.PMemberDto;
+import com.ssafy.stargate.model.dto.request.pmanagement.*;
+import com.ssafy.stargate.model.dto.response.pmanagement.PGroupMemberResponseDto;
+import com.ssafy.stargate.model.dto.response.pmanagement.PGroupCreateResponseDto;
+import com.ssafy.stargate.model.dto.response.pmanagement.PMemberCreateResponseDto;
 import com.ssafy.stargate.model.service.PManagementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ public class PManagementController {
      */
     @GetMapping("/get")
     public ResponseEntity<?> getGroupList(Principal principal) {
-        List<PGroupDto> groupList = managementService.getGroupList(principal);
+        List<PGroupMemberResponseDto> groupList = managementService.getGroupList(principal);
         return ResponseEntity.ok(groupList);
     }
 
@@ -40,8 +42,8 @@ public class PManagementController {
      * @return 신규 생성한 그룹 객체
      */
     @PostMapping("/group/create")
-    public ResponseEntity<PGroupDto> createGroup(@RequestBody PGroupDto dto, Principal principal) {
-        PGroupDto group = managementService.createGroup(dto, principal);
+    public ResponseEntity<PGroupCreateResponseDto> createGroup(@RequestBody PGroupCreateRequestDto dto, Principal principal) {
+        PGroupCreateResponseDto group = managementService.createGroup(dto, principal);
         return ResponseEntity.status(200).body(group);
     }
 
@@ -53,7 +55,7 @@ public class PManagementController {
      * @return 성공여부. 기본 200
      */
     @DeleteMapping("/group/delete")
-    public ResponseEntity<?> deleteGroup(@RequestBody PGroupDto dto, Principal principal) {
+    public ResponseEntity<?> deleteGroup(@RequestBody PGroupDeleteRequestDto dto, Principal principal) {
         managementService.deleteGroup(dto, principal);
         return ResponseEntity.ok(null);
     }
@@ -66,7 +68,7 @@ public class PManagementController {
      * @return 성공시 200 코드를 반환한다.
      */
     @PutMapping("/group/update")
-    public ResponseEntity<?> updateGroup(@RequestBody PGroupDto dto, Principal principal) {
+    public ResponseEntity<?> updateGroup(@RequestBody PGroupUpdateRequestDto dto, Principal principal) {
         managementService.updateGroup(dto, principal);
         return ResponseEntity.ok(null);
     }
@@ -79,9 +81,9 @@ public class PManagementController {
      * @return 성공시 200
      */
     @PostMapping("/member/create")
-    public ResponseEntity<?> createMember(@RequestBody PGroupDto dto) {
-        PMemberDto memberDto = managementService.createMember(dto);
-        return ResponseEntity.status(200).body(memberDto);
+    public ResponseEntity<?> createMember(@RequestBody PMemberCreateRequestDto dto) {
+        PMemberCreateResponseDto response = managementService.createMember(dto);
+        return ResponseEntity.status(200).body(response);
     }
 
     /**
@@ -91,7 +93,7 @@ public class PManagementController {
      * @return 성공여부
      */
     @DeleteMapping("/member/delete")
-    public ResponseEntity<?> deleteMember(@RequestBody PMemberDto dto) {
+    public ResponseEntity<?> deleteMember(@RequestBody PMemberDeleteRequestDto dto) {
         managementService.deleteMember(dto);
         return ResponseEntity.ok(null);
     }
@@ -102,7 +104,7 @@ public class PManagementController {
      * @return 성공여부 (200), 에러시 (600)
      */
     @PutMapping("/member/update")
-    public ResponseEntity<?> updateMember(@RequestBody PMemberDto dto){
+    public ResponseEntity<?> updateMember(@RequestBody PMemberUpdateRequestDto dto){
         managementService.updateMember(dto);
         return ResponseEntity.ok(null);
     }

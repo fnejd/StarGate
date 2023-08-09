@@ -1,7 +1,10 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
-import com.ssafy.stargate.model.dto.common.PostitDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitDeleteRequestDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitRequestDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitWriteRequestDto;
+import com.ssafy.stargate.model.dto.response.postit.PostitResponseDto;
 import com.ssafy.stargate.model.entity.FUser;
 import com.ssafy.stargate.model.entity.Meeting;
 import com.ssafy.stargate.model.entity.PMember;
@@ -12,7 +15,6 @@ import com.ssafy.stargate.model.repository.PMemberRepository;
 import com.ssafy.stargate.model.repository.PostitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,7 +37,7 @@ public class PostitServiceImpl implements PostitService {
      * @throws CRUDException 포스트잇 작성 실패
      */
     @Override
-    public void writePostit(PostitDto postitDto) throws CRUDException {
+    public void writePostit(PostitWriteRequestDto postitDto) throws CRUDException {
         try {
             Postit postit = postitRepository.findPostit(postitDto.getFanEmail(), postitDto.getMemberNo(), postitDto.getMeetingUuid()).orElse(null);
             if (postit == null) {
@@ -65,9 +67,9 @@ public class PostitServiceImpl implements PostitService {
      * @return 쿼리한 포스트잇 dto 객체
      */
     @Override
-    public PostitDto getPostit(PostitDto postitDto) {
+    public PostitResponseDto getPostit(PostitRequestDto postitDto) {
         Postit postit = postitRepository.findPostit(postitDto.getFanEmail(), postitDto.getMemberNo(), postitDto.getMeetingUuid()).orElseThrow();
-        return PostitDto.fromEntity(postit);
+        return PostitResponseDto.fromEntity(postit);
     }
 
     /**
@@ -75,7 +77,7 @@ public class PostitServiceImpl implements PostitService {
      * @param postitDto : PostitDto : no만 필요.
      */
     @Override
-    public void deletePostit(PostitDto postitDto) {
+    public void deletePostit(PostitDeleteRequestDto postitDto) {
         Postit postit = postitRepository.findById(postitDto.getNo()).orElseThrow();
         postitRepository.delete(postit);
     }

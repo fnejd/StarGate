@@ -1,7 +1,10 @@
 package com.ssafy.stargate.controller;
 
 import com.ssafy.stargate.exception.CRUDException;
-import com.ssafy.stargate.model.dto.common.PostitDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitDeleteRequestDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitRequestDto;
+import com.ssafy.stargate.model.dto.request.postit.PostitWriteRequestDto;
+import com.ssafy.stargate.model.dto.response.postit.PostitResponseDto;
 import com.ssafy.stargate.model.service.PostitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +26,7 @@ public class PostitController {
      * @return 작성(생성, 수정)성공여부를 반환.
      */
     @PostMapping("/write")
-    public ResponseEntity<Void> writePostit(@RequestBody PostitDto postitDto) throws CRUDException {
+    public ResponseEntity<Void> writePostit(@RequestBody PostitWriteRequestDto postitDto) throws CRUDException {
         postitService.writePostit(postitDto);
         return ResponseEntity.status(200).build();
     }
@@ -35,8 +38,8 @@ public class PostitController {
      * @return 포스트잇의 contents데이터가 포함된 dto 객체.
      */
     @GetMapping("/get")
-    public ResponseEntity<PostitDto> getPostit(@ModelAttribute PostitDto postitDto) {
-        PostitDto responseDto = postitService.getPostit(postitDto);
+    public ResponseEntity<PostitResponseDto> getPostit(@ModelAttribute PostitRequestDto postitDto) {
+        PostitResponseDto responseDto = postitService.getPostit(postitDto);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -47,7 +50,7 @@ public class PostitController {
      * @return 삭제성공여부(200), 실패시 600
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> deletePostit(@RequestBody PostitDto postitDto) {
+    public ResponseEntity<Void> deletePostit(@RequestBody PostitDeleteRequestDto postitDto) {
         postitService.deletePostit(postitDto);
         return ResponseEntity.ok(null);
     }
