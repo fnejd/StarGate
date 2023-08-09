@@ -13,12 +13,13 @@ import { useNavigate } from 'react-router-dom';
  */
 
 interface BoardCardBoxProps {
-  uuid: string;
+  uuid?: string;
   imageSrc?: string;
-  title: string;
-  date: string;
-  remainingTime: number;
-  isAdmin: boolean;
+  title?: string;
+  date?: string;
+  remainingTime?: number;
+  isAdmin?: boolean;
+  isLoading: boolean;
 }
 
 const BoardCardBox = ({
@@ -26,8 +27,9 @@ const BoardCardBox = ({
   imageSrc,
   title,
   date,
-  remainingTime,
+  remainingTime = 0,
   isAdmin,
+  isLoading,
 }: BoardCardBoxProps) => {
   const navigate = useNavigate();
 
@@ -54,50 +56,97 @@ const BoardCardBox = ({
 
   return (
     <div className="flex justify-center">
-      <div className="w-5/6 lg:h-96 md:h-56 sm:h-56 flex justify-center items-center backdrop-opacity-50 bg-blue-500 rounded-lg">
-        <div className="w-5/6 h-5/6 flex justify-center">
-          <BoardCard imageSrc={imageSrc} />
-          <div className="h-3/4 flex flex-col flex-grow justify-evenly mx-6">
-            <h1>{title}</h1>
-            <div className="flex">
-              <div className="flex flex-col w-1/3">
-                <div className="flex justify-between">
-                  <p>일시</p>
-                  <p>{date}</p>
+      {isLoading ? (
+        <div className="w-5/6 lg:h-96 md:h-56 sm:h-56 flex justify-center items-center backdrop-opacity-50 bg-gray-300 rounded-lg">
+          <div className="w-5/6 h-5/6 flex justify-center">
+            <BoardCard isLoading={isLoading} />
+            <div className="h-3/4 flex flex-col flex-grow justify-evenly mx-6">
+              <h1>제목</h1>
+              <div className="flex">
+                <div className="flex flex-col w-1/3">
+                  <div className="flex justify-between">
+                    <p>일시</p>
+                    <p>{date}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p>남은시간</p>
+                    <p>
+                      {days > 0 && `${days}일 `}
+                      {hours > 0 && `${hours}시간 `}
+                      {minutes > 0 && `${minutes}분 `}
+                      {seconds > 0 && `${seconds}초`}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <p>남은시간</p>
-                  <p>
-                    {days > 0 && `${days}일 `}
-                    {hours > 0 && `${hours}시간 `}
-                    {minutes > 0 && `${minutes}분 `}
-                    {seconds > 0 && `${seconds}초`}
-                  </p>
+                <div className="w-2/3 flex justify-end">
+                  {isAdmin ? (
+                    <button
+                      onClick={handleToMonitoring}
+                      className={isTimeExceeded ? 'bg-admingray' : ''}
+                      disabled={isTimeExceeded}
+                    >
+                      상세보기
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleToReady}
+                      className={isTimeExceeded ? 'bg-admingray' : ''}
+                      disabled={isTimeExceeded}
+                    >
+                      입장하기
+                    </button>
+                  )}
                 </div>
-              </div>
-              <div className="w-2/3 flex justify-end">
-                {isAdmin ? (
-                  <button
-                    onClick={handleToMonitoring}
-                    className={isTimeExceeded ? 'bg-admingray' : ''}
-                    disabled={isTimeExceeded}
-                  >
-                    상세보기
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleToReady}
-                    className={isTimeExceeded ? 'bg-admingray' : ''}
-                    disabled={isTimeExceeded}
-                  >
-                    입장하기
-                  </button>
-                )}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="w-5/6 lg:h-96 md:h-56 sm:h-56 flex justify-center items-center backdrop-opacity-50 bg-blue-500 rounded-lg">
+          <div className="w-5/6 h-5/6 flex justify-center">
+            <BoardCard imageSrc={imageSrc} isLoading={isLoading} />
+            <div className="h-3/4 flex flex-col flex-grow justify-evenly mx-6">
+              <h1>{title}</h1>
+              <div className="flex">
+                <div className="flex flex-col w-1/3">
+                  <div className="flex justify-between">
+                    <p>일시</p>
+                    <p>{date}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p>남은시간</p>
+                    <p>
+                      {days > 0 && `${days}일 `}
+                      {hours > 0 && `${hours}시간 `}
+                      {minutes > 0 && `${minutes}분 `}
+                      {seconds > 0 && `${seconds}초`}
+                    </p>
+                  </div>
+                </div>
+                <div className="w-2/3 flex justify-end">
+                  {isAdmin ? (
+                    <button
+                      onClick={handleToMonitoring}
+                      className={isTimeExceeded ? 'bg-admingray' : ''}
+                      disabled={isTimeExceeded}
+                    >
+                      상세보기
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleToReady}
+                      className={isTimeExceeded ? 'bg-admingray' : ''}
+                      disabled={isTimeExceeded}
+                    >
+                      입장하기
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -35,6 +35,7 @@ interface AdminBoardData {
 }
 
 const AdminBoard = () => {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<AdminBoardData>({
     ongoing: [],
     expected: [],
@@ -43,10 +44,14 @@ const AdminBoard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('로딩중');
       const fetchedData = await fetchAdminBoard();
       if (fetchedData) {
         setData(fetchedData);
+        console.log(fetchedData)
       }
+      setLoading(false);
+      console.log('로딩완료');
     };
     fetchData();
   }, []);
@@ -88,23 +93,41 @@ const AdminBoard = () => {
   return (
     <div className="w-screen flex flex-col justify-center">
       <AdminBoardHeader />
-      {cardData && (
+      {loading ? (
         <BoardCardBox
+          isAdmin={true}
+          isLoading={loading}
+        />
+      ) : (
+        cardData && <BoardCardBox
           uuid={cardData.uuid}
           imageSrc={cardData.imageFileInfo?.fileUrl}
           title={cardData.name}
           date={cardData.startDate}
           remainingTime={cardData.remainingTime}
           isAdmin={true}
+          isLoading={loading}
         />
       )}
-      <Link to='/admin/event/create' className="fixed right-5 bottom-5">
+      <Link to="/admin/event/create" className="fixed right-5 bottom-5">
         <PlusButton />
       </Link>
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
-      <BoardCardList meetings={data.expected.slice(1)} isAdmin={true} />
+      {loading ? (
+        <BoardCardList isLoading={loading} isAdmin={true} />
+      ) : (
+        data.expected[1] && <BoardCardList
+          meetings={data.expected.slice(1)}
+          isAdmin={true}
+          isLoading={loading}
+        />
+      )}
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
-      <BoardCardList meetings={data.finished} isAdmin={true} />
+      {data.finished &&<BoardCardList
+        meetings={data.finished}
+        isAdmin={true}
+        isLoading={loading}
+      />}
     </div>
   );
 };

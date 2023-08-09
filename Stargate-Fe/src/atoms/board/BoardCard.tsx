@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 /**
  * BoardCardProps
@@ -13,6 +13,7 @@ interface BoardCardProps {
   title?: string;
   date?: string;
   remainingTime?: number;
+  isLoading: boolean;
 }
 
 const BoardCard = ({
@@ -20,9 +21,9 @@ const BoardCard = ({
   title,
   date,
   remainingTime,
+  isLoading,
 }: BoardCardProps) => {
   const [isHovering, setIsHovering] = useState(false);
-  const isLoading = imageSrc;
 
   const handleMouseEnter = () => {
     if (title && date) {
@@ -35,16 +36,19 @@ const BoardCard = ({
   };
 
   return (
-    <div
-      className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <>
       {isLoading ? (
-        // 스켈레톤 UI
-        <div className="animate-pulse bg-gray-50 lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 rounded-md"></div>
+        <div
+          className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 relative animate-pulse bg-gray-200 rounded-md"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        ></div>
       ) : (
-        <>
+        <div
+          className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 relative"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           <img
             className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 object-cover object-center rounded-md"
             src={imageSrc}
@@ -59,9 +63,9 @@ const BoardCard = ({
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
