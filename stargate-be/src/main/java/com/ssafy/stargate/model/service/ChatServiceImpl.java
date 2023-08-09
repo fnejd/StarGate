@@ -56,7 +56,7 @@ public class ChatServiceImpl implements ChatService{
      * @return ChattingRoomResponseDto 채팅룸 수정된 dto
      */
     @Override
-    public ChattingRoomResponseDto updateChattingRoom(ChattingRoomRequestDto dto) {
+    public ChattingRoomResponseDto updateChattingRoom(ChattingRoomRequestDto dto) throws NotFoundException{
 
         ChattingRoom chattingRoom = chattingRoomRepository.findById(dto.getRoomNo()).orElseThrow(()-> new NotFoundException("해당하는 채팅룸은 존재하지 않습니다"));
 
@@ -105,7 +105,7 @@ public class ChatServiceImpl implements ChatService{
                 .no(chatMessage.getNo())
                 .roomNo(chatMessage.getChattingRoom().getRoomNo())
                 .writer(chatMessage.getNickname() != null ? chatMessage.getNickname() : chatMessage.getEmail())
-                .message(chatMessage.getContent())
+                .message(chatMessage.getMessage())
                 .createDate(chatMessage.getCreateDate())
                 .editDate(chatMessage.getEditDate())
                 .build()))
@@ -117,14 +117,28 @@ public class ChatServiceImpl implements ChatService{
     /**
      * 메세지 해당 채팅룸에 전송 및 전송된 메세지 저장
      * @param message ChatMessageDto 작성된 메세지가 저장된 dto
+     * @param roomNo 채팅룸 번호
+     * @throws NotFoundException 메세지를 보내려는 채팅룸이 존재하지 않을 경우 발생하는 에러
      */
     @Override
-    public void sendMessage(ChatMessageDto message) {
+    public void sendMessage(ChatMessageDto message, Long roomNo) throws NotFoundException {
 
         messageSendingOperations.convertAndSend("/topic/chat" + message.getRoomNo(), message);
 
+        ChattingRoom chattingRoom = chattingRoomRepository.findById(roomNo).orElseThrow(() -> new NotFoundException("해당하는 채팅룸은 존재하지 않습니다"));
 
+        ChatMessage.ChatMessageBuilder chatMessage = ChatMessage.builder()
+                .no(message.getNo())
+                .chattingRoom(chattingRoom)
+                .message(message.getMessage());
 
+        if(message.getWriter().contains("@")){
+            chatMessage.email(message.getWriter());
+        }else{
+            chatMessage.nickname(message.getWriter());
+        }
+
+        chatMessageRepository.save(chatMessage.build());
     }
 
     /**
@@ -137,23 +151,26 @@ public class ChatServiceImpl implements ChatService{
         chatMessageRepository.deleteById(dto.getNo());
     }
 
+
+
     /**
      * 채팅 메세지 수정
      * @param dto ChatMessageDto 수정하려는 메세지 정보가 담긴 dto
      * @return ChatMessageDto 수정된 메세지 정보가 담긴 dto
+     * @throws NotFoundException 수정하려는 메세지 번호가 존재하지 않을 때 발생하는 에러
      */
     @Override
-    public ChatMessageDto updateMessage(ChatMessageDto dto) {
+    public ChatMessageDto updateMessage(ChatMessageDto dto) throws NotFoundException {
         ChatMessage chatMessage = chatMessageRepository.findById(dto.getNo()).orElseThrow(() -> new NotFoundException("해당 하는 메세지가 존재하지 않습니다."));
 
-        chatMessage.setContent(dto.getMessage());
+        chatMessage.setMessage(dto.getMessage());
 
         ChatMessage savedChatMessage = chatMessageRepository.save(chatMessage);
 
         return ChatMessageDto.builder()
                 .no(savedChatMessage.getNo())
                 .roomNo(savedChatMessage.getChattingRoom().getRoomNo())
-                .message(savedChatMessage.getContent())
+                .message(savedChatMessage.getMessage())
                 .writer(savedChatMessage.getNickname() != null ? savedChatMessage.getNickname() : savedChatMessage.getEmail())
                 .createDate(savedChatMessage.getCreateDate())
                 .editDate(savedChatMessage.getEditDate())
