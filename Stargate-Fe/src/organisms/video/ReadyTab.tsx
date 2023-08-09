@@ -26,15 +26,17 @@ const ReadyTab = () => {
       <div className="font-medium text-white font-suit text-40">
         이유한 스무살 기념 팬사인회
       </div>
-      <div className="flex flex-col flex-wrap w-l h-550 bg-white rounded-md cursor-pointer">
-        <div>
+      <div className="flex flex-col flex-wrap w-l h-550 bg-white rounded-md">
+        <div className="flex flex-col">
           {tabList.map((tab, index) => (
             <div
-              className="w-2/4 h-200"
+              className="flex items-center w-2/4 h-200 cursor-pointer"
               key={index}
               onClick={() => handleTabClick(index)}
             >
-              <span className="material-icons"></span>
+              <span className="material-icons text-center text-mainblue">
+                check_circle
+              </span>
               <div className="text-black p-4">{tab}</div>
             </div>
           ))}

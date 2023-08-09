@@ -116,7 +116,7 @@ const MeetingBottomSection = ({
   //   setFormData({ ...formData, [fieldName]: e.target.value });
   // };
 
-  // 등록 함수
+  // 등록 함수8
   const handleGroupChange = (value: number | string) => {
     const selectedGroup = group.find((item) => item.name === value);
     if (selectedGroup) {
@@ -179,11 +179,22 @@ const MeetingBottomSection = ({
 
   const addFans = (email: string) => {
     if (email.trim() !== '') {
-      // 빈 문자열이 아닌 경우에만 추가
-      setFanData([email, ...fanData]);
-      setFanValue('');
+      // 공백 제거
+      const emailValue: string = email.trim();
+      // 중복 체크
+      if (!fanData.includes(emailValue)) {
+        const updateFanData = [...fanData];
+        updateFanData.push(emailValue);
+        setFanData(updateFanData);
+        setFanValue('');
+      } else {
+        // 이미 존재하는 이메일인 경우 처리
+        alert('이미 존재하는 이메일입니다.');
+      }
     }
   };
+
+  console.log(fanData);
 
   const handleCsvData = (data, fileInfo) => {
     // 2열(인덱스 1)에 있는 이메일 값들을 추출하여 emailList에 저장
@@ -193,7 +204,7 @@ const MeetingBottomSection = ({
       (email) => email && email.trim() !== ''
     );
     console.log('nonEmptyEmails', nonEmptyEmails);
-    setFanData([...nonEmptyEmails, ...fanData]);
+    setFanData([...nonEmptyEmails]);
   };
 
   console.log('팬 데이터 업로드', fanData);
