@@ -173,16 +173,6 @@ public class JwtTokenUtil {
         return auth;
     }
 
-    /**
-     * JwtToken DB 에 해당 이메일이 저장되어 있는지 확인 (없으면 로그아웃 상태)
-     */
-    private boolean existingJwtToken(String email){
-
-
-
-
-        return true;
-    }
 
     /**
      * JwtToken 에서 Bearer 제거

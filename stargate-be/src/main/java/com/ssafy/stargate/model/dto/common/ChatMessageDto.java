@@ -4,6 +4,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * 메세지 전달, 저장에 사용되는 dto
+ */
 @Builder
 @Getter
 @Setter

@@ -17,6 +17,7 @@ import java.util.List;
 public class ChattingRoom extends BaseEntity{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "room_no")
     private Long roomNo;
 

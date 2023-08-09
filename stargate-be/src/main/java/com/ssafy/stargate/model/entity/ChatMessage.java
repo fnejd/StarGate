@@ -14,6 +14,7 @@ import lombok.*;
 public class ChatMessage extends BaseEntity{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long no;
 
     @Column
@@ -23,7 +24,7 @@ public class ChatMessage extends BaseEntity{
     private String nickname;
 
     @Column
-    private String content;
+    private String message;
 
     @ManyToOne
     @JoinColumn(name = "room_no")
