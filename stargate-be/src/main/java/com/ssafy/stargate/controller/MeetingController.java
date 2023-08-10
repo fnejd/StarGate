@@ -1,6 +1,7 @@
 package com.ssafy.stargate.controller;
 
 import com.ssafy.stargate.exception.CRUDException;
+import com.ssafy.stargate.exception.InputDataBlankException;
 import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.model.dto.request.meeting.MeetingCreateRequestDto;
 import com.ssafy.stargate.model.dto.request.meeting.MeetingDeleteRequestDto;
@@ -49,10 +50,10 @@ public class MeetingController {
      * @param principal [Principal] 소속사 이메일이 포함된 객체
      * @return [ResponseEntity<MeetingResponseDto>] 저장된 미팅 결과 dto (성공: 200)
      * @throws CRUDException     데이터 CRUD 에러
-     * @throws NotFoundException 데이터 찾기 실패 에러
+     * @throws InputDataBlankException 빈 입력 데이터 에러
      */
     @PostMapping("/create")
-    public ResponseEntity<MeetingResponseDto> createMeeting(@ModelAttribute MeetingCreateRequestDto dto, @RequestParam(name = "imageFile", required = false) MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException {
+    public ResponseEntity<MeetingResponseDto> createMeeting(@ModelAttribute MeetingCreateRequestDto dto, @RequestParam(name = "imageFile", required = false) MultipartFile imageFile, Principal principal) throws CRUDException, InputDataBlankException {
         MeetingResponseDto meeting = meetingService.createMeeting(dto, imageFile, principal);
         return ResponseEntity.ok(meeting);
     }
@@ -65,10 +66,10 @@ public class MeetingController {
      * @param principal [Principal] 소속사 이메일이 포함된 객체
      * @return 성공: 200
      * @throws CRUDException     데이터 CRUD 에러
-     * @throws NotFoundException 데이터 찾기 실패 에러
+     * @throws InputDataBlankException 빈 입력 데이터 에러
      */
     @PutMapping("/update")
-    public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingUpdateRequestDto dto, @RequestParam(name = "imageFile", required = false) MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException {
+    public ResponseEntity<Void> updateMeeting(@ModelAttribute MeetingUpdateRequestDto dto, @RequestParam(name = "imageFile", required = false) MultipartFile imageFile, Principal principal) throws CRUDException, InputDataBlankException {
         meetingService.updateMeeting(dto, imageFile, principal);
         return ResponseEntity.ok(null);
     }

@@ -117,7 +117,7 @@ public class MeetingServiceImpl implements MeetingService {
      * @param principal [Principal] 소속사 이메일이 포함된 객체
      * @return [MeetingResponseDto] 생성한 미팅 정보를 담은 DTO
      * @throws CRUDException     데이터 CRUD 에러
-     * @throws NotFoundException 데이터 찾기 실패 에러
+     * @throws InputDataBlankException 빈 입력 데이터 에러
      */
     @Transactional
     @Override
@@ -168,7 +168,7 @@ public class MeetingServiceImpl implements MeetingService {
      * @param dto       [MeetingUpdateRequestDto] 입력받은 Meeting DTO
      * @param principal [Principal] 소속사 이메일이 포함된 객체
      * @throws CRUDException     데이터 CRUD 에러
-     * @throws NotFoundException 데이터 찾기 실패 에러
+     * @throws InputDataBlankException 빈 입력 데이터 에러
      */
     @Transactional
     @Override
@@ -328,6 +328,7 @@ public class MeetingServiceImpl implements MeetingService {
      * @return List<MeetingMemberBridge> 미팅 멤버 엔티티 리스트
      * @throws NotFoundException             NotFoundException 데이터 찾기 실패 에러
      * @throws InputDataDuplicationException 미팅 멤버 리스트에 번호(id) 중복 발생 시 던져주는 에러
+     * @throws InputDataBlankException 빈 입력 데이터 에러
      */
     private List<MeetingMemberBridge> dtoToMeetingMemberList(Meeting meeting, List<Long> meetingMemberDtos) throws NotFoundException, InputDataDuplicationException, InputDataBlankException {
         if (meetingMemberDtos.size() < 1) {
@@ -359,6 +360,7 @@ public class MeetingServiceImpl implements MeetingService {
      * @param meetingFUserDtos [List<String>] 미팅 팬유저 이메일(id) 리스트
      * @return List<MeetingFUserBridge> 미팅 팬유저 엔티티 리스트
      * @throws InputDataDuplicationException 미팅 팬유저 리스트에 이메일(id) 중복 발생 시 던져주는 에러
+     * @throws InputDataBlankException 빈 입력 데이터 에러
      */
     private List<MeetingFUserBridge> dtoToMeetingFUserList(Meeting meeting, List<String> meetingFUserDtos) throws InputDataDuplicationException, InputDataBlankException {
         if (meetingFUserDtos.size() < 1) {
