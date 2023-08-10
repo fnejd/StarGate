@@ -19,6 +19,11 @@ export const groupsShouldFetch = atom<boolean>({
   default: true,
 });
 
+export const groupsDeleteState = atom<boolean>({
+  key: 'groupsDeleteState',
+  default: false,
+});
+
 export const groupsState = atom<GroupData[]>({
   key: 'groupsState',
   default: [],
