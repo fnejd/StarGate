@@ -27,13 +27,9 @@ const postPolraroidOption = async (uuid, meetingMembers) => {
 };
 
 // 전달할 메모
-const postNotePad = async (uuid, meetingMembers) => {
+const postNotePad = async (postitData) => {
   try {
-    const postData = {
-      uuid: uuid,
-      meetingMembers: meetingMembers,
-    }
-    const response = await api.post('/readyroom/polaroid-enable/write', postData);
+    const response = await api.post('/postit/write', postitData);
     return response;
   } catch (error) {
     console.error('포스트잇 저장 실패', error);

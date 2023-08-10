@@ -202,7 +202,7 @@ const Tab3 = ({ readyData, setReadyData }: Tab2Props) => {
       };
     });
   }, [memberInfo])
-  
+
   console.log('포스트잇 업뎃', memberInfo)
 
   return (
@@ -233,9 +233,24 @@ const Tab3 = ({ readyData, setReadyData }: Tab2Props) => {
 };
 
 const Tab4 = ({ readyData }: TabProps) => {
+  const [memoValue, setMemoValue] = useState('');
+
+  const handleMemoChange = (event) => {
+    const newMemoValue = event.target.value;
+    setMemoValue(newMemoValue);
+  }
+
+
   return (
-    <div className="w-5/6 h-5/6 mx-auto">
-      내가 볼 메모장
+    <div className="bg-postityellow w-4/6 h-380 p-3 mx-auto rounded-sm drop-shadow-lg border-none outline-none mt-2">
+          <div className='mt-2 font-semibold p-2'>
+            <div>
+              <textarea className="bg-postityellow resize-none w-400 h-250 outline-none p-2"
+                value={memoValue}
+                onChange={handleMemoChange}>
+              </textarea>
+            </div>
+          </div>
     </div>
   );
 };

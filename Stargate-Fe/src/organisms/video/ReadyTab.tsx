@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Tab0, Tab1, Tab2, Tab3, Tab4, Tab5 } from './TabContent';
 import BtnWhite from '@/atoms/common/BtnWhite';
-import { postPolraroidOption } from '@/services/userVideo';
+import { postPolraroidOption, postNotePad } from '@/services/userVideo';
 
 interface RedayDataProps {
   readyData: MeetingData;
@@ -66,7 +66,17 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
       console.log('폴라로이드 전송###', response)
     }
     if (tabIndex == 3) {
-      const response = await postNotePad(uuid, readyData.meetingMembers)
+      console.log(readyData)
+      const postitData = {
+        email: readyData.meetingFUser.email,
+        uuid: uuid,
+        postitDatas: readyData.meetingMembers.map(member => ({
+          memberNo: member.memberNo,
+          postitContents: member.postitContents,
+        })),
+      };
+
+      const response = await postNotePad(postitData)
       console.log('포스트잇 전송###', response)
     }
   };
