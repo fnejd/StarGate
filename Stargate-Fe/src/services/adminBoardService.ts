@@ -41,7 +41,7 @@ const fetchGroup = async () => {
       },
       withCredentials: false,
     });
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (error) {
     console.log('에러발생', error);
@@ -90,17 +90,30 @@ const updateGroup = async (groupNo: number, name: string) => {
   }
 };
 
+const deleteGroup = async (groupNo: number) => {
+  try {
+    const response = await api.delete('/pmanagements/group/delete', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      data: {
+        groupNo: groupNo,
+      },
+      withCredentials: false,
+    });
+    console.log('그룹 삭제', response);
+  } catch (error) {
+    console.log('그룹 삭제 에러:', error);
+  }
+};
+
 const createMember = async (groupNo: number, name: string) => {
   try {
     const response = await api.post(
       '/pmanagements/member/create',
       {
         groupNo: groupNo,
-        members: [
-          {
-            name: name,
-          },
-        ],
+        name: name,
       },
       {
         headers: {
@@ -109,7 +122,7 @@ const createMember = async (groupNo: number, name: string) => {
         withCredentials: false,
       }
     );
-    console.log(response);
+    console.log('멤버 생성 response', response);
   } catch (error) {
     console.log('멤버 생성 에러:', error);
   }
@@ -147,7 +160,7 @@ const deleteMember = async (memberNo: number) => {
       },
       withCredentials: false,
     });
-    console.log(response);
+    console.log('멤버 삭제', response);
   } catch (error) {
     console.log('멤버 삭제 에러:', error);
   }
@@ -159,6 +172,7 @@ export {
   fetchGroup,
   createGroup,
   updateGroup,
+  deleteGroup,
   createMember,
   updateMember,
   deleteMember,
