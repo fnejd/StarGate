@@ -1,4 +1,4 @@
-package com.ssafy.stargate.model.dto.request;
+package com.ssafy.stargate.model.dto.request.fuser;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -7,11 +7,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-@Builder
+/**
+ * 팬 유저 계정 정보 수정 요청에 관한 dto
+ */
+
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
 public class FUserUpdateRequestDto {
 

@@ -1,18 +1,14 @@
-package com.ssafy.stargate.model.dto.request;
+package com.ssafy.stargate.model.dto.request.fuser;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 /**
- * 팬 유저 회원가입시 사용되는 DTO이다.
- * @author 남현실
+ * 팬유저 로그인 요청에 관한 dto
  */
-@Builder
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
 public class FUserLoginRequestDto {
 

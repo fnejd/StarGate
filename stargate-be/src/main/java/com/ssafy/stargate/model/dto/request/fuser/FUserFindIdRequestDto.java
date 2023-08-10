@@ -1,19 +1,16 @@
-package com.ssafy.stargate.model.dto.common;
+package com.ssafy.stargate.model.dto.request.fuser;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 /**
- * 아이디 찾기를 위한 DTO
+ * 팬유저 아이디 찾기 요청에 관한 dto
  */
-@Builder
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
-public class FUserFindIdDto {
+public class FUserFindIdRequestDto {
 
     @NotBlank(message = "이름은 필수 입력사항")
     private String name;
@@ -22,5 +19,4 @@ public class FUserFindIdDto {
     @Pattern(regexp = "^01([0|1|6|7|8|9]?)-?([0-9]{4})-?([0-9]{4})$")
     private String phone;
 
-    private String email;
 }

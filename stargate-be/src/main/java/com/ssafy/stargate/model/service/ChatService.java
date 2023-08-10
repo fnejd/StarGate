@@ -2,28 +2,28 @@ package com.ssafy.stargate.model.service;
 
 
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.common.ChatMessageDto;
-import com.ssafy.stargate.model.dto.request.ChattingRoomRequestDto;
-import com.ssafy.stargate.model.dto.response.ChattingRoomResponseDto;
-
-import java.util.List;
+import com.ssafy.stargate.model.dto.request.chat.*;
+import com.ssafy.stargate.model.dto.response.chat.ChatMessageListResponseDto;
+import com.ssafy.stargate.model.dto.response.chat.ChatMessageResponseDto;
+import com.ssafy.stargate.model.dto.response.chat.ChattingRoomListResponseDto;
+import com.ssafy.stargate.model.dto.response.chat.ChattingRoomResponseDto;
 
 public interface ChatService {
 
-    public ChattingRoomResponseDto createChattingRoom(ChattingRoomRequestDto dto);
+    public ChattingRoomResponseDto createChattingRoom(ChattingRoomCreateRequestDto dto);
 
-    public ChattingRoomResponseDto updateChattingRoom(ChattingRoomRequestDto dto) throws NotFoundException;
+    public ChattingRoomResponseDto updateChattingRoom(ChattingRoomUpdateRequestDto dto) throws NotFoundException;
 
 
-    public List<ChattingRoomResponseDto> getAllChattingRoom();
+    public ChattingRoomListResponseDto getAllChattingRoom();
 
-    public List<ChatMessageDto> getChattingMessages(ChattingRoomRequestDto dto);
+    public ChatMessageListResponseDto getChattingMessages(Long roomNo);
 
-    public void sendMessage(ChatMessageDto dto, Long roomNo) throws NotFoundException;
+    public void sendMessage(ChatMessageCreateRequestDto dto) throws NotFoundException;
 
-    public void deleteMessage(ChatMessageDto dto);
+    public void deleteMessage(ChatMessageDeleteRequestDto dto);
 
-    public ChatMessageDto updateMessage(ChatMessageDto dto) throws NotFoundException;
+    public ChatMessageResponseDto updateMessage(ChatMessageUpdateRequestDto dto) throws NotFoundException;
 
 
 }

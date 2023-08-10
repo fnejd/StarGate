@@ -1,9 +1,13 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.common.LetterDto;
+import com.ssafy.stargate.model.dto.request.letter.LetterDeleteRequestDto;
+import com.ssafy.stargate.model.dto.request.letter.LetterFindByMeetingRequestDto;
+import com.ssafy.stargate.model.dto.request.letter.LetterFindByMemberRequestDto;
+import com.ssafy.stargate.model.dto.request.letter.LetterWriteRequestDto;
+import com.ssafy.stargate.model.dto.response.letter.LetterListResponseDto;
+import com.ssafy.stargate.model.dto.response.letter.LetterResponseDto;
 
-import java.util.List;
 
 
 /**
@@ -11,16 +15,16 @@ import java.util.List;
  */
 public interface LetterService {
 
-    public LetterDto writeLetter(LetterDto dto) throws NotFoundException;
+    public LetterResponseDto writeLetter(LetterWriteRequestDto dto) throws NotFoundException;
 
-    public void deleteLetter(LetterDto dto);
+    public void deleteLetter(LetterDeleteRequestDto dto);
 
-    public LetterDto getLetter(Long no) throws NotFoundException;
+    public LetterResponseDto getLetter(Long no) throws NotFoundException;
 
-    public List<LetterDto> getLetterByMeeting(LetterDto dto);
+    public LetterListResponseDto getLetterByMeeting(LetterFindByMeetingRequestDto dto);
 
-    public List<LetterDto> getLetterByMember(LetterDto memberNo);
+    public LetterListResponseDto getLetterByMember(LetterFindByMemberRequestDto memberNo);
 
-    public List<LetterDto> getLetterByFUser(String email);
+    public LetterListResponseDto getLetterByFUser(String email);
 
 }
