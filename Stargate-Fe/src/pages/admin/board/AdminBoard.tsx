@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 import BoardCardBox from '@/organisms/board/BoardCardBox';
 import BoardCardList from '@/organisms/board/BoardCardList';
 import { fetchAdminBoard } from '@/services/adminBoardService';
 import PlusButton from '@/atoms/board/PlusMinusButton';
+import AdminBoardHeader from '@/organisms/board/AdminBoardHeader';
 
 interface ImageFileInfo {
   filename: string;
@@ -92,8 +92,8 @@ const AdminBoard = () => {
   }, [data]);
 
   return (
-    <div className="w-xl flex flex-col justify-center">
-      <BoardHeaderNav isAdmin={true} />
+    <div className="w-xl min-h-screen flex flex-col justify-around">
+      <AdminBoardHeader />
       {loading ? (
         <BoardCardBox
           isAdmin={true}

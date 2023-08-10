@@ -22,6 +22,7 @@ const MyPage = () => {
     };
     fetchData();
   }, []);
+  
   return (
     <div>
       <BoardHeaderNav isAdmin={false} />

@@ -87,7 +87,7 @@ const UserBoard = () => {
   }, [data]);
 
   return (
-    <div className="w-xl flex flex-col justify-center">
+    <div className="w-xl min-h-screen flex flex-col justify-around">
       <BoardHeader />
       {loading ? (
         <BoardCardBox
