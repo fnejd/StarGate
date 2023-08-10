@@ -232,20 +232,32 @@ const Tab3 = ({ readyData, setReadyData }: Tab2Props) => {
   );
 };
 
-const Tab4 = ({ readyData }: TabProps) => {
-  const [memoValue, setMemoValue] = useState('');
+const Tab4 = ({ readyData, setReadyData }: Tab2Props) => {
+  const [memoValue, setMemoValue] = useState(readyData.meetingFUser.memoContents);
 
   const handleMemoChange = (event) => {
     const newMemoValue = event.target.value;
     setMemoValue(newMemoValue);
-  }
 
+    setReadyData((prevReadyData) => {
+      const updatedMeetingFUser = {
+        ...prevReadyData.meetingFUser,
+        memoContents: newMemoValue,
+      };
+    });
+    return {
+      ...prevReadyData,
+      meetingFUser: updatedMeetingFUser,
+    };
+  };
+
+  console.log('메모 바뀌는', readyData)
 
   return (
-    <div className="bg-postityellow w-4/6 h-380 p-3 mx-auto rounded-sm drop-shadow-lg border-none outline-none mt-2">
+    <div className="bg-memoblue w-4/6 h-380 p-3 mx-auto rounded-sm drop-shadow-lg border-none outline-none mt-2">
           <div className='mt-2 font-semibold p-2'>
             <div>
-              <textarea className="bg-postityellow resize-none w-400 h-250 outline-none p-2"
+              <textarea className="bg-memoblue resize-none w-400 h-250 outline-none p-2"
                 value={memoValue}
                 onChange={handleMemoChange}>
               </textarea>

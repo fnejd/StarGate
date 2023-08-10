@@ -26,7 +26,7 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
     1: <Tab1 readyData={readyData} handleConfirm={() => handleConfirm(2)} />,
     2: <Tab2 readyData={readyData} handleConfirm={() => handleConfirm(3)} setReadyData={setReadyData}/>,
     3: <Tab3 readyData={readyData} handleConfirm={() => handleConfirm(4)} setReadyData={setReadyData}/>,
-    4: <Tab4 readyData={readyData} handleConfirm={() => handleConfirm(5)} />,
+    4: <Tab4 readyData={readyData} handleConfirm={() => handleConfirm(5)} setReadyData={setReadyData}/>,
     5: <Tab5 readyData={readyData} />,
   };
   const tabList = [
@@ -118,7 +118,7 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
               </div>
             ))}
           </div>
-          <div className="flex flex-wrap my-auto w-4/6 h-500 text-black p-4 border border-black relative">
+          <div className="flex flex-wrap my-auto w-4/6 h-500 text-black p-4 relative">
             {tabContent[activeTab]}
             <div className='z-10 absolute bottom-5 right-5'>
             <BtnWhite onClick={() => handleConfirm(activeTab)} text="확인"></BtnWhite>
