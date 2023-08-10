@@ -13,7 +13,7 @@ const getReady = async (uuid: string) => {
 };
 
 // 폴라로이드 사진 여부
-const postPolraroidOption = async ({uuid, meetingMembers}) => {
+const postPolraroidOption = async (uuid, meetingMembers) => {
   try {
     const postData = {
       uuid: uuid,

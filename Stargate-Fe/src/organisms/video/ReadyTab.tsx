@@ -62,8 +62,8 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
     handleResetTabs(tabIndex + 1);
     // 폴라로이드 전송
     if (tabIndex == 2) {
-      // const response = await postPolraroidOption()
-
+      const response = await postPolraroidOption(uuid, readyData.meetingMembers)
+      console.log('폴라로이드 전송###', response)
     }
   };
 
