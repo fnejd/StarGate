@@ -1,6 +1,6 @@
 package com.ssafy.stargate.controller;
 
-import com.ssafy.stargate.model.dto.response.RemindResponseDto;
+import com.ssafy.stargate.model.dto.response.remind.RemindResponseDto;
 import com.ssafy.stargate.model.service.RemindService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

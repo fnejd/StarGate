@@ -1,8 +1,8 @@
-package com.ssafy.stargate.model.dto.response;
+package com.ssafy.stargate.model.dto.response.meeting;
 
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ReadyRoomResponseDto {
+public class MeetingDetailResponseDto {
     private UUID uuid;
     private String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -24,41 +24,39 @@ public class ReadyRoomResponseDto {
     private int meetingTime;
     private int photoNum;
     private String notice;
-    private SavedFileDto imageFileInfo;
+    private SavedFileResponseDto imageFileInfo;
+    private List<MeetingFUser> meetingFUsers;
+    private List<MeetingMember> meetingMembers;
     private long groupNo;
     private String groupName;
-    private MeetingFUser meetingFUser;
-    private List<MeetingMember> meetingMembers;
 
-    @SuperBuilder
+    @Builder
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class MeetingFUser {
+    public static class MeetingFUser{
+        @JsonIgnore
+        private long no;
         private String email; // FUser
         private int orderNum;
+        private Boolean isRegister;
         private String name;
-
-        private long remainingTime;
-        private int remainingFanNum;
-        private String memoContents;
     }
 
-    @SuperBuilder
+    @Builder
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
     public static class MeetingMember {
+        @JsonIgnore
+        private UUID uuid;
         private long memberNo; // PMember
         private int orderNum;
         private String roomId;
         private String name;
-
-        private Boolean isPolaroidEnable;
-        private String postitContents;
     }
 }

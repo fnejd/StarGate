@@ -1,11 +1,8 @@
-package com.ssafy.stargate.model.dto.common;
+package com.ssafy.stargate.model.dto.request.meeting;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.stargate.exception.ParsingException;
-import com.ssafy.stargate.model.entity.Meeting;
-import com.ssafy.stargate.model.entity.MeetingFUserBridge;
-import com.ssafy.stargate.model.entity.MeetingMemberBridge;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,13 +10,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Builder
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
-public class MeetingDto {
+public class MeetingUpdateRequestDto {
     private UUID uuid;
     private String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -65,28 +59,5 @@ public class MeetingDto {
         } catch (Exception e) {
             throw new ParsingException("MeetingFMembers의 JSON 형태의 문자열을 파싱하는데 실패했습니다.");
         }
-    }
-
-
-    public static MeetingDto entityToDto(Meeting meeting) {
-        return MeetingDto.builder()
-                .uuid(meeting.getUuid())
-                .name(meeting.getName())
-                .startDate(meeting.getStartDate())
-                .waitingTime(meeting.getWaitingTime())
-                .meetingTime(meeting.getMeetingTime())
-                .notice(meeting.getNotice())
-                .photoNum(meeting.getPhotoNum())
-                .meetingMembers(entityToDtoMeetingMemberList(meeting.getMeetingMembers()))
-                .meetingFUsers(entityToDtoMeetingFUserList(meeting.getMeetingFUsers()))
-                .build();
-    }
-
-    public static String entityToDtoMeetingMemberList(List<MeetingMemberBridge> meetingMembers) {
-        return meetingMembers.stream().map(meetingMember -> meetingMember.getPMember().getMemberNo()).toList().toString();
-    }
-
-    public static String entityToDtoMeetingFUserList(List<MeetingFUserBridge> meetingFUsers) {
-        return meetingFUsers.stream().map(meetingFUser -> meetingFUser.getEmail()).toList().toString();
     }
 }

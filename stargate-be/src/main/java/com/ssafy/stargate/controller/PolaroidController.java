@@ -1,8 +1,8 @@
 package com.ssafy.stargate.controller;
 
 import com.ssafy.stargate.exception.CRUDException;
-import com.ssafy.stargate.model.dto.request.PolaroidRequestDto;
-import com.ssafy.stargate.model.dto.response.PolaroidResponseDto;
+import com.ssafy.stargate.model.dto.request.polaroid.PolaroidWriteRequestDto;
+import com.ssafy.stargate.model.dto.response.polaroid.PolaroidResponseDto;
 import com.ssafy.stargate.model.service.PolaroidService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,13 +41,13 @@ public class PolaroidController {
     /**
      * 폴라로이드 이미지를 저장한다.
      *
-     * @param dto       [MeetingDto] 생성할 폴라로이드 정보
+     * @param dto       [PolaroidWriteRequestDto] 생성할 폴라로이드 정보
      * @param imageFile [MultipartFile] 폴라로이드 이미지 파일 (필수 아님)
      * @return 성공: 200
      * @throws CRUDException 폴라로이드 생성 실패
      */
     @PostMapping("/create")
-    public ResponseEntity<Void> createPolaroid(@ModelAttribute PolaroidRequestDto dto, @RequestParam(name = "imageFile", required = false) MultipartFile imageFile) throws CRUDException {
+    public ResponseEntity<Void> createPolaroid(@ModelAttribute PolaroidWriteRequestDto dto, @RequestParam(name = "imageFile", required = false) MultipartFile imageFile) throws CRUDException {
         polaroidService.createPolaroid(dto, imageFile);
         return ResponseEntity.ok(null);
     }

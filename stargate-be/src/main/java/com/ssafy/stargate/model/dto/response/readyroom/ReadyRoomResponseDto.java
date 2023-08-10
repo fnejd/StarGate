@@ -1,8 +1,6 @@
-package com.ssafy.stargate.model.dto.response;
+package com.ssafy.stargate.model.dto.response.readyroom;
 
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
-import com.ssafy.stargate.model.dto.common.MeetingFUserBridgeDto;
-import com.ssafy.stargate.model.dto.common.MeetingMemberBridgeDto;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MeetingDetailResponseDto {
+public class ReadyRoomResponseDto {
     private UUID uuid;
     private String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -26,11 +24,11 @@ public class MeetingDetailResponseDto {
     private int meetingTime;
     private int photoNum;
     private String notice;
-    private SavedFileDto imageFileInfo;
-    private List<MeetingFUser> meetingFUsers;
-    private List<MeetingMember> meetingMembers;
+    private SavedFileResponseDto imageFileInfo;
     private long groupNo;
     private String groupName;
+    private MeetingFUser meetingFUser;
+    private List<MeetingMember> meetingMembers;
 
     @SuperBuilder
     @Getter
@@ -38,9 +36,14 @@ public class MeetingDetailResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class MeetingFUser extends MeetingFUserBridgeDto {
-        private Boolean isRegister;
+    public static class MeetingFUser {
+        private String email; // FUser
+        private int orderNum;
         private String name;
+
+        private long remainingTime;
+        private int remainingFanNum;
+        private String memoContents;
     }
 
     @SuperBuilder
@@ -49,8 +52,13 @@ public class MeetingDetailResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class MeetingMember extends MeetingMemberBridgeDto {
+    public static class MeetingMember {
+        private long memberNo; // PMember
+        private int orderNum;
         private String roomId;
         private String name;
+
+        private Boolean isPolaroidEnable;
+        private String postitContents;
     }
 }

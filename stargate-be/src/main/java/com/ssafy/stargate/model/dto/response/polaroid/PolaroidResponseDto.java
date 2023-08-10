@@ -1,10 +1,9 @@
-package com.ssafy.stargate.model.dto.response;
+package com.ssafy.stargate.model.dto.response.polaroid;
 
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import lombok.*;
 
 import java.util.List;
-import java.util.UUID;
 
 
 @Builder
@@ -26,6 +25,6 @@ public class PolaroidResponseDto {
     @ToString
     public static class PolaroidDetailDto {
         private long no;
-        private SavedFileDto imageFileInfo;
+        private SavedFileResponseDto imageFileInfo;
     }
 }

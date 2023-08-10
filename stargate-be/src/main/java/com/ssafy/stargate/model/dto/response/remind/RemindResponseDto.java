@@ -1,6 +1,6 @@
-package com.ssafy.stargate.model.dto.response;
+package com.ssafy.stargate.model.dto.response.remind;
 
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -44,7 +44,7 @@ public class RemindResponseDto {
     @ToString
     public static class PolaroidDto {
         private long no;
-        private SavedFileDto imageFileInfo;
+        private SavedFileResponseDto imageFileInfo;
     }
 
     @Builder

@@ -1,7 +1,5 @@
 package com.ssafy.stargate.model.dto.response;
 
-import com.ssafy.stargate.model.dto.common.MeetingDto;
-import jakarta.persistence.Entity;
 import java.util.List;
 import lombok.*;
 

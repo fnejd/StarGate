@@ -1,6 +1,5 @@
 package com.ssafy.stargate.model.entity;
 
-import com.ssafy.stargate.model.dto.common.HistoryDto;
 import jakarta.persistence.*;
 import lombok.*;
 

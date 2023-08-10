@@ -1,4 +1,4 @@
-package com.ssafy.stargate.model.dto.common;
+package com.ssafy.stargate.model.dto.response.file;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SavedFileDto {
+public class SavedFileResponseDto {
     private String filename;
     private String fileUrl;
 }

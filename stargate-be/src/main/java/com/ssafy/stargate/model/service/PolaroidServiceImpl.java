@@ -2,14 +2,12 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.request.PolaroidRequestDto;
-import com.ssafy.stargate.model.dto.response.PolaroidResponseDto;
+import com.ssafy.stargate.model.dto.request.polaroid.PolaroidWriteRequestDto;
+import com.ssafy.stargate.model.dto.response.polaroid.PolaroidResponseDto;
 import com.ssafy.stargate.model.entity.*;
 import com.ssafy.stargate.model.repository.*;
 import com.ssafy.stargate.util.FileUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,12 +83,12 @@ public class PolaroidServiceImpl implements PolaroidService {
     /**
      * 폴라로이드 이미지를 저장한다.
      *
-     * @param dto       [PolaroidRequestDto] 생성할 폴라로이드 정보
+     * @param dto       [PolaroidWriteRequestDto] 생성할 폴라로이드 정보
      * @param imageFile [MultipartFile] 폴라로이드 이미지 파일
      * @throws CRUDException 폴라로이드 생성 실패
      */
     @Override
-    public void createPolaroid(PolaroidRequestDto dto, MultipartFile imageFile) throws CRUDException {
+    public void createPolaroid(PolaroidWriteRequestDto dto, MultipartFile imageFile) throws CRUDException {
         String filename = fileUtil.uploadFile(filePath, imageFile);
         if (filename == null) {
             throw new CRUDException("이미지 파일이 없어 생성이 불가능합니다.");
@@ -107,6 +105,7 @@ public class PolaroidServiceImpl implements PolaroidService {
             polaroidRepository.save(polaroid);
         } catch (Exception e) {
             fileUtil.deleteFile(filePath, filename);
+            e.printStackTrace();
             throw new CRUDException("폴라로이드 생성 중 오류가 발생했습니다.");
         }
     }

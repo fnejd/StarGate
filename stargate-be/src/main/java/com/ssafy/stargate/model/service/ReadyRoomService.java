@@ -2,9 +2,9 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.common.MemoDto;
-import com.ssafy.stargate.model.dto.common.PolaroidEnableDto;
-import com.ssafy.stargate.model.dto.response.ReadyRoomResponseDto;
+import com.ssafy.stargate.model.dto.request.readyroom.MemoWriteRequestDto;
+import com.ssafy.stargate.model.dto.request.readyroom.PolaroidEnableWriteRequsetDto;
+import com.ssafy.stargate.model.dto.response.readyroom.ReadyRoomResponseDto;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface ReadyRoomService {
     public ReadyRoomResponseDto getReadyRoomInfo(UUID uuid, Principal principal) throws NotFoundException;
 
-    public void writeMemo(MemoDto dto, Principal principal) throws NotFoundException, CRUDException;
+    public void writeMemo(MemoWriteRequestDto dto, Principal principal) throws NotFoundException, CRUDException;
 
-    public void writePolaroidEnable(PolaroidEnableDto dto, Principal principal) throws NotFoundException, CRUDException;
+    public void writePolaroidEnable(PolaroidEnableWriteRequsetDto dto, Principal principal) throws NotFoundException, CRUDException;
 }
