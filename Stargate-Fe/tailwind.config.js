@@ -101,6 +101,7 @@ export default {
 
         red: '#DC2626',
         admingray: '#DADADA',
+        postityellow: '#FFFACE',
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],

@@ -1,24 +1,41 @@
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import BtnWhite from '@/atoms/common/BtnWhite';
+import AdminToggle from '@/atoms/common/AdminToggle';
 
-interface Tab0Props {
+interface TabProps {
   readyData: MeetingData;
-  handleConfirm: () => void;
 }
+
+interface Tab2Props {
+  readyData: MeetingData;
+  setReadyData: React.Dispatch<React.SetStateAction<MeetingData | null>>,
+}
+
+type MeetingMember = {
+  memberNo: number;
+  name: string;
+  orderNum: number;
+  roomId: string;
+  isPolaroidEnable: boolean;
+  postitContents: string;
+};
+
+type MeetingData = {
+  meetingMembers: MeetingMember[];
+};
 
 const navigateVideoRoom = () => {};
 
-const Tab0 = ({ readyData, handleConfirm }: Tab0Props) => {
+const Tab0 = ({ readyData }: TabProps) => {
   return (
-    <div>
+    <div className='w-5/6 h-5/6 mx-auto'>
       {readyData.notice}
-      <BtnWhite onClick={handleConfirm} text="확인"></BtnWhite>
     </div>
   );
 };
 
-const Tab1 = ({ readyData, handleConfirm }: Tab0Props) => {
+const Tab1 = ({ readyData }: TabProps) => {
   const [stream, setStream] = useState(null);
   const [audioContext, setAudioContext] = useState(null);
 
@@ -46,6 +63,8 @@ const Tab1 = ({ readyData, handleConfirm }: Tab0Props) => {
       source.connect(analyser);
       analyser.connect(audioContext.destination);
 
+      const WIDTH: number = 300
+      const HEIGHT: number = 70
       analyser.fftSize = 256;
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
@@ -53,30 +72,39 @@ const Tab1 = ({ readyData, handleConfirm }: Tab0Props) => {
       console.log(canvas);
       const canvasCtx = canvas.getContext('2d');
       function drawGraph() {
-        canvasCtx.clearRect(0, 0, 100, 100);
+        canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
         const drawVisual = requestAnimationFrame(drawGraph);
         analyser.getByteFrequencyData(dataArray);
-        canvasCtx.fillStyle = 'rgb(200, 200, 200)';
-        canvasCtx.fillRect(0, 0, 100, 100);
+        canvasCtx.fillStyle = 'rgb(240, 240, 240)'
+        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
         canvasCtx.lineWidth = 2;
-        canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+        canvasCtx.strokeStyle = 'blue';
         canvasCtx.beginPath();
-        const sliceWidth = 100 / bufferLength;
+        const sliceWidth = WIDTH / bufferLength;
         let x = 0;
+      
+        canvasCtx.save();
+        canvasCtx.translate(0, HEIGHT);
+        canvasCtx.scale(1, -1);
+      
         for (let i = 0; i < bufferLength; i++) {
           const v = dataArray[i] / 128.0;
-          const y = v * (100 / 2);
-
+          const y = v * (HEIGHT / 2);
+      
           if (i === 0) {
             canvasCtx.moveTo(x, y);
           } else {
             canvasCtx.lineTo(x, y);
           }
-
+      
           x += sliceWidth;
         }
-        canvasCtx.lineTo(100, 100 / 2);
+      
+        canvasCtx.lineTo(WIDTH, HEIGHT / 2);
         canvasCtx.stroke();
+      
+        // Restore the canvas state
+        canvasCtx.restore();
       }
 
       drawGraph();
@@ -84,46 +112,77 @@ const Tab1 = ({ readyData, handleConfirm }: Tab0Props) => {
   }, [audioContext, stream]);
 
   return (
-    <div>
-      {stream && (
-        <ReactPlayer playing muted height="300px" width="400px" url={stream} />
-      )}
-      <canvas id="audio" width="150" height="150"></canvas>
-      <BtnWhite onClick={handleConfirm} text="확인"></BtnWhite>
+    <div className="w-5/6 h-5/6 flex items-center justify-center mx-auto">
+      <div className="w-5/6 h-5/6 mx-auto flex flex-col items-center">
+        {stream && (
+          <ReactPlayer playing muted height="4/6" width="5/6" url={stream} />
+        )}
+        <canvas id="audio" width="250" height="80" className='rounded-md mx-auto'></canvas>
+      </div>
     </div>
   );
 };
 
-const Tab2 = ({ readyData, handleConfirm }: Tab0Props) => {
+const Tab2 = ({ readyData, setReadyData }: Tab2Props) => {
+  const [memberInfo, setMemberInfo] = useState<meetingMembers[]>(readyData.meetingMembers);
+
+  const handleTogglePhotoTime = (memberIndex: number) => {
+    setMemberInfo((prevMemberInfo) => {
+      const updatedMemberInfo = [...prevMemberInfo];
+      updatedMemberInfo[memberIndex].isPolaroidEnable = !updatedMemberInfo[memberIndex].isPolaroidEnable;
+      return updatedMemberInfo;
+    });
+  };
+
+  useEffect(() => {
+    setReadyData((prevReadyData) => {
+      return {
+        ...prevReadyData,
+        meetingMembers: memberInfo,
+      };
+    });
+  }, [memberInfo])
+
+  console.log('멤버 폴라로이드 정보', memberInfo)
+  console.log('멤버정보', readyData.meetingMembers)
   return (
-    <div>
-      탭2
-      <BtnWhite onClick={handleConfirm} text="확인"></BtnWhite>
+    <div className="w-5/6 h-5/6 mx-auto">
+      <div className='text-18 font-semibold text-center flex justify-between mt-6 mb-4 mx-auto'>
+        <span>멤버 이름</span>
+        <span>폴라로이드 촬영 여부</span>
+      </div>
+      {memberInfo && memberInfo.map((member, index) => (
+        <div key={index} className='flex justify-between my-8 mx-auto p-4'>
+          <div className='text-18'>{member.name}</div>
+          <AdminToggle
+            photoTime={member.isPolaroidEnable}
+            setPhotoTime={() => handleTogglePhotoTime(index)}
+          />
+        </div>
+      ))}
     </div>
   );
 };
 
-const Tab3 = ({ readyData, handleConfirm }: Tab0Props) => {
+const Tab3 = ({ readyData }: TabProps) => {
   return (
-    <div>
-      탭3
-      <BtnWhite onClick={handleConfirm} text="확인"></BtnWhite>
+    <div className="w-5/6 h-5/6 mx-auto">
+      전달할 포스트잇
     </div>
   );
 };
 
-const Tab4 = ({ readyData, handleConfirm }: Tab0Props) => {
+const Tab4 = ({ readyData }: TabProps) => {
   return (
-    <div>
-      탭4
-      <BtnWhite onClick={handleConfirm} text="확인"></BtnWhite>
+    <div className="w-5/6 h-5/6 mx-auto">
+      내가 볼 메모장
     </div>
   );
 };
 
 const Tab5 = () => {
   return (
-    <div>
+    <div className="w-5/6 h-5/6 mx-auto">
       탭5
       <BtnWhite onClick={navigateVideoRoom} text="남은 시간"></BtnWhite>
     </div>
