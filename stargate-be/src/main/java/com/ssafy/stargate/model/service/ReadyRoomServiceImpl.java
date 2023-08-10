@@ -64,8 +64,7 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
             PostitRepository postitRepository,
             FileUtil fileUtil,
             @Value("${s3.filepath.meeting}") String filePath,
-            TimeUtil timeUtil
-    ) {
+            TimeUtil timeUtil) {
         this.memoRepository = memoRepository;
         this.meetingRepository = meetingRepository;
         this.meetingFUserRepository = meetingFUserRepository;
@@ -203,13 +202,10 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
                     .memberNo(member.getMemberNo())
                     .name(member.getName())
                     .orderNum(meetingMember.getOrderNum())
-                    .roomId(MeetingMemberBridge.getRoomId(meeting, meetingMember));
-
-            PolaroidEnable polaroidEnable = polaroidEnableRepository.findById(PolaroidEnable.createId(uuid, email, memberNo)).orElse(null);
-            if (polaroidEnable != null) {
-                meetingMemberBuilder
-                        .isPolaroidEnable(Boolean.valueOf(polaroidEnable.getIsPolaroidEnable()));
-            }
+                    .roomId(MeetingMemberBridge.getRoomId(meeting, meetingMember))
+                    .isPolaroidEnable(Boolean.valueOf(polaroidEnableRepository.findById(PolaroidEnable.createId(uuid, email, memberNo))
+                            .orElse(PolaroidEnable.builder().isPolaroidEnable("false").build())
+                            .getIsPolaroidEnable()));
 
             Postit postit = postitRepository.findPostit(email, memberNo, uuid).orElse(null);
             if (postit != null) {

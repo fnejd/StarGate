@@ -1,6 +1,7 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
+import com.ssafy.stargate.exception.InputDataBlankException;
 import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.model.dto.request.meeting.MeetingCreateRequestDto;
 import com.ssafy.stargate.model.dto.request.meeting.MeetingDeleteRequestDto;
@@ -18,9 +19,9 @@ import java.util.UUID;
 public interface MeetingService {
     public MeetingDetailResponseDto getMeeting(UUID uuid, Principal principal) throws NotFoundException;
 
-    public MeetingResponseDto createMeeting(MeetingCreateRequestDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException;
+    public MeetingResponseDto createMeeting(MeetingCreateRequestDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, InputDataBlankException;
 
-    public void updateMeeting(MeetingUpdateRequestDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException;
+    public void updateMeeting(MeetingUpdateRequestDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, InputDataBlankException;
 
     public void deleteMeeting(MeetingDeleteRequestDto dto, Principal principal) throws CRUDException, NotFoundException;
 }
