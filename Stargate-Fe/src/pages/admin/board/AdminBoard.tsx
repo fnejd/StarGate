@@ -5,38 +5,11 @@ import BoardCardList from '@/organisms/board/BoardCardList';
 import { fetchAdminBoard } from '@/services/adminBoardService';
 import PlusButton from '@/atoms/board/PlusMinusButton';
 import AdminBoardHeader from '@/organisms/board/AdminBoardHeader';
-
-interface ImageFileInfo {
-  filename: string;
-  fileUrl: string;
-}
-/**
- * @param uuid => 미팅 구분할 uuid
- * @param remainingTime => 남은 시간(초)
- * @param imageFileInfo => 이미지 정보
- */
-interface MeetingData {
-  uuid: string;
-  name: string;
-  startDate: string;
-  remainingTime: number;
-  imageFileInfo?: ImageFileInfo;
-}
-
-/**
- * @param ongoing => 진행중
- * @param expected => 예정
- * @param finished => 완료
- */
-interface AdminBoardData {
-  ongoing: MeetingData[];
-  expected: MeetingData[];
-  finished: MeetingData[];
-}
+import { BoardData } from '@/types/board/type';
 
 const AdminBoard = () => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<AdminBoardData>({
+  const [data, setData] = useState<BoardData>({
     ongoing: [],
     expected: [],
     finished: [],

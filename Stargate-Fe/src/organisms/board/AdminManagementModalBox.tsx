@@ -5,11 +5,8 @@ import AdminManagementInput from '@/atoms/board/AdminManagementInput';
 import { deleteMember } from '@/services/adminBoardService';
 import { useRecoilState } from 'recoil';
 import { selectedGroupMembersState, groupsShouldFetch } from '@/recoil/adminManagementState';
+import { MemberData } from '@/types/board/type';
 
-interface MemberData {
-  memberNo: number;
-  name: string;
-}
 /**
  * ManagementModalBoxProps
  * @param isOpen => 모달 창이 열려있는지를 나타내는 boolean 값

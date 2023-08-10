@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 import MyPageBox from '@/organisms/board/MyPageBox';
 import { fetchAdminData } from '@/services/adminBoardService';
-
-interface AdminData {
-  name : string;
-  email : string;
-  code : string;
-}
+import { AdminData } from '@/types/board/type';
 
 const AdminMyPage = () => {
   const [adminData, setAdminData] = useState<AdminData | null>(null);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   createMember,
   updateMember,
@@ -13,6 +13,7 @@ import {
   selectedGroupNoState,
   selectedGroupNameState,
 } from '@/recoil/adminManagementState';
+import { MemberData } from '@/types/board/type';
 /**
  * AdminManagementInput
  * @param isGroup => 인풋 태그 타입 설정 변수
@@ -28,16 +29,6 @@ interface AdminManagementInputProps {
   memberNo?: number | null;
   value?: string;
   onEnter: () => void;
-}
-
-interface MemberData {
-  memberNo: number;
-  name: string;
-}
-
-interface newGroup {
-  groupNo: number;
-  name: string;
 }
 
 const AdminManagementInput = ({
@@ -62,7 +53,7 @@ const AdminManagementInput = ({
   // Input onChange 시 value값 변경해주기
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    console.log('현재 값 :', value)
+    console.log('현재 값 :', value);
     setInputValue(value);
   };
 
@@ -79,7 +70,6 @@ const AdminManagementInput = ({
         const newGroup = await createGroup(inputValue);
         console.log(inputValue, '===', newGroup);
         if (newGroup !== undefined) {
-
           setGroups([...groups, newGroup]);
           setSelectedGroupNo(newGroup.groupNo);
           setSelectedGroupName(newGroup.name);

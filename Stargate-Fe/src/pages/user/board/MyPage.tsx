@@ -2,15 +2,7 @@ import { useEffect, useState } from 'react';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 import MyPageBox from '@/organisms/board/MyPageBox';
 import { fetchUserData } from '@/services/userBoardService';
-
-interface UserData {
-  email: string;
-  password: string;
-  name: string;
-  nickname: string;
-  birthday: string;
-  phone: string;
-}
+import { UserData } from '@/types/board/type';
 
 const MyPage = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -22,7 +14,7 @@ const MyPage = () => {
     };
     fetchData();
   }, []);
-  
+
   return (
     <div>
       <BoardHeaderNav isAdmin={false} />

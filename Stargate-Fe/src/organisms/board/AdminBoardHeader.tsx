@@ -1,4 +1,3 @@
-import React from 'react';
 import BoardHeaderTitle from '@/atoms/board/BoardHeaderTitle';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 
