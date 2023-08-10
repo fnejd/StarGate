@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import BtnWhite from '@/atoms/common/BtnWhite';
 import AdminToggle from '@/atoms/common/AdminToggle';
+import { loginApi } from '@/services/authService';
+import { splitVendorChunkPlugin } from 'vite';
 
 interface TabProps {
   readyData: MeetingData;
@@ -164,11 +166,69 @@ const Tab2 = ({ readyData, setReadyData }: Tab2Props) => {
   );
 };
 
-const Tab3 = ({ readyData }: TabProps) => {
+const Tab3 = ({ readyData, setReadyData }: Tab2Props) => {
+  const [memberIndex, setMemberIndex] = useState(0);
+  const [memberInfo, setMemberInfo] = useState<meetingMembers[]>(readyData.meetingMembers);
+  const [postitValue, setPostitValue] = useState('');
+
+  const handlePrevMember = () => {
+    if (memberIndex > 0) {
+      setMemberIndex(memberIndex - 1);
+      setPostitValue(memberInfo[memberIndex - 1]?.postitContents || '');
+    }
+  };
+
+  const handleNextMember = () => {
+    if (memberIndex < memberInfo.length - 1) {
+      setMemberIndex(memberIndex + 1);
+      setPostitValue(memberInfo[memberIndex + 1]?.postitContents || '');
+    }
+  };
+
+  const handlePostitChange = (event) => {
+    const newPostitValue = event.target.value;
+    setPostitValue(newPostitValue);
+
+    const updatedMemberInfo = [...memberInfo];
+    updatedMemberInfo[memberIndex].postitContents = newPostitValue;
+    setMemberInfo(updatedMemberInfo);
+  };
+
+  useEffect(() => {
+    setReadyData((prevReadyData) => {
+      return {
+        ...prevReadyData,
+        meetingMembers: memberInfo,
+      };
+    });
+  }, [memberInfo])
+  
+  console.log('포스트잇 업뎃', memberInfo)
+
   return (
-    <div className="w-5/6 h-5/6 mx-auto">
-      전달할 포스트잇
-    </div>
+    <>
+      <div className="bg-postityellow w-4/6 h-380 p-3 mx-auto rounded-sm drop-shadow-lg border-none outline-none mt-2">
+        {memberInfo[memberIndex] && (
+          <div className='mt-2 font-semibold p-2'>
+            To. {memberInfo[memberIndex].name}
+            <div>
+              <textarea className="bg-postityellow resize-none w-400 h-250 outline-none p-2"
+                value={postitValue}
+                onChange={handlePostitChange}>
+              </textarea>
+            </div>
+          </div>
+        )}
+        <div className='flex justify-between cursor-pointer m-2 text-gray-500'>
+          <span className="material-symbols-rounded text-32"  onClick={handlePrevMember}>
+            chevron_left
+          </span>
+          <span className="material-symbols-rounded text-32" onClick={handleNextMember}>
+            chevron_right
+          </span>
+        </div>
+      </div>
+    </>
   );
 };
 

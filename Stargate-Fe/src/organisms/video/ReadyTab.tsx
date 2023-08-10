@@ -25,7 +25,7 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
     0: <Tab0 readyData={readyData} handleConfirm={() => handleConfirm(1)} />,
     1: <Tab1 readyData={readyData} handleConfirm={() => handleConfirm(2)} />,
     2: <Tab2 readyData={readyData} handleConfirm={() => handleConfirm(3)} setReadyData={setReadyData}/>,
-    3: <Tab3 readyData={readyData} handleConfirm={() => handleConfirm(4)} />,
+    3: <Tab3 readyData={readyData} handleConfirm={() => handleConfirm(4)} setReadyData={setReadyData}/>,
     4: <Tab4 readyData={readyData} handleConfirm={() => handleConfirm(5)} />,
     5: <Tab5 readyData={readyData} />,
   };
@@ -64,6 +64,10 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
     if (tabIndex == 2) {
       const response = await postPolraroidOption(uuid, readyData.meetingMembers)
       console.log('폴라로이드 전송###', response)
+    }
+    if (tabIndex == 3) {
+      const response = await postNotePad(uuid, readyData.meetingMembers)
+      console.log('포스트잇 전송###', response)
     }
   };
 

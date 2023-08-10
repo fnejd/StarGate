@@ -20,10 +20,24 @@ const postPolraroidOption = async (uuid, meetingMembers) => {
       meetingMembers: meetingMembers,
     }
     const response = await api.post('/readyroom/polaroid-enable/write', postData);
-    // return response.data;
+    return response;
   } catch (error) {
     console.error('포스트잇 저장 실패', error);
   }
 };
 
-export { getReady, postPolraroidOption };
+// 전달할 메모
+const postNotePad = async (uuid, meetingMembers) => {
+  try {
+    const postData = {
+      uuid: uuid,
+      meetingMembers: meetingMembers,
+    }
+    const response = await api.post('/readyroom/polaroid-enable/write', postData);
+    return response;
+  } catch (error) {
+    console.error('포스트잇 저장 실패', error);
+  }
+};
+
+export { getReady, postPolraroidOption, postNotePad };
