@@ -2,17 +2,15 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.common.MemoDto;
-import com.ssafy.stargate.model.dto.common.PolaroidEnableDto;
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
-import com.ssafy.stargate.model.dto.response.ReadyRoomResponseDto;
+import com.ssafy.stargate.model.dto.request.readyroom.MemoWriteRequestDto;
+import com.ssafy.stargate.model.dto.request.readyroom.PolaroidEnableWriteRequsetDto;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
+import com.ssafy.stargate.model.dto.response.readyroom.ReadyRoomResponseDto;
 import com.ssafy.stargate.model.entity.*;
 import com.ssafy.stargate.model.repository.*;
 import com.ssafy.stargate.util.FileUtil;
 import com.ssafy.stargate.util.TimeUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -95,7 +93,7 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
         if (meeting.getMeetingMembers().size() < 1) new NotFoundException("미팅멤버가 없습니다.");
         PGroup pGroup = meeting.getMeetingMembers().get(0).getPMember().getPGroup();
 
-        SavedFileDto imageFileInfoDto = (meeting.getImage() != null) ? fileUtil.getFileInfo(filePath, meeting.getImage()) : null;
+        SavedFileResponseDto imageFileInfoDto = (meeting.getImage() != null) ? fileUtil.getFileInfo(filePath, meeting.getImage()) : null;
 
         return ReadyRoomResponseDto.builder()
                 .uuid(meeting.getUuid())
@@ -119,13 +117,13 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
      * 메모는 한 미팅과 한 유저 당 하나씩 생성된다.
      * 데이터를 Redis에 저장한다.
      *
-     * @param dto       [MemoDto] 메모 정보가 담긴 dto
+     * @param dto       [MemoWriteRequestDto] 메모 정보가 담긴 dto
      * @param principal [Principal] 팬유저 이메일이 포함된 객체
      * @throws NotFoundException 데이터 CRUD 에러
      * @throws CRUDException     데이터 찾기 실패 에러
      */
     @Override
-    public void writeMemo(MemoDto dto, Principal principal) throws NotFoundException, CRUDException {
+    public void writeMemo(MemoWriteRequestDto dto, Principal principal) throws NotFoundException, CRUDException {
         String email = principal.getName();
         UUID uuid = dto.getUuid();
         meetingFUserRepository.findByEmailAndUuid(email, uuid).orElseThrow(() -> new NotFoundException("미팅 팬유저를 찾을 수 없습니다."));
@@ -149,19 +147,19 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
      * 멤버별 폴라로이드 활성화 여부를 작성한다.
      * 데이터를 Redis에 저장한다.
      *
-     * @param dto       [PolaroidEnableDto] 멤버별 폴라로이드 활성화 여부 정보가 담긴 dto
+     * @param dto       [PolaroidEnableWriteRequsetDto] 멤버별 폴라로이드 활성화 여부 정보가 담긴 dto
      * @param principal [Principal] 팬유저 이메일이 포함된 객체
      * @throws NotFoundException 데이터 CRUD 에러
      * @throws CRUDException     데이터 찾기 실패 에러
      */
     @Override
-    public void writePolaroidEnable(PolaroidEnableDto dto, Principal principal) throws NotFoundException, CRUDException {
+    public void writePolaroidEnable(PolaroidEnableWriteRequsetDto dto, Principal principal) throws NotFoundException, CRUDException {
         String email = principal.getName();
         UUID uuid = dto.getUuid();
         meetingFUserRepository.findByEmailAndUuid(email, uuid).orElseThrow(() -> new NotFoundException("미팅 팬유저를 찾을 수 없습니다."));
 
         try {
-            for (PolaroidEnableDto.MeetingMemberDto meetingMemberDto : dto.getMeetingMembers()) {
+            for (PolaroidEnableWriteRequsetDto.MeetingMemberDto meetingMemberDto : dto.getMeetingMembers()) {
 
                 long memberNo = meetingMemberDto.getMemberNo();
                 if (!meetingMemberRepository.findByMemberNoAndUuid(memberNo, uuid).isPresent()) {
@@ -267,7 +265,7 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
      * @param id  [String] 데이터 id
      * @param dto [MemoDto] 메모 정보를 담은 dto
      */
-    private void createMemo(String id, MemoDto dto) {
+    private void createMemo(String id, MemoWriteRequestDto dto) {
         Memo memo = Memo.builder()
                 .id(id)
                 .contents(dto.getContents())
@@ -281,7 +279,7 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
      * @param memo [Memo] 저장된 메모 엔티티
      * @param dto  [MemoDto] 메모 정보를 담은 dto
      */
-    private void updateMemo(Memo memo, MemoDto dto) {
+    private void updateMemo(Memo memo, MemoWriteRequestDto dto) {
         memo.setContents(dto.getContents());
         memoRepository.save(memo);
     }
@@ -292,7 +290,7 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
      * @param id  [String] 데이터 id
      * @param dto [PolaroidEnableDto.MeetingMemberDto] 해당 멤버의 폴라로이드 활성화 여부 정보를 담은 dto
      */
-    private void createPolaroidEnable(String id, PolaroidEnableDto.MeetingMemberDto dto) {
+    private void createPolaroidEnable(String id, PolaroidEnableWriteRequsetDto.MeetingMemberDto dto) {
         PolaroidEnable polaroidEnable = PolaroidEnable.builder()
                 .id(id)
                 .isPolaroidEnable(String.valueOf(dto.getIsPolaroidEnable()))
@@ -306,7 +304,7 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
      * @param polaroidEnable [PolaroidEnable] 저장된 폴라로이드 활성화 여부 엔티티
      * @param dto            [PolaroidEnableDto.MeetingMemberDto] 해당 멤버의 폴라로이드 활성화 여부 정보를 담은 dto
      */
-    private void updatePolaroidEnable(PolaroidEnable polaroidEnable, PolaroidEnableDto.MeetingMemberDto dto) {
+    private void updatePolaroidEnable(PolaroidEnable polaroidEnable, PolaroidEnableWriteRequsetDto.MeetingMemberDto dto) {
         polaroidEnable.setIsPolaroidEnable(String.valueOf(dto.getIsPolaroidEnable()));
         polaroidEnableRepository.save(polaroidEnable);
     }

@@ -1,19 +1,18 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.response.RemindResponseDto;
+import com.ssafy.stargate.model.dto.response.remind.RemindResponseDto;
 import com.ssafy.stargate.model.entity.*;
 import com.ssafy.stargate.model.repository.LetterRepository;
 import com.ssafy.stargate.model.repository.MeetingRepository;
 import com.ssafy.stargate.model.repository.PolaroidRepository;
 import com.ssafy.stargate.util.FileUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -118,10 +117,10 @@ public class RemindServiceImpl implements RemindService {
                     long memberNo = meetingMember.getPMember().getMemberNo();
 
                     Optional<List<Polaroid>> polaroids = polaroidRepository.findPolaroidList(email, memberNo, uuid);
-                    List<RemindResponseDto.PolaroidDto> polaroidDtos = getPolaroidList(polaroids.isPresent() ? polaroids.get() : null);
+                    List<RemindResponseDto.PolaroidDto> polaroidDtos = (polaroids.isPresent())? getPolaroidList(polaroids.get()) : new ArrayList<>();
 
                     Optional<Letter> letter = letterRepository.findLetter(email, memberNo, uuid);
-                    RemindResponseDto.LetterDto letterDto = getLetter(letter.isPresent() ? letter.get() : null);
+                    RemindResponseDto.LetterDto letterDto = (letter.isPresent())? getLetter(letter.get()) : null;
 
                     return RemindResponseDto.MeetingMemberDto.builder()
                             .memberNo(memberNo)

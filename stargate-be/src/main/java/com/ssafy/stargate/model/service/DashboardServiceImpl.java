@@ -1,8 +1,7 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.common.MeetingDto;
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import com.ssafy.stargate.model.dto.response.DashboardMeetingResponseDto;
 import com.ssafy.stargate.model.dto.response.DashboardResponseDto;
 import com.ssafy.stargate.model.entity.Meeting;
@@ -13,15 +12,10 @@ import com.ssafy.stargate.util.FileUtil;
 import com.ssafy.stargate.util.TimeUtil;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -181,14 +175,14 @@ public class DashboardServiceImpl implements DashboardService{
 
         if(meeting.getImage() != null){
 
-            SavedFileDto savedFileDto = fileUtil.getFileInfo(filePath, meeting.getImage());
+            SavedFileResponseDto savedFileResponseDto = fileUtil.getFileInfo(filePath, meeting.getImage());
 
             return DashboardMeetingResponseDto.builder()
                     .uuid(meeting.getUuid())
                     .name(meeting.getName())
                     .startDate(meeting.getStartDate())
                     .remainingTime(remainingSecond)
-                    .imageFileInfo(savedFileDto)
+                    .imageFileInfo(savedFileResponseDto)
                     .build();
 
         }else{

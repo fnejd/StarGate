@@ -1,8 +1,8 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
-import com.ssafy.stargate.model.dto.request.PolaroidRequestDto;
-import com.ssafy.stargate.model.dto.response.PolaroidResponseDto;
+import com.ssafy.stargate.model.dto.request.polaroid.PolaroidWriteRequestDto;
+import com.ssafy.stargate.model.dto.response.polaroid.PolaroidResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -15,5 +15,5 @@ import java.util.UUID;
 public interface PolaroidService {
     public List<PolaroidResponseDto> getPolaroidList(UUID uuid, Principal principal);
 
-    public void createPolaroid(PolaroidRequestDto dto, MultipartFile imageFile) throws CRUDException;
+    public void createPolaroid(PolaroidWriteRequestDto dto, MultipartFile imageFile) throws CRUDException;
 }

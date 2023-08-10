@@ -2,8 +2,11 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.common.MeetingDto;
-import com.ssafy.stargate.model.dto.response.MeetingDetailResponseDto;
+import com.ssafy.stargate.model.dto.request.meeting.MeetingCreateRequestDto;
+import com.ssafy.stargate.model.dto.request.meeting.MeetingDeleteRequestDto;
+import com.ssafy.stargate.model.dto.request.meeting.MeetingUpdateRequestDto;
+import com.ssafy.stargate.model.dto.response.meeting.MeetingDetailResponseDto;
+import com.ssafy.stargate.model.dto.response.meeting.MeetingResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -15,9 +18,9 @@ import java.util.UUID;
 public interface MeetingService {
     public MeetingDetailResponseDto getMeeting(UUID uuid, Principal principal) throws NotFoundException;
 
-    public MeetingDto createMeeting(MeetingDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException;
+    public MeetingResponseDto createMeeting(MeetingCreateRequestDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException;
 
-    public void updateMeeting(MeetingDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException;
+    public void updateMeeting(MeetingUpdateRequestDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException;
 
-    public void deleteMeeting(MeetingDto dto, Principal principal) throws CRUDException, NotFoundException;
+    public void deleteMeeting(MeetingDeleteRequestDto dto, Principal principal) throws CRUDException, NotFoundException;
 }

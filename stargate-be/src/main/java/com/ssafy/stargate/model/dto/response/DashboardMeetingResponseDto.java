@@ -1,9 +1,7 @@
 package com.ssafy.stargate.model.dto.response;
 
 
-import com.ssafy.stargate.model.dto.common.MeetingDto;
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
-import com.ssafy.stargate.model.entity.Meeting;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -24,6 +22,6 @@ public class DashboardMeetingResponseDto {
     private String name;
     private LocalDateTime startDate;
     private long remainingTime;
-    private SavedFileDto imageFileInfo;
+    private SavedFileResponseDto imageFileInfo;
 
 }
