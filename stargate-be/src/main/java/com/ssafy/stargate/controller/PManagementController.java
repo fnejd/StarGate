@@ -38,6 +38,8 @@ public class PManagementController {
     /**
      * 신규 그룹을 생성한다.
      *
+     *
+     * @param dto PGroupCreateRequestDto 생성할 그룹정보가 포함된 객체
      * @param principal 소속사 이메일이 포함된 객체
      * @return 신규 생성한 그룹 객체
      */
@@ -50,7 +52,7 @@ public class PManagementController {
     /**
      * 그룹을 삭제한다.
      *
-     * @param dto       : PGroupDto 삭제할 그룹 번호가 포함된 dto
+     * @param dto PGroupDeleteRequestDto : 삭제할 그룹 번호가 포함된 dto
      * @param principal : Principal = 소속사 유저 정보(JWT에서)
      * @return 성공여부. 기본 200
      */
@@ -63,7 +65,7 @@ public class PManagementController {
     /**
      * 그룹 정보를 변경한다. 실질적으로 이름만 변경한다.
      *
-     * @param dto PGroupDto 그룹번호, 신규 이름이 포함된 그룹dto 객체를 반환한다.
+     * @param dto PGroupUpdateRequestDto 그룹번호, 신규 이름이 포함된 그룹dto 객체를 반환한다.
      * @param principal Principal 인증객체
      * @return 성공시 200 코드를 반환한다.
      */
@@ -77,7 +79,7 @@ public class PManagementController {
      * 그룹에 신규 멤버를 추가한다. 그룹 번호가 필요하다.
      * 신규 멤버는 members의 0번 인덱스에 하나 배치한다.
      *
-     * @param dto
+     * @param dto PMemberCreateRequestDto 멤버 정보
      * @return 성공시 200
      */
     @PostMapping("/member/create")
@@ -89,7 +91,7 @@ public class PManagementController {
     /**
      * 멤버를 삭제한다.
      *
-     * @param dto PMemberDto : 삭제할 멤버 번호가 포함된 PMemberDto객체
+     * @param dto PMemberDeleteRequestDto 삭제할 멤버 번호가 포함된 PMemberDto객체
      * @return 성공여부
      */
     @DeleteMapping("/member/delete")
@@ -100,7 +102,7 @@ public class PManagementController {
 
     /**
      * 소속사 계정정보를 업데이트한다.
-     * @param dto PMemberDto 소속사 유저정보가 담긴 객체
+     * @param dto PMemberUpdateRequestDto 소속사 유저정보가 담긴 객체
      * @return 성공여부 (200), 에러시 (600)
      */
     @PutMapping("/member/update")
