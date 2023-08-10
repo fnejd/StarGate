@@ -2,10 +2,11 @@ import { useState } from 'react';
 import PlusMinusButton from '../../atoms/board/PlusMinusButton';
 import AdminManagementModalBox from './AdminManagementModalBox';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import EndCallButton from '@/atoms/common/EndCallButton';
+import RedButton from '@/atoms/common/RedButton';
 import { deleteGroup } from '@/services/adminBoardService';
 import { useRecoilState } from 'recoil';
 import {
+  groupsShouldFetch,
   selectedGroupNoState,
   groupsDeleteState,
 } from '@/recoil/adminManagementState';
@@ -33,8 +34,15 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
   const [selectedGroup, setSelectedGroup] =
     useRecoilState(selectedGroupNoState);
   const [groupsDelete, setGroupsDelete] = useRecoilState(groupsDeleteState);
+  const [groupsFetch, setGroupsFetch] = useRecoilState(groupsShouldFetch);
   const groupNames = group.map((data) => data.name);
-  const totalButtons = Math.ceil(groupNames.length / 5) * 5;
+  const groupNums = group.map((data) => data.groupNo);
+  const totalButtons = Math.ceil(groupNums.length / 5) * 5;
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    setGroupsDelete(false);
+  };
 
   const handleModalClose = () => {
     setSelectedGroup(null);
@@ -48,24 +56,21 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
    * 그 후 setIsModalOpen을 이용해 Modal창을 열어줌
    */
 
-  const handleCircleClick = (groupName: string) => {
-    const selectedGroupNo =
-      group.find((data) => data.name === groupName)?.groupNo || null;
-    setSelectedGroup(selectedGroupNo);
-    setIsModalOpen(true);
+  const handleCircleClick = (groupNo: number) => {
+    setSelectedGroup(groupNo);
+    handleModalOpen();
   };
 
-  const handlePlusClick = (groupName: string) => {
-    const selectedGroupNo =
-      group.find((data) => data.name === groupName)?.groupNo || null;
-    setSelectedGroup(selectedGroupNo);
-    setIsModalOpen(true);
+  const handlePlusClick = () => {
+    handleModalOpen();
   };
 
   const handleMinusClick = () => {
-    console.log('실행됨?');
-    setGroupsDelete(true);
-    console.log('값 바뀜?', groupsDeleteState);
+    if (groupsDelete) {
+      setGroupsDelete(false);
+    } else {
+      setGroupsDelete(true);
+    }
   };
 
   const groupDeleteHandle = async (groupDeleteNum: number) => {
@@ -73,6 +78,7 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
       try {
         await deleteGroup(groupDeleteNum);
         console.log('그룹 삭제:', groupDeleteNum);
+        setGroupsFetch(true);
       } catch (error) {
         console.log(error);
       }
@@ -87,21 +93,23 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
         <div className="flex justify-between flex-wrap">
           {Array.from({ length: totalButtons }).map((_, index) => {
             const groupName = groupNames[index];
-            if (groupName) {
+            const groupNo = groupNums[index];
+            if (groupNo) {
               return (
                 <div
-                  key={groupName}
+                  key={groupNo}
                   className="lg:w-1/5 flex justify-center h2r mb-14 relative"
                 >
                   <BtnBlue
-                    onClick={() => handleCircleClick(groupName)}
+                    onClick={() => handleCircleClick(groupNo)}
                     text={groupName}
                   ></BtnBlue>
                   {groupsDelete && (
                     <div className="absolute top-0 right-0 z-10">
-                      <EndCallButton
-                        onClick={groupDeleteHandle()}
-                      ></EndCallButton>
+                      <RedButton
+                        onClick={() => groupDeleteHandle(groupNo)}
+                        isCall={false}
+                      ></RedButton>
                     </div>
                   )}
                 </div>
@@ -113,8 +121,8 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
             }
           })}
         </div>
-        <div className="self-end flex">
-          <PlusMinusButton onClick={() => handlePlusClick('')} />
+        <div className="self-end w-1/5 flex justify-between">
+          <PlusMinusButton onClick={handlePlusClick} />
           <PlusMinusButton isPlus={false} onClick={handleMinusClick} />
         </div>
         <AdminManagementModalBox
