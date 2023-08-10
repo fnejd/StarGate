@@ -48,7 +48,7 @@ const AdminBoard = () => {
       const fetchedData = await fetchAdminBoard();
       if (fetchedData) {
         setData(fetchedData);
-        console.log(fetchedData)
+        console.log(fetchedData);
       }
       setLoading(false);
       console.log('로딩완료');
@@ -56,10 +56,14 @@ const AdminBoard = () => {
     fetchData();
   }, []);
 
-  const cardData = data.ongoing[0] || data.expected[0];
+  /**
+   * @param cardBoxData => CardBox에 넣을 data값 선정
+   * @param setExpected => CardBox에 Expected[0]이 들어갔는지 확인하는 변수
+   */
+  const cardBoxData = data.ongoing[0] || data.expected[0];
+  const setExpected = cardBoxData === data.expected[0];
 
   /**
-   * @todo => expected 첫 번째꺼 ongoing이 있으면 사라지는 문제있음
    * @todo => 추후에 useInterval로 수정
    */
 
@@ -95,20 +99,19 @@ const AdminBoard = () => {
     <div className="w-xl min-h-screen flex flex-col justify-around">
       <AdminBoardHeader />
       {loading ? (
-        <BoardCardBox
-          isAdmin={true}
-          isLoading={loading}
-        />
+        <BoardCardBox isAdmin={true} isLoading={loading} />
       ) : (
-        cardData && <BoardCardBox
-          uuid={cardData.uuid}
-          imageSrc={cardData.imageFileInfo?.fileUrl}
-          title={cardData.name}
-          date={cardData.startDate}
-          remainingTime={cardData.remainingTime}
-          isAdmin={true}
-          isLoading={loading}
-        />
+        cardBoxData && (
+          <BoardCardBox
+            uuid={cardBoxData.uuid}
+            imageSrc={cardBoxData.imageFileInfo?.fileUrl}
+            title={cardBoxData.name}
+            date={cardBoxData.startDate}
+            remainingTime={cardBoxData.remainingTime}
+            isAdmin={true}
+            isLoading={loading}
+          />
+        )
       )}
       <Link to="/admin/event/create" className="fixed right-5 bottom-5">
         <PlusButton />
@@ -117,18 +120,29 @@ const AdminBoard = () => {
       {loading ? (
         <BoardCardList isLoading={loading} isAdmin={true} />
       ) : (
-        data.expected[1] && <BoardCardList
-          meetings={data.expected.slice(1)}
+        data.expected &&
+        (setExpected ? (
+          <BoardCardList
+            meetings={data.expected.slice(1)}
+            isAdmin={true}
+            isLoading={loading}
+          />
+        ) : (
+          <BoardCardList
+            meetings={data.expected}
+            isAdmin={true}
+            isLoading={loading}
+          />
+        ))
+      )}
+      <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
+      {data.finished && (
+        <BoardCardList
+          meetings={data.finished}
           isAdmin={true}
           isLoading={loading}
         />
       )}
-      <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
-      {data.finished &&<BoardCardList
-        meetings={data.finished}
-        isAdmin={true}
-        isLoading={loading}
-      />}
     </div>
   );
 };
