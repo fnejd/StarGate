@@ -32,7 +32,7 @@ public class PUserController {
     /**
      * 소속사 유저의 회원가입을 수행한다.
      *
-     * @param dto PUserRegisterDto : 소속사 회원가입 정보를 담는다.
+     * @param dto PUserCreateRequestDto : 소속사 회원가입 정보를 담는다.
      * @return 성공시 200, 실패시 600
      */
     @PostMapping("/register")
@@ -45,6 +45,11 @@ public class PUserController {
         }
     }
 
+    /**
+     * 이메일이 사용 가능한지 확인한다.
+     * @param email 이메일
+     * @return 사용가능여부
+     */
     @PostMapping("/check-email")
     public ResponseEntity<UserEmailCheckResponseDto> checkPuserEmailExist(@RequestParam("email") String email) {
         boolean result = pUserService.checkEmailExist(email);
@@ -55,7 +60,7 @@ public class PUserController {
     /**
      * 소속사 유저의 로그인 기능을 수행한다.
      *
-     * @param dto : PUserRequestDto : email, password 속성 필.
+     * @param dto : PUserLoginRequestDto : email, password 속성 필.
      * @return 로그인 성공시 SimpleDto에 JWT를 담아 보낸다. 실패시 401 코드 반환
      */
     @PostMapping("/login")
@@ -71,7 +76,7 @@ public class PUserController {
      * 회원 탈퇴를 수행한다.
      * 이메일과 비밀번호를 필수로 요구한다.
      *
-     * @param dto PUserRequestDto 소속사 유저 정보(이메일, 비밀번호 필)
+     * @param dto PUserDeleteRequestDto 소속사 유저 정보(이메일, 비밀번호 필)
      * @return 성공시 200
      */
     @DeleteMapping("/delete")
@@ -95,7 +100,7 @@ public class PUserController {
     /**
      * 소속사 유저 정보를 변경한다.
      *
-     * @param pUserDto 소속사 유저 정보 객체
+     * @param pUserDto PUserUpdateRequestDto 소속사 유저 정보 객체
      * @return 성공여부(200, 600)
      */
     @PutMapping("/update")
