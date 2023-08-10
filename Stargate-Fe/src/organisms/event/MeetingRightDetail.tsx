@@ -48,12 +48,12 @@ const MeetingRightSection = ({
         setSelectedImage(reader.result as string);
       };
 
-       // formData 업데이트
-       setFormData((prevFormData) => ({
+      // formData 업데이트
+      setFormData((prevFormData) => ({
         ...prevFormData,
         imageFile: file, // 선택된 파일로 이미지 업데이트
       }));
-    
+
       reader.readAsDataURL(file);
     }
   };
@@ -70,7 +70,7 @@ const MeetingRightSection = ({
       ...prevFormData,
       notice: textValue,
     }));
-  }
+  };
 
   return (
     <>

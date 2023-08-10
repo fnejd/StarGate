@@ -110,8 +110,8 @@ const loginApi = async (formData: FormData, type: boolean) => {
     })
     .catch((error) => {
       console.log(error);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-      response = error['response'].data;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+      response = error['response'].status.toString();
     });
 
   return response;
@@ -125,6 +125,14 @@ const logoutApi = async () => {
   await checkTokenExpTime();
   try {
     let result;
+    // if (api.defaults.headers.common['Authorization'] != null) {
+    //   const tokenDecode = api.defaults.headers.common['Authorization']
+    //     ?.toString()
+    //     .split('.')[1];
+    //   const payload = atob(tokenDecode);
+    //   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    //   result = JSON.parse(payload.toString());
+    // }
     if (localStorage.getItem('accessToken') != null) {
       const tokenDecode = localStorage
         .getItem('accessToken')
@@ -328,7 +336,8 @@ const adminLoginApi = async (formData: FormData, type: boolean) => {
     })
     .catch((error) => {
       console.log(error);
-      response = 'FAIL';
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+      response = error['response'].status.toString();
     });
 
   return response;
