@@ -27,4 +27,6 @@ public interface PUserService {
     int updatePUser(PUserUpdateRequestDto pUserDto);
 
     boolean checkEmailExist(String email);
+
+    void logout(String name);
 }

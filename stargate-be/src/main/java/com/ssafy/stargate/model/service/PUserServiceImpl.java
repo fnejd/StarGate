@@ -1,16 +1,15 @@
 package com.ssafy.stargate.model.service;
 
-import com.ssafy.stargate.exception.EmailDuplicationException;
-import com.ssafy.stargate.exception.LoginException;
-import com.ssafy.stargate.exception.PasswordFailException;
-import com.ssafy.stargate.exception.RegisterException;
+import com.ssafy.stargate.exception.*;
 import com.ssafy.stargate.model.dto.request.puser.PUserCreateRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserDeleteRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserUpdateRequestDto;
 import com.ssafy.stargate.model.dto.response.jwt.JwtResponseDto;
 import com.ssafy.stargate.model.dto.response.puser.PUserResponseDto;
+import com.ssafy.stargate.model.entity.JwtToken;
 import com.ssafy.stargate.model.entity.PUser;
+import com.ssafy.stargate.model.repository.JwtTokenRepository;
 import com.ssafy.stargate.model.repository.PUserRepository;
 import com.ssafy.stargate.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -32,12 +31,9 @@ import java.time.LocalDateTime;
 public class PUserServiceImpl implements PUserService {
 
     private final PUserRepository pUserRepository;
-
-
     private final PasswordEncoder passwordEncoder;
-
-
     private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenRepository jwtTokenRepository;
 
     /**
      * 소속사 직원에 대한 회원가입을 수행한다.
@@ -58,11 +54,12 @@ public class PUserServiceImpl implements PUserService {
                 .joinDate(LocalDateTime.now())
                 .build();
         pUserRepository.save(pUser);
-        log.info("TEST FOR JPA TIMEZONE : {}",pUser.getCreateDate());
+        log.info("TEST FOR JPA TIMEZONE : {}", pUser.getCreateDate());
     }
 
     /**
      * 소속사 이메일 중복검사를 수행한다.
+     *
      * @param email String 소속사 이메일 후보
      * @return 사용 여부(사용하면 true)
      */
@@ -81,10 +78,20 @@ public class PUserServiceImpl implements PUserService {
     public JwtResponseDto login(PUserLoginRequestDto dto) throws LoginException {
         PUser pUser = pUserRepository.findById(dto.getEmail()).orElseThrow(() -> new LoginException("해당 이메일 없음"));
         if (passwordEncoder.matches(dto.getPassword(), pUser.getPassword())) {
-            log.info("CreateDate = {}",pUser.getCreateDate());
+            log.info("CreateDate = {}", pUser.getCreateDate());
+            String refreshToken = jwtTokenUtil.createRefreshToken(dto.getEmail(), "PRODUCER");
+            String accessToken = jwtTokenUtil.createAccessToken(dto.getEmail(), "PRODUCER");
+
+            JwtToken token = JwtToken.builder()
+                    .email(dto.getEmail())
+                    .refreshToken(refreshToken)
+                    .build();
+
+            jwtTokenRepository.save(token);
+
             return JwtResponseDto.builder()
-                    .refreshToken(jwtTokenUtil.createRefreshToken(pUser.getEmail(), "PRODUCER"))
-                    .accessToken(jwtTokenUtil.createAccessToken(pUser.getEmail(), "PRODUCER"))
+                    .refreshToken(refreshToken)
+                    .accessToken(accessToken)
                     .build();
         } else {
             throw new LoginException("소속사 로그인 실패");
@@ -147,5 +154,20 @@ public class PUserServiceImpl implements PUserService {
         } else {
             return 401;
         }
+    }
+
+    /**
+     * 로그아웃(리프레쉬 토큰 삭제)를 수행한다.
+     * @param email 사용자 이메일
+     */
+    @Override
+    public void logout(String email) {
+        JwtToken refreshToken = jwtTokenRepository.findById(email).orElse(null);
+        if (refreshToken != null) {
+            jwtTokenRepository.deleteById(email);
+        } else {
+            throw new NotFoundException("해당 유저는 이미 로그아웃 상태입니다.");
+        }
+        log.info("로그아웃 되었습니다");
     }
 }
