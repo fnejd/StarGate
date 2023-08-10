@@ -4,7 +4,7 @@ import AdminBoardHeader from '@/organisms/board/AdminBoardHeader';
 import BoardCardBox from '@/organisms/board/BoardCardBox';
 import BoardCardList from '@/organisms/board/BoardCardList';
 import { fetchAdminBoard } from '@/services/adminBoardService';
-import PlusButton from '@/atoms/board/PlusButton';
+import PlusButton from '@/atoms/board/PlusMinusButton';
 
 interface ImageFileInfo {
   filename: string;
@@ -85,9 +85,9 @@ const AdminBoard = () => {
           return meeting;
         }),
       }));
-    }, 1000);
+    }, 1000); // 1초에 1씩 줄어듬
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // 메모리 누수 방지를 위해 clearInterval
   }, [data]);
 
   return (

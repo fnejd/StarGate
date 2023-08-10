@@ -1,4 +1,3 @@
-import React from 'react';
 import BoardCard from '../../atoms/board/BoardCard';
 import { useNavigate } from 'react-router-dom';
 
@@ -46,6 +45,7 @@ const BoardCardBox = ({
    * 색깔 회색 + 사용 불가로 막아놓음
    */
   const isTimeExceeded = remainingTime > 1800;
+  const isOngoing = 1 > remainingTime;
 
   const days = Math.floor(remainingTime / 86400);
   const hours = Math.floor((remainingTime - days * 86400) / 3600);
@@ -113,15 +113,21 @@ const BoardCardBox = ({
                     <p>일시</p>
                     <p>{date}</p>
                   </div>
-                  <div className="flex justify-between">
-                    <p>남은시간</p>
-                    <p>
-                      {days > 0 && `${days}일 `}
-                      {hours > 0 && `${hours}시간 `}
-                      {minutes > 0 && `${minutes}분 `}
-                      {seconds > 0 && `${seconds}초`}
-                    </p>
-                  </div>
+                  {isOngoing ? (
+                    <div className="flex justify-between">
+                      <p>진행중입니다!</p>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between">
+                      <p>남은시간</p>
+                      <p>
+                        {days > 0 && `${days}일 `}
+                        {hours > 0 && `${hours}시간 `}
+                        {minutes > 0 && `${minutes}분 `}
+                        {seconds > 0 && `${seconds}초`}
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <div className="w-2/3 flex justify-end">
                   {isAdmin ? (
