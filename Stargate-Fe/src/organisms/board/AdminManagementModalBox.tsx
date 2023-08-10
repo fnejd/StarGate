@@ -4,7 +4,10 @@ import AdminManagementDeleteButton from '@/atoms/board/AdminManagementDeleteButt
 import AdminManagementInput from '@/atoms/board/AdminManagementInput';
 import { deleteMember } from '@/services/adminBoardService';
 import { useRecoilState } from 'recoil';
-import { selectedGroupMembersState, groupsShouldFetch } from '@/recoil/adminManagementState';
+import {
+  selectedGroupMembersState,
+  groupsShouldFetch,
+} from '@/recoil/adminManagementState';
 import { MemberData } from '@/types/board/type';
 
 /**
@@ -88,15 +91,18 @@ const AdminManagementModalBox = ({
   const handleXButtonClicktoDelete = async (memberNo: number | void) => {
     showInputClose();
     if (memberNo) {
-      try {
-        await deleteMember(memberNo);
-        const updatedMembers = selectedGroupMembers.filter(
-          (member) => member.memberNo !== memberNo
-        );
-        setSelectedGroupMembers(updatedMembers);
-        setGroupsFetch(true);
-      } catch (error) {
-        console.log('멤버 삭제 에러:', error);
+      const confirmed = window.confirm('정말로 이 멤버를 삭제하시겠습니까?');
+      if (confirmed) {
+        try {
+          await deleteMember(memberNo);
+          const updatedMembers = selectedGroupMembers.filter(
+            (member) => member.memberNo !== memberNo
+          );
+          setSelectedGroupMembers(updatedMembers);
+          setGroupsFetch(true);
+        } catch (error) {
+          console.log('멤버 삭제 에러:', error);
+        }
       }
     } else {
       console.log('memberNo 없음');

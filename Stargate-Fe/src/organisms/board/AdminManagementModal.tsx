@@ -43,7 +43,6 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
   };
 
   /**
-   * handleCircleClick
    * 버튼이 클릭되면, props로 전달받은 groupName을 이용해 group의 data를 찾음
    * data에서 groupNo를 selectedGroup에 저장, 만약에 못찾았다면 null값을 넣어줌
    * 그 후 setIsModalOpen을 이용해 Modal창을 열어줌
@@ -68,18 +67,20 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
 
   const groupDeleteHandle = async (groupDeleteNum: number) => {
     if (groupDeleteNum !== null) {
-      try {
-        await deleteGroup(groupDeleteNum);
-        console.log('그룹 삭제:', groupDeleteNum);
-        setGroupsFetch(true);
-      } catch (error) {
-        console.log(error);
+      const confirmed = window.confirm('정말로 이 그룹을 삭제하시겠습니까?');
+      if (confirmed) {
+        try {
+          await deleteGroup(groupDeleteNum);
+          console.log('그룹 삭제:', groupDeleteNum);
+          setGroupsFetch(true);
+        } catch (error) {
+          console.log(error);
+        }
       }
     } else {
       console.log('groupDeleteNum 없음');
     }
   };
-
   return (
     <div>
       <div className="w-l h-500 flex flex-col justify-between">
