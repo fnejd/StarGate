@@ -1,11 +1,11 @@
 import React from 'react';
-import AdminBoardHeaderNav from '../../atoms/board/AdminBoardHeaderNav';
 import BoardHeaderTitle from '@/atoms/board/BoardHeaderTitle';
+import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 
 const AdminBoardHeader = () => {
   return (
     <div className='w-full'>
-      <AdminBoardHeaderNav />
+      <BoardHeaderNav isAdmin={true} />
       <BoardHeaderTitle />
     </div>
   );

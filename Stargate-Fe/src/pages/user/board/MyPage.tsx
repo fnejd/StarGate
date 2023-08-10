@@ -24,7 +24,7 @@ const MyPage = () => {
   }, []);
   return (
     <div>
-      <BoardHeaderNav></BoardHeaderNav>
+      <BoardHeaderNav isAdmin={false} />
       <div className="flex w-full justify-center items-center">
         <MyPageBox
           isAdmin={false}

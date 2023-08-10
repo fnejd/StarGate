@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import AdminBoardHeaderNav from '@/atoms/board/AdminBoardHeaderNav';
+import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 import MyPageBox from '@/organisms/board/MyPageBox';
 import { fetchAdminData } from '@/services/adminBoardService';
 
@@ -22,7 +22,7 @@ const AdminMyPage = () => {
 
   return (
     <div>
-      <AdminBoardHeaderNav></AdminBoardHeaderNav>
+      <BoardHeaderNav isAdmin={true}/>
       <div className="flex w-full justify-center items-center">
         <MyPageBox
           isAdmin={true}

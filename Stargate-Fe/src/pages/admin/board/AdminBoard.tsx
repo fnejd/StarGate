@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import AdminBoardHeader from '@/organisms/board/AdminBoardHeader';
+import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 import BoardCardBox from '@/organisms/board/BoardCardBox';
 import BoardCardList from '@/organisms/board/BoardCardList';
 import { fetchAdminBoard } from '@/services/adminBoardService';
@@ -59,6 +59,7 @@ const AdminBoard = () => {
   const cardData = data.ongoing[0] || data.expected[0];
 
   /**
+   * @todo => expected 첫 번째꺼 ongoing이 있으면 사라지는 문제있음
    * @todo => 추후에 useInterval로 수정
    */
 
@@ -92,7 +93,7 @@ const AdminBoard = () => {
 
   return (
     <div className="w-xl flex flex-col justify-center">
-      <AdminBoardHeader />
+      <BoardHeaderNav isAdmin={true} />
       {loading ? (
         <BoardCardBox
           isAdmin={true}
