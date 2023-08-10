@@ -59,13 +59,10 @@ const AdminManagementInput = ({
   );
   const [groupsFetch, setGroupsFetch] = useRecoilState(groupsShouldFetch);
 
-  useEffect(() => {
-    setInputValue(value || '');
-  }, [value]);
-
   // Input onChange 시 value값 변경해주기
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    console.log('현재 값 :', value)
     setInputValue(value);
   };
 
@@ -84,8 +81,8 @@ const AdminManagementInput = ({
         if (newGroup !== undefined) {
 
           setGroups([...groups, newGroup]);
-          // setSelectedGroupNo(newGroup.groupNo);
-          // setSelectedGroupName(newGroup.name);
+          setSelectedGroupNo(newGroup.groupNo);
+          setSelectedGroupName(newGroup.name);
           console.log(newGroup);
           console.log(groups);
           setGroupsFetch(true);
@@ -131,13 +128,13 @@ const AdminManagementInput = ({
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (isGroup) {
-        groupInputHandle();
+        await groupInputHandle();
         console.log('그룹');
       } else {
-        memberInputHandle();
+        await memberInputHandle();
         console.log('멤버');
       }
       console.log('엔터');
