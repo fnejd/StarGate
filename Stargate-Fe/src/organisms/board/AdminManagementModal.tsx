@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PlusMinusButton from '../../atoms/board/PlusMinusButton';
 import AdminManagementModalBox from './AdminManagementModalBox';
 import BtnBlue from '@/atoms/common/BtnBlue';
+import EndCallButton from '@/atoms/common/EndCallButton';
 import { deleteGroup } from '@/services/adminBoardService';
 import { useRecoilState } from 'recoil';
 import {
@@ -33,7 +34,6 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
     useRecoilState(selectedGroupNoState);
   const [groupsDelete, setGroupsDelete] = useRecoilState(groupsDeleteState);
   const groupNames = group.map((data) => data.name);
-  const groupNums = group.map((data) => data.groupNo);
   const totalButtons = Math.ceil(groupNames.length / 5) * 5;
 
   const handleModalClose = () => {
@@ -87,23 +87,22 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
         <div className="flex justify-between flex-wrap">
           {Array.from({ length: totalButtons }).map((_, index) => {
             const groupName = groupNames[index];
-            const groupNo = groupNums[index];
             if (groupName) {
               return (
                 <div
-                  key={groupNo}
-                  className="lg:w-1/5 flex justify-center h2r mb-14 relative" // relative 추가
+                  key={groupName}
+                  className="lg:w-1/5 flex justify-center h2r mb-14 relative"
                 >
                   <BtnBlue
                     onClick={() => handleCircleClick(groupName)}
                     text={groupName}
                   ></BtnBlue>
                   {groupsDelete && (
-                    <div
-                      key={groupNo}
-                      className="absolute top-0 right-0 w-12 h-12 bg-red rounded-full z-10" // 빨간색 버튼 스타일
-                      onClick={groupDeleteHandle(groupNo)}
-                    ></div>
+                    <div className="absolute top-0 right-0 z-10">
+                      <EndCallButton
+                        onClick={groupDeleteHandle()}
+                      ></EndCallButton>
+                    </div>
                   )}
                 </div>
               );

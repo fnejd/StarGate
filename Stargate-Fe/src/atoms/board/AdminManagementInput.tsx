@@ -11,7 +11,7 @@ import {
   groupsShouldFetch,
   selectedGroupMembersState,
   selectedGroupNoState,
-  selectedGroupNameState
+  selectedGroupNameState,
 } from '@/recoil/adminManagementState';
 /**
  * AdminManagementInput
@@ -52,8 +52,11 @@ const AdminManagementInput = ({
     MemberData[]
   >(selectedGroupMembersState);
   const [groups, setGroups] = useRecoilState(groupsState);
-  const [selectedGroupNo, setSelectedGroupNo] = useRecoilState(selectedGroupNoState);
-  const [selectedGroupName, setSelectedGroupName] = useRecoilState(selectedGroupNameState);
+  const [selectedGroupNo, setSelectedGroupNo] =
+    useRecoilState(selectedGroupNoState);
+  const [selectedGroupName, setSelectedGroupName] = useRecoilState(
+    selectedGroupNameState
+  );
   const [groupsFetch, setGroupsFetch] = useRecoilState(groupsShouldFetch);
 
   useEffect(() => {
@@ -77,11 +80,14 @@ const AdminManagementInput = ({
     } else {
       try {
         const newGroup = await createGroup(inputValue);
-        console.log(newGroup)
-        if (newGroup !== undefined){
-          setGroups([...groups, newGroup])
+        console.log(inputValue, '===', newGroup);
+        if (newGroup !== undefined) {
+
+          setGroups([...groups, newGroup]);
           // setSelectedGroupNo(newGroup.groupNo);
           // setSelectedGroupName(newGroup.name);
+          console.log(newGroup);
+          console.log(groups);
           setGroupsFetch(true);
         }
       } catch (error) {
@@ -109,7 +115,7 @@ const AdminManagementInput = ({
       if (groupNo)
         try {
           const newMember = await createMember(groupNo, inputValue);
-          console.log(inputValue,'===', newMember)
+          console.log(inputValue, '===', newMember);
           if (newMember !== undefined) {
             console.log('멤버 생성 시작');
             setSelectedGroupMembers([...selectedGroupMembers, newMember]);
@@ -129,10 +135,10 @@ const AdminManagementInput = ({
     if (e.key === 'Enter') {
       if (isGroup) {
         groupInputHandle();
-        console.log('그룹')
+        console.log('그룹');
       } else {
         memberInputHandle();
-        console.log('멤버')
+        console.log('멤버');
       }
       console.log('엔터');
       onEnter();

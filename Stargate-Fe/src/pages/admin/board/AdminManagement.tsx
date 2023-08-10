@@ -8,12 +8,13 @@ import { groupsState, groupsShouldFetch } from '@/recoil/adminManagementState';
 const AdminManagement = () => {
   const [groups, setGroups] = useRecoilState(groupsState);
   const [groupsFetch, setGroupsFetch] = useRecoilState(groupsShouldFetch);
-
+  console.log(groupsFetch, '바뀌었나?')
   useEffect(() => {
     const fetchData = async () => {
       if (groupsFetch) {
         const data = await fetchGroup();
         setGroups(data);
+        console.log('그룹을 다시 가져옵니다',data);
         setGroupsFetch(false);
       }
     };

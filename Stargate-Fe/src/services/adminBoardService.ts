@@ -63,7 +63,7 @@ const createGroup = async (name: string) => {
         withCredentials: false,
       }
     );
-    console.log(response);
+    return response.data;
   } catch (error) {
     console.log('그룹 생성 에러:', error);
   }
@@ -122,7 +122,7 @@ const createMember = async (groupNo: number, name: string) => {
         withCredentials: false,
       }
     );
-    console.log('멤버 생성 response', response);
+    return response.data;
   } catch (error) {
     console.log('멤버 생성 에러:', error);
   }
