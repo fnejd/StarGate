@@ -1,7 +1,7 @@
 package com.ssafy.stargate.controller;
 
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.response.DashboardResponseDto;
+import com.ssafy.stargate.model.dto.response.dashboard.DashboardResponseDto;
 import com.ssafy.stargate.model.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class DashboardController {
+
     private final DashboardService dashboardService;
 
     /**
      * 대시보드 정보 전달
-     *
      * @return [ResponseEntity<DashboardResponseDto>] today, past, future 미팅 정보 저장하는 dto
      * @throws NotFoundException 토큰에서 해당하는 AUTH 가 USER, PRODUCER 가 아닐 경우
      */

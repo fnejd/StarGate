@@ -1,4 +1,4 @@
-package com.ssafy.stargate.model.dto.response;
+package com.ssafy.stargate.model.dto.response.dashboard;
 
 
 import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;

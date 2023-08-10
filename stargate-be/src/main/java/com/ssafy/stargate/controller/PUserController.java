@@ -7,8 +7,8 @@ import com.ssafy.stargate.model.dto.request.puser.PUserCreateRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserDeleteRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserUpdateRequestDto;
-import com.ssafy.stargate.model.dto.response.JwtResponseDto;
-import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
+import com.ssafy.stargate.model.dto.response.jwt.JwtResponseDto;
+import com.ssafy.stargate.model.dto.response.fuser.FUserEmailCheckResponseDto;
 import com.ssafy.stargate.model.dto.response.puser.PUserResponseDto;
 import com.ssafy.stargate.model.service.PUserService;
 import lombok.RequiredArgsConstructor;
@@ -51,9 +51,9 @@ public class PUserController {
      * @return 사용가능여부
      */
     @PostMapping("/check-email")
-    public ResponseEntity<UserEmailCheckResponseDto> checkPuserEmailExist(@RequestParam("email") String email) {
+    public ResponseEntity<FUserEmailCheckResponseDto> checkPuserEmailExist(@RequestParam("email") String email) {
         boolean result = pUserService.checkEmailExist(email);
-        return ResponseEntity.ok(UserEmailCheckResponseDto.builder().exist(result).build());
+        return ResponseEntity.ok(FUserEmailCheckResponseDto.builder().exist(result).build());
     }
 
 

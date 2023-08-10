@@ -7,7 +7,7 @@ import com.ssafy.stargate.model.dto.request.puser.PUserCreateRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserDeleteRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserLoginRequestDto;
 import com.ssafy.stargate.model.dto.request.puser.PUserUpdateRequestDto;
-import com.ssafy.stargate.model.dto.response.JwtResponseDto;
+import com.ssafy.stargate.model.dto.response.jwt.JwtResponseDto;
 import com.ssafy.stargate.model.dto.response.puser.PUserResponseDto;
 
 import java.security.Principal;

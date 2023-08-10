@@ -1,9 +1,9 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.NotFoundException;
+import com.ssafy.stargate.model.dto.response.dashboard.DashboardMeetingResponseDto;
+import com.ssafy.stargate.model.dto.response.dashboard.DashboardResponseDto;
 import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
-import com.ssafy.stargate.model.dto.response.DashboardMeetingResponseDto;
-import com.ssafy.stargate.model.dto.response.DashboardResponseDto;
 import com.ssafy.stargate.model.entity.Meeting;
 import com.ssafy.stargate.model.entity.MeetingFUserBridge;
 import com.ssafy.stargate.model.repository.MeetingFUserRepository;
