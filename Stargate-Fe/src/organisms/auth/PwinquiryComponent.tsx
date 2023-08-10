@@ -17,8 +17,7 @@ const PwinquiryComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState<object>({ email: '' });
   // const SetEmailProp = useSetRecoilState(emailState);
-  const SetEmailProp = (value: string) =>
-    sessionStorage.setItem('emailStore', value);
+  const SetEmailProp = (value: string) => sessionStorage.setItem('emailStore', value)
   const [authNum, setAuthNum] = useState<number[]>([]);
 
   /**

@@ -86,23 +86,13 @@ const AuthNumberComponent = ({
         >
           <div ref={modalRef} className="w-fit h-fit bg-white rounded-lg p-4">
             {load ? (
-              <div className="backdrop:card shadow rounded-md p-4 mx-auto w-l">
-                <p className="mt-4 mb-4 form-title text-black">
-                  회원님의 이메일로 번호를 전송중입니다.
+              <div className="animate-pulse backdrop:card bg-white p-5 rounded-lg m-5">
+                <p className="mt-4 modal-title text-slate-700">인증번호 입력</p>
+                <p className="mt-4 form-title text-slate-700">
+                  이메일로 전송된 인증번호 6자리를 입력해주세요
                 </p>
-                <div className="animate-pulse flex space-x-4">
-                  <div className="rounded-full bg-slate-700 h-24 w-24 m-2"></div>
-                  <div className="flex-1 space-y-6 py-1">
-                    <div className="h-5 bg-slate-700 rounded m-2"></div>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-3 gap-4">
-                        <div className="h-5 bg-slate-700 rounded col-span-2 m-2"></div>
-                        <div className="h-5 bg-slate-700 rounded col-span-1 m-2"></div>
-                      </div>
-                      <div className="h-5 bg-slate-700 rounded m-2"></div>
-                    </div>
-                  </div>
-                </div>
+                <div className="m-5 mx-auto bg-slate-700 rounded-lg w-m h-20 relative"></div>
+                <div className="mx-auto w-40 h-16 bg-slate-700 rounded-xl"></div>
               </div>
             ) : (
               <div className="text-black backdrop:card bg-white p-5 rounded-lg m-5">

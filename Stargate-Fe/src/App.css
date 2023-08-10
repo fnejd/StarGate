@@ -14,3 +14,16 @@ html {
     'GRAD' 0,
     'opsz' 0;
 }
+
+// input 태그 자동완성 사용 시 배경색 생기는 거 지우기
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #fff inset;
+  -webkit-text-fill-color: white;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: white;
+}
