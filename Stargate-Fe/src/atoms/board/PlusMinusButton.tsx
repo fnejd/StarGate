@@ -6,12 +6,11 @@ import React from 'react';
  */
 
 interface PlusButtonProps {
+  isPlus?: boolean;
   onClick?: () => void;
 }
 
-const PlusButton = (props: PlusButtonProps) => {
-  const { onClick } = props;
-
+const PlusButton = ({ isPlus = true, onClick }: PlusButtonProps) => {
   return (
     <div>
       <div
@@ -19,7 +18,7 @@ const PlusButton = (props: PlusButtonProps) => {
         onClick={onClick}
       >
         <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center">
-          <p className="text-mainblue text-32 flex items-center">+</p>
+          <p className="text-mainblue text-32 flex items-center">{isPlus ? ('+') : ('-')}</p>
         </div>
       </div>
     </div>

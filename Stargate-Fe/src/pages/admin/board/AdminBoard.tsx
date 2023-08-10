@@ -4,7 +4,7 @@ import AdminBoardHeader from '@/organisms/board/AdminBoardHeader';
 import BoardCardBox from '@/organisms/board/BoardCardBox';
 import BoardCardList from '@/organisms/board/BoardCardList';
 import { fetchAdminBoard } from '@/services/adminBoardService';
-import PlusButton from '@/atoms/board/PlusButton';
+import PlusButton from '@/atoms/board/PlusMinusButton';
 
 interface ImageFileInfo {
   filename: string;

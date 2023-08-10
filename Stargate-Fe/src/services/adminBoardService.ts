@@ -90,17 +90,30 @@ const updateGroup = async (groupNo: number, name: string) => {
   }
 };
 
+const deleteGroup = async (groupNo: number) => {
+  try {
+    const response = await api.delete('/pmanagements/group/delete', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      data: {
+        groupNo: groupNo,
+      },
+      withCredentials: false,
+    });
+    console.log('그룹 삭제', response);
+  } catch (error) {
+    console.log('그룹 삭제 에러:', error);
+  }
+};
+
 const createMember = async (groupNo: number, name: string) => {
   try {
     const response = await api.post(
       '/pmanagements/member/create',
       {
         groupNo: groupNo,
-        members: [
-          {
-            name: name,
-          },
-        ],
+        name: name,
       },
       {
         headers: {
@@ -159,6 +172,7 @@ export {
   fetchGroup,
   createGroup,
   updateGroup,
+  deleteGroup,
   createMember,
   updateMember,
   deleteMember,
