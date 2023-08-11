@@ -60,9 +60,11 @@ const ReadyRoom = () => {
     fetchReadyData(); // async 함수 호출
   }, []);
 
+  console.log('최종 레디 데이터', readyData)
+
   return (
     <div>
-      <ReadyTab readyData={readyData} />
+      <ReadyTab readyData={readyData} setReadyData={setReadyData} />
     </div>
   );
 };

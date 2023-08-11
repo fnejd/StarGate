@@ -6,6 +6,8 @@ html {
   --tw-gradient-to: #0010ff var(--tw-gradient-to-position);
 }
 
+<<<<<<< HEAD
+=======
 .material-symbols-rounded {
   color: black;
   font-variation-settings:
@@ -15,6 +17,7 @@ html {
     'opsz' 0;
 }
 
+>>>>>>> 1f1d58bd5842ed026aef7ffa040160e433e4c65c
 .material-pw {
   color: white;
   font-variation-settings:

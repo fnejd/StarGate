@@ -26,8 +26,10 @@ export default {
         600: '600px',
       },
       height: {
+        250: '250px',
         300: '300px',
         350: '350px',
+        380: '380px',
         400: '400px',
         500: '500px',
         550: '550px',
@@ -96,7 +98,12 @@ export default {
 
         red: '#DC2626',
         admingray: '#DADADA',
+<<<<<<< HEAD
+        postityellow: '#FFFACE',
+        memoblue: '#AAAFF7'
+=======
         postityellow: '#FFFACE'
+>>>>>>> 1f1d58bd5842ed026aef7ffa040160e433e4c65c
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],
