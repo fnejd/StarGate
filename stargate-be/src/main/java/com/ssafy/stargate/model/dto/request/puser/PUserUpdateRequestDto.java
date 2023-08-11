@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class PUserUpdateRequestDto {
     private String email;
-    private String password;
+    private String newPassword;
     private String code;
     private String name;
     private String originalPassword;

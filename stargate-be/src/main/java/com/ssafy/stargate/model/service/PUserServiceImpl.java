@@ -146,8 +146,8 @@ public class PUserServiceImpl implements PUserService {
             if (pUserDto.getCode() != null) {
                 pUser.setCode(pUser.getCode());
             }
-            if (pUserDto.getPassword() != null) {
-                pUser.setPassword(passwordEncoder.encode(pUserDto.getPassword()));
+            if (pUserDto.getNewPassword() != null) {
+                pUser.setPassword(passwordEncoder.encode(pUserDto.getNewPassword()));
             }
             pUserRepository.save(pUser);
             return 200;
