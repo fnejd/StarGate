@@ -21,7 +21,7 @@ const AdminToggle = ({ photoTime, setPhotoTime }: AdminToggleProps) => {
       onClick={handleToggle}
     >
       <div
-        className={`w-6 h-6 bg-white rounded-full absolute top-4 transform -translate-y-1/2 transition-transform switch ${
+        className={`w-6 h-6 bg-white rounded-full absolute top-3 transform -translate-y-1/2 transition-transform switch ${
           photoTime ? 'translate-x-0' : 'translate-x-8'
         }`}
       ></div>
