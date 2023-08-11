@@ -39,6 +39,7 @@ const updateUserData = async (formData: FormData) => {
       withCredentials: false,
     });
     console.log(response);
+    alert('수정되었습니다.');
     return response.data;
   } catch (error) {
     console.log('에러발생', error);

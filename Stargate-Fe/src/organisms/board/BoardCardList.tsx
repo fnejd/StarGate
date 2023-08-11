@@ -40,6 +40,7 @@ const BoardCardList = ({
   isAdmin: boolean;
   isLoading: boolean;
   isOver?: boolean;
+  isRemind? :boolean;
 }) => {
   const navigate = useNavigate();
   const remainder = meetings === undefined ? 0 : meetings.length % 4;
@@ -53,7 +54,6 @@ const BoardCardList = ({
    */
 
   const handleCardClick = (uuid: string) => {
-    navigate(`/remind/${uuid}`); // navigate 함수를 사용하여 원하는 경로로 이동합니다.
     if (isAdmin) {
       linkToDetail(uuid);
     } else {
