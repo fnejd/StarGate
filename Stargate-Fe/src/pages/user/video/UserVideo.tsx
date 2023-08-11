@@ -7,7 +7,7 @@ const UserVideo = () => {
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const socketRef = useRef<WebSocket | null>(
-    new WebSocket('ws://i9a406.p.ssafy.io:8080/rtc/asdf.12')
+    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.12')
   );
   const socket = socketRef.current;
 
