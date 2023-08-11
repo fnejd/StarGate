@@ -2,67 +2,84 @@ import { useState } from 'react';
 import PlusMinusButton from '../../atoms/board/PlusMinusButton';
 import AdminManagementModalBox from './AdminManagementModalBox';
 import BtnBlue from '@/atoms/common/BtnBlue';
+import RedButton from '@/atoms/common/RedButton';
 import { deleteGroup } from '@/services/adminBoardService';
 import { useRecoilState } from 'recoil';
-import { selectedGroupNoState } from '@/recoil/adminManagementState';
+import {
+  groupsShouldFetch,
+  selectedGroupNoState,
+  groupsDeleteState,
+} from '@/recoil/adminManagementState';
+import { GroupData } from '@/types/board/type';
+
 /**
  * AdminManagementModal
  * group의 이름들을 가져와서 버튼으로 출력, 만약 5의 배수가 아니라면 비어있는 <div>를 이용해 공간을 채워줌
  * 버튼을 click하면, setSelectedGroup에 group을 state로 넣어줌
  */
 
-interface MemberData {
-  memberNo: number;
-  name: string;
-}
-interface GroupData {
-  groupNo: number;
-  name: string;
-  members: MemberData[];
-}
 interface AdminManagementModalProps {
   group: GroupData[];
 }
 
 const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [deleteGroupNo, setDeleteGroupNo] = useState<number | null>(null);
   const [selectedGroup, setSelectedGroup] =
     useRecoilState(selectedGroupNoState);
+  const [groupsDelete, setGroupsDelete] = useRecoilState(groupsDeleteState);
+  const [groupsFetch, setGroupsFetch] = useRecoilState(groupsShouldFetch);
   const groupNames = group.map((data) => data.name);
-  const totalButtons = Math.ceil(groupNames.length / 5) * 5;
+  const groupNums = group.map((data) => data.groupNo);
+  const totalButtons = Math.ceil(groupNums.length / 5) * 5;
 
-  const groupDeleteHandle = async () => {
-    if (deleteGroupNo !== null) {
-      try {
-        await deleteGroup(deleteGroupNo);
-        setDeleteGroupNo(null);
-        console.log('그룹 삭제:', deleteGroupNo);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      console.log('deleteGroupNo 없음');
-    }
-  };
-
-  /**
-   * handleCircleClick
-   * 버튼이 클릭되면, props로 전달받은 groupName을 이용해 group의 data를 찾음
-   * data에서 groupNo를 selectedGroup에 저장, 만약에 못찾았다면 null값을 넣어줌
-   * 그 후 setIsModalOpen을 이용해 Modal창을 열어줌
-   */
-
-  const handleCircleClick = (groupName: string) => {
-    const selectedGroupNo =
-      group.find((data) => data.name === groupName)?.groupNo || null;
-    setSelectedGroup(selectedGroupNo);
+  const handleModalOpen = () => {
     setIsModalOpen(true);
+    setGroupsDelete(false);
   };
 
   const handleModalClose = () => {
     setSelectedGroup(null);
     setIsModalOpen(false);
+  };
+
+  /**
+   * 버튼이 클릭되면, props로 전달받은 groupName을 이용해 group의 data를 찾음
+   * data에서 groupNo를 selectedGroup에 저장, 만약에 못찾았다면 null값을 넣어줌
+   * 그 후 setIsModalOpen을 이용해 Modal창을 열어줌
+   */
+
+  const handleCircleClick = (groupNo: number) => {
+    setSelectedGroup(groupNo);
+    handleModalOpen();
+  };
+
+  const handlePlusClick = () => {
+    handleModalOpen();
+  };
+
+  const handleMinusClick = () => {
+    if (groupsDelete) {
+      setGroupsDelete(false);
+    } else {
+      setGroupsDelete(true);
+    }
+  };
+
+  const groupDeleteHandle = async (groupDeleteNum: number) => {
+    if (groupDeleteNum !== null) {
+      const confirmed = window.confirm('정말로 이 그룹을 삭제하시겠습니까?');
+      if (confirmed) {
+        try {
+          await deleteGroup(groupDeleteNum);
+          console.log('그룹 삭제:', groupDeleteNum);
+          setGroupsFetch(true);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } else {
+      console.log('groupDeleteNum 없음');
+    }
   };
   return (
     <div>
@@ -70,16 +87,25 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
         <div className="flex justify-between flex-wrap">
           {Array.from({ length: totalButtons }).map((_, index) => {
             const groupName = groupNames[index];
-            if (groupName) {
+            const groupNo = groupNums[index];
+            if (groupNo) {
               return (
                 <div
-                  key={groupName}
-                  className="lg:w-1/5 flex justify-center h2r mb-14"
+                  key={groupNo}
+                  className="lg:w-1/5 flex justify-center h2r mb-14 relative"
                 >
                   <BtnBlue
-                    onClick={() => handleCircleClick(groupName)}
+                    onClick={() => handleCircleClick(groupNo)}
                     text={groupName}
                   ></BtnBlue>
+                  {groupsDelete && (
+                    <div className="absolute top-0 right-0 z-10">
+                      <RedButton
+                        onClick={() => groupDeleteHandle(groupNo)}
+                        isCall={false}
+                      ></RedButton>
+                    </div>
+                  )}
                 </div>
               );
             } else {
@@ -89,9 +115,9 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
             }
           })}
         </div>
-        <div className="self-end flex">
-          <PlusMinusButton onClick={() => handleCircleClick('')} />
-          <PlusMinusButton isPlus = {false} onClick={() => handleCircleClick('')} />
+        <div className="self-end w-1/5 flex justify-between">
+          <PlusMinusButton onClick={handlePlusClick} />
+          <PlusMinusButton isPlus={false} onClick={handleMinusClick} />
         </div>
         <AdminManagementModalBox
           isOpen={isModalOpen}
