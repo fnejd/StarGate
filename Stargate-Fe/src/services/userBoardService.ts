@@ -30,4 +30,19 @@ const fetchUserData = async () => {
   }
 };
 
-export { fetchUserBoard, fetchUserData };
+const updateUserData = async (formData: FormData) => {
+  try {
+    const response = await api.put('/fusers/update', formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log('에러발생', error);
+  }
+};
+
+export { fetchUserBoard, fetchUserData, updateUserData };

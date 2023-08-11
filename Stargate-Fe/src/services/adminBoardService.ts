@@ -30,6 +30,21 @@ const fetchAdminData = async () => {
   }
 };
 
+const updateAdminData = async (formData: FormData) => {
+  try {
+    const response = await api.put('/pusers/update', formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log('에러발생', error);
+  }
+};
+
 /**
  * 소속사 그룹&멤버 data 가져오기
  */
@@ -169,6 +184,7 @@ const deleteMember = async (memberNo: number) => {
 export {
   fetchAdminBoard,
   fetchAdminData,
+  updateAdminData,
   fetchGroup,
   createGroup,
   updateGroup,
