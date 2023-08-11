@@ -135,12 +135,61 @@ const UserVideo = () => {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
-  const [timeout, setTimeout] = useState(false); // 미팅 시간 다 끝났을 때 true, 아닐 때는 false
+  const [isTimeout, setIsTimeout] = useState(false); // 미팅 시간 다 끝났을 때 true, 아닐 때는 false
   const [sec, setSec] = useState();
+  const [minute, setMinute] = useState(0); // 분을 관리하는 상태
+  const [second, setSecond] = useState(0); // 초를 관리하는 상태
+  const [timerInterval, setTimerInterval] = useState(0); // 타이머 인터벌을 관리하는 상태
+
   // 멤버 고유번호(미팅 순서에 따른 웹소켓 주소)를 배열에 할당
   let currentMemberIndex = 0;
   let socketUrl = '';
   let socket;
+
+  ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
+  // 초를 줄이는 로직
+  const tick = () => {
+    // 타임아웃 알림
+    if (second == 0 && minute == 0) {
+      setIsTimeout(true)
+    }
+    
+    if (second > 0) {
+      setSecond((sec) => sec - 1);
+    }
+
+    if (second === 0) {
+      if (minute === 0) {
+        setIsTimeout(true);
+      } else {
+        setMinute((min) => min - 1);
+        setSecond(59);
+      }
+    }
+  };
+
+  // 초와 분 다시 가져와서 설정하는 함수
+  const getTime = () => {
+    setMinute(parseInt(minute / 60));
+    setSecond(parseInt(second % 60));
+  };
+
+  언제 초분 설정?
+  처음 가져왔을 때, 연예인한테도 쏴주고 내 분 초 설정
+  그리고 초와 분이 다 0초가 되었을 때 다시 설정
+  // 처음 비디오 데이터 값이 받아지면 초와 분 설정
+  useEffect(() => {
+    getTime();
+  }, [videoData]);
+
+  // 시간 추적하다가 초가 0이 될 때 타이머 인터벌 클리어
+  useEffect(() => {
+    if (second === 0) {
+      clearInterval(timerInterval);
+    }
+  }, [minute, second]);
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   useEffect(() => {}, [memberNos]);
   useEffect(() => {
