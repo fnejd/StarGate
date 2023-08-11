@@ -24,7 +24,7 @@ const ProFileIcon = () => {
   }
 
   return (
-    <span onClick={() => navigate(link)} className="material-symbols-outlined">
+    <span onClick={() => navigate(link)} className="material-symbols-outlined m-4 text-48">
       account_box
     </span>
   );
