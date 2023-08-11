@@ -69,6 +69,7 @@ public class PUserController {
         try {
             return ResponseEntity.ok(pUserService.login(dto));
         } catch (LoginException e) {
+            log.info("PUSER LOGIN ERROR : {}",e.getMessage());
             return ResponseEntity.status(401).build();
         }
     }
