@@ -98,12 +98,8 @@ export default {
 
         red: '#DC2626',
         admingray: '#DADADA',
-<<<<<<< HEAD
         postityellow: '#FFFACE',
         memoblue: '#AAAFF7'
-=======
-        postityellow: '#FFFACE'
->>>>>>> 1f1d58bd5842ed026aef7ffa040160e433e4c65c
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],

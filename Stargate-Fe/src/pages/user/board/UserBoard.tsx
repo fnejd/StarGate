@@ -85,6 +85,7 @@ const UserBoard = () => {
             meetings={data.expected.slice(1)}
             isAdmin={false}
             isLoading={loading}
+            isOver={false}
           />
         )
       )}
@@ -94,6 +95,7 @@ const UserBoard = () => {
           meetings={data.finished}
           isAdmin={false}
           isLoading={loading}
+          isOver={true}
         />
       )}
     </div>

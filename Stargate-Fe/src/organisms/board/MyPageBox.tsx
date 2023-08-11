@@ -105,7 +105,6 @@ const MyPageBox = (props: MyPageBoxProps) => {
     console.log(adminFormData.get('newPassword'));
     const data = await updateAdminData(adminFormData);
     setNameFetch(true);
-    console.log('실행완료됨?');
   };
 
   const updateUser = async () => {

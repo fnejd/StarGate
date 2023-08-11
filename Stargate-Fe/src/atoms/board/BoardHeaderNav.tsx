@@ -5,7 +5,7 @@ import { fetchUserData } from '@/services/userBoardService';
 import { fetchAdminData } from '@/services/adminBoardService';
 import { UserData, AdminData } from '@/types/board/type';
 import { nameShouldFetch } from '@/recoil/myPageState';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 /**
  * @todo
