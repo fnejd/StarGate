@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -17,7 +16,7 @@ public class TimeUtil {
      * @param date 기준 날짜 
      * @return 기준일 - 현재 시간을 초로 반환
      */
-    public long getRemaingSeconds(LocalDateTime date){
+    public long getRemainingSeconds(LocalDateTime date){
 
         log.info(" DB 에 저장된 시간 : {}, " , date);
 

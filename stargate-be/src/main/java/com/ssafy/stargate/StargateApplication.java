@@ -14,8 +14,6 @@ public class StargateApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StargateApplication.class, args);
 
-//		LocalDateTime now = LocalDateTime.now();
-//		System.out.println("현재 시간 " + now);
 	}
 
 	@PostConstruct

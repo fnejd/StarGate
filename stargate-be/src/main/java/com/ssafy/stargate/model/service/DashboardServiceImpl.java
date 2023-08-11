@@ -13,7 +13,9 @@ import com.ssafy.stargate.util.TimeUtil;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,19 +77,13 @@ public class DashboardServiceImpl implements DashboardService{
     @Transactional
     public DashboardResponseDto getDashBoard() throws NotFoundException{
 
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-
-        Authentication authentication = securityContext.getAuthentication();
-
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) authentication;
-
         ongoingMeetings = new ArrayList<>();
         expectedMeetings = new ArrayList<>();
         finishedMeetings = new ArrayList<>();
         today = LocalDateTime.now();
 
-        String auth = usernamePasswordAuthenticationToken.getAuthorities().stream().toList().get(0).getAuthority().toString();
-        String email = usernamePasswordAuthenticationToken.getName().toString();
+        String auth = getAuthorizationType();
+        String email = getEmail();
 
         log.info("auth {} ", auth);
         log.info("email {} ", email);
@@ -117,6 +113,13 @@ public class DashboardServiceImpl implements DashboardService{
         }else{
             throw new NotFoundException("해당하는 AUTH 는 유효하지 않습니다.");
         }
+
+        
+        // 예정은 가장 빠른 미팅 순으로 정렬
+        sortExpectedMeetings(expectedMeetings);
+        // 리마인드는 가장 최근 미팅 순으로 정렬
+        sortFinishedMeetings(finishedMeetings);
+
         return DashboardResponseDto.builder()
                 .ongoing(ongoingMeetings)
                 .expected(expectedMeetings)
@@ -136,10 +139,9 @@ public class DashboardServiceImpl implements DashboardService{
      */
     private void classifyMeetings(Meeting meeting){
 
-        
         if(meeting != null){
 
-            long remainingSecond = timeUtil.getRemaingSeconds(meeting.getStartDate());
+            long remainingSecond = timeUtil.getRemainingSeconds(meeting.getStartDate());
             long totalMeetingTime = (meeting.getMeetingTime() + meeting.getWaitingTime()) * meetingFUserRepository.countRegisteredFUsers(meeting.getUuid());
 
             if(remainingSecond> 0){
@@ -170,29 +172,71 @@ public class DashboardServiceImpl implements DashboardService{
      */
     private DashboardMeetingResponseDto setMeetingInfo(Meeting meeting, long remainingSecond){
 
-
         log.info("초 : {}",remainingSecond);
 
+        DashboardMeetingResponseDto.DashboardMeetingResponseDtoBuilder dtoBuilder = DashboardMeetingResponseDto.builder()
+                .uuid(meeting.getUuid())
+                .name(meeting.getName())
+                .startDate(meeting.getStartDate())
+                .remainingTime(remainingSecond);
+
         if(meeting.getImage() != null){
-
             SavedFileResponseDto savedFileResponseDto = fileUtil.getFileInfo(filePath, meeting.getImage());
-
-            return DashboardMeetingResponseDto.builder()
-                    .uuid(meeting.getUuid())
-                    .name(meeting.getName())
-                    .startDate(meeting.getStartDate())
-                    .remainingTime(remainingSecond)
-                    .imageFileInfo(savedFileResponseDto)
-                    .build();
-
-        }else{
-
-            return DashboardMeetingResponseDto.builder()
-                    .uuid(meeting.getUuid())
-                    .name(meeting.getName())
-                    .startDate(meeting.getStartDate())
-                    .remainingTime(remainingSecond)
-                    .build();
+            dtoBuilder.imageFileInfo(savedFileResponseDto);
         }
+
+        return dtoBuilder.build();
     }
+
+    /**
+     * SecurityContext 에 저장되어 있는 UsernamePasswordAuthenticationToken 정보 반환
+     * @return UsernamePasswordAuthenticationToken
+     */
+    private UsernamePasswordAuthenticationToken getUserPasswordAuthentication(){
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) authentication;
+
+        return usernamePasswordAuthenticationToken;
+    }
+
+    /**
+     * UsernamePasswordAuthenticationToken 에 저장되어 있는 auth 반환
+     * @return String (USER, PRODUCER)
+     */
+    private String getAuthorizationType(){
+
+        return getUserPasswordAuthentication().getAuthorities().stream().toList().get(0).getAuthority().toString();
+    }
+
+    /**
+     * UsernamePasswordAuthenticationToken 에 저장되어 있는 유저 이메일 반환
+     * @return String 유저 이메일
+     */
+    private String getEmail(){
+
+        return getUserPasswordAuthentication().getName().toString();
+    }
+
+    /**
+     * 예정 미팅을 가장 시간이 얼마 남지 않은 순으로 정렬
+     * @param dto List<DashboardMeetingResponseDto> 예정 미팅 목록
+     * @return 가장 빠르게 시작하는 순으로 정렬된 예정 미팅 목록
+     */
+    private void sortExpectedMeetings(List<DashboardMeetingResponseDto> dto){
+
+        dto.stream().sorted(Comparator.comparingLong(DashboardMeetingResponseDto -> DashboardMeetingResponseDto.getRemainingTime())).toList();
+    }
+
+    /**
+     * 완료된 미팅을 가장 최근에 끝난 미팅 순으로 정렬
+     * @param dto List<DashboardMeetingResponseDto> 완료된 미팅 목록
+     * @return 가장 최근에 끝난 미팅 순으로 정렬된 완료된 미팅 목록
+     */
+    private void sortFinishedMeetings(List<DashboardMeetingResponseDto> dto){
+        dto.stream().sorted(Comparator.comparingLong(DashboardMeetingResponseDto::getRemainingTime).reversed()).collect(Collectors.toList());
+    }
+
 }
