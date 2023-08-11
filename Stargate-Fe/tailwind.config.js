@@ -5,27 +5,22 @@ import { Plugin } from 'tailwindcss';
 export default {
   content: [
     // 모든 html 파일 경로 등록
-    './**/*.html',
-    './src/**/*.{html,js}',
-    './src/**/*.{js,ts,jsx,tsx}',
+    "./**/*.html",
+    "./src/**/*.{html,js}",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       width: {
-        xs: '15vw',
-        s: '30vw',
-        m: '50vw',
-        l: '70vw',
-        xl: '98vw',
-        m: '50vw',
-        l: '70vw',
-        ml: '80vw',
-        xl: '98vw',
+        'xs' : '15vw',
+        's' : '30vw',
+        'm': '50vw',
+        'l': '70vw',
+        'xl': '98vw',
         62: '241px',
         300: '300px',
         350: '350px',
         400: '400px',
-        450: '450px',
         500: '500px',
         550: '550px',
         600: '600px',
@@ -103,8 +98,12 @@ export default {
 
         red: '#DC2626',
         admingray: '#DADADA',
+<<<<<<< HEAD
         postityellow: '#FFFACE',
         memoblue: '#AAAFF7'
+=======
+        postityellow: '#FFFACE'
+>>>>>>> 1f1d58bd5842ed026aef7ffa040160e433e4c65c
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],
@@ -156,6 +155,9 @@ export default {
         lg: '16px',
         xl: '32px',
       },
+      dropShadow: {
+        nobg: '0 0 0px 1000px #fff inset',
+      }
     },
   },
   plugins: [
@@ -170,4 +172,4 @@ export default {
     //   };
     // }),
   ],
-};
+}

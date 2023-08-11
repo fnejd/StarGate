@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputComponent from '../../atoms/common/InputComponent';
 import PasswordFormComponent from '../auth/PasswordFormComponent';
 import TextButtonComponent from '@/atoms/common/TextButtonComponent';
 
 /**
- * Todos
+ * @todo
  * InputComponents 충돌 수정
  */
 

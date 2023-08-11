@@ -75,7 +75,7 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   sessionStorage.setItem('refreshToken', refreshToken);
   sessionStorage.setItem('tokenExpTime', `${expTime}`);
 
-  return accessToken;
+  return 'SUCCESS';
 };
 
 // AccessToken이 없을 때,(만료됐을 때 재발급)
@@ -110,7 +110,7 @@ const loginApi = async (formData: FormData, type: boolean) => {
     })
     .catch((error) => {
       console.log(error);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       response = error['response'].data;
     });
 
@@ -125,6 +125,7 @@ const logoutApi = async () => {
   await checkTokenExpTime();
   try {
     let result;
+
     if (localStorage.getItem('accessToken') != null) {
       const tokenDecode = localStorage
         .getItem('accessToken')
@@ -136,28 +137,31 @@ const logoutApi = async () => {
         result = JSON.parse(payload.toString());
         console.log(result);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (result.auth && result.auth == 'USER') {
+        await api.post(
+          '/fusers/logout',
+          {},
+          {
+            headers: {
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+            withCredentials: false,
+          }
+        );
+      }
+    } else {
+      return '로그인 정보가 존재하지 않습니다.';
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (result.auth && result.auth == 'USER') {
-      await api.post(
-        '/fusers/logout',
-        {},
-        {
-          headers: {
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-          withCredentials: false,
-        }
-      );
-    }
+
     api.defaults.headers.common['Authorization'] = '';
     localStorage.clear();
     sessionStorage.clear();
     return 'SUCCESS';
   } catch (error) {
     console.log(error);
-    return 'FAIL';
+    return '로그인 실패';
   }
 };
 
@@ -328,7 +332,8 @@ const adminLoginApi = async (formData: FormData, type: boolean) => {
     })
     .catch((error) => {
       console.log(error);
-      response = 'FAIL';
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      response = error['response'].data;
     });
 
   return response;
