@@ -3,14 +3,6 @@ import React, { useState } from 'react';
 const ToolTipComponent = () => {
   const [opacity, setOpacity] = useState(0);
 
-  const hoverHandler = () => {
-    setOpacity(100);
-  };
-
-  const mouseOutHandelr = () => {
-    setOpacity(0);
-  };
-
   return (
     <div className="relative m-2 z-10">
       {/* info */}
@@ -20,8 +12,8 @@ const ToolTipComponent = () => {
         </span>
       </div>
       <a
-        onMouseOver={() => hoverHandler()}
-        onMouseOut={() => mouseOutHandelr()}
+        onMouseOver={() => setOpacity(100)}
+        onMouseOut={() => setOpacity(0)}
         className="relative z-20 text-b7 text-24 font-semibold hover:text-32 hover:text-b7 duration-300"
       >
         ?
