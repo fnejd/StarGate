@@ -251,7 +251,7 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
      * @return [long] 해당 팬유저의 미팅방 시작까지 남은 시간(초)
      */
     private long getFUserRemainSeconds(Meeting meeting, int remainingFanNum) {
-        return timeUtil.getRemaingSeconds(meeting.getStartDate())
+        return timeUtil.getRemainingSeconds(meeting.getStartDate())
                 + remainingFanNum * (meeting.getMeetingTime() + meeting.getWaitingTime());
     }
 
