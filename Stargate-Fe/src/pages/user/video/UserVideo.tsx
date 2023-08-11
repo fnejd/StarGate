@@ -5,7 +5,6 @@ import peerService from '@/peer/peer';
 const UserVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const socketRef = useRef<WebSocket | null>(
     new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.12')
   );
@@ -132,25 +131,25 @@ const UserVideo = () => {
     <div>
       <h1>Room Page</h1>
       {myStream && (
-        <>
-          <h1>내 영상</h1>
+        <div className="flex">
+          <h6>내 영상</h6>
           <ReactPlayer
             playing
             muted
-            height="200px"
-            width="300px"
+            height="150px"
+            width="200px"
             url={myStream}
           />
-        </>
+        </div>
       )}
       {remoteStream && (
         <>
-          <h1>연예인 영상</h1>
+          <h6>연예인 영상</h6>
           <ReactPlayer
             playing
             muted
-            height="400px"
-            width="600px"
+            height="1000px"
+            width="800px"
             url={remoteStream}
           />
         </>
