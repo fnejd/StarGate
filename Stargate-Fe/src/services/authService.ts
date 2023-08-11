@@ -111,7 +111,7 @@ const loginApi = async (formData: FormData, type: boolean) => {
     .catch((error) => {
       console.log(error);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      response = error['response'].data
+      response = error['response'].data;
     });
 
   return response;
@@ -125,7 +125,7 @@ const logoutApi = async () => {
   await checkTokenExpTime();
   try {
     let result;
-    
+
     if (localStorage.getItem('accessToken') != null) {
       const tokenDecode = localStorage
         .getItem('accessToken')

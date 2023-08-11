@@ -122,8 +122,10 @@ const NotepadComponent = () => {
         onDragOver={(e) => dragOverHandler(e)}
         onDragEnd={(e) => dragEndHandler(e)}
         style={{ left: pos.left, top: pos.top }}
-      > 
-        <textarea className="bg-postityellow resize p-3 rounded-sm drop-shadow-lg border-none outline-none">hi</textarea>
+      >
+        <textarea className="bg-postityellow resize p-3 rounded-sm drop-shadow-lg border-none outline-none">
+          hi
+        </textarea>
       </div>
     </div>
   );
