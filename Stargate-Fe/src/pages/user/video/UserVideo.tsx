@@ -5,15 +5,10 @@ import peerService from '@/peer/peer';
 const UserVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-  const myVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
-  // const [socket, setSocket] = useState<WebSocket | null>(
-  //   new WebSocket('ws://i9a406.p.ssafy.io:8080/rtc/asdf.12')
-  // );
   const socketRef = useRef<WebSocket | null>(
     new WebSocket('ws://i9a406.p.ssafy.io:8080/rtc/asdf.12')
   );
-  // const videoRef = useRef(null);
   const socket = socketRef.current;
 
   // 연결상태 변경시 콘솔에 출력
@@ -25,9 +20,7 @@ const UserVideo = () => {
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
     if (e.candidate) {
-      console.log(
-        '#####################################ICE candidate 이벤트 핸들러 설정'
-      );
+      console.log('############ICE candidate 이벤트 핸들러 설정');
       socket.send(
         JSON.stringify({
           type: 'candidate',
@@ -40,9 +33,6 @@ const UserVideo = () => {
   // ontrack 이벤트 핸들러를 등록하여 스트림 정보를 받을 때 사용자 목록을 업데이트
   peerService.peer.ontrack = (e) => {
     console.log('ontrack success');
-    // console.log(e.stream);
-    // setRemoteStream(e.stream);
-    // console.log(remoteStream);
     // 로컬 미디어 스트림 확인
     console.log('Local media stream:', peerService.peer.getLocalStreams());
 
@@ -52,7 +42,7 @@ const UserVideo = () => {
 
     // 원격 미디어 스트림이 있을 경우, 원격 비디오를 표시하기 위해 remoteStream을 연결합니다.
     if (remoteStream) {
-      console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&상대방 화면 등록');
+      console.log('&&&&&&&&&&&상대방 화면 등록');
       remoteVideoRef.current!.srcObject = remoteStream;
     }
   };
@@ -72,13 +62,7 @@ const UserVideo = () => {
     console.log('컴포넌트 실행');
 
     // 웹소켓 서버 URL 설정
-    // const socketUrl = 'ws://i9a406.p.ssafy.io:8080/rtc/asdf.12';
     const socketUrl = 'ws://i9a406.p.ssafy.io:8080/rtc/asdf.12';
-
-    // 웹소켓 객체를 생성하고 서버와 연결합니다.
-    // let socket = new WebSocket(socketUrl);
-    // setSocket(socket);
-
     const socket = socketRef.current;
 
     socket.onopen = async () => {
@@ -95,11 +79,8 @@ const UserVideo = () => {
       // 로컬 미디어 스트림 확인
       console.log('Local media stream:', peerService.peer.getLocalStreams());
 
-      // // 원격 미디어 스트림 확인
-      // console.log("Remote media stream:", peerService.peer.getRemoteStreams());
+      // 원격 미디어 스트림 확인
       setMyStream(stream);
-      // console.log('1-1. 내 미디어 연결');
-      // console.log(stream);
 
       const data = {
         type: 'join',
@@ -160,14 +141,6 @@ const UserVideo = () => {
             width="300px"
             url={myStream}
           />
-          {/* <video
-            ref={myVideoRef}
-            id="myFace"
-            autoPlay
-            playsInline
-            width={200}
-            height={200}
-          ></video> */}
         </>
       )}
       {remoteStream && (
@@ -180,14 +153,6 @@ const UserVideo = () => {
             width="600px"
             url={remoteStream}
           />
-          {/* <video
-            ref={remoteVideoRef}
-            id="remoteFace"
-            autoPlay
-            playsInline
-            width={200}
-            height={200}
-          ></video> */}
         </>
       )}
     </div>

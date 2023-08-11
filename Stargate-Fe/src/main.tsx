@@ -43,7 +43,7 @@ const router = createBrowserRouter([
   { path: '/admin/event/detail', element: <AdminEventDetail /> },
   { path: '/admin/monitoring', element: <AdminMonitoring /> },
 
-  { path: '/star/video', element: <StarVideo /> },
+  { path: '/star/video/:romdId', element: <StarVideo /> },
 ]);
 
 
