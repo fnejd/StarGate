@@ -7,6 +7,15 @@ html {
 }
 
 .material-symbols-rounded {
+  color: black;
+  font-variation-settings:
+    'FILL' 100,
+    'wght' 700,
+    'GRAD' 0,
+    'opsz' 0;
+}
+
+.material-pw {
   color: white;
   font-variation-settings:
     'FILL' 100,
