@@ -2,7 +2,6 @@ package com.ssafy.stargate.model.dto.response.readyroom;
 
 import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -30,7 +29,7 @@ public class ReadyRoomResponseDto {
     private MeetingFUser meetingFUser;
     private List<MeetingMember> meetingMembers;
 
-    @SuperBuilder
+    @Builder
     @Getter
     @Setter
     @AllArgsConstructor
@@ -46,7 +45,7 @@ public class ReadyRoomResponseDto {
         private String memoContents;
     }
 
-    @SuperBuilder
+    @Builder
     @Getter
     @Setter
     @AllArgsConstructor
