@@ -1,0 +1,40 @@
+?uuid=09ed6064-77ab-460c-92f0-27aebc370e80 // [String] 미팅 uuid
+
+{
+		"email" : "ssafy@naver.com", // [String] 팬 id(email)
+    "waitingTime": 30, // [int] 미팅 중간 대기 시간(초)
+    "meetingTime": 60, // [int] 미팅 시간 (초)
+		"photoNum": 2, // [int] 촬영 컷 수
+		"memoContents": "thisismemooooo" // [String] 메모장 내용
+    "meetingMembers": [ // [List<Object>] 미팅 멤버 리스트 (미팅 순서대로)
+        {
+            "memberNo": 1, // [long] 멤버 번호(id) // 고유 아이디 //폴라로이드에 사용
+						"name": "testM" // [String] 멤버 이름
+						"roomId": "09ed6064-77ab-460c-92f0-27aebc370e80.1" // [String] 미팅방 id
+						"isPolaroidEnable": true // [boolean] 폴라로이드 활성 여부 // 디폴트 false
+						"postitContents": "thisispostitttttt" // [String] 포스트잇 내용
+        },
+				...
+    ]
+}
+
+유저 video 링크 입장시
+1. uuid 전달해서 api 응답 받아옴
+2. meetingMembers 배열을 순환하면서
+  첫번째 요소의 roomId의 . 뒤 숫자를 떼서 웹소켓에 붙여서 소켓 url 설정
+3. 웹소켓으로 미팅 타입 같이 보냄, 유저 입장 및 미팅타임 전송
+4. 만약 photoNum이 0이 아니라면
+  photoNum에 10을 곱한 수를 meetingTime에서 빼서
+  미팅 타임을 재할당
+  meetingTime 초 -1씩 렌더링
+5. 화면에 포스트잇을 띄워줌
+6. 화면에 메모를 띄워줌
+7. 미팅 시간이 0초가 될 경우 화면에 10초 타이머 시작
+  10, 9, 8, 7.. 1초 뒤 0초가 될 경우
+  스크린샷 후 서버에 전송
+  photoNum -1 
+8. photoNum이 0이 될 때까지 사진 찍고 서버 전송
+9. 사진 촬영까지 끝나고 나면
+10. 웹소켓 연결 끊고 대기화면으로 넘어감, 그냥 비디오 꺼진 화면
+11. 대기 타임 지나면 배열의 다음 요소에서 추출해서 소켓 url 설정
+

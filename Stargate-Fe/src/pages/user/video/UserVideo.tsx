@@ -1,14 +1,19 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
+import { getUserVideo } from '@/services/userVideo';
+import useInterval from '@/hooks/useInterval';
 
 const UserVideo = () => {
+  const uuid: string = useParams().uuid;
+  const [videoData, setVideoData] = useState({});
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-  const socketRef = useRef<WebSocket | null>(
-    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.12')
-  );
-  const socket = socketRef.current;
+  // const socketRef = useRef<WebSocket | null>(
+  //   new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf')
+  // );
+  // const socket = socketRef.current;
 
   // 연결상태 변경시 콘솔에 출력
   peerService.peer.onconnectionstatechange = () => {
@@ -125,6 +130,50 @@ const UserVideo = () => {
         // socket.close(); // 웹소켓 연결을 해제합니다.
       };
     };
+  }, []);
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
+  const [timeout, setTimeout] = useState(false); // 미팅 시간 다 끝났을 때 true, 아닐 때는 false
+  const [sec, setSec] = useState();
+  // 멤버 고유번호(미팅 순서에 따른 웹소켓 주소)를 배열에 할당
+  let currentMemberIndex = 0;
+  let socketUrl = '';
+  let socket;
+
+  useEffect(() => {}, [memberNos]);
+  useEffect(() => {
+    // 웹소켓 주소를 업데이트하고 연결하는 함수
+    const connectWebSocket = () => {
+      if (currentMemberIndex < memberNos.length) {
+        socketUrl = `ws://i9a406.p.ssafy.io:8080/api/rtc/${memberNos[currentMemberIndex]}`;
+        socket = new WebSocket(socketUrl);
+
+        // 웹소켓과 관련된 작업 수행
+        // ...
+      }
+    };
+
+    connectWebSocket();
+  }, [videoData]);
+
+  // 컴포
+  useEffect(() => {
+    console.log('서버에서 데이터 받아옴');
+    const fetchData = async () => {
+      const data = await getUserVideo(uuid);
+      const extractedMemberNos = data.meetingMembers.map(
+        (member) => member.memberNo
+      );
+      console.log(extractedMemberNos);
+      // 서버에서 받아온 데이터 저장
+      // 멤버 순서 배열 할당
+      setMemberNos(extractedMemberNos);
+      setVideoData(data);
+    };
+
+    fetchData();
   }, []);
 
   return (
