@@ -102,7 +102,6 @@ public class ReadyRoomServiceImpl implements ReadyRoomService {
                 .meetingTime(meeting.getMeetingTime())
                 .photoNum(meeting.getPhotoNum())
                 .notice(meeting.getNotice())
-                .photoNum(meeting.getPhotoNum())
                 .groupNo(pGroup.getGroupNo())
                 .groupName(pGroup.getName())
                 .imageFileInfo(imageFileInfoDto)
