@@ -29,6 +29,12 @@ public class MeetingRoomController {
         return ResponseEntity.ok(meetingRoomFUserResponseDto);
     }
 
+    /**
+     * 접속한 연예인 화상통화 정보를 보내준다.
+     * @param roomId 미팅 번호 UUID
+     * @return
+     * - 백승윤
+     */
     @GetMapping("/member/get")
     public ResponseEntity<MeetingRoomMemberResponseDto> getMemberMeetingRoomInfo(@RequestParam String roomId) {
         MeetingRoomMemberResponseDto meetingRoomMemberResponseDto = meetingRoomService.getMemberMeetingRoomInfo(roomId);
