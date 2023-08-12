@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
+import TimeLeftComponent from '@/atoms/common/TimeLeftComponent';
 import { getUserVideo } from '@/services/userVideo';
 import useInterval from '@/hooks/useInterval';
 
@@ -14,11 +15,10 @@ const UserVideo = () => {
   // let socket;
 
   const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
-  const [isTimeout, setIsTimeout] = useState(false); // 미팅 시간 다 끝났을 때 true, 아닐 때는 false
-  const [sec, setSec] = useState();
   const [minute, setMinute] = useState(0); // 분을 관리하는 상태
   const [second, setSecond] = useState(0); // 초를 관리하는 상태
-  const [timerInterval, setTimerInterval] = useState(0); // 타이머 인터벌을 관리하는 상태
+  const [waitingMinute, setWaitingMinute] = useState(0); // 분을 관리하는 상태
+  const [waitingSecond, setWaitingSecond] = useState(0); // 초를 관리하는 상태
   const [meetingOrder, setMeetingOrder] = useState(0); // 이게 바뀌었을 때 미팅 순서가 넘어감
 
   // 연결상태 변경시 콘솔에 출력
@@ -63,6 +63,7 @@ const UserVideo = () => {
       const ansData = {
         type: 'ans',
         ans: ans,
+        time: videoData.meetingTime,
       };
       socket.send(JSON.stringify(ansData));
       console.log('3. 연예인한테 응답보냄');
@@ -107,6 +108,8 @@ const UserVideo = () => {
     // 분과 초 설정
     setMinute(parseInt(videoData.meetingTime / 60));
     setSecond(parseInt(videoData.meetingTime % 60));
+    setWaitingMinute(parseInt(videoData.waitingTime / 60));
+    setWaitingSecond(parseInt(videoData.waitingTime % 60));
   }, [videoData, meetingOrder]);
 
   useEffect(() => {
@@ -180,7 +183,6 @@ const UserVideo = () => {
   }, [socket]);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
   ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
 
   // 타이머 함수
@@ -206,12 +208,21 @@ const UserVideo = () => {
   };
 
   console.log(minute, second);
-  
-  useInterval(() => {
-    // 특정 간격마다 실행될 로직
-    console.log('타이머 시작!');
-    tick();
-  }, [meetingOrder]); // 1초마다 실행
+
+  useEffect(() => {
+    if (peerService.peer && (second > 0 || minute > 0)) {
+      // ICE 후보자 추가 성공 이벤트가 발생하거나
+      // meetingOrder가 변경되고 초 또는 분이 0보다 큰 경우에만 useInterval 시작
+      const intervalId = useInterval(() => {
+        console.log('타이머 시작!');
+        tick();
+      }, 1000); // 1초마다 실행
+
+      return () => {
+        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      };
+    }
+  }, [peerService.peer, meetingOrder]);
 
   // 초와 분 다시 가져와서 설정하는 함수
   // const getTime = () => {
@@ -274,6 +285,7 @@ const UserVideo = () => {
 
   return (
     <div>
+      {socket && <TimeLeftComponent min={minute} sec={second} />}
       <h1>Room Page</h1>
       {myStream && (
         <div className="flex">
