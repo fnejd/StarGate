@@ -1,15 +1,5 @@
 import { atom } from 'recoil';
-
-interface GroupData {
-  groupNo: number;
-  name: string;
-  members: MemberData[];
-}
-
-interface MemberData {
-  memberNo: number;
-  name: string;
-}
+import { GroupData, MemberData } from '@/types/board/type';
 
 /**
  * 그룹&멤버 변화 일어날때마다 다시 groups fetch하기 위한 추적용 변수
@@ -17,6 +7,11 @@ interface MemberData {
 export const groupsShouldFetch = atom<boolean>({
   key: 'groupsShouldFetch',
   default: true,
+});
+
+export const groupsDeleteState = atom<boolean>({
+  key: 'groupsDeleteState',
+  default: false,
 });
 
 export const groupsState = atom<GroupData[]>({

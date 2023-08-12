@@ -33,7 +33,7 @@ const router = createBrowserRouter([
   { path: '/mypage', element: <MyPage /> },
   { path: '/remind/:uuid', element: <Remind /> },
   { path: '/ready/:uuid', element: <Ready /> },
-  { path: '/video', element: <Video /> },
+  { path: '/video/:uuid', element: <Video /> },
 
   { path: '/admin/signup', element: <AdminSignUp /> },
   { path: '/admin/board', element: <AdminBoard /> },
@@ -45,7 +45,6 @@ const router = createBrowserRouter([
 
   { path: '/star/video', element: <StarVideo /> },
 ]);
-
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>

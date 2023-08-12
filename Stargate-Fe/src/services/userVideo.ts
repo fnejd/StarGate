@@ -18,8 +18,11 @@ const postPolraroidOption = async (uuid, meetingMembers) => {
     const postData = {
       uuid: uuid,
       meetingMembers: meetingMembers,
-    }
-    const response = await api.post('/readyroom/polaroid-enable/write', postData);
+    };
+    const response = await api.post(
+      '/readyroom/polaroid-enable/write',
+      postData
+    );
     return response;
   } catch (error) {
     console.error('포스트잇 저장 실패', error);
@@ -36,4 +39,16 @@ const postNotePad = async (postitData) => {
   }
 };
 
-export { getReady, postPolraroidOption, postNotePad };
+// 유저 비디오 접속
+const getUserVideo = async (uuid: string) => {
+  try {
+    const queryString = `?uuid=${uuid}`;
+    const response = await api.get('/meetingroom/fuser/get' + queryString);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('미팅 생성 실패 ', error);
+  }
+};
+
+export { getReady, postPolraroidOption, postNotePad, getUserVideo };

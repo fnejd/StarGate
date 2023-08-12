@@ -1,5 +1,6 @@
 import BoardCard from '../../atoms/board/BoardCard';
 import { useNavigate } from 'react-router-dom';
+import { ImageFileInfo } from '@/types/board/type';
 
 /**
  * BoardCardListProps
@@ -27,12 +28,7 @@ interface MeetingData {
   name: string;
   startDate: string;
   remainingTime?: number;
-  imageFileInfo?: imageFileInfo;
-}
-
-interface imageFileInfo {
-  filename: string;
-  fileUrl: string;
+  imageFileInfo?: ImageFileInfo;
 }
 
 const BoardCardList = ({
