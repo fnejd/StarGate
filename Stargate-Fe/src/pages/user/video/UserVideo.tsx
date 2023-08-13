@@ -96,29 +96,35 @@ const UserVideo = () => {
   }, []);
 
   useEffect(() => {
-    // 비디오 데이터 처음 들어왔을 때, 미팅 순서 바뀌었을 때 추적
-    // 웹소켓 주소를 미팅 순서에 따라 업데이트
-    const connectWebSocket = async () => {
-      if (meetingOrder < memberNos.length) {
-        const newSocket = new WebSocket(
-          `ws://i9a406.p.ssafy.io:8080/api/rtc/${videoData.meetingMembers[meetingOrder].roomId}`
-        );
-        setSocket(newSocket); // 새로운 WebSocket 인스턴스를 상태로 업데이트
-      }
-    };
+    // videoData가 비어있지 않은 경우에만 실행
+    if (Object.keys(videoData).length > 0) {
+      // 비디오 데이터 처음 들어왔을 때, 미팅 순서 바뀌었을 때 추적
+      // 웹소켓 주소를 미팅 순서에 따라 업데이트
+      const connectWebSocket = async () => {
+        if (meetingOrder < memberNos.length && meetingOrder > -1) {
+          const newSocket = new WebSocket(
+            `ws://i9a406.p.ssafy.io:8080/api/rtc/${videoData.meetingMembers[meetingOrder].roomId}`
+          );
+          setSocket(newSocket); // 새로운 WebSocket 인스턴스를 상태로 업데이트
+        }
+      };
 
-    connectWebSocket();
+      console.log('소켓 주소 업데이트$$$$$$$$$');
+      connectWebSocket();
 
-    // 분과 초 설정
-    setTimer((prevTimer) => ({
-      ...prevTimer,
-      minute: parseInt(videoData.meetingTime / 60),
-      second: parseInt(videoData.meetingTime % 60),
-      waitingMinute: parseInt(videoData.waitingTime / 60),
-      waitingSecond: parseInt(videoData.waitingTime % 60),
-    }));
+      // 분과 초 설정
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        minute: Math.floor(videoData.meetingTime / 60),
+        second: videoData.meetingTime % 60,
+        waitingMinute: Math.floor(videoData.waitingTime / 60),
+        waitingSecond: videoData.waitingTime % 60,
+      }));
+    }
   }, [videoData, meetingOrder]);
 
+  console.log('분 초 설정', timer.second);
+  console.log('대기 시간 설정', timer);
   useEffect(() => {
     if (!socket) {
       console.log('소켓 초기화 안됨!!!!!!!!!!!!!!!!!!!!!');
@@ -192,15 +198,17 @@ const UserVideo = () => {
   console.log('미팅순서', meetingOrder);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
-  const tickWaiting = () => {S
+  const tickWaiting = () => {
     console.log('대기시간으로 넘어감');
     // 미팅 시간이 끝나면 미팅 순서 넘어감 => 소켓 재설정 => 다시 타이머 재시작
-    if (timer.waitingSecond === 0 && timer.waitingMinute === 0) {
-      setMeetingOrder(meetingOrder + 1);
-    }
+    // if (timer.waitingSecond === 0 && timer.waitingMinute === 0) {
+    //   console.log('미팅 순서 변경');
+    //   setMeetingOrder(meetingOrder + 1);
+    // }
 
     // 초 줄여주는 로직
     if (timer.waitingSecond > 0) {
+      console.log('대기시간 초 줄여주는 로직');
       setTimer((prevTimer) => ({
         ...prevTimer,
         waitingSecond: prevTimer.waitingSecond - 1,
@@ -218,8 +226,16 @@ const UserVideo = () => {
     }
   };
 
+  useEffect(() => {
+    if (timer.waitingMinute === 0 && timer.waitingSecond === 0) {
+      console.log('미팅 순서 변경');
+      setMeetingOrder(meetingOrder + 1);
+    }
+  }, [timer.waitingMinute, timer.waitingSecond]);
+
   // 타이머 함수
   const tick = () => {
+    console.log('틱 시작', timer.second);
     // 초 줄여주는 로직
     if (timer.second > 0) {
       console.log('초 줄어듦');
@@ -227,6 +243,16 @@ const UserVideo = () => {
         ...prevTimer,
         second: prevTimer.second - 1,
       }));
+    }
+    if (timer.second === 0 && timer.minute > 0) {
+      console.log('초가 0이 되어 분이 줄어듦');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        minute: prevTimer.minute - 1,
+        second: 59,
+      }));
+    } else if (timer.second == 0 && timer.minute == 0) {
+      tickWaiting();
     }
   };
 
@@ -239,22 +265,31 @@ const UserVideo = () => {
         second: 59,
       }));
     } else if (timer.second == 0 && timer.minute == 0) {
-      tickWaiting();
-    }
-  }, [timer.second, timer.minute]);
-
-  useEffect(() => {
-    if (peerService.peer && timer) {
       const intervalId = setInterval(() => {
-        console.log('타이머 시작!');
-        tick();
+        console.log('대기시간타이머 시작!');
+        tickWaiting();
       }, 1000); // 1초마다 실행
 
       return () => {
         clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       };
     }
-  }, [peerService.peer, meetingOrder]);
+  }, [timer.second, timer.minute]);
+
+  useEffect(() => {
+    if (peerService.peer) {
+      const intervalId = setInterval(() => {
+        if (timer.second > 0) {
+          console.log('타이머 시작!');
+          tick();
+        }
+      }, 1000); // 1초마다 실행
+
+      return () => {
+        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      };
+    }
+  }, [meetingOrder, timer.second]);
 
   // 초와 분 다시 가져와서 설정하는 함수
   // const getTime = () => {
@@ -276,44 +311,6 @@ const UserVideo = () => {
   //     clearInterval(timerInterval);
   //   }
   // }, [minute, second]);
-
-  // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // 컴포넌트가 실행되면 서버에서 비디오데이터 받아옴
-  // useEffect(() => {
-  //   console.log('서버에서 데이터 받아옴');
-  //   const fetchData = async () => {
-  //     const data = await getUserVideo(uuid);
-  //     const extractedMemberNos = data.meetingMembers.map(
-  //       (member) => member.memberNo
-  //     );
-  //     console.log(extractedMemberNos);
-  //     // 서버에서 받아온 데이터 저장
-  //     // 멤버 순서 배열 할당
-  //     setMemberNos(extractedMemberNos);
-  //     setVideoData(data);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  // // 비디오데이터가 들어오면 웹 소켓 주소 업데이트
-  // // 미팅 순서가 변경되면 웹 소켓 주소 업데이트
-  // useEffect(() => {
-  //   // 웹소켓 주소를 업데이트하고 연결하는 함수
-  //   const connectWebSocket = () => {
-  //     if (meetingOrder < memberNos.length) {
-  //       socketUrl = new WebSocket(
-  //         `ws://i9a406.p.ssafy.io:8080/api/rtc/${videoData.meetingMembers[meetingOrder].roomId}`
-  //       );
-  //       socket = socketUrl.current;
-  //     }
-  //   };
-
-  //   connectWebSocket();
-  // }, [videoData, meetingOrder]);
-
-  // useEffect(() => {}, [memberNos]);
 
   return (
     <div>
