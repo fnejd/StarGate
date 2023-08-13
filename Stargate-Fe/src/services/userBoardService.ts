@@ -46,4 +46,18 @@ const updateUserData = async (formData: FormData) => {
   }
 };
 
-export { fetchUserBoard, fetchUserData, updateUserData };
+const fetchRemindData = async (location : string) => {
+  try {
+    const response = await api.get(`${location}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(location)
+    console.log('에러발생', error);
+  }
+};
+export { fetchUserBoard, fetchUserData, updateUserData, fetchRemindData };

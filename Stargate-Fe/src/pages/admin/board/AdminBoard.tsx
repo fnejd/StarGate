@@ -4,7 +4,7 @@ import BoardCardBox from '@/organisms/board/BoardCardBox';
 import BoardCardList from '@/organisms/board/BoardCardList';
 import { fetchAdminBoard } from '@/services/adminBoardService';
 import PlusButton from '@/atoms/board/PlusMinusButton';
-import AdminBoardHeader from '@/organisms/board/AdminBoardHeader';
+import BoardHeader from '@/organisms/board/BoardHeader';
 import { BoardData } from '@/types/board/type';
 
 const AdminBoard = () => {
@@ -70,7 +70,7 @@ const AdminBoard = () => {
 
   return (
     <div className="w-xl min-h-screen flex flex-col justify-around">
-      <AdminBoardHeader />
+      <BoardHeader isAdmin={true}/>
       {loading ? (
         <BoardCardBox isAdmin={true} isLoading={loading} />
       ) : (

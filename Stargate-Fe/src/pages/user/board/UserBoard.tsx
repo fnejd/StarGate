@@ -18,13 +18,20 @@ const UserBoard = () => {
       const fetchedData = await fetchUserBoard();
       if (fetchedData) {
         setData(fetchedData);
+        console.log(fetchedData);
       }
+      setLoading(false);
+      console.log('로딩완료');
     };
     fetchData();
-    setLoading(false);
-    console.log('로딩완료');
   }, []);
-  const cardData = data.ongoing[0] || data.expected[0];
+
+  /**
+   * @param cardBoxData => CardBox에 넣을 data값 선정
+   * @param setExpected => CardBox에 Expected[0]이 들어갔는지 확인하는 변수
+   */
+  const cardBoxData = data.ongoing[0] || data.expected[0];
+  const setExpected = cardBoxData === data.expected[0];
 
   /**
    * @todo => 추후에 useInterval로 수정
@@ -60,17 +67,17 @@ const UserBoard = () => {
 
   return (
     <div className="w-xl min-h-screen flex flex-col justify-around">
-      <BoardHeader />
+      <BoardHeader isAdmin={false} />
       {loading ? (
         <BoardCardBox isAdmin={false} isLoading={loading} />
       ) : (
-        cardData && (
+        cardBoxData && (
           <BoardCardBox
-            uuid={cardData.uuid}
-            imageSrc={cardData.imageFileInfo?.fileUrl}
-            title={cardData.name}
-            date={cardData.startDate}
-            remainingTime={cardData.remainingTime}
+            uuid={cardBoxData.uuid}
+            imageSrc={cardBoxData.imageFileInfo?.fileUrl}
+            title={cardBoxData.name}
+            date={cardBoxData.startDate}
+            remainingTime={cardBoxData.remainingTime}
             isAdmin={false}
             isLoading={loading}
           />
@@ -80,14 +87,20 @@ const UserBoard = () => {
       {loading ? (
         <BoardCardList isLoading={loading} isAdmin={false} />
       ) : (
-        data.expected[1] && (
+        data.expected &&
+        (setExpected ? (
           <BoardCardList
             meetings={data.expected.slice(1)}
             isAdmin={false}
             isLoading={loading}
-            isOver={false}
           />
-        )
+        ) : (
+          <BoardCardList
+            meetings={data.expected}
+            isAdmin={false}
+            isLoading={loading}
+          />
+        ))
       )}
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
       {data.finished && (
