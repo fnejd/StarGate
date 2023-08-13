@@ -35,7 +35,7 @@ const BoardCardList = ({
   meetings,
   isAdmin,
   isLoading,
-  isOver,
+  isOver = false,
 }: BoardCardListProps & {
   isAdmin: boolean;
   isLoading: boolean;
