@@ -1,9 +1,10 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import TimeLeftComponent from '@/atoms/common/TimeLeftComponent';
-import { getUserVideo } from '@/services/userVideo';
+import { getUserVideo, postPicture } from '@/services/userVideo';
 import useInterval from '@/hooks/useInterval';
 
 const UserVideo = () => {
@@ -15,6 +16,8 @@ const UserVideo = () => {
   // let socket;
 
   const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
+  const [photoNum, setPhotoNum] = useState(null);
+  const [picTime, setPictime] = useState(10);
   const [timer, setTimer] = useState({
     minute: 0,
     second: 0,
@@ -112,19 +115,23 @@ const UserVideo = () => {
       console.log('소켓 주소 업데이트$$$$$$$$$');
       connectWebSocket();
 
+      // const meetingTime = videoData.meetingTime - photoNum * 10;
+      const meetingTime = videoData.meetingTime - 2 * 10;
+
       // 분과 초 설정
       setTimer((prevTimer) => ({
         ...prevTimer,
-        minute: Math.floor(videoData.meetingTime / 60),
-        second: videoData.meetingTime % 60,
+        minute: Math.floor(meetingTime / 60),
+        second: meetingTime % 60,
         waitingMinute: Math.floor(videoData.waitingTime / 60),
         waitingSecond: videoData.waitingTime % 60,
       }));
+      // setPhotoNum(videoData.photoNum);
+      setPhotoNum(2);
     }
   }, [videoData, meetingOrder]);
 
-  console.log('분 초 설정', timer.second);
-  console.log('대기 시간 설정', timer);
+  console.log('대기 시간 설정', timer, photoNum);
   useEffect(() => {
     if (!socket) {
       console.log('소켓 초기화 안됨!!!!!!!!!!!!!!!!!!!!!');
@@ -251,8 +258,6 @@ const UserVideo = () => {
         minute: prevTimer.minute - 1,
         second: 59,
       }));
-    } else if (timer.second == 0 && timer.minute == 0) {
-      tickWaiting();
     }
   };
 
@@ -264,17 +269,41 @@ const UserVideo = () => {
         minute: prevTimer.minute - 1,
         second: 59,
       }));
-    } else if (timer.second == 0 && timer.minute == 0) {
+    }
+    // else if (timer.second == 0 && timer.minute == 0 && photoNum == 0) {
+    //   const intervalId = setInterval(() => {
+    //     console.log('대기시간타이머 시작!');
+    //     tickWaiting();
+    //   }, 1000); // 1초마다 실행
+    //   return () => {
+    //     clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+    //   };
+    // }
+    else if (timer.second == 0 && timer.minute == 0 && photoNum != 0) {
+      // let screenshotCount = videoData.photoNum;
+      let screenshotCount = 2;
+
+      const intervalPhoto = setInterval(() => {
+        if (screenshotCount > 0) {
+          console.log('촬영 시작**************8');
+          takeScreenshotAndSend();
+          screenshotCount--;
+        }
+      }, 10000); // 10초마다 실행
+
       const intervalId = setInterval(() => {
-        console.log('대기시간타이머 시작!');
-        tickWaiting();
+        if (screenshotCount == 0) {
+          console.log('대기시간타이머 시작!');
+          tickWaiting();
+        }
       }, 1000); // 1초마다 실행
 
       return () => {
+        clearInterval(intervalPhoto); // 컴포넌트 언마운트 시 interval 정리
         clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       };
     }
-  }, [timer.second, timer.minute]);
+  }, [timer.second, timer.minute, photoNum]);
 
   useEffect(() => {
     if (peerService.peer) {
@@ -291,26 +320,42 @@ const UserVideo = () => {
     }
   }, [meetingOrder, timer.second]);
 
-  // 초와 분 다시 가져와서 설정하는 함수
-  // const getTime = () => {
-  //   setMinute(parseInt(minute / 60));
-  //   setSecond(parseInt(second % 60));
-  // };
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // // 언제 초분 설정?
-  // // 처음 가져왔을 때, 연예인한테도 쏴주고 내 분 초 설정
-  // // 그리고 초와 분이 다 0초가 되었을 때 다시 설정
-  // // 처음 비디오 데이터 값이 받아지면 초와 분 설정
-  // useEffect(() => {
-  //   getTime();
-  // }, [videoData]);
+  // 폴라로이드 촬영 및 전송
+  const takeScreenshotAndSend = async () => {
+    const videoContainer = document.getElementById('video-container');
+    const canvas = await html2canvas(videoContainer);
 
-  // 시간 추적하다가 초가 0이 될 때 타이머 인터벌 클리어
-  // useEffect(() => {
-  //   if (second === 0) {
-  //     clearInterval(timerInterval);
+    // 스크린샷을 이미지 데이터로 변환
+    const screenshotData = canvas.toDataURL('image/jpeg');
+
+    const takePhoto = async () => {
+      const formData = {
+        uuid: uuid,
+        email: videoData.email,
+        memberNo: meetingOrder,
+        imageFile: screenshotData,
+      };
+      const response = await postPicture(formData);
+      console.log('사진 촬영', response);
+    };
+
+    takePhoto();
+  };
+
+  // // 10초마다 스크린샷 찍기와 전송하기
+  // const screenshotInterval = setInterval(() => {
+  //   if (timer.second % 10 === 0) {
+  //     console.log("스크린샷 찍기");
+  //     takeScreenshotAndSend();
   //   }
-  // }, [minute, second]);
+  // }, 1000);
+
+  // return () => {
+  //   clearInterval(screenshotInterval); // 컴포넌트 언마운트 시 interval 정리
+  // };
+  // }, [timer.second]);
 
   return (
     <div>
@@ -329,30 +374,32 @@ const UserVideo = () => {
         />
       )}
       <h1>Room Page</h1>
-      {myStream && (
-        <div className="flex">
-          <h6>내 영상</h6>
-          <ReactPlayer
-            playing
-            muted
-            height="150px"
-            width="200px"
-            url={myStream}
-          />
-        </div>
-      )}
-      {remoteStream && (
-        <>
-          <h6>연예인 영상</h6>
-          <ReactPlayer
-            playing
-            muted
-            height="1000px"
-            width="800px"
-            url={remoteStream}
-          />
-        </>
-      )}
+      <div id="video-container">
+        {myStream && (
+          <div className="flex">
+            <h6>내 영상</h6>
+            <ReactPlayer
+              playing
+              muted
+              height="150px"
+              width="200px"
+              url={myStream}
+            />
+          </div>
+        )}
+        {remoteStream && (
+          <>
+            <h6>연예인 영상</h6>
+            <ReactPlayer
+              playing
+              muted
+              height="1000px"
+              width="800px"
+              url={remoteStream}
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };

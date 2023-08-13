@@ -44,11 +44,31 @@ const getUserVideo = async (uuid: string) => {
   try {
     const queryString = `?uuid=${uuid}`;
     const response = await api.get('/meetingroom/fuser/get' + queryString);
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('미팅 생성 실패 ', error);
   }
 };
 
-export { getReady, postPolraroidOption, postNotePad, getUserVideo };
+const postPicture = async (formData) => {
+  try {
+    const response = await api.post('/polaroids/create', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error('폴라로이드 전송 실패', error);
+  }
+};
+
+export {
+  getReady,
+  postPolraroidOption,
+  postNotePad,
+  getUserVideo,
+  postPicture,
+};

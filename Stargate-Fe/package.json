@@ -16,6 +16,7 @@
     "@types/react-beautiful-dnd": "^13.1.4",
     "axios": "^1.4.0",
     "degit": "^2.8.4",
+    "html2canvas": "^1.4.1",
     "peerjs": "^1.4.7",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
@@ -48,13 +49,17 @@
     "vite": "^4.4.0"
   },
   "eslintConfig": {
-    "extends": ["react-app"],
+    "extends": [
+      "react-app"
+    ],
     "rules": {
       "no-unused-vars": "warn"
     },
     "overrides": [
       {
-        "files": ["**/*.ts?(x)"],
+        "files": [
+          "**/*.ts?(x)"
+        ],
         "rules": {
           "max-len": "warn"
         }
