@@ -3,10 +3,14 @@ import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { getEvent } from '@/services/adminEvent';
+import { fetchEventDetailData } from '@/services/adminEvent';
+
+interface ImageFileInfo {
+  filename: string;
+  fileUrl: string;
+}
 
 interface MeetingFUser {
-  no: number;
   email: string;
   orderNum: number;
   isRegister: string;
@@ -14,60 +18,61 @@ interface MeetingFUser {
 }
 
 interface MeetingMember {
-  no: number;
   memberNo: number;
+  name: string;
   orderNum: number;
   roomId: string;
 }
 
-interface GroupMember {
-  memberNo: number;
+interface MeetingData {
+  uuid: string;
   name: string;
-}
-
-interface Group {
-  groupNo: number;
-  members: GroupMember[];
-}
-
-interface FormData {
-  name: string;
-  startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  startDate: string;
   waitingTime: number;
   meetingTime: number;
   notice: string;
   photoNum: number;
-  imageFile: File | null;
-  starName: string;
-  meetingFUsers: string;
-  meetingMembers: string;
+  groupNo: number;
+  groupName: string;
+  imageFileInfo: ImageFileInfo;
+  meetingFUsers: MeetingFUser[];
+  meetingMembers: MeetingMember[];
 }
 
 const AdminEventDetail = () => {
-  // const [group, setGroup] = useState<Group[]>([]);
-  // const [formData, setFormData] = useState<FormData>({
-  //   name: '',
-  //   startDate: null,
-  //   waitingTime: 10,
-  //   meetingTime: 80,
-  //   photoNum: 0,
-  //   notice: '',
-  //   imageFile: null,
-  //   starName: '',
-  //   meetingFUsers: '',
-  //   meetingMembers: '',
-  // });
+  const [group, setGroup] = useState<Group[]>([]);
+  const [data, setData] = useState<MeetingData>({
+    uuid:'',
+    name: '',
+    startDate: '',
+    waitingTime: 10,
+    meetingTime: 80,
+    notice: '',
+    photoNum: 0,
+    groupNo : 0,
+    groupName: '',
+    imageFileInfo: [],
+    starName: '',
+    meetingFUsers: [],
+    meetingMembers: [],
+  });
 
   // 미팅 디테일 가져오기
-  useEffect(async () => {
-    const currentUrl = window.location.href; 
-    const parts = currentUrl.split('/'); 
-    const uuid = parts[parts.length - 1]; 
-    console.log(currentUrl); 
-    const data = await getEvent();
+  useEffect(() => {
+    const fetchEventDetail = async () => {
+      const currentUrl = window.location.href;
+      const parts = currentUrl.split('/');
+      const uuid = parts[parts.length - 1];
+      console.log(uuid);
 
-    console.log(data)
-    
+      const fetchedData = await fetchEventDetailData(uuid);
+      if (fetchedData) {
+        setData(fetchedData);
+        console.log('데이터는', fetchedData);
+      }
+      console.log('로딩완료', location);
+    };
+    fetchEventDetail();
   }, []);
 
   // const handleName = (event: ChangeEvent<HTMLInputElement>) => {

@@ -45,4 +45,19 @@ const getEvent = async () => {
   }
 };
 
-export { createEvent, getEvent };
+const fetchEventDetailData = async (location : string) => {
+  try {
+    const response = await api.get(`/meetings/get/${location}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(location)
+    console.log('에러발생', error);
+  }
+};
+
+export { createEvent, getEvent, fetchEventDetailData };
