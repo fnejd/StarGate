@@ -15,11 +15,15 @@ const UserVideo = () => {
   // let socket;
 
   const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
-  const [minute, setMinute] = useState(0); // 분을 관리하는 상태
-  const [second, setSecond] = useState(0); // 초를 관리하는 상태
-  const [waitingMinute, setWaitingMinute] = useState(0); // 분을 관리하는 상태
-  const [waitingSecond, setWaitingSecond] = useState(0); // 초를 관리하는 상태
-  const [meetingOrder, setMeetingOrder] = useState(0); // 이게 바뀌었을 때 미팅 순서가 넘어감
+  const [timer, setTimer] = useState({
+    minute: 0,
+    second: 0,
+    waitingMinute: 0,
+    waitingSecond: 0,
+  });
+  // 미팅이 종료되고 대기 시간 시작할 때 사용하는 상태
+  const [isWaiting, setIsWaiting] = useState(false);
+  const [meetingOrder, setMeetingOrder] = useState(-1); // 이게 바뀌었을 때 미팅 순서가 넘어감
 
   // 연결상태 변경시 콘솔에 출력
   peerService.peer.onconnectionstatechange = () => {
@@ -106,10 +110,13 @@ const UserVideo = () => {
     connectWebSocket();
 
     // 분과 초 설정
-    setMinute(parseInt(videoData.meetingTime / 60));
-    setSecond(parseInt(videoData.meetingTime % 60));
-    setWaitingMinute(parseInt(videoData.waitingTime / 60));
-    setWaitingSecond(parseInt(videoData.waitingTime % 60));
+    setTimer((prevTimer) => ({
+      ...prevTimer,
+      minute: parseInt(videoData.meetingTime / 60),
+      second: parseInt(videoData.meetingTime % 60),
+      waitingMinute: parseInt(videoData.waitingTime / 60),
+      waitingSecond: parseInt(videoData.waitingTime % 60),
+    }));
   }, [videoData, meetingOrder]);
 
   useEffect(() => {
@@ -182,38 +189,63 @@ const UserVideo = () => {
     };
   }, [socket]);
 
+  console.log('미팅순서', meetingOrder);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
-
-  // 타이머 함수
-  const tick = () => {
+  const tickWaiting = () => {S
+    console.log('대기시간으로 넘어감');
     // 미팅 시간이 끝나면 미팅 순서 넘어감 => 소켓 재설정 => 다시 타이머 재시작
-    if (second == 0 && minute == 0) {
+    if (timer.waitingSecond === 0 && timer.waitingMinute === 0) {
       setMeetingOrder(meetingOrder + 1);
     }
 
     // 초 줄여주는 로직
-    if (second > 0) {
-      setSecond((sec) => sec - 1);
+    if (timer.waitingSecond > 0) {
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        waitingSecond: prevTimer.waitingSecond - 1,
+      }));
     }
 
-    if (second === 0) {
-      if (minute === 0) {
-        setIsTimeout(true);
-      } else {
-        setMinute((min) => min - 1);
-        setSecond(59);
+    if (timer.waitingSecond === 0) {
+      if (timer.waitingMinute > 0) {
+        setTimer((prevTimer) => ({
+          ...prevTimer,
+          waitingMinute: prevTimer.waitingMinute - 1,
+          waitingSecond: 59,
+        }));
       }
     }
   };
 
-  console.log(minute, second);
+  // 타이머 함수
+  const tick = () => {
+    // 초 줄여주는 로직
+    if (timer.second > 0) {
+      console.log('초 줄어듦');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        second: prevTimer.second - 1,
+      }));
+    }
+  };
 
   useEffect(() => {
-    if (peerService.peer && (second > 0 || minute > 0)) {
-      // ICE 후보자 추가 성공 이벤트가 발생하거나
-      // meetingOrder가 변경되고 초 또는 분이 0보다 큰 경우에만 useInterval 시작
-      const intervalId = useInterval(() => {
+    if (timer.second === 0 && timer.minute > 0) {
+      console.log('초가 0이 되어 분이 줄어듦');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        minute: prevTimer.minute - 1,
+        second: 59,
+      }));
+    } else if (timer.second == 0 && timer.minute == 0) {
+      tickWaiting();
+    }
+  }, [timer.second, timer.minute]);
+
+  useEffect(() => {
+    if (peerService.peer && timer) {
+      const intervalId = setInterval(() => {
         console.log('타이머 시작!');
         tick();
       }, 1000); // 1초마다 실행
@@ -285,7 +317,20 @@ const UserVideo = () => {
 
   return (
     <div>
-      {socket && <TimeLeftComponent min={minute} sec={second} />}
+      {socket && (
+        <TimeLeftComponent
+          min={
+            timer.minute === 0 && timer.second === 0
+              ? timer.waitingMinute
+              : timer.minute
+          }
+          sec={
+            timer.minute === 0 && timer.second === 0
+              ? timer.waitingSecond
+              : timer.second
+          }
+        />
+      )}
       <h1>Room Page</h1>
       {myStream && (
         <div className="flex">
