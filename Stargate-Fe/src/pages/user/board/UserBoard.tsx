@@ -60,7 +60,7 @@ const UserBoard = () => {
 
   return (
     <div className="w-xl min-h-screen flex flex-col justify-around">
-      <BoardHeader />
+      <BoardHeader isAdmin={false}/>
       {loading ? (
         <BoardCardBox isAdmin={false} isLoading={loading} />
       ) : (

@@ -2,26 +2,10 @@ import { useState, useEffect } from 'react';
 import RemindDetail from '@/organisms/remind/RemindDetail';
 import RemindTitle from '@/organisms/remind/RemindTitle';
 import { fetchRemindData } from '@/services/userBoardService';
-import { ImageFileInfo } from '@/types/board/type';
-
-interface Polaroid {
-  no: number;
-  imageFileInfo: ImageFileInfo;
-}
-
-interface FanLetter {
-  no: number;
-  contents: string;
-  createDate: string;
-  editDate: string;
-}
-
-interface MeetingMember {
-  memberNo: number;
-  name: string;
-  polaroids: Polaroid[];
-  letter: FanLetter;
-}
+import { MeetingMember } from '@/types/board/type';
+import { useRecoilState } from 'recoil';
+import { nameShouldFetch } from '@/recoil/myPageState';
+import BoardHeader from '@/organisms/board/BoardHeader';
 
 interface MeetingData {
   uuid: string;
@@ -32,35 +16,43 @@ interface MeetingData {
   meetingMembers: MeetingMember[];
 }
 
-interface locationData {
-  location: string;
-}
+/**
+ * @todo => 처음으로 button 만들기
+ * @todo => letter값이 null이여서 주석처리, 추후 확인필요
+ */
 
 const Remind = () => {
   const [data, setData] = useState<MeetingData>();
   const [loading, setLoading] = useState(true);
+  const [nameFetch, setNameFetch] = useRecoilState(nameShouldFetch);
 
-  /**
-   * @todo => URLSearchParams 사용해서 path값 가져와서 넣어주기
-   */
-  
   useEffect(() => {
-    const fetchRemind = async (state : locationData) => {
-      const fetchedData = await fetchRemindData(location);
+    const fetchRemind = async () => {
+      const fetchedData = await fetchRemindData(location.pathname);
       if (fetchedData) {
         setData(fetchedData);
-        console.log(fetchedData);
+        console.log('데이터는', fetchedData);
+        setNameFetch(true);
       }
       setLoading(false);
-      console.log('로딩완료');
+      console.log('로딩완료', location);
     };
-    fetchRemind(location);
+    fetchRemind();
   }, []);
 
   return (
-    <div>
-      <RemindDetail />
-      {/* <RemindTitle /> */}
+    <div className="h-screen flex flex-col">
+      <BoardHeader isAdmin={false} title="R E M I N D"></BoardHeader>
+      {data && (
+        <div className="flex flex-grow mx-10">
+          <RemindTitle
+            name={data.name}
+            startDate={data.startDate}
+            groupName={data.groupName}
+          />
+          <RemindDetail meetingMembers={data.meetingMembers} />
+        </div>
+      )}
     </div>
   );
 };

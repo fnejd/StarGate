@@ -46,17 +46,17 @@ const updateUserData = async (formData: FormData) => {
   }
 };
 
-const fetchRemindData = async (location : Location) => {
+const fetchRemindData = async (location : string) => {
   try {
-    const response = await api.get(`/reminds/${location}`, {
+    const response = await api.get(`${location}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
       withCredentials: false,
     });
-    console.log(response);
     return response.data;
   } catch (error) {
+    console.log(location)
     console.log('에러발생', error);
   }
 };

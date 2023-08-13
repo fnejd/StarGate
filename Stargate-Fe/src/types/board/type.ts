@@ -49,3 +49,21 @@ export interface AdminData {
   email: string;
   code: string;
 }
+
+export interface MeetingMember {
+  memberNo: number;
+  name: string;
+  polaroids: Polaroid[];
+  letter: FanLetter;
+}
+export interface FanLetter {
+  no: number;
+  contents: string;
+  createDate: string;
+  editDate: string;
+}
+
+export interface Polaroid {
+  no: number;
+  imageFileInfo: ImageFileInfo;
+}

@@ -63,7 +63,7 @@ const BoardCardList = ({
     }
   };
   const linkToRemind = (uuid: string) => {
-    navigate(`/remind/${uuid}`);
+    navigate(`/reminds/${uuid}`);
   };
   const linkToDetail = (uuid: string) => {
     navigate(`/admin/event/detail/${uuid}`);
