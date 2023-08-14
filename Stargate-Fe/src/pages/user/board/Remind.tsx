@@ -18,7 +18,6 @@ interface MeetingData {
 
 /**
  * @todo => 처음으로 button 만들기
- * @todo => letter값이 null이여서 주석처리, 추후 확인필요
  */
 
 const Remind = () => {

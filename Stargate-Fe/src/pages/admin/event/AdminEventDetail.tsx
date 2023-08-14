@@ -123,7 +123,7 @@ const AdminEventDetail = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col justify-center w-full">
+      {/* <div className="flex flex-col justify-center w-full">
         <div className="flex">
           <MeetingLeftSection formData={formData} setFormData={setFormData} />
           <MeetingRightSection formData={formData} setFormData={setFormData} />
@@ -134,9 +134,9 @@ const AdminEventDetail = () => {
           group={group}
           setGroup={setGroup}
         />
-      </div>
+      </div> */}
       <div className="mx-8 my-20 text-center">
-        <BtnBlue text="확인" onClick={handleCreateEvent} />
+        {/* <BtnBlue text="확인" onClick={handleCreateEvent} /> */}
       </div>
     </div>
   );
