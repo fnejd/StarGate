@@ -1,19 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 interface NotepadComponentProps {
-  videoData: any; // videoData의 타입에 따라 수정해야 합니다.
-  meetingOrder: number;
+  videoData: any;
+  initialMeetingOrder: number;
 }
 
 const NotepadComponent = ({
   videoData,
-  meetingOrder,
+  initialMeetingOrder,
 }: NotepadComponentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragComponentRef = useRef<HTMLDivElement>(null);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [current, setCurrent] = useState({ x: 0, y: 0 });
   const [pos, setPos] = useState({ left: 0, top: 0 });
+  const [meetingOrder, setMeetingOrder] = useState(initialMeetingOrder); // 로컬 상태로 meetingOrder 관리
+
+  useEffect(() => {
+    // meetingOrder가 변경되면 로컬 상태인 meetingOrder 업데이트
+    setMeetingOrder(initialMeetingOrder);
+  }, [initialMeetingOrder]);
 
   // 드래그가 유효한 영역 안에서 이루어지는지 검사
   const isInsideDragArea = (e: React.DragEvent<HTMLElement>) => {
@@ -134,9 +140,7 @@ const NotepadComponent = ({
         {videoData.meetingMembers[meetingOrder] ? (
           <textarea
             className="p-3 border-none rounded-sm outline-none resize bg-postityellow drop-shadow-lg"
-            defaultValue={
-              videoData.meetingMembers[meetingOrder]?.postitContents
-            }
+            value={videoData.meetingMembers[meetingOrder]?.postitContents}
           />
         ) : (
           <p></p>

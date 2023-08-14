@@ -371,7 +371,10 @@ const UserVideo = () => {
       )}
       <div className="flex flex-row w-screen h-full"></div>
       {Object.keys(videoData).length > 0 && (
-        <NotepadComponent videoData={videoData} meetingOrder={meetingOrder} />
+        <NotepadComponent
+          videoData={videoData}
+          initialMeetingOrder={meetingOrder}
+        />
       )}
       <h1>Room Page</h1>
       <div id="video-container">
