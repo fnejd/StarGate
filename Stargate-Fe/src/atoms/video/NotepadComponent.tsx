@@ -128,7 +128,7 @@ const NotepadComponent = ({
   return (
     <div className="container absolute z-50 w-full h-full" ref={containerRef}>
       <div
-        className="relative drag-component bg-none w-fit h-fit"
+        className="relative w-fit h-fit"
         ref={dragComponentRef}
         draggable
         onDrag={(e) => dragHandler(e)}

@@ -1,11 +1,15 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
+import TimeLeftComponent from '@/atoms/common/TimeLeftComponent';
 import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
-import NotepadComponent from '@/atoms/video/NotepadComponent';
 import { getUserVideo, postPicture } from '@/services/userVideo';
+import useInterval from '@/hooks/useInterval';
 
 const UserVideo = () => {
   const navigate = useNavigate();
@@ -14,6 +18,7 @@ const UserVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
+  // let socket;
 
   const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
   const [photoNum, setPhotoNum] = useState(null);
@@ -65,6 +70,19 @@ const UserVideo = () => {
   };
 
   // 연예인한테 오퍼 받았을 때 답장 보내는 함수
+  const getAnswer = useCallback(
+    async (ans) => {
+      const ansData = {
+        type: 'ans',
+        ans: ans,
+        time: videoData.meetingTime,
+      };
+      socket.send(JSON.stringify(ansData));
+      console.log('3. 연예인한테 응답보냄');
+      console.log(peerService);
+    },
+    [socket]
+  );
   const getAnswer = useCallback(
     async (ans) => {
       const ansData = {
@@ -149,6 +167,7 @@ const UserVideo = () => {
       console.log('서버 오픈~');
       console.log('팬 입장');
       console.log(socket);
+      console.log(socket);
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -208,10 +227,22 @@ const UserVideo = () => {
       };
     };
   }, [socket]);
+  }, [socket]);
 
+  console.log('미팅순서', meetingOrder);
   console.log('미팅순서', meetingOrder);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
+  const tickWaiting = () => {
+    console.log('대기시간으로 넘어감');
+
+    // 초 줄여주는 로직
+    if (timer.waitingSecond > 0) {
+      console.log('대기시간 초 줄여주는 로직');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        waitingSecond: prevTimer.waitingSecond - 1,
+      }));
   const tickWaiting = () => {
     console.log('대기시간으로 넘어감');
 
@@ -231,11 +262,44 @@ const UserVideo = () => {
           waitingMinute: prevTimer.waitingMinute - 1,
           waitingSecond: 59,
         }));
+    if (timer.waitingSecond === 0) {
+      if (timer.waitingMinute > 0) {
+        setTimer((prevTimer) => ({
+          ...prevTimer,
+          waitingMinute: prevTimer.waitingMinute - 1,
+          waitingSecond: 59,
+        }));
       }
     }
   };
 
   useEffect(() => {
+    if (timer.waitingMinute === 0 && timer.waitingSecond === 0) {
+      console.log('미팅 순서 변경');
+      setMeetingOrder(meetingOrder + 1);
+    }
+  }, [timer.waitingMinute, timer.waitingSecond]);
+
+  // 타이머 함수
+  const tick = () => {
+    console.log('틱 시작', timer.second);
+    // 초 줄여주는 로직
+    if (timer.second > 0) {
+      console.log('초 줄어듦');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        second: prevTimer.second - 1,
+      }));
+    }
+    if (timer.second === 0 && timer.minute > 0) {
+      console.log('초가 0이 되어 분이 줄어듦');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        minute: prevTimer.minute - 1,
+        second: 59,
+      }));
+    }
+  };
     if (timer.waitingMinute === 0 && timer.waitingSecond === 0) {
       console.log('미팅 순서 변경');
       setMeetingOrder(meetingOrder + 1);
@@ -294,10 +358,90 @@ const UserVideo = () => {
         clearInterval(intervalPhoto); // 컴포넌트 언마운트 시 interval 정리
         clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       };
+    if (timer.second === 0 && timer.minute > 0) {
+      console.log('초가 0이 되어 분이 줄어듦');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        minute: prevTimer.minute - 1,
+        second: 59,
+      }));
+    } else if (timer.second == 0 && timer.minute == 0 && photoNum != 0) {
+      // let screenshotCount = videoData.photoNum;
+      let screenshotCount = 2;
+
+      const intervalPhoto = setInterval(() => {
+        if (screenshotCount > 0) {
+          console.log('촬영 시작**************8');
+          takeScreenshotAndSend();
+          screenshotCount--;
+        }
+      }, 10000); // 10초마다 실행
+
+      const intervalId = setInterval(() => {
+        if (screenshotCount == 0) {
+          console.log('대기시간타이머 시작!');
+          tickWaiting();
+        }
+      }, 1000); // 1초마다 실행
+
+      return () => {
+        clearInterval(intervalPhoto); // 컴포넌트 언마운트 시 interval 정리
+        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      };
     }
+  }, [timer.second, timer.minute, photoNum]);
   }, [timer.second, timer.minute, photoNum]);
 
   useEffect(() => {
+    if (peerService.peer) {
+      const intervalId = setInterval(() => {
+        if (timer.second > 0) {
+          console.log('타이머 시작!');
+          tick();
+        }
+      }, 1000); // 1초마다 실행
+
+      return () => {
+        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      };
+    }
+  }, [meetingOrder, timer.second]);
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // 폴라로이드 촬영 및 전송
+  const takeScreenshotAndSend = async () => {
+    const videoContainer = document.getElementById('video-container');
+    const canvas = await html2canvas(videoContainer);
+
+    // 스크린샷을 이미지 데이터로 변환
+    const screenshotData = canvas.toDataURL('image/jpeg');
+
+    const takePhoto = async () => {
+      // Data URI를 Blob으로 변환하는 함수
+      const dataURItoBlob = (dataURI) => {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ab], { type: mimeString });
+      };
+
+      const blobImage = dataURItoBlob(screenshotData);
+
+      const formData = new FormData();
+      formData.append('uuid', uuid);
+      formData.append('email', videoData.email);
+      formData.append(
+        'memberNo',
+        videoData.meetingMembers[meetingOrder].memberNo.toString()
+      ); // memberNo는 문자열로 변환하여 추가
+      formData.append('imageFile', blobImage, 'screenshot.jpg');
     if (peerService.peer) {
       const intervalId = setInterval(() => {
         if (timer.second > 0) {
@@ -383,6 +527,33 @@ const UserVideo = () => {
         />
       )}
       <h1>Room Page</h1>
+      <div id="video-container">
+        {myStream && (
+          <div className="flex">
+            <h6>내 영상</h6>
+            <ReactPlayer
+              playing
+              muted
+              height="150px"
+              width="200px"
+              url={myStream}
+            />
+          </div>
+        )}
+        {remoteStream && (
+          <>
+            <h6>연예인 영상</h6>
+            <ReactPlayer
+              playing
+              muted
+              height="1000px"
+              width="800px"
+              url={remoteStream}
+            />
+          </>
+        )}
+      </div>
+    </div>
       <div id="video-container">
         {myStream && (
           <div className="flex">

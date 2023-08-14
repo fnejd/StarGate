@@ -57,7 +57,7 @@ const BoardCardBox = ({
   return (
     <div className="flex justify-center">
       {isLoading ? (
-        <div className="w-5/6 lg:h-96 md:h-56 sm:h-56 flex justify-center items-center backdrop-opacity-50 bg-gray-300 rounded-lg">
+        <div className="w-5/6 lg:h-96 md:h-56 sm:h-56 flex justify-center items-center backdrop-opacity-50 bg-white rounded-lg">
           <div className="w-5/6 h-5/6 flex justify-center items-center">
             <BoardCard isLoading={isLoading} />
             <div className="h-3/4 flex flex-col flex-grow justify-evenly mx-6">

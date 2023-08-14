@@ -39,10 +39,25 @@ const updateUserData = async (formData: FormData) => {
       withCredentials: false,
     });
     console.log(response);
+    alert('수정되었습니다.');
     return response.data;
   } catch (error) {
     console.log('에러발생', error);
   }
 };
 
-export { fetchUserBoard, fetchUserData, updateUserData };
+const fetchRemindData = async (location : string) => {
+  try {
+    const response = await api.get(`${location}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(location)
+    console.log('에러발생', error);
+  }
+};
+export { fetchUserBoard, fetchUserData, updateUserData, fetchRemindData };
