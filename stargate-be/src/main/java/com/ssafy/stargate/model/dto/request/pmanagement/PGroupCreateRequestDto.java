@@ -1,10 +1,8 @@
 package com.ssafy.stargate.model.dto.request.pmanagement;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @Setter
 @Getter
 @AllArgsConstructor

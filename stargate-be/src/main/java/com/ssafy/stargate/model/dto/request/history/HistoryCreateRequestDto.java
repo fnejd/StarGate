@@ -2,6 +2,7 @@ package com.ssafy.stargate.model.dto.request.history;
 
 import lombok.*;
 
+@Builder
 @Setter
 @Getter
 @ToString
