@@ -56,7 +56,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
      * 연예인이 방 입장시 필요한 모든 정보를 일괄 로딩하여 배치한다.
      *
      * @param roomId 연예인 대기방 고유번호
-     * @return TODO
+     * @return 연예인과 관련된 모든 팬들의 정보를 담는 객체
      */
     @Override
     @Transactional(readOnly = true)
