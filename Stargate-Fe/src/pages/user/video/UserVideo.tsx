@@ -1,20 +1,19 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useCallback, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
 import { getUserVideo, postPicture } from '@/services/userVideo';
-import useInterval from '@/hooks/useInterval';
 
 const UserVideo = () => {
+  const navigate = useNavigate();
   const uuid: string = useParams().uuid;
-  const [videoData, setVideoData] = useState({});
+  const [videoData, setVideoData] = useState(null);
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  // let socket;
 
   const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
   const [photoNum, setPhotoNum] = useState(null);
@@ -101,11 +100,14 @@ const UserVideo = () => {
 
   useEffect(() => {
     // videoData가 비어있지 않은 경우에만 실행
-    if (Object.keys(videoData).length > 0) {
+    if (videoData) {
       // 비디오 데이터 처음 들어왔을 때, 미팅 순서 바뀌었을 때 추적
       // 웹소켓 주소를 미팅 순서에 따라 업데이트
       const connectWebSocket = async () => {
-        if (meetingOrder < memberNos.length && meetingOrder > -1) {
+        if (
+          meetingOrder < videoData.meetingMembers.length &&
+          meetingOrder > -1
+        ) {
           const newSocket = new WebSocket(
             `ws://i9a406.p.ssafy.io:8080/api/rtc/${videoData.meetingMembers[meetingOrder].roomId}`
           );
@@ -129,6 +131,10 @@ const UserVideo = () => {
       }));
       // setPhotoNum(videoData.photoNum);
       setPhotoNum(2);
+    }
+
+    if (videoData && meetingOrder === videoData.meetingMembers.length) {
+      navigate(`/remind/${uuid}`);
     }
   }, [videoData, meetingOrder]);
 
@@ -370,7 +376,7 @@ const UserVideo = () => {
         />
       )}
       <div className="flex flex-row w-screen h-full"></div>
-      {Object.keys(videoData).length > 0 && (
+      {videoData && (
         <NotepadComponent
           videoData={videoData}
           initialMeetingOrder={meetingOrder}
