@@ -293,7 +293,8 @@ const UserVideo = () => {
 
   useEffect(() => {
     if (peerService.peer) {
-      const intervalId = setInterval(() => {        if (timer.second > 0) {
+      const intervalId = setInterval(() => {
+        if (timer.second > 0) {
           console.log('타이머 시작!');
           tick();
         }
@@ -353,17 +354,25 @@ const UserVideo = () => {
 
   return (
     <div className="w-screen h-screen">
-      {socket && <VideoHeaderComponent min={
+      {socket && (
+        <VideoHeaderComponent
+          min={
             timer.minute === 0 && timer.second === 0
               ? timer.waitingMinute
               : timer.minute
-          } sec={
+          }
+          sec={
             timer.minute === 0 && timer.second === 0
               ? timer.waitingSecond
               : timer.second
-          } type="user" />}
+          }
+          type="user"
+        />
+      )}
       <div className="flex flex-row w-screen h-full"></div>
-      <NotepadComponent />
+      {Object.keys(videoData).length > 0 && (
+        <NotepadComponent videoData={videoData} meetingOrder={meetingOrder} />
+      )}
       <h1>Room Page</h1>
       <div id="video-container">
         {myStream && (

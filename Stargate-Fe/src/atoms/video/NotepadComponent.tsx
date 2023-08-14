@@ -1,6 +1,14 @@
 import React, { useState, useRef } from 'react';
 
-const NotepadComponent = () => {
+interface NotepadComponentProps {
+  videoData: any; // videoData의 타입에 따라 수정해야 합니다.
+  meetingOrder: number;
+}
+
+const NotepadComponent = ({
+  videoData,
+  meetingOrder,
+}: NotepadComponentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragComponentRef = useRef<HTMLDivElement>(null);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
@@ -112,7 +120,7 @@ const NotepadComponent = () => {
   };
 
   return (
-    <div className="absolute container w-96 h-96 z-50" ref={containerRef}>
+    <div className="container absolute z-50 w-full h-full" ref={containerRef}>
       <div
         className="relative drag-component bg-none w-fit h-fit"
         ref={dragComponentRef}
@@ -123,9 +131,16 @@ const NotepadComponent = () => {
         onDragEnd={(e) => dragEndHandler(e)}
         style={{ left: pos.left, top: pos.top }}
       >
-        <textarea className="bg-postityellow resize p-3 rounded-sm drop-shadow-lg border-none outline-none">
-          hi
-        </textarea>
+        {videoData.meetingMembers[meetingOrder] ? (
+          <textarea
+            className="p-3 border-none rounded-sm outline-none resize bg-postityellow drop-shadow-lg"
+            defaultValue={
+              videoData.meetingMembers[meetingOrder]?.postitContents
+            }
+          />
+        ) : (
+          <p></p>
+        )}
       </div>
     </div>
   );
