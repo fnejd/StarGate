@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.25",
+    "@tensorflow-models/body-pix": "^2.2.0",
     "@types/react-beautiful-dnd": "^13.1.4",
     "axios": "^1.4.0",
     "degit": "^2.8.4",
