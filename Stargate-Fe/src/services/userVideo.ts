@@ -53,6 +53,7 @@ const getUserVideo = async (uuid: string) => {
 
 const postPicture = async (formData) => {
   try {
+    console.log('사진 데이터', formData);
     const response = await api.post('/polaroids/create', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

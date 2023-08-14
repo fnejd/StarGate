@@ -331,12 +331,34 @@ const UserVideo = () => {
     const screenshotData = canvas.toDataURL('image/jpeg');
 
     const takePhoto = async () => {
-      const formData = {
-        uuid: uuid,
-        email: videoData.email,
-        memberNo: meetingOrder,
-        imageFile: screenshotData,
+      // Data URI를 Blob으로 변환하는 함수
+      const dataURItoBlob = (dataURI) => {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ab], { type: mimeString });
       };
+
+      const blobImage = dataURItoBlob(screenshotData);
+
+      const formData = new FormData();
+      formData.append('uuid', uuid);
+      formData.append('email', videoData.email);
+      formData.append(
+        'memberNo',
+        videoData.meetingMembers[meetingOrder].memberNo.toString()
+      ); // memberNo는 문자열로 변환하여 추가
+      formData.append('imageFile', blobImage, 'screenshot.jpg');
+
+      for (const key of formData.keys()) {
+        console.log(key, formData.get(key));
+      }
       const response = await postPicture(formData);
       console.log('사진 촬영', response);
     };
