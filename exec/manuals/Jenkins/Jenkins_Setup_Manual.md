@@ -26,8 +26,8 @@ docker run --name stargate-jenkins -d -p 9090:8080 jenkins/jenkins
 ```
 
 ### 참고글
-```
-$ docker run --name jenkins-docker -d -p 8080:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -u root jenkins/jenkins:lts
+```bash
+docker run --name jenkins-docker -d -p 9090:8080 -p 50000:50000 -v /home/jenkins:/var/jenkins_home -u root jenkins/jenkins:lts
 ```
 
 - 여기서 -d 명령어는 백그라운드 실행, -p 명령어는 컨테이너와 호스트 PC 간 연결을 위해 내부 포트와 외부 포트를 묶은 것입니다.
@@ -155,6 +155,8 @@ $ docker run --name jenkins-docker -d -p 8080:8080 -p 50000:50000 -v /home/jenki
 
 ### I.a 보안파일 추가해주기
 
+> application-secret.properties등 보안파일을 빌드에 추가해야한다. 
+
 > ssh으로 연결된 cli를 통해 docker cp로 파일 복사를 실행할 것이다.
 
 1. 우선 FileZila나 scp커넥션 등을 통해 필요한 application파일 등을 ubuntu 서버로 옮긴다.
@@ -180,7 +182,7 @@ docker exec -it <컨테이녀 명> /bin/bash
 ```
 
 
-### II. Send files or execute commdns over SSH
+### II. Send files or execute commands over SSH
 
 > 여기서는 build한 jar파일을 ssh으로 우분투 서버로 전송해서 도커이미지를 생성할 것임.
 
