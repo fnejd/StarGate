@@ -4,6 +4,7 @@ import html2canvas from 'html2canvas';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import TimeLeftComponent from '@/atoms/common/TimeLeftComponent';
+import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
 import { getUserVideo, postPicture } from '@/services/userVideo';
 import useInterval from '@/hooks/useInterval';
 
@@ -207,11 +208,6 @@ const UserVideo = () => {
   ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
   const tickWaiting = () => {
     console.log('대기시간으로 넘어감');
-    // 미팅 시간이 끝나면 미팅 순서 넘어감 => 소켓 재설정 => 다시 타이머 재시작
-    // if (timer.waitingSecond === 0 && timer.waitingMinute === 0) {
-    //   console.log('미팅 순서 변경');
-    //   setMeetingOrder(meetingOrder + 1);
-    // }
 
     // 초 줄여주는 로직
     if (timer.waitingSecond > 0) {
@@ -269,17 +265,7 @@ const UserVideo = () => {
         minute: prevTimer.minute - 1,
         second: 59,
       }));
-    }
-    // else if (timer.second == 0 && timer.minute == 0 && photoNum == 0) {
-    //   const intervalId = setInterval(() => {
-    //     console.log('대기시간타이머 시작!');
-    //     tickWaiting();
-    //   }, 1000); // 1초마다 실행
-    //   return () => {
-    //     clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
-    //   };
-    // }
-    else if (timer.second == 0 && timer.minute == 0 && photoNum != 0) {
+    } else if (timer.second == 0 && timer.minute == 0 && photoNum != 0) {
       // let screenshotCount = videoData.photoNum;
       let screenshotCount = 2;
 
@@ -366,21 +352,9 @@ const UserVideo = () => {
     takePhoto();
   };
 
-  // // 10초마다 스크린샷 찍기와 전송하기
-  // const screenshotInterval = setInterval(() => {
-  //   if (timer.second % 10 === 0) {
-  //     console.log("스크린샷 찍기");
-  //     takeScreenshotAndSend();
-  //   }
-  // }, 1000);
-
-  // return () => {
-  //   clearInterval(screenshotInterval); // 컴포넌트 언마운트 시 interval 정리
-  // };
-  // }, [timer.second]);
-
   return (
-    <div>
+    <div className="w-screen h-screen">
+      <VideoHeaderComponent min={time.min} sec={time.sec} type="star" />
       {socket && (
         <TimeLeftComponent
           min={
