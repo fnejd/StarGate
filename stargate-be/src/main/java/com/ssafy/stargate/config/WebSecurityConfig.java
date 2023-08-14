@@ -37,7 +37,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/pusers/register", "/pusers/check-email",
                                 "/pusers/login", "/fusers/register", "/fusers/login",
                                 "/fusers/find-id", "/fusers/get-code", "/fusers/check-code",
-                                "/fusers/new-pw", "/fusers/check-email"
+                                "/fusers/new-pw", "/fusers/check-email","/meetingroom/member/get"
                         ).anonymous()
                         .requestMatchers("/pdashboard").hasAuthority("Producer")
                         .requestMatchers("/rtc/**").permitAll()
