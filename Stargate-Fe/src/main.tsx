@@ -31,7 +31,7 @@ const router = createBrowserRouter([
   { path: '/pwreset', element: <PwReset /> },
   { path: '/board', element: <Board /> },
   { path: '/mypage', element: <MyPage /> },
-  { path: '/remind/:uuid', element: <Remind /> },
+  { path: '/reminds/:uuid', element: <Remind /> },
   { path: '/ready/:uuid', element: <Ready /> },
   { path: '/video/:uuid', element: <Video /> },
 
@@ -43,15 +43,15 @@ const router = createBrowserRouter([
   { path: '/admin/event/detail', element: <AdminEventDetail /> },
   { path: '/admin/monitoring', element: <AdminMonitoring /> },
 
-  { path: '/star/video', element: <StarVideo /> },
+  { path: '/star/video/:uuid', element: <StarVideo /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
-  <RecoilRoot>
-    {/* <SocketProvider socketURL="wss://i9a406.p.ssafy.io:8080/rtc/asdf.12"> */}
-    <RouterProvider router={router} />
-    {/* </SocketProvider> */}
-  </RecoilRoot>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <RecoilRoot>
+      {/* <SocketProvider socketURL="wss://i9a406.p.ssafy.io:8080/rtc/asdf.12"> */}
+      <RouterProvider router={router} />
+      {/* </SocketProvider> */}
+    </RecoilRoot>
+  </React.StrictMode>
 );

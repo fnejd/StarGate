@@ -7,7 +7,7 @@ const VideoHeaderComponent = () => {
   const [nextUser, setNextUser] = useState('김수환');
 
   return (
-    <div className="flex flex-row w-screen">
+    <div className="flex flex-row w-screen my-5">
       <div className="basis-1/2 w-full text-white ml-5">
         <ProFileIcon />
       </div>

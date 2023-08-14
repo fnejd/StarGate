@@ -1,12 +1,17 @@
 import React from 'react';
 import BoardHeaderNav from '../../atoms/board/BoardHeaderNav';
-import BoardHeaderTitle from '../../atoms/board/BoardHeaderTitle';
+import HeaderTitle from '../../atoms/common/HeaderTitle';
 
-const BoardHeader = () => {
+interface HeaderProps {
+  isAdmin: boolean;
+  title?: string;
+}
+
+const BoardHeader = ({ isAdmin, title = 'D A S H B O A R D' }: HeaderProps) => {
   return (
-    <div className='w-full'>
-      <BoardHeaderNav isAdmin={false} />
-      <BoardHeaderTitle />
+    <div className="w-full">
+      <BoardHeaderNav isAdmin={isAdmin} />
+      <HeaderTitle>{title}</HeaderTitle>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
+import NotepadComponent from '@/atoms/video/NotepadComponent';
+import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
 
 const StarVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
@@ -139,34 +141,38 @@ const StarVideo = () => {
       };
     };
   }, []);
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   return (
-    <div>
-      <h1>Room Page</h1>
-      {myStream && (
-        <>
-          <h1>내 영상</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="200px"
-            width="300px"
-            url={myStream}
-          />
-        </>
-      )}
-      {remoteStream && (
-        <>
-          <h1>팬 영상</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="400px"
-            width="600px"
-            url={remoteStream}
-          />
-        </>
-      )}
+    <div className="w-screen h-screen">
+      <VideoHeaderComponent />
+      <div className="flex flex-row w-screen h-full">
+        <NotepadComponent />
+        {myStream && (
+          <div className="basis-1/2">
+            <p>연옌</p>
+            <ReactPlayer
+              playing
+              muted
+              height="full"
+              width="full"
+              url={myStream}
+            />
+          </div>
+        )}
+        {remoteStream && (
+          <div className="basis-1/2">
+            <p>팬</p>
+            <ReactPlayer
+              playing
+              muted
+              height="full"
+              width="full"
+              url={remoteStream}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
