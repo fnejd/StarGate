@@ -58,7 +58,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost", "http://localhost:3000"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost", "http://localhost:3000","https://stargatea406.netlify.app/"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);
