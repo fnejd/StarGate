@@ -26,8 +26,12 @@ const Remind = () => {
   const [nameFetch, setNameFetch] = useRecoilState(nameShouldFetch);
 
   useEffect(() => {
+    const currentUrl = window.location.href;
+    const parts = currentUrl.split('/');
+    const uuid = parts[parts.length - 1];
+    console.log(uuid);
     const fetchRemind = async () => {
-      const fetchedData = await fetchRemindData(location.pathname);
+      const fetchedData = await fetchRemindData(uuid);
       if (fetchedData) {
         setData(fetchedData);
         console.log('데이터는', fetchedData);
@@ -40,7 +44,7 @@ const Remind = () => {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen w-xl flex flex-col">
       <BoardHeader isAdmin={false} title="R E M I N D"></BoardHeader>
       {data && (
         <div className="flex flex-grow mx-10">
