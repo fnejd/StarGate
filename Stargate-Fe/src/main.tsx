@@ -31,7 +31,7 @@ const router = createBrowserRouter([
   { path: '/pwreset', element: <PwReset /> },
   { path: '/board', element: <Board /> },
   { path: '/mypage', element: <MyPage /> },
-  { path: '/reminds/:uuid', element: <Remind /> },
+  { path: '/remind/:uuid', element: <Remind /> },
   { path: '/ready/:uuid', element: <Ready /> },
   { path: '/video/:uuid', element: <Video /> },
 
