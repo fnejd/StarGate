@@ -3,12 +3,32 @@ import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
 import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
+import { getStarMeetingDataApi } from '@/services/videoService';
+import useInterval from '@/hooks/useInterval';
+
+interface starMeetingDataType {
+  waitingTime: number;
+  meetingTime: number;
+  photoNum: number;
+  memberNo: number;
+  meetingUser: [
+    {
+      email: string;
+      name: string;
+      nickname: string;
+      birthday: string;
+      isPolaroidEnable: boolean;
+      postitContents: string;
+      totalMeetingCnt: number;
+    },
+  ];
+}
 
 const StarVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const socketRef = useRef<WebSocket | null>(
-    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.12')
+    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.137')
   );
   const socket = socketRef.current;
 
@@ -101,6 +121,8 @@ const StarVideo = () => {
       console.log('서버 오픈~');
       console.log('연예인 입장');
 
+      await getMeetingData();
+
       socket.onmessage = async (event) => {
         console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
         const receivedData = JSON.parse(event.data);
@@ -115,6 +137,12 @@ const StarVideo = () => {
           await peerService.setLocalDescription(receivedData.ans);
           console.log('Connection state:', peerService.peer.connectionState);
           console.log(peerService);
+          // UHAN
+          console.log(receivedData.time);
+          setTotalTime(receivedData.time);
+          setTime({ min: Math.trunc(totalTime / 60), sec: totalTime % 60 });
+          console.log(time);
+          // YHAN
         }
         if (receivedData.type === 'candidate') {
           console.log('444444444444444444444 아이스를 받았어요');
@@ -141,11 +169,103 @@ const StarVideo = () => {
       };
     };
   }, []);
+
+  /**
+   * @author UHAN
+   */
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const [roomNum, setRoomNum] = useState(13);
+  const [userIdx, setUserIdx] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
+  const [loadUser, setLoadUser] = useState(true);
+  const [time, setTime] = useState({ min: 0, sec: 0 });
+  const [meetingData, setMeetingData] = useState<starMeetingDataType>({
+    waitingTime: 0,
+    meetingTime: 0,
+    photoNum: 0,
+    memberNo: 0,
+    meetingUser: [
+      {
+        email: '',
+        name: '',
+        nickname: '',
+        birthday: '',
+        isPolaroidEnable: false,
+        postitContents: '',
+        totalMeetingCnt: 0,
+      },
+    ],
+  });
+  let userData;
+
+  const getMeetingData = async () => {
+    const response = await getStarMeetingDataApi(
+      `location.search.${roomNum}`
+    ).catch((error) => console.log(error));
+    console.log(response);
+    // setLoadUser(false);
+    if (response != undefined) {
+      setMeetingData(response);
+      console.log(meetingData);
+    } else {
+      setTotalTime(sumTime(10, 10, 0));
+    }
+  };
+
+  // 미팅타임과 웨이팅 타임 합계한 유저 당 미팅시간
+  const sumTime = (
+    meetingTime: number,
+    waitingTime: number
+  ) => {
+    const time = meetingTime + waitingTime;
+    return time;
+  };
+
+  let sutter = 10;
+
+  const countingSutter = (num: number) => {
+    console.log(num);
+  };
+
+  useInterval(() => {
+    if (totalTime < 0 || !loadUser) {
+      // 시간이 다 되었을 때 다음 사람에 대한 요청이 이루어져야함.
+      console.log('next User Comming || not yet loadusers');
+      return 0;
+    }
+    if (totalTime <= meetingData.photoNum * 10) {
+      // 10초 간격으로 사진 촬영 카운팅 시작
+      countingSutter(sutter);
+      sutter -= 1;
+      // 10초가 지나면 실행 분기
+      if (sutter < 0) {
+        // 사진 촬영 횟수가 끝나면 아무런 액션 취하지 않기
+        if (meetingData.photoNum < 0) return 0;
+        // 셔터 초기화시켜주고
+        sutter = 10;
+        // 사진 촬영 횟수 하나 줄여주고
+        meetingData.photoNum -= 1;
+      }
+    }
+    setTime({ min: Math.trunc(totalTime / 60), sec: totalTime % 60 });
+    console.log(totalTime);
+    totalTime < 0 ? setTotalTime(totalTime) : setTotalTime(totalTime - 1);
+  }, 1000);
+
+  // User Data가 들어오면 meetingTime 계산해서 카운트 훅 시작
+  useEffect(() => {
+    setTotalTime(
+      sumTime(
+        meetingData.meetingTime,
+        meetingData.waitingTime
+      )
+    );
+    userData = [...meetingData.meetingUser];
+  }, [meetingData]);
 
   return (
     <div className="w-screen h-screen">
-      <VideoHeaderComponent />
+      <VideoHeaderComponent min={time.min} sec={time.sec} type="star" />
       <div className="flex flex-row w-screen h-full">
         <NotepadComponent />
         {myStream && (

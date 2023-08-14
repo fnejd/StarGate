@@ -5,7 +5,7 @@ const NotepadComponent = () => {
   const dragComponentRef = useRef<HTMLDivElement>(null);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [current, setCurrent] = useState({ x: 0, y: 0 });
-  const [pos, setPos] = useState({ left: 0, top: 0 });
+  const [pos, setPos] = useState({ left: window.innerWidth * 0.8, top: window.innerHeight * 0.3 });
 
   // 드래그가 유효한 영역 안에서 이루어지는지 검사
   const isInsideDragArea = (e: React.DragEvent<HTMLElement>) => {
