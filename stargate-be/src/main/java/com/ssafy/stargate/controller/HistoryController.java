@@ -31,7 +31,7 @@ public class HistoryController {
      * @param email    [String] 팬유저 이메일 (id)
      * @return [List<HistoryResponseDetailDto>] 히스토리 정보 dto 리스트
      */
-    @GetMapping("get")
+    @GetMapping("/get")
     ResponseEntity<List<HistoryResponseDetailDto>> getHistoryList(@RequestParam long memberNo, @RequestParam String email) {
         List<HistoryResponseDetailDto> histories = historyService.getHistoryList(memberNo, email);
         return ResponseEntity.ok(histories);
