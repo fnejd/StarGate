@@ -16,7 +16,7 @@ const MeetingBottomDetail = ({ formData }: { formData: MeetingData }) => {
             <tr key={index}>
               <td>{fUser.name}</td>
               <td>{fUser.email}</td>
-              <td className="material-symbols-rounded flex justify-center">
+              <td className={`material-symbols-rounded flex justify-center ${fUser.isRegister ? `text-green` : `text-red`}`}>
                 {fUser.isRegister ? `Done` : `Close`}
               </td>
             </tr>
