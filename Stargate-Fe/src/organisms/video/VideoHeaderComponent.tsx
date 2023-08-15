@@ -18,7 +18,7 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
   const [nextUser, setNextUser] = useState('김수환');
 
   return type == 'star' ? (
-    <div className="flex flex-row w-screen my-5">
+    <div className="flex flex-row w-screen my-5 fixed top-0 left-0">
       <div className="flex items-center w-full ml-5 text-white basis-1/2">
         <ProFileIcon />
         <div className="mx-auto">

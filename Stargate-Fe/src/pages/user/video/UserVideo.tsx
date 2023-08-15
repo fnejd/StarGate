@@ -358,42 +358,45 @@ const UserVideo = () => {
 
     // takePhoto();
   };
-///////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
-const performBodyPixSegmentation = async (videoElement) => {
-  const net = await bodyPix.load({
-    architecture: 'ResNet50',
-    outputStride: 32,
-    quantBytes: 2
-  });
+  // const performBodyPixSegmentation = async (videoElement) => {
+  //   const net = await bodyPix.load({
+  //     architecture: 'ResNet50',
+  //     outputStride: 32,
+  //     quantBytes: 2,
+  //   });
 
-  const segmentation = await net.segmentPerson(videoElement);
-  const backgroundBlurAmount = 3;
-  const edgeBlurAmount = 3;
-  const flipHorizontal = false;
+  //   const segmentation = await net.segmentPerson(videoElement);
+  //   const backgroundBlurAmount = 3;
+  //   const edgeBlurAmount = 3;
+  //   const flipHorizontal = false;
 
-  const canvas = document.getElementById('canvas');
+  //   const canvas = document.getElementById('canvas');
 
-  bodyPix.drawBokehEffect(
-    canvas, img, segmentation, backgroundBlurAmount,
-    edgeBlurAmount, flipHorizontal
-  );
+  //   bodyPix.drawBokehEffect(
+  //     canvas,
+  //     img,
+  //     segmentation,
+  //     backgroundBlurAmount,
+  //     edgeBlurAmount,
+  //     flipHorizontal
+  //   );
 
-  console.log(segmentation);
-};
+  //   console.log(segmentation);
+  // };
 
-useEffect(() => {
-  if (myStream) {
-    const video = document.getElementById('webcam'); // 비디오 엘리먼트
-    video.play();
+  // useEffect(() => {
+  //   if (myStream) {
+  //     const video = document.getElementById('webcam'); // 비디오 엘리먼트
+  //     video.play();
 
-    performBodyPixSegmentation(video); // BodyPix 세분화 및 효과 적용
-  }
-}, [myStream]);
-
+  //     performBodyPixSegmentation(video); // BodyPix 세분화 및 효과 적용
+  //   }
+  // }, [myStream]);
 
   return (
-    <div className="w-screen h-screen">
+    <div>
       {socket && (
         <VideoHeaderComponent
           min={
@@ -421,34 +424,33 @@ useEffect(() => {
         {myStream && (
           <div className="flex">
             <h6>내 영상</h6>
-              <ReactPlayer
-                playing
-                muted
-                height="150px"
-                width="200px"
-                url={myStream}
-              />
-             <video
-  ref={(video) => {
-    if (video) {
-      video.play(); // 비디오 재생 시작
-      performBodyPixSegmentation(video)
-        .then((segmentation) => {
-          // 세분화 결과를 여기서 처리할 수 있습니다.
-          // 세분화 결과를 사용하여 캔버스 수정이나 배경 제거 적용 가능
-        })
-        .catch((error) => {
-          console.error('BodyPix 세분화 오류:', error);
-        });
-    }
-  }}
-  id="webcam"
-  autoPlay
-  playsInline
-  width="640"
-  height="480"
-></video>
-
+            <ReactPlayer
+              playing
+              muted
+              height="150px"
+              width="200px"
+              url={myStream}
+            />
+            {/* <video
+              ref={(video) => {
+                if (video) {
+                  video.play(); // 비디오 재생 시작
+                  performBodyPixSegmentation(video)
+                    .then((segmentation) => {
+                      // 세분화 결과를 여기서 처리할 수 있습니다.
+                      // 세분화 결과를 사용하여 캔버스 수정이나 배경 제거 적용 가능
+                    })
+                    .catch((error) => {
+                      console.error('BodyPix 세분화 오류:', error);
+                    });
+                }
+              }}
+              id="webcam"
+              autoPlay
+              playsInline
+              width="640"
+              height="480"
+            ></video> */}
           </div>
         )}
         {remoteStream && (
