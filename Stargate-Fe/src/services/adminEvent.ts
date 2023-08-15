@@ -37,7 +37,7 @@ const createEvent = async (meetingData: FormData | null) => {
   }
 };
 
-const updateEvent = async (meetingData:FormData) => {
+const updateEvent = async (meetingData: FormData) => {
   if (meetingData) {
     try {
       const formDataToSend = new FormData();
@@ -71,7 +71,7 @@ const updateEvent = async (meetingData:FormData) => {
   }
 };
 
-const fetchEventDetailData = async (location : string) => {
+const fetchEventDetailData = async (location: string) => {
   try {
     const response = await api.get(`/meetings/get/${location}`, {
       headers: {
@@ -81,9 +81,24 @@ const fetchEventDetailData = async (location : string) => {
     });
     return response.data;
   } catch (error) {
-    console.log(location)
+    console.log(location);
     console.log('에러발생', error);
   }
 };
 
-export { createEvent,updateEvent, fetchEventDetailData };
+const fetchEventDetailLettersData = async (uuid: string) => {
+  try {
+    const response = await api.get('/letters/get-meeting', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(location);
+    console.log('에러발생', error);
+  }
+};
+
+export { createEvent, updateEvent, fetchEventDetailData };

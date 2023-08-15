@@ -74,10 +74,10 @@ const AdminEventDetail = () => {
         </div>
       </div>
       <div className="flex justify-evenly w-m my-20 text-center">
-        <BtnBlue text="편지 리스트" onClick={() => handleLetterList(`uuid`)} />
+        <BtnBlue text="편지 리스트" onClick={() => handleLetterList(`${data.uuid}`)} />
         <BtnBlue
           text="모니터링 입장"
-          onClick={() => handleMonitoring(`uuid`)}
+          onClick={() => handleMonitoring(`${data.uuid}`)}
         />
         <Link to="/admin/event/create" state={{ uuid: data.uuid }}>
           <BtnBlue text="수정" />

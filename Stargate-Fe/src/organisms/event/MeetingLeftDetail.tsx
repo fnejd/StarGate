@@ -5,7 +5,10 @@ const MeetingLeftDetail = ({ formData }: { formData: MeetingData }) => {
   const [year, month, dayWithTime] = start.split('-');
   const day = dayWithTime.split('T')[0]; // "T"를 기준으로 분리하여 일자만 추출
   const newDate: Date = new Date(Number(year), Number(month) - 1, Number(day));
-  const stringDate: string = newDate.toISOString().slice(0, -1);
+  const stringDate = `${year}-${month}-${day}  ${newDate
+    .getHours()
+    .toString()
+    .padStart(2, '0')}:${newDate.getMinutes().toString().padStart(2, '0')}`;
   const picSec = formData.photoNum * 10;
 
   return (
@@ -29,8 +32,8 @@ const MeetingLeftDetail = ({ formData }: { formData: MeetingData }) => {
         <tbody>
           {formData.meetingMembers.map((member, index) => (
             <tr key={index}>
-              <td>{member.name}</td>
-              <td>{member.roomId}</td>
+              <p>{member.name}</p>
+              <a href={`https://stargatea406.netlify.app/star/video/${member.roomId}`}>링크</a>
             </tr>
           ))}
         </tbody>
