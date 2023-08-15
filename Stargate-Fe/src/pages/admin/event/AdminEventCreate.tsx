@@ -4,25 +4,13 @@ import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { createEvent, fetchEventDetailData, updateEvent } from '@/services/adminEvent';
+import {
+  createEvent,
+  updateEvent,
+  fetchEventDetailData,
+} from '@/services/adminEvent';
 import { fetchGroup } from '@/services/adminBoardService';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
-import { MeetingData } from '@/types/event/type';
-
-interface MeetingFUser {
-  no: number;
-  email: string;
-  orderNum: number;
-  isRegister: string;
-  name: string;
-}
-
-interface MeetingMember {
-  no: number;
-  memberNo: number;
-  orderNum: number;
-  roomId: string;
-}
 
 interface GroupMember {
   memberNo: number;
@@ -35,30 +23,22 @@ interface Group {
 }
 
 interface FormData {
-  name: null;
-  startDate: Date | string | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  uuid: string | null;
+  name: string | null;
+  startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
   waitingTime: number;
   meetingTime: number;
   notice: string;
   photoNum: number;
-  imageFile: File | null;
-  meetingFUsers: string;
+  imageFile:
+    | File
+    | null
+    | {
+        filename: string;
+        fileUrl: string;
+      };
+  meetingFUsers: string | GroupMember;
   meetingMembers: string;
-}
-
-interface FormUpdateData {
-  uuid: string;
-  name: null;
-  startDate: Date | string | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
-  waitingTime: number;
-  meetingTime: number;
-  notice: string;
-  photoNum: number;
-  groupNo: number;
-  groupName: string;
-  imageFileInfo?: ImageFileInfo | null;
-  meetingFUsers: MeetingFUser[];
-  meetingMembers: MeetingMember[];
 }
 
 const AdminEventCreate = () => {
@@ -68,32 +48,16 @@ const AdminEventCreate = () => {
 
   const [group, setGroup] = useState<Group[]>([]);
   const [formData, setFormData] = useState<FormData>({
+    uuid: null,
     name: null,
     startDate: null,
     waitingTime: 10,
     meetingTime: 80,
-    photoNum: 0,
     notice: '',
+    photoNum: 0,
     imageFile: null,
     meetingFUsers: '',
     meetingMembers: '',
-  });
-  const [formUpdateData, setFormUpdateData] = useState<FormUpdateData>({
-    uuid: '',
-    name: null,
-    startDate: null,
-    waitingTime: 10,
-    meetingTime: 80,
-    photoNum: 0,
-    notice: '',
-    groupNo: 0,
-    groupName: '',
-    imageFileInfo: {
-      filename: '',
-      fileUrl: '',
-    },
-    meetingFUsers: [],
-    meetingMembers: [],
   });
 
   useEffect(() => {
@@ -102,9 +66,9 @@ const AdminEventCreate = () => {
         const uuid = updateUuid;
         const fetchedData = await fetchEventDetailData(uuid);
         if (fetchedData) {
-          setFormUpdateData(fetchedData);
+          setFormData(fetchedData);
         }
-        console.log('로딩완료', location);
+        console.log('로딩완료', updateUuid, '=== updateUuid');
       }
     };
     if (updateUuid) fetchEventDetail();
@@ -140,11 +104,11 @@ const AdminEventCreate = () => {
   };
 
   // API로 데이터 전송
-  const handleCheckEvent = async () => {
+  const handleCheckEvent = async (updateUuid: string) => {
     if (updateUuid) {
       try {
         console.log(formData);
-        await updateEvent(updateUuid);
+        await updateEvent(formData);
         console.log('이벤트 수정 성공');
         navigate(`/admin/event/detail/${updateUuid}`);
       } catch (error) {
@@ -202,7 +166,7 @@ const AdminEventCreate = () => {
         </div>
       </div>
       <div className="flex justify-evenly w-m mx-8 my-20 text-center">
-        <BtnBlue text="확인" onClick={handleCheckEvent} />
+        <BtnBlue text="확인" onClick={() => handleCheckEvent(updateUuid)} />
       </div>
     </div>
   );

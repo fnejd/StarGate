@@ -37,7 +37,7 @@ const createEvent = async (meetingData: FormData | null) => {
   }
 };
 
-const updateEvent =async (meetingData:FormData) => {
+const updateEvent = async (meetingData:FormData) => {
   if (meetingData) {
     try {
       const formDataToSend = new FormData();
@@ -56,7 +56,7 @@ const updateEvent =async (meetingData:FormData) => {
       for (let key of formDataToSend.keys()) {
         console.log(key, ':', formDataToSend.get(key));
       }
-      const response = await api.post('/meetings/create', formDataToSend, {
+      const response = await api.put('/meetings/update', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
           // 'Authorization': `Bearer ${access}`,
@@ -64,9 +64,9 @@ const updateEvent =async (meetingData:FormData) => {
         },
       });
 
-      console.log('미팅 생성 성공', response.data);
+      console.log('미팅 수정 성공', response.data);
     } catch (error) {
-      console.error('미팅 생성 실패 ', error);
+      console.error('미팅 수정 실패 ', error);
     }
   }
 };

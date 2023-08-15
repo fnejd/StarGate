@@ -6,7 +6,7 @@ export interface ImageFileInfo {
 export interface MeetingFUser {
   email: string;
   orderNum: number;
-  isRegister: string;
+  isRegister: boolean;
   name: string;
 }
 

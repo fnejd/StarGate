@@ -1,48 +1,15 @@
-import { useEffect, useState, ChangeEvent } from 'react';
-import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
-import MeetingRightSection from '@/organisms/event/MeetingRightSection';
-import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
+import { useEffect, useState } from 'react';
+import MeetingLeftDetail from '@/organisms/event/MeetingLeftDetail';
+import MeetingRightDetail from '@/organisms/event/MeetingRightDetail';
+import MeetingBottomDetail from '@/organisms/event/MeetingBottomDetail';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { fetchEventDetailData } from '@/services/adminEvent';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 import { useNavigate, Link } from 'react-router-dom';
-
-interface ImageFileInfo {
-  filename: string;
-  fileUrl: string;
-}
-
-interface MeetingFUser {
-  email: string;
-  orderNum: number;
-  isRegister: string;
-  name: string;
-}
-
-interface MeetingMember {
-  memberNo: number;
-  name: string;
-  orderNum: number;
-  roomId: string;
-}
-
-interface MeetingData {
-  uuid: string;
-  name: string;
-  startDate: string;
-  waitingTime: number;
-  meetingTime: number;
-  notice: string;
-  photoNum: number;
-  groupNo: number;
-  groupName: string;
-  imageFileInfo: ImageFileInfo;
-  meetingFUsers: MeetingFUser[];
-  meetingMembers: MeetingMember[];
-}
+import { MeetingData } from '@/types/event/type';
 
 const AdminEventDetail = () => {
-  const [group, setGroup] = useState<[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<MeetingData>({
     uuid: '',
     name: '',
@@ -74,6 +41,8 @@ const AdminEventDetail = () => {
       if (fetchedData) {
         setData(fetchedData);
         console.log('데이터는', fetchedData);
+        console.log(fetchedData.startDate);
+        setLoading(false);
       }
       console.log('로딩완료', location);
     };
@@ -88,28 +57,23 @@ const AdminEventDetail = () => {
   };
 
   return (
-    <div className="w-xl flex flex-col items-center">
+    <div className="flex w-xl flex-col items-center">
       <BoardHeaderNav isAdmin={true}></BoardHeaderNav>
       <div className="my-10 text-center form-title">{data.name}</div>
-      <div className="mb-8 w-full flex justify-center">
+      <div className="mb-8 w-full flex justify-end">
         <div className="flex w-5/12">
-          {/* <MeetingLeftSection formData={formData} setFormData={setFormData} /> */}
+          {loading === false && <MeetingLeftDetail formData={data} />}
         </div>
         <div className="flex w-5/12">
-          {/* <MeetingRightSection formData={formData} setFormData={setFormData} /> */}
+          {loading === false && <MeetingRightDetail formData={data} />}
         </div>
       </div>
-      <div className="flex flex-col justify-center w-5/12">
-        <div className="flex">
-          {/* <MeetingBottomSection
-            formData={formData}
-            setFormData={setFormData}
-            group={group}
-            setGroup={setGroup}
-          /> */}
+      <div className="flex w-full justify-end">
+        <div className="flex w-5/6">
+          {loading === false && <MeetingBottomDetail formData={data} />}
         </div>
       </div>
-      <div className="flex justify-evenly w-m mx-8 my-20 text-center">
+      <div className="flex justify-evenly w-m my-20 text-center">
         <BtnBlue text="편지 리스트" onClick={() => handleLetterList(`uuid`)} />
         <BtnBlue
           text="모니터링 입장"
