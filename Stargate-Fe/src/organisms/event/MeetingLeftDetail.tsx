@@ -3,8 +3,16 @@ import { MeetingData } from '@/types/event/type';
 const MeetingLeftDetail = ({ formData }: { formData: MeetingData }) => {
   const start = formData.startDate;
   const [year, month, dayWithTime] = start.split('-');
-  const day = dayWithTime.split('T')[0]; // "T"를 기준으로 분리하여 일자만 추출
-  const newDate: Date = new Date(Number(year), Number(month) - 1, Number(day));
+  const [day, time] = dayWithTime.split('T'); // "T"를 기준으로 분리하여 일자와 시간을 추출
+  const [hour, minute, second] = time.split(':');
+  const newDate: Date = new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    Number(hour),
+    Number(minute),
+    Number(second.split('.')[0])
+  );
   const stringDate = `${year}-${month}-${day}  ${newDate
     .getHours()
     .toString()
@@ -32,12 +40,14 @@ const MeetingLeftDetail = ({ formData }: { formData: MeetingData }) => {
         <tbody>
           {formData.meetingMembers.map((member, index) => (
             <tr key={index}>
-              <p>{member.name}</p>
-              <a
-                href={`https://stargatea406.netlify.app/star/video?roomId=${member.roomId}`}
-              >
-                링크
-              </a>
+              <td className="w-28">{member.name}</td>
+              <td>
+                <a
+                  href={`https://stargatea406.netlify.app/star/video?roomId=${member.roomId}`}
+                >
+                  링크
+                </a>
+              </td>
             </tr>
           ))}
         </tbody>
