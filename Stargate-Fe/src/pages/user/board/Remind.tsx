@@ -1,3 +1,10 @@
+import React from 'react';
+
+const Remind = () => {
+  return <div>리마인드</div>;
+};
+
+export default Remind;
 import { useState, useEffect } from 'react';
 import RemindDetail from '@/organisms/remind/RemindDetail';
 import RemindTitle from '@/organisms/remind/RemindTitle';

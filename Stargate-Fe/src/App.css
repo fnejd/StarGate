@@ -24,7 +24,6 @@ html {
     'opsz' 0;
 }
 
-// input 태그 자동완성 사용 시 배경색 생기는 거 지우기
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px #fff inset;
   -webkit-text-fill-color: white;

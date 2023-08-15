@@ -1,3 +1,10 @@
+import React from 'react';
+
+const AdminEventDetail = () => {
+  return <div>이벤트 상세</div>;
+};
+
+export default AdminEventDetail;
 import { useEffect, useState, ChangeEvent } from 'react';
 import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';

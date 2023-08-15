@@ -1,22 +1,32 @@
 import { useEffect, useRef } from 'react';
 
-function useInterval(callback, delay) {
-  const savedCallback = useRef(); // 최근에 들어온 callback을 저장할 ref를 하나 만든다.
+interface useIntervalProps {
+  (callback: () => void, delay: number): void;
+}
 
+const useInterval: useIntervalProps = (callback, delay) => {
+  // useRef를 사용해 렌더 횟수 최소화
+  const savedCallback = useRef<(() => void) | null>(null);
+
+  // callback에 변화가 감지될 때 감지해 최신 상태 유지
   useEffect(() => {
-    savedCallback.current = callback; // callback이 바뀔 때마다 ref를 업데이트 해준다.
+    savedCallback.current = callback;
   }, [callback]);
 
+  // 인터벌이랑 클로저 세팅
   useEffect(() => {
     function tick() {
-      savedCallback.current(); // tick이 실행되면 callback 함수를 실행시킨다.
+      if (savedCallback.current) {
+        savedCallback.current();
+      }
     }
-    if (delay !== null) {
-      // 만약 delay가 null이 아니라면
-      let id = setInterval(tick, delay); // delay에 맞추어 interval을 새로 실행시킨다.
-      return () => clearInterval(id); // unmount될 때 clearInterval을 해준다.
+
+    if (delay != null) {
+      const id = setInterval(tick, delay);
+      // Memory 효율성을 위해 바로바로 클로저 해주기
+      return () => clearInterval(id);
     }
-  }, [delay]); // delay가 바뀔 때마다 새로 실행된다.
-}
+  }, [delay]);
+};
 
 export default useInterval;
