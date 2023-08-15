@@ -1,31 +1,25 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import BtnWhite from '@/atoms/common/BtnWhite';
 import AdminToggle from '@/atoms/common/AdminToggle';
 import { loginApi } from '@/services/authService';
 import { splitVendorChunkPlugin } from 'vite';
+import {
+  MeetingData,
+  MeetingFUser,
+  MeetingMember,
+  ImageFileInfo,
+} from '@/types/ready';
 
 interface TabProps {
   readyData: MeetingData;
 }
 
 interface Tab2Props {
-  readyData: MeetingData;
+  readyData: ReadyData;
   setReadyData: React.Dispatch<React.SetStateAction<MeetingData | null>>;
 }
-
-type MeetingMember = {
-  memberNo: number;
-  name: string;
-  orderNum: number;
-  roomId: string;
-  isPolaroidEnable: boolean;
-  postitContents: string;
-};
-
-type MeetingData = {
-  meetingMembers: MeetingMember[];
-};
 
 const navigateVideoRoom = () => {};
 
@@ -106,7 +100,6 @@ const Tab1 = ({
         canvasCtx.lineTo(WIDTH, HEIGHT / 2);
         canvasCtx.stroke();
 
-        // Restore the canvas state
         canvasCtx.restore();
       }
 
@@ -181,7 +174,9 @@ const Tab3 = ({ readyData, setReadyData }: Tab2Props) => {
   const [memberInfo, setMemberInfo] = useState<meetingMembers[]>(
     readyData.meetingMembers
   );
-  const [postitValue, setPostitValue] = useState('');
+  const [postitValue, setPostitValue] = useState(
+    readyData.meetingMembers[0].postitContents
+  );
 
   const handlePrevMember = () => {
     if (memberIndex > 0) {
@@ -265,11 +260,11 @@ const Tab4 = ({ readyData, setReadyData }: Tab2Props) => {
         ...prevReadyData.meetingFUser,
         memoContents: newMemoValue,
       };
+      return {
+        ...prevReadyData,
+        meetingFUser: updatedMeetingFUser,
+      };
     });
-    return {
-      ...prevReadyData,
-      meetingFUser: updatedMeetingFUser,
-    };
   };
 
   console.log('메모 바뀌는', readyData);
@@ -289,11 +284,62 @@ const Tab4 = ({ readyData, setReadyData }: Tab2Props) => {
   );
 };
 
-const Tab5 = () => {
+const Tab5 = ({ readyData }) => {
+  const navigate = useNavigate();
+  const [timer, setTimer] = useState({
+    minute: 0,
+    second: 0,
+  });
+
+  useEffect(() => {
+    setTimer((prevTimer) => ({
+      ...prevTimer,
+      minute: Math.floor(readyData.meetingFUser.remainingTime / 60),
+      second: readyData.meetingFUser.remainingTime % 60,
+    }));
+    tick();
+  }, []);
+
+  const tick = () => {
+    console.log('틱 시작', timer.second);
+    // 초 줄여주는 로직
+    if (timer.second > 0) {
+      console.log('초 줄어듦');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        second: prevTimer.second - 1,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    if (timer.second === 0 && timer.minute > 0) {
+      console.log('초가 0이 되어 분이 줄어듦');
+      setTimer((prevTimer) => ({
+        ...prevTimer,
+        minute: prevTimer.minute - 1,
+        second: 59,
+      }));
+    }
+  }, [timer.second, timer.minute]);
+
+  const navigateVideoRoom = () => {
+    if (timer.minute === 0 && timer.second === 0) {
+      // 시간이 0일 때만 이동
+      navigate(`/video/${uuid}`);
+    }
+  };
+
   return (
-    <div className="w-5/6 h-5/6 mx-auto">
-      탭5
-      <BtnWhite onClick={navigateVideoRoom} text="남은 시간"></BtnWhite>
+    <div className="w-5/6 h-5/6 mx-auto text-center flex justify-center items-center">
+      {timer.minute === 0 && timer.second === 10 ? (
+        <BtnRed
+          onClick={navigateVideoRoom}
+          text={`${timer.minute} : ${timer.second}`}
+        />
+      ) : (
+        <BtnWhite text={`${timer.minute} : ${timer.second}`} />
+      )}
     </div>
   );
 };

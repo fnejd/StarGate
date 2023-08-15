@@ -21,7 +21,7 @@ interface MeetingMember {
   postitContents: string;
 }
 
-interface MeetingData {
+interface ReadyData {
   uuid: string;
   name: string;
   startDate: string;
@@ -32,7 +32,6 @@ interface MeetingData {
   groupNo: number;
   groupName: string;
   imageFileInfo: ImageFileInfo;
-  meetingFUsers: MeetingFUser[];
+  meetingFUser: MeetingFUser;
   meetingMembers: MeetingMember[];
 }
-

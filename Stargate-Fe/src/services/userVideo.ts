@@ -29,13 +29,23 @@ const postPolraroidOption = async (uuid, meetingMembers) => {
   }
 };
 
-// 전달할 메모
-const postNotePad = async (noteData) => {
+// 전달할 포스트잇
+const postNotePad = async (postitData) => {
   try {
-    const response = await api.post('/postit/write', noteData);
+    const response = await api.post('/postit/write', postitData);
     return response;
   } catch (error) {
     console.error('포스트잇 저장 실패', error);
+  }
+};
+
+// 전달할 메모
+const postMemo = async (noteData) => {
+  try {
+    const response = await api.post('/readyroom/memo/write', noteData);
+    return response;
+  } catch (error) {
+    console.error('메모 저장 실패', error);
   }
 };
 
@@ -70,6 +80,7 @@ export {
   getReady,
   postPolraroidOption,
   postNotePad,
+  postMemo,
   getUserVideo,
   postPicture,
 };

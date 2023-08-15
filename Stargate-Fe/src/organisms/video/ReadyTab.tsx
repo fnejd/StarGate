@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Tab0, Tab1, Tab2, Tab3, Tab4, Tab5 } from './TabContent';
 import BtnWhite from '@/atoms/common/BtnWhite';
-import { postPolraroidOption, postNotePad } from '@/services/userVideo';
+import {
+  postPolraroidOption,
+  postNotePad,
+  postMemo,
+} from '@/services/userVideo';
 
 interface RedayDataProps {
-  readyData: MeetingData;
-  setReadyData: React.Dispatch<React.SetStateAction<MeetingData | null>>;
+  readyData: ReadyData;
+  setReadyData: React.Dispatch<React.SetStateAction<ReadyData | null>>;
 }
 
 const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
@@ -66,6 +70,17 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
 
   console.log('컴포넌트상에서 레디 데이터', readyData);
 
+  useEffect(() => {
+    if (activeTab !== 1) {
+      setMediaActive(false);
+      console.log('탭 1 아님');
+    } else if (activeTab === 1) {
+      setMediaActive(true);
+    }
+  }, [activeTab]);
+
+  console.log('미디어액티브', mediaActive);
+
   // 클릭된 인덱스 이전의 탭들을 모두 false로 설정하는 함수
   const handleResetTabs = (tabIndex: number) => {
     setTabState((prevTabState) =>
@@ -76,6 +91,16 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
   // 탭을 클릭했을 때 활성화된 탭 번호가 바뀌고
   // 클릭된 탭 이후의 탭들은 모두 비활성화 설정하는 함수
   const handleTabClick = (clickedIndex: number) => {
+    if (clickedIndex === 5) {
+      const hasFalseStateBeforeTab5 = tabState
+        .slice(0, 4)
+        .some((state) => !state);
+      if (hasFalseStateBeforeTab5) {
+        alert('입장 전 위의 필수 절차를 먼저 진행해주세요');
+        setActiveTab(0);
+        return;
+      }
+    }
     setActiveTab(clickedIndex);
     // handleResetTabs(clickedIndex);
   };
@@ -116,8 +141,21 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
         contents: readyData.meetingFUser.memoContents,
       };
 
-      const response = await postNotePad(noteData);
+      console.log('메모 전송', noteData);
+
+      const response = await postMemo(noteData);
       console.log('메모장 전송###', response);
+
+      const hasFalseStateBeforeTab5 = tabState
+        .slice(0, 4)
+        .some((state) => !state);
+      if (hasFalseStateBeforeTab5) {
+        alert('입장 전 위의 필수 절차를 먼저 진행해주세요');
+        setActiveTab(0);
+        return;
+      }
+    }
+    if (tabIndex === 5) {
     }
   };
 
@@ -160,13 +198,15 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
             ))}
           </div>
           <div className="flex flex-wrap my-auto w-4/6 h-500 text-black p-4 relative">
-            {tabContent[activeTab]}
-            <div className="z-10 absolute bottom-5 right-5">
-              <BtnWhite
-                onClick={() => handleConfirm(activeTab)}
-                text="확인"
-              ></BtnWhite>
-            </div>
+            {readyData && tabContent[activeTab]}
+            {activeTab !== 5 && (
+              <div className="z-10 absolute bottom-5 right-5">
+                <BtnWhite
+                  onClick={() => handleConfirm(activeTab)}
+                  text="확인"
+                ></BtnWhite>
+              </div>
+            )}
           </div>
         </div>
       </div>
