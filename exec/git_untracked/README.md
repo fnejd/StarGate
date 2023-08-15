@@ -1,8 +1,7 @@
 # 깃이 추적하지 않는 파일 목록
 
 - nginx.conf
-- application-secret-properties
-
+- application-secret.properties
 
 ## Nginx 관련
 
