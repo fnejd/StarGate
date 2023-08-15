@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
@@ -23,10 +24,15 @@ interface starMeetingDataType {
 }
 
 const StarVideo = () => {
+  // const roomId: string = useParams().uuid;
+  // const roomId = new URLSearchParams(location.search);
+  // const url = roomId.get('roomId') ? roomId.get('roomId') : 'Null';
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+
   const socketRef = useRef<WebSocket>(
-    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.19')
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${roomId}`)
   );
   const socket = socketRef.current;
 
@@ -463,15 +469,13 @@ const StarVideo = () => {
         min={timer.min}
         sec={timer.sec}
         type="star"
-        fUserData={meetingData && meetingData.meetingFUsers}
-        fUserIdx={userIdx}
+        participantsData={meetingData && meetingData.meetingFUsers}
+        meetingIdx={userIdx}
       />
       <div className="flex flex-row w-screen h-full">
         <NotepadComponent
-          text={
-            meetingData &&
-            meetingData.meetingFUsers[meetingOrder].postitContents
-          }
+          meetingData={meetingData}
+          initialMeetingOrder={meetingOrder}
         />
         {myStream && (
           <div className="basis-1/2">

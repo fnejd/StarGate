@@ -30,9 +30,9 @@ const postPolraroidOption = async (uuid, meetingMembers) => {
 };
 
 // 전달할 메모
-const postNotePad = async (postitData) => {
+const postNotePad = async (noteData) => {
   try {
-    const response = await api.post('/postit/write', postitData);
+    const response = await api.post('/postit/write', noteData);
     return response;
   } catch (error) {
     console.error('포스트잇 저장 실패', error);
