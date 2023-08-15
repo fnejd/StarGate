@@ -46,9 +46,9 @@ const updateUserData = async (formData: FormData) => {
   }
 };
 
-const fetchRemindData = async (location : string) => {
+const fetchRemindData = async (uuid : string) => {
   try {
-    const response = await api.get(`${location}`, {
+    const response = await api.get(`/reminds/${uuid}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
