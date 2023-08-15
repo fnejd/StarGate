@@ -178,11 +178,18 @@ const NotepadComponent = ({
         onDragEnd={(e) => dragEndHandler(e)}
         style={{ left: pos.left, top: pos.top }}
       >
-        <textarea
-          className="bg-postityellow text-black resize p-3 rounded-sm drop-shadow-lg border-none outline-none"
-          value={postit}
-          onChange={(e) => setPostit(e.target.value)}
-        ></textarea>
+        {meetingData.meetingFUsers[meetingOrder] ? (
+          <>
+            <div
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
+              style={{ cursor: 'none' }}
+            >
+              {meetingData.meetingFUserss[meetingOrder]?.postitContents}
+            </div>
+          </>
+        ) : (
+          <p></p>
+        )}
       </div>
     </div>
   );

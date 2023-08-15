@@ -38,7 +38,7 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
       <div className="flex items-center basis-1/2 w-full text-white ml-5">
         <ProFileIcon />
         <div className="mx-auto">
-          ~<p>이름: {participantsData[meetingIdx].name}</p>
+          <p>이름: {participantsData[meetingIdx].name}</p>
           <p>생일: {participantsData[meetingIdx].birthday}</p>
           <p>촬영 여부: {participantsData[meetingIdx].isPolaroidEnable}</p>
         </div>

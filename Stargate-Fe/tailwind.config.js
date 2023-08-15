@@ -100,6 +100,7 @@ export default {
         y11: '#432005',
 
         red: '#DC2626',
+        green: '#22C55E',
         admingray: '#DADADA',
         postityellow: '#FFFACE',
         memoblue: '#AAAFF7',
