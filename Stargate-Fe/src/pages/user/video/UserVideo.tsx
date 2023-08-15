@@ -116,7 +116,7 @@ const UserVideo = () => {
         }
       };
 
-      console.log('소켓 주소 업데이트$$$$$$$$$');
+      console.log('소켓 주소 업데이트$$$$$$$$$', socket);
       connectWebSocket();
 
       // const meetingTime = videoData.meetingTime - photoNum * 10;

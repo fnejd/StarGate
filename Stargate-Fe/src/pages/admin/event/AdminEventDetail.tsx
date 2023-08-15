@@ -1,10 +1,3 @@
-import React from 'react';
-
-const AdminEventDetail = () => {
-  return <div>이벤트 상세</div>;
-};
-
-export default AdminEventDetail;
 import { useEffect, useState, ChangeEvent } from 'react';
 import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
@@ -67,14 +60,13 @@ const AdminEventDetail = () => {
 
   // 미팅 디테일 가져오기
   useEffect(async () => {
-    const currentUrl = window.location.href; 
-    const parts = currentUrl.split('/'); 
-    const uuid = parts[parts.length - 1]; 
-    console.log(currentUrl); 
+    const currentUrl = window.location.href;
+    const parts = currentUrl.split('/');
+    const uuid = parts[parts.length - 1];
+    console.log(currentUrl);
     const data = await getEvent();
 
-    console.log(data)
-    
+    console.log(data);
   }, []);
 
   // const handleName = (event: ChangeEvent<HTMLInputElement>) => {
