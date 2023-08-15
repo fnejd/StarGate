@@ -396,7 +396,7 @@ const UserVideo = () => {
   // }, [myStream]);
 
   return (
-    <div>
+    <div className="w-screen h-screen">
       {socket && (
         <VideoHeaderComponent
           min={
@@ -412,26 +412,25 @@ const UserVideo = () => {
           type="user"
         />
       )}
-      <div className="flex flex-row w-screen h-full"></div>
-      {videoData && (
-        <NotepadComponent
-          videoData={videoData}
-          initialMeetingOrder={meetingOrder}
-        />
-      )}
-      <h1>Room Page</h1>
-      <div id="video-container">
-        {myStream && (
-          <div className="flex">
-            <h6>내 영상</h6>
-            <ReactPlayer
-              playing
-              muted
-              height="150px"
-              width="200px"
-              url={myStream}
-            />
-            {/* <video
+      <div className="flex flex-row w-screen h-full">
+        {videoData && (
+          <NotepadComponent
+            videoData={videoData}
+            initialMeetingOrder={meetingOrder}
+          />
+        )}
+        <div id="video-container">
+          {myStream && (
+            <div className="basis-1/2">
+              <h6>내 영상</h6>
+              <ReactPlayer
+                playing
+                muted
+                height="full"
+                width="full"
+                url={myStream}
+              />
+              {/* <video
               ref={(video) => {
                 if (video) {
                   video.play(); // 비디오 재생 시작
@@ -451,20 +450,21 @@ const UserVideo = () => {
               width="640"
               height="480"
             ></video> */}
-          </div>
-        )}
-        {remoteStream && (
-          <>
-            <h6>연예인 영상</h6>
-            <ReactPlayer
-              playing
-              muted
-              height="1000px"
-              width="800px"
-              url={remoteStream}
-            />
-          </>
-        )}
+            </div>
+          )}
+          {remoteStream && (
+            <div className="basis-1/2">
+              <h6>연예인 영상</h6>
+              <ReactPlayer
+                playing
+                muted
+                height="full"
+                width="full"
+                url={remoteStream}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
