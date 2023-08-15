@@ -13,7 +13,7 @@ const NotepadComponent = ({
   const dragComponentRef = useRef<HTMLDivElement>(null);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [current, setCurrent] = useState({ x: 0, y: 0 });
-  const [pos, setPos] = useState({ right: 100, top: 0 });
+  const [pos, setPos] = useState({ left: 0, top: 0 });
   const [meetingOrder, setMeetingOrder] = useState(initialMeetingOrder); // 로컬 상태로 meetingOrder 관리
 
   useEffect(() => {
@@ -135,18 +135,18 @@ const NotepadComponent = ({
         onDragStart={(e) => dragStartHandler(e)}
         onDragOver={(e) => dragOverHandler(e)}
         onDragEnd={(e) => dragEndHandler(e)}
-        style={{ right: pos.right, top: pos.top }}
+        style={{ right: pos.left, top: pos.top }}
       >
         {videoData.meetingMembers[meetingOrder] ? (
           <>
             <div
-              className="p-3 m-2 border-none rounded-sm outline-none resize w-250 h-300 bg-postityellow drop-shadow-lg"
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
               style={{ cursor: 'none' }}
             >
               {videoData.meetingMembers[meetingOrder]?.postitContents}
             </div>
             <div
-              className="p-3 m-2 border-none rounded-sm outline-none resize w-250 h-300 bg-postityellow drop-shadow-lg"
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
               style={{ cursor: 'none' }}
             >
               {videoData.memoContents}

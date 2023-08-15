@@ -421,8 +421,8 @@ const UserVideo = () => {
         )}
         <div id="video-container">
           {myStream && (
-            <div className="basis-1/2">
-              <h6>내 영상</h6>
+            <div className="basis-1/2 text-center">
+              <span className="form-title">내 영상</span>
               <ReactPlayer
                 playing
                 muted
@@ -453,8 +453,8 @@ const UserVideo = () => {
             </div>
           )}
           {remoteStream && (
-            <div className="basis-1/2">
-              <h6>연예인 영상</h6>
+            <div className="basis-1/2 text-center">
+              <span className="form-title">연예인 영상</span>
               <ReactPlayer
                 playing
                 muted
