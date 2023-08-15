@@ -1,11 +1,27 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
-const NotepadComponent = () => {
+interface NotepadComponentProps {
+  videoData?: any;
+  meetingData?: any;
+  initialMeetingOrder: number;
+}
+
+const NotepadComponent = ({
+  videoData,
+  meetingData,
+  initialMeetingOrder,
+}: NotepadComponentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragComponentRef = useRef<HTMLDivElement>(null);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [current, setCurrent] = useState({ x: 0, y: 0 });
   const [pos, setPos] = useState({ left: 0, top: 0 });
+  const [meetingOrder, setMeetingOrder] = useState(0); // 로컬 상태로 meetingOrder 관리
+
+  useEffect(() => {
+    // meetingOrder가 변경되면 로컬 상태인 meetingOrder 업데이트
+    setMeetingOrder(initialMeetingOrder);
+  }, [initialMeetingOrder]);
 
   // 드래그가 유효한 영역 안에서 이루어지는지 검사
   const isInsideDragArea = (e: React.DragEvent<HTMLElement>) => {
@@ -111,7 +127,39 @@ const NotepadComponent = () => {
     document.body.removeAttribute('style');
   };
 
-  return (
+  return videoData ? (
+    <div className="container absolute z-50 w-full h-full" ref={containerRef}>
+      <div
+        className="relative w-fit h-fit"
+        ref={dragComponentRef}
+        draggable
+        onDrag={(e) => dragHandler(e)}
+        onDragStart={(e) => dragStartHandler(e)}
+        onDragOver={(e) => dragOverHandler(e)}
+        onDragEnd={(e) => dragEndHandler(e)}
+        style={{ right: pos.left, top: pos.top }}
+      >
+        {videoData.meetingMembers[meetingOrder] ? (
+          <>
+            <div
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
+              style={{ cursor: 'none' }}
+            >
+              {videoData.meetingMembers[meetingOrder]?.postitContents}
+            </div>
+            <div
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
+              style={{ cursor: 'none' }}
+            >
+              {videoData.memoContents}
+            </div>
+          </>
+        ) : (
+          <p></p>
+        )}
+      </div>
+    </div>
+  ) : (
     <div className="absolute w-full h-full z-50" ref={containerRef}>
       <div
         className="relative w-fit h-fit"
@@ -122,8 +170,19 @@ const NotepadComponent = () => {
         onDragOver={(e) => dragOverHandler(e)}
         onDragEnd={(e) => dragEndHandler(e)}
         style={{ left: pos.left, top: pos.top }}
-      > 
-        <textarea className="bg-postityellow resize p-3 rounded-sm drop-shadow-lg border-none outline-none">hi</textarea>
+      >
+        {meetingData && meetingData.meetingFUsers[meetingOrder] ? (
+          <>
+            <div
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
+              style={{ cursor: 'none' }}
+            >
+              {meetingData.meetingFUsers[meetingOrder]?.postitContents}
+            </div>
+          </>
+        ) : (
+          <p></p>
+        )}
       </div>
     </div>
   );

@@ -33,7 +33,11 @@ const MeetingLeftDetail = ({ formData }: { formData: MeetingData }) => {
           {formData.meetingMembers.map((member, index) => (
             <tr key={index}>
               <p>{member.name}</p>
-              <a href={`https://stargatea406.netlify.app/star/video/${member.roomId}`}>링크</a>
+              <a
+                href={`https://stargatea406.netlify.app/star/video?roomId=${member.roomId}`}
+              >
+                링크
+              </a>
             </tr>
           ))}
         </tbody>

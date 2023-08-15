@@ -3,12 +3,33 @@ import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
 import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
+import { getStarMeetingDataApi } from '@/services/videoService';
+
+interface starMeetingDataType {
+  waitingTime: number;
+  meetingTime: number;
+  photoNum: number;
+  memberNo: number;
+  meetingFUsers: {
+    email: string;
+    name: string;
+    nickname: string;
+    birthday: string;
+    isPolaroidEnable: boolean;
+    postitContents: string;
+    totalMeetingCnt: number;
+  }[];
+}
 
 const StarVideo = () => {
+  const roomId = new URLSearchParams(location.search);
+  const url = roomId.get('roomId') ? roomId.get('roomId') : 'Null';
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-  const socketRef = useRef<WebSocket | null>(
-    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.12')
+
+  const socketRef = useRef<WebSocket>(
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
   );
   const socket = socketRef.current;
 
@@ -91,11 +112,25 @@ const StarVideo = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log('컴포넌트 실행');
+  const [receiveTime, setReceiveTime] = useState(0);
+  const [timer, setTimer] = useState({
+    min: 0,
+    sec: 0,
+    waitingMin: 0,
+    waitingSec: 0,
+  });
+  const [onTimer, setOnTimer] = useState(false);
+  const [meetingOrder, setMeetingOrder] = useState(-1);
+  const [photoNum, setPhotoNum] = useState(0);
+  const [meetingData, setMeetingData] = useState<starMeetingDataType | null>(
+    null
+  );
 
-    // 웹소켓 서버 URL 설정
-    const socket = socketRef.current;
+  useEffect(() => {
+    if (!socket) {
+      console.log('socket Connecting Plz');
+      return;
+    }
 
     socket.onopen = async () => {
       console.log('서버 오픈~');
@@ -114,7 +149,9 @@ const StarVideo = () => {
           console.log('33333333333333333 팬한테 앤써를 받았어요');
           await peerService.setLocalDescription(receivedData.ans);
           console.log('Connection state:', peerService.peer.connectionState);
-          console.log(peerService);
+          setReceiveTime(receivedData.time);
+
+          setOnTimer(true);
         }
         if (receivedData.type === 'candidate') {
           console.log('444444444444444444444 아이스를 받았어요');
@@ -140,14 +177,181 @@ const StarVideo = () => {
         // socket.close(); // 웹소켓 연결을 해제합니다.
       };
     };
+  }, [socket]);
+
+  const getMeetingData = async () => {
+    const roomId =
+      url != null
+        ? url
+        : '127baa3f-63df-47e9-a4ab-ff0469737881.002d4659-12b8-430c-a3c1-88beb3df8adb';
+
+    await getStarMeetingDataApi(roomId)
+      .then((res: starMeetingDataType | undefined) => {
+        if (res != undefined) {
+          setMeetingData({
+            waitingTime: res.waitingTime,
+            meetingTime: res.meetingTime,
+            photoNum: res.photoNum,
+            memberNo: res.memberNo,
+            meetingFUsers: res.meetingFUsers,
+          });
+        }
+      })
+      .catch((error) => console.log(error));
+
+    return;
+  };
+
+  useEffect(() => {
+    console.log('컴포넌트 실행~~');
+
+    console.log('fetch start');
+    const fetchData = async () => {
+      if (!meetingData) await getMeetingData();
+    };
+    void fetchData();
+    console.log(meetingData);
   }, []);
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    console.log(meetingData);
+    if (!meetingData) {
+      console.log('아직 데이터 없음!');
+      return;
+    }
+
+    const meetingTime = receiveTime;
+    setTimer((prev) => ({
+      ...prev,
+      min: Math.trunc(meetingTime / 60),
+      sec: meetingTime % 60,
+      waitingMin: Math.trunc(meetingData.waitingTime / 60),
+      waitingSec: meetingData.waitingTime % 60,
+    }));
+
+    console.log(timer);
+
+    setPhotoNum(meetingData.photoNum);
+
+    if (meetingData && meetingOrder === meetingData.meetingFUsers.length) {
+      // 통화 종료 시 이벤트 핸들링
+    }
+  }, [meetingData, meetingOrder, receiveTime]);
+
+  const tickWaiting = () => {
+    console.log('대기 시간 으로 넘 ㅓ어 감');
+
+    if (timer.waitingSec > 0) {
+      setTimer((prev) => ({
+        ...prev,
+        waitingSec: prev.waitingSec - 1,
+      }));
+    }
+
+    if (timer.waitingSec === 0) {
+      if (timer.waitingMin > 0) {
+        setTimer((prev) => ({
+          ...prev,
+          waitingMin: prev.waitingMin - 1,
+          waitingSec: 59,
+        }));
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (timer.waitingMin === 0 && timer.waitingSec === 0) {
+      console.log('미팅 순서 변경');
+      setMeetingOrder(meetingOrder + 1);
+      setOnTimer(false);
+    }
+  }, [timer.waitingMin, timer.waitingSec]);
+
+  const tick = () => {
+    console.log('Tick Method Start', timer.sec);
+
+    // sec -1
+    if (timer.sec > 0) {
+      setTimer((prev) => ({
+        ...prev,
+        sec: prev.sec - 1,
+      }));
+    }
+    if (timer.sec === 0 && timer.min > 0) {
+      console.log('초가 0이 되어 분이 줄어든다잉');
+      setTimer((prev) => ({
+        ...prev,
+        min: prev.min - 1,
+        sec: 59,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    console.log('timer start');
+    if (timer.sec === 0 && timer.min > 0) {
+      console.log('초가 0이 되어 분이 줄어든다잉');
+      setTimer((prev) => ({
+        ...prev,
+        min: prev.min - 1,
+        sec: 59,
+      }));
+    } else if (timer.sec == 0 && timer.min == 0 && photoNum != 0) {
+      // let screenshotCount = photoNum;
+      let screenshotCount = 2;
+
+      const intervalPhoto = setInterval(() => {
+        if (screenshotCount > 0) {
+          console.log('Photo Shot');
+          // takeScreenshotAndSend();
+          screenshotCount--;
+        }
+      }, 10000);
+
+      const intervalId = setInterval(() => {
+        if (screenshotCount == 0) {
+          console.log('WaitingTimer Run');
+          tickWaiting();
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalPhoto);
+        clearInterval(intervalId);
+      };
+    }
+  }, [timer.sec, timer.min, photoNum]);
+
+  useEffect(() => {
+    console.log(onTimer);
+    if (peerService.peer && onTimer) {
+      const intervalId = setInterval(() => {
+        if (timer.sec > 0) {
+          console.log('타이머 시작!@!@!!');
+          tick();
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [meetingOrder, timer.sec, onTimer]);
 
   return (
     <div className="w-screen h-screen">
-      <VideoHeaderComponent />
+      <VideoHeaderComponent
+        min={timer.min}
+        sec={timer.sec}
+        type="star"
+        participantsData={meetingData && meetingData.meetingFUsers}
+        meetingIdx={meetingOrder}
+      />
       <div className="flex flex-row w-screen h-full">
-        <NotepadComponent />
+        <NotepadComponent
+          meetingData={meetingData}
+          initialMeetingOrder={meetingOrder}
+        />
         {myStream && (
           <div className="basis-1/2">
             <p>연옌</p>
