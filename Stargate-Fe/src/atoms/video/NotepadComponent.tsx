@@ -13,7 +13,6 @@ const NotepadComponent = ({
 }: NotepadComponentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragComponentRef = useRef<HTMLDivElement>(null);
-  const [postit, setPostit] = useState<string>('');
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [current, setCurrent] = useState({ x: 0, y: 0 });
   const [pos, setPos] = useState({ left: 0, top: 0 });
@@ -23,12 +22,6 @@ const NotepadComponent = ({
     // meetingOrder가 변경되면 로컬 상태인 meetingOrder 업데이트
     setMeetingOrder(initialMeetingOrder);
   }, [initialMeetingOrder]);
-
-  useEffect(() => {
-    if (meetingData)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-      setPostit(meetingData.meetingFUsers[initialMeetingOrder].postitContents);
-  }, [meetingData, initialMeetingOrder]);
 
   // 드래그가 유효한 영역 안에서 이루어지는지 검사
   const isInsideDragArea = (e: React.DragEvent<HTMLElement>) => {
@@ -178,11 +171,18 @@ const NotepadComponent = ({
         onDragEnd={(e) => dragEndHandler(e)}
         style={{ left: pos.left, top: pos.top }}
       >
-        <textarea
-          className="bg-postityellow text-black resize p-3 rounded-sm drop-shadow-lg border-none outline-none"
-          value={postit}
-          onChange={(e) => setPostit(e.target.value)}
-        ></textarea>
+        {meetingData.meetingFUsers[meetingOrder] ? (
+          <>
+            <div
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
+              style={{ cursor: 'none' }}
+            >
+              {meetingData.meetingFUserss[meetingOrder]?.postitContents}
+            </div>
+          </>
+        ) : (
+          <p></p>
+        )}
       </div>
     </div>
   );
