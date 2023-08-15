@@ -4,7 +4,6 @@ import peerService from '@/peer/peer';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
 import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
 import { getStarMeetingDataApi } from '@/services/videoService';
-import useInterval from '@/hooks/useInterval';
 
 interface starMeetingDataType {
   waitingTime: number;
@@ -23,10 +22,14 @@ interface starMeetingDataType {
 }
 
 const StarVideo = () => {
+  const roomId = new URLSearchParams(location.search);
+  const url = roomId.get('roomId') ? roomId.get('roomId') : 'Null';
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+
   const socketRef = useRef<WebSocket>(
-    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.19')
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
   );
   const socket = socketRef.current;
 
@@ -109,72 +112,7 @@ const StarVideo = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   console.log('컴포넌트 실행');
-
-  //   // 웹소켓 서버 URL 설정
-  //   // const socket = socketRef.current;
-
-  //   socket.onopen = async () => {
-  //     console.log('서버 오픈~');
-  //     console.log('연예인 입장');
-
-  //     console.log('socket Plz');
-
-  //     socket.onmessage = async (event) => {
-  //       console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
-  //       const receivedData = JSON.parse(event.data);
-  //       console.log('rd', receivedData);
-  //       // 상대가 조인했다는 메시지를 받음
-  //       if (receivedData.type === 'join') {
-  //         console.log('11111111111111111 어 팬 들어왔다');
-  //         getJoined();
-  //       }
-  //       if (receivedData.type === 'ans') {
-  //         console.log('33333333333333333 팬한테 앤써를 받았어요');
-  //         await peerService.setLocalDescription(receivedData.ans);
-  //         console.log('Connection state:', peerService.peer.connectionState);
-  //         console.log(peerService);
-  //         // UHAN
-  //         // setOnTimer(true);
-  //         // console.log(receivedData.time);
-  //         // // setTime({ min: Math.trunc(totalTime / 60), sec: totalTime % 60 });
-  //         // console.log(timer);
-  //         // YHAN
-  //       }
-  //       if (receivedData.type === 'candidate') {
-  //         console.log('444444444444444444444 아이스를 받았어요');
-  //         console.log(receivedData.candidate);
-
-  //         // 받은 후보 데이터로 RTCIceCandidate 객체를 생성합니다.
-  //         const candidateObject = new RTCIceCandidate(receivedData.candidate);
-
-  //         // 이후, RTCIceCandidate를 RTCPeerConnection에 추가합니다.
-  //         peerService.peer
-  //           .addIceCandidate(candidateObject)
-  //           .then(() => {
-  //             console.log('ICE 후보자 추가 성공');
-  //           })
-  //           .catch((error) => {
-  //             console.error('ICE 후보자 추가 실패:', error);
-  //           });
-  //         console.log('Connection state:', peerService.peer.connectionState);
-  //       }
-  //     };
-  //     // 컴포넌트 언마운트 시 연결 해제
-  //     return () => {
-  //       // socket.close(); // 웹소켓 연결을 해제합니다.
-  //     };
-  //   };
-  // }, []);
-
-  /**
-   * @author UHAN
-   */
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   const [receiveTime, setReceiveTime] = useState(0);
-  const [roomNum, setRoomNum] = useState(13);
-  const [userIdx, setUserIdx] = useState(0);
   const [timer, setTimer] = useState({
     min: 0,
     sec: 0,
@@ -182,27 +120,8 @@ const StarVideo = () => {
     waitingSec: 0,
   });
   const [onTimer, setOnTimer] = useState(false);
-  const [isWaiting, setIsWaiting] = useState(false);
   const [meetingOrder, setMeetingOrder] = useState(-1);
-  const [loadUser, setLoadUser] = useState(true);
   const [photoNum, setPhotoNum] = useState(0);
-  // const [meetingData, setMeetingData] = useState<starMeetingDataType>({
-  //   waitingTime: 0,
-  //   meetingTime: 0,
-  //   photoNum: 0,
-  //   memberNo: 0,
-  //   meetingFUsers: [
-  //     {
-  //       email: '',
-  //       name: '',
-  //       nickname: '',
-  //       birthday: '',
-  //       isPolaroidEnable: false,
-  //       postitContents: '',
-  //       totalMeetingCnt: 0,
-  //     },
-  //   ],
-  // });
   const [meetingData, setMeetingData] = useState<starMeetingDataType | null>(
     null
   );
@@ -213,14 +132,9 @@ const StarVideo = () => {
       return;
     }
 
-    // 웹소켓 서버 URL 설정
-    // const socket = socketRef.current;
-
     socket.onopen = async () => {
       console.log('서버 오픈~');
       console.log('연예인 입장');
-
-      console.log('socket Plz');
 
       socket.onmessage = async (event) => {
         console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
@@ -235,14 +149,9 @@ const StarVideo = () => {
           console.log('33333333333333333 팬한테 앤써를 받았어요');
           await peerService.setLocalDescription(receivedData.ans);
           console.log('Connection state:', peerService.peer.connectionState);
-          console.log(peerService);
-          // UHAN
-          console.log(receivedData.time);
           setReceiveTime(receivedData.time);
-          // setTime({ min: Math.trunc(totalTime / 60), sec: totalTime % 60 });
+
           setOnTimer(true);
-          console.log(timer);
-          // YHAN
         }
         if (receivedData.type === 'candidate') {
           console.log('444444444444444444444 아이스를 받았어요');
@@ -271,14 +180,12 @@ const StarVideo = () => {
   }, [socket]);
 
   const getMeetingData = async () => {
-    // DELETE PLZ
     const roomId =
-      '127baa3f-63df-47e9-a4ab-ff0469737881.002d4659-12b8-430c-a3c1-88beb3df8adb';
-    //
-    await getStarMeetingDataApi(
-      // `location.search.${roomNum}`
-      roomId
-    )
+      url != null
+        ? url
+        : '127baa3f-63df-47e9-a4ab-ff0469737881.002d4659-12b8-430c-a3c1-88beb3df8adb';
+
+    await getStarMeetingDataApi(roomId)
       .then((res: starMeetingDataType | undefined) => {
         if (res != undefined) {
           setMeetingData({
@@ -312,7 +219,6 @@ const StarVideo = () => {
       console.log('아직 데이터 없음!');
       return;
     }
-    // const meetingTime = meetingData.meetingTime - meetingData.photoNum * 10;
 
     const meetingTime = receiveTime;
     setTimer((prev) => ({
@@ -432,46 +338,19 @@ const StarVideo = () => {
     }
   }, [meetingOrder, timer.sec, onTimer]);
 
-  // useInterval(() => {
-  //   if (totalTime < 0 || !loadUser) {
-  //     // 시간이 다 되었을 때 다음 사람에 대한 요청이 이루어져야함.
-  //     console.log('next User Comming || not yet loadusers');
-  //     return 0;
-  //   }
-  //   if (totalTime <= meetingData.photoNum * 10) {
-  //     // 10초 간격으로 사진 촬영 카운팅 시작
-  //     countingSutter(sutter);
-  //     sutter -= 1;
-  //     // 10초가 지나면 실행 분기
-  //     if (sutter < 0) {
-  //       // 사진 촬영 횟수가 끝나면 아무런 액션 취하지 않기
-  //       if (meetingData.photoNum < 0) return 0;
-  //       // 셔터 초기화시켜주고
-  //       sutter = 10;
-  //       // 사진 촬영 횟수 하나 줄여주고
-  //       meetingData.photoNum -= 1;
-  //     }
-  //   }
-  //   setTime({ min: Math.trunc(totalTime / 60), sec: totalTime % 60 });
-  //   console.log(totalTime);
-  //   totalTime < 0 ? setTotalTime(totalTime) : setTotalTime(totalTime - 1);
-  // }, 1000);
-
   return (
     <div className="w-screen h-screen">
       <VideoHeaderComponent
         min={timer.min}
         sec={timer.sec}
         type="star"
-        fUserData={meetingData && meetingData.meetingFUsers}
-        fUserIdx={userIdx}
+        participantsData={meetingData && meetingData.meetingFUsers}
+        meetingIdx={meetingOrder}
       />
       <div className="flex flex-row w-screen h-full">
         <NotepadComponent
-          text={
-            meetingData &&
-            meetingData.meetingFUsers[meetingOrder].postitContents
-          }
+          meetingData={meetingData}
+          initialMeetingOrder={meetingOrder}
         />
         {myStream && (
           <div className="basis-1/2">

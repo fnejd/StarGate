@@ -21,6 +21,7 @@ import AdminManagement from './pages/admin/board/AdminManagement.tsx';
 import AdminMyPage from './pages/admin/board/AdminMyPage.tsx';
 import AdminEventCreate from './pages/admin/event/AdminEventCreate.tsx';
 import AdminEventDetail from './pages/admin/event/AdminEventDetail.tsx';
+import AdminEventDetailLetters from './pages/admin/event/AdminEventDetailLetters.tsx';
 import AdminMonitoring from './pages/admin/event/AdminMonitoring.tsx';
 
 const router = createBrowserRouter([
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
   { path: '/pwreset', element: <PwReset /> },
   { path: '/board', element: <Board /> },
   { path: '/mypage', element: <MyPage /> },
-  { path: '/reminds/:uuid', element: <Remind /> },
+  { path: '/remind/:uuid', element: <Remind /> },
   { path: '/ready/:uuid', element: <Ready /> },
   { path: '/video', element: <Video /> },
 
@@ -40,10 +41,11 @@ const router = createBrowserRouter([
   { path: '/admin/management', element: <AdminManagement /> },
   { path: '/admin/myPage', element: <AdminMyPage /> },
   { path: '/admin/event/create', element: <AdminEventCreate /> },
-  { path: '/admin/event/detail', element: <AdminEventDetail /> },
+  { path: '/admin/event/detail/:uuid', element: <AdminEventDetail /> },
+  { path: '/admin/event/letters/:uuid', element: <AdminEventDetailLetters /> },
   { path: '/admin/monitoring', element: <AdminMonitoring /> },
 
-  { path: '/star/video/:uuid', element: <StarVideo /> },
+  { path: '/star/video', element: <StarVideo /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

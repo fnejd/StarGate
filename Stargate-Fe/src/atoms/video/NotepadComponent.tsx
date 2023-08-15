@@ -1,24 +1,34 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
-interface NotePadProps {
-  text: string | null;
+interface NotepadComponentProps {
+  videoData?: any;
+  meetingData?: any;
+  initialMeetingOrder: number;
 }
 
-const NotepadComponent: React.FC<NotePadProps> = ({ text }) => {
-  const [postit, setPostit] = useState<string | null>();
+const NotepadComponent = ({
+  videoData,
+  meetingData,
+  initialMeetingOrder,
+}: NotepadComponentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragComponentRef = useRef<HTMLDivElement>(null);
+  const [postit, setPostit] = useState<string>('');
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [current, setCurrent] = useState({ x: 0, y: 0 });
-  const [pos, setPos] = useState({
-    left: window.innerWidth * 0.8,
-    top: window.innerHeight * 0.1,
-  });
+  const [pos, setPos] = useState({ left: 0, top: 0 });
+  const [meetingOrder, setMeetingOrder] = useState(initialMeetingOrder); // 로컬 상태로 meetingOrder 관리
 
   useEffect(() => {
-    setPostit(text);
-    console.log(text);
-  }, [text]);
+    // meetingOrder가 변경되면 로컬 상태인 meetingOrder 업데이트
+    setMeetingOrder(initialMeetingOrder);
+  }, [initialMeetingOrder]);
+
+  useEffect(() => {
+    if (meetingData)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      setPostit(meetingData.meetingFUsers[initialMeetingOrder].postitContents);
+  }, [meetingData, initialMeetingOrder]);
 
   // 드래그가 유효한 영역 안에서 이루어지는지 검사
   const isInsideDragArea = (e: React.DragEvent<HTMLElement>) => {
@@ -124,7 +134,39 @@ const NotepadComponent: React.FC<NotePadProps> = ({ text }) => {
     document.body.removeAttribute('style');
   };
 
-  return (
+  return videoData ? (
+    <div className="container absolute z-50 w-full h-full" ref={containerRef}>
+      <div
+        className="relative w-fit h-fit"
+        ref={dragComponentRef}
+        draggable
+        onDrag={(e) => dragHandler(e)}
+        onDragStart={(e) => dragStartHandler(e)}
+        onDragOver={(e) => dragOverHandler(e)}
+        onDragEnd={(e) => dragEndHandler(e)}
+        style={{ right: pos.left, top: pos.top }}
+      >
+        {videoData.meetingMembers[meetingOrder] ? (
+          <>
+            <div
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
+              style={{ cursor: 'none' }}
+            >
+              {videoData.meetingMembers[meetingOrder]?.postitContents}
+            </div>
+            <div
+              className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
+              style={{ cursor: 'none' }}
+            >
+              {videoData.memoContents}
+            </div>
+          </>
+        ) : (
+          <p></p>
+        )}
+      </div>
+    </div>
+  ) : (
     <div className="absolute w-full h-full z-50" ref={containerRef}>
       <div
         className="relative w-fit h-fit"

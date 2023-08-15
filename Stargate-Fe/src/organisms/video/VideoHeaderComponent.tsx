@@ -6,7 +6,7 @@ interface VideoHeaaderProps {
   min: number;
   sec: number;
   type: string;
-  fUserData:
+  participantsData:
     | {
         email: string;
         name: string;
@@ -17,7 +17,7 @@ interface VideoHeaaderProps {
         totalMeetingCnt: number;
       }[]
     | null;
-  fUserIdx: number;
+  meetingIdx: number;
 }
 
 // Props 에 유저 데이터 넣는 부분 추가해주기
@@ -26,21 +26,21 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
   min,
   sec,
   type,
-  fUserData,
-  fUserIdx,
+  participantsData,
+  meetingIdx,
 }) => {
   const [nextUser, setNextUser] = useState('김수환');
 
-  console.log(fUserData);
+  console.log(participantsData);
 
-  return type == 'star' && fUserData != undefined ? (
+  return type == 'star' && participantsData != undefined ? (
     <div className="flex flex-row w-screen my-5">
       <div className="flex items-center basis-1/2 w-full text-white ml-5">
         <ProFileIcon />
         <div className="mx-auto">
-          <p>이름: {fUserData[fUserIdx].name}</p>
-          <p>생일: {fUserData[fUserIdx].birthday}</p>
-          <p>촬영 여부: {fUserData[fUserIdx].isPolaroidEnable}</p>
+          <p>이름: {participantsData[meetingIdx].name}</p>
+          <p>생일: {participantsData[meetingIdx].birthday}</p>
+          <p>촬영 여부: {participantsData[meetingIdx].isPolaroidEnable}</p>
         </div>
       </div>
       <div className="flex basis-1/4 justify-end mr-5">

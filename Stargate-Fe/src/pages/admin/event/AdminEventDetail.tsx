@@ -1,144 +1,87 @@
-import React from 'react';
-
-const AdminEventDetail = () => {
-  return <div>이벤트 상세</div>;
-};
-
-export default AdminEventDetail;
-import { useEffect, useState, ChangeEvent } from 'react';
-import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
-import MeetingRightSection from '@/organisms/event/MeetingRightSection';
-import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
+import { useEffect, useState } from 'react';
+import MeetingLeftDetail from '@/organisms/event/MeetingLeftDetail';
+import MeetingRightDetail from '@/organisms/event/MeetingRightDetail';
+import MeetingBottomDetail from '@/organisms/event/MeetingBottomDetail';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { getEvent } from '@/services/adminEvent';
-
-interface MeetingFUser {
-  no: number;
-  email: string;
-  orderNum: number;
-  isRegister: string;
-  name: string;
-}
-
-interface MeetingMember {
-  no: number;
-  memberNo: number;
-  orderNum: number;
-  roomId: string;
-}
-
-interface GroupMember {
-  memberNo: number;
-  name: string;
-}
-
-interface Group {
-  groupNo: number;
-  members: GroupMember[];
-}
-
-interface FormData {
-  name: string;
-  startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
-  waitingTime: number;
-  meetingTime: number;
-  notice: string;
-  photoNum: number;
-  imageFile: File | null;
-  starName: string;
-  meetingFUsers: string;
-  meetingMembers: string;
-}
+import { fetchEventDetailData } from '@/services/adminEvent';
+import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
+import { useNavigate, Link } from 'react-router-dom';
+import { MeetingData } from '@/types/event/type';
 
 const AdminEventDetail = () => {
-  // const [group, setGroup] = useState<Group[]>([]);
-  // const [formData, setFormData] = useState<FormData>({
-  //   name: '',
-  //   startDate: null,
-  //   waitingTime: 10,
-  //   meetingTime: 80,
-  //   photoNum: 0,
-  //   notice: '',
-  //   imageFile: null,
-  //   starName: '',
-  //   meetingFUsers: '',
-  //   meetingMembers: '',
-  // });
+  const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<MeetingData>({
+    uuid: '',
+    name: '',
+    startDate: '',
+    waitingTime: 10,
+    meetingTime: 80,
+    notice: '',
+    photoNum: 0,
+    groupNo: 0,
+    groupName: '',
+    imageFileInfo: {
+      filename: '',
+      fileUrl: '',
+    },
+    meetingFUsers: [],
+    meetingMembers: [],
+  });
+  const navigate = useNavigate();
 
   // 미팅 디테일 가져오기
-  useEffect(async () => {
-    const currentUrl = window.location.href; 
-    const parts = currentUrl.split('/'); 
-    const uuid = parts[parts.length - 1]; 
-    console.log(currentUrl); 
-    const data = await getEvent();
+  useEffect(() => {
+    const fetchEventDetail = async () => {
+      const currentUrl = window.location.href;
+      const parts = currentUrl.split('/');
+      const uuid = parts[parts.length - 1];
+      console.log(uuid);
 
-    console.log(data)
-    
+      const fetchedData = await fetchEventDetailData(uuid);
+      if (fetchedData) {
+        setData(fetchedData);
+        console.log('데이터는', fetchedData);
+        console.log(fetchedData.startDate);
+        setLoading(false);
+      }
+      console.log('로딩완료', location);
+    };
+    fetchEventDetail();
   }, []);
 
-  // const handleName = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const value = event.target.value;
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     name: value,
-  //   }));
-  //   console.log(`제목 ${formData.name}`);
-  // };
-
-  // const handleFormDataChange = (data: FormData) => {
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     data,
-  //   }));
-  // };
-
-  // API로 데이터 전송
-  // const handleCreateEvent = async () => {
-  //   if (formData) {
-  //     // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
-  //     // const mergedFormData = { ...formData, ...eventData };
-  //     try {
-  //       console.log(formData);
-  //       await createEvent(formData);
-  //       console.log('이벤트 전송 성공');
-  //     } catch (error) {
-  //       console.error('이벤트 전송 실패:', error);
-  //     }
-  //   }
-  // };
+  const handleLetterList = (uuid: string) => {
+    navigate(`/admin/event/letters/${uuid}`);
+  };
+  const handleMonitoring = (uuid: string) => {
+    console.log(uuid, '제작중');
+  };
 
   return (
-    <div>
-      <div className="my-10 text-center form-title">팬사인회 생성</div>
-      <div className="mb-8">
-        <label htmlFor="제목" className="flex justify-start my-2 ml-1">
-          <span className="font-medium text-white font-suit text-14">제목</span>
-        </label>
-        <div className="flex">
-          <input
-            className="h-8 px-3 py-2 ml-1 mr-1 text-black bg-white border border-gray-300 rounded-sm w-450 text-12 placeholder-pl-5 font-suit focus:outline-none focus:ring-2 focus:ring-mainblue-300 focus:border-transparent"
-            type="text"
-            placeholder=""
-            value={formData.name}
-            onChange={handleName}
-          />
+    <div className="flex w-xl flex-col items-center">
+      <BoardHeaderNav isAdmin={true}></BoardHeaderNav>
+      <div className="my-10 text-center form-title">{data.name}</div>
+      <div className="mb-8 w-full flex justify-end">
+        <div className="flex w-5/12">
+          {loading === false && <MeetingLeftDetail formData={data} />}
+        </div>
+        <div className="flex w-5/12">
+          {loading === false && <MeetingRightDetail formData={data} />}
         </div>
       </div>
-      <div className="flex flex-col justify-center w-full">
-        <div className="flex">
-          <MeetingLeftSection formData={formData} setFormData={setFormData} />
-          <MeetingRightSection formData={formData} setFormData={setFormData} />
+      <div className="flex w-full justify-end">
+        <div className="flex w-5/6">
+          {loading === false && <MeetingBottomDetail formData={data} />}
         </div>
-        <MeetingBottomSection
-          formData={formData}
-          setFormData={setFormData}
-          group={group}
-          setGroup={setGroup}
+      </div>
+      <div className="flex justify-evenly w-m my-20 text-center">
+        <BtnBlue text="편지 리스트" onClick={() => handleLetterList(`${data.uuid}`)} />
+        <BtnBlue
+          text="모니터링 입장"
+          onClick={() => handleMonitoring(`${data.uuid}`)}
         />
-      </div>
-      <div className="mx-8 my-20 text-center">
-        <BtnBlue text="확인" onClick={handleCreateEvent} />
+        <Link to="/admin/event/create" state={{ uuid: data.uuid }}>
+          <BtnBlue text="수정" />
+        </Link>
       </div>
     </div>
   );

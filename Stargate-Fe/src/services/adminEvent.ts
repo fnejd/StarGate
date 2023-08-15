@@ -30,19 +30,75 @@ const createEvent = async (meetingData: FormData | null) => {
       });
 
       console.log('미팅 생성 성공', response.data);
+      return response.data;
     } catch (error) {
       console.error('미팅 생성 실패 ', error);
     }
   }
 };
 
-// 미팅 상세정보 불러오기
-const getEvent = async () => {
-  try {
-    // const response = await api.get('/meetings/create', formDataToSend, {
-  } catch (error) {
-    console.error('미팅 생성 실패 ', error);
+const updateEvent = async (meetingData: FormData) => {
+  if (meetingData) {
+    try {
+      const formDataToSend = new FormData();
+      const access = localStorage.getItem('accessToken');
+
+      for (const key in meetingData) {
+        if (meetingData.hasOwnProperty(key)) {
+          if (key === 'meetingFUsers' || key === 'meetingMembers') {
+            formDataToSend.append(key, JSON.stringify(meetingData[key]));
+          } else {
+            formDataToSend.append(key, meetingData[key]);
+          }
+        }
+      }
+
+      for (let key of formDataToSend.keys()) {
+        console.log(key, ':', formDataToSend.get(key));
+      }
+      const response = await api.put('/meetings/update', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          // 'Authorization': `Bearer ${access}`,
+          // withCredentials: false,
+        },
+      });
+
+      console.log('미팅 수정 성공', response.data);
+    } catch (error) {
+      console.error('미팅 수정 실패 ', error);
+    }
   }
 };
 
-export { createEvent, getEvent };
+const fetchEventDetailData = async (location: string) => {
+  try {
+    const response = await api.get(`/meetings/get/${location}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(location);
+    console.log('에러발생', error);
+  }
+};
+
+const fetchEventDetailLettersData = async (uuid: string) => {
+  try {
+    const response = await api.get('/letters/get-meeting', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      withCredentials: false,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(location);
+    console.log('에러발생', error);
+  }
+};
+
+export { createEvent, updateEvent, fetchEventDetailData };

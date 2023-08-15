@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ButtonProps {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const BtnBlue: React.FC<ButtonProps> = ({ text, onClick }) => {

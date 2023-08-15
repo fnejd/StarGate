@@ -6,17 +6,18 @@ interface starMeetingDataType {
   meetingTime: number;
   photoNum: number;
   memberNo: number;
-  meetingFUsers: [{
-    email: string;
-    name: string;
-    nickname: string;
-    birthday: string;
-    isPolaroidEnable: boolean;
-    postitContents: string;
-    totalMeetingCnt: number;
-  }];
+  meetingFUsers: [
+    {
+      email: string;
+      name: string;
+      nickname: string;
+      birthday: string;
+      isPolaroidEnable: boolean;
+      postitContents: string;
+      totalMeetingCnt: number;
+    },
+  ];
 }
-
 
 // 연예인 화상통화 정보 가져오기
 const getStarMeetingDataApi = async (params: string) => {
