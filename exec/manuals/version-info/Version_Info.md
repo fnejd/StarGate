@@ -3,21 +3,32 @@
 # SERVER
 
 ### Ubuntu
+
 - Ubuntu 20.04 LTS
 
-### Docker 
+### Docker
+
 - Docker version 24.0.5
 
 #### images
+
 - jenkins/jenkins : latest
 - redis : latest
 - mysql : latest
 
+#### containers
+
+- jenkins/jenkins : 2.417
+- redis : 7.0.12
+- mysql : 8.0.34
+
 ### Nginx
+
 - 1.18.0 (Ubuntu)
 
 ### certbot
-- TODO 
+
+- 0.40.0 (Ubuntu)
 
 # BACKEND
 
@@ -34,6 +45,7 @@
 - pnpm : 8.6.10
 
 ### 핵심 dependency
+
 > 모든 의존 정보는 FE폴더의 package.json에 명시됨
 
 - Vite : 4.4.0
@@ -51,5 +63,3 @@
 - Postman : 10.17.0 (최신버전 자동업데이트)
 - redis desktop manager : 0.9.3.817
 - git : 2.41.0.windows.1
-
-
