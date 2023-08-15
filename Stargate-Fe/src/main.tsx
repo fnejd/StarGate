@@ -45,7 +45,7 @@ const router = createBrowserRouter([
   { path: '/admin/event/letters/:uuid', element: <AdminEventDetailLetters /> },
   { path: '/admin/monitoring', element: <AdminMonitoring /> },
 
-  { path: '/star/video/:uuid', element: <StarVideo /> },
+  { path: '/star/video', element: <StarVideo /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

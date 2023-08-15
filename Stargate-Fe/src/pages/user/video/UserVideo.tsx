@@ -6,7 +6,7 @@ const UserVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const socketRef = useRef<WebSocket | null>(
-    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.12')
+    new WebSocket('ws://i9a406.p.ssafy.io:8080/api/rtc/asdf.137')
   );
   const socket = socketRef.current;
 
@@ -51,6 +51,7 @@ const UserVideo = () => {
     const ansData = {
       type: 'ans',
       ans: ans,
+      time: 90
     };
     socket.send(JSON.stringify(ansData));
     console.log('3. 연예인한테 응답보냄');
