@@ -26,7 +26,7 @@ const emailVaildationCheck = (email: string) => {
     return '이메일 형식이 올바르지 않습니다.';
   }
   return 'SUCCESS';
-}
+};
 
 const pwValidationCheck = (pw: string, pwCheck: string) => {
   // pw Checking
@@ -41,7 +41,7 @@ const pwValidationCheck = (pw: string, pwCheck: string) => {
     return '비밀번호 형식을 다시 확인해주세요.';
   }
   return 'SUCCESS';
-}
+};
 
 const userValidationCheck = (user: userType) => {
   // email Checking
@@ -101,8 +101,22 @@ const userValidationCheck = (user: userType) => {
     return '닉네임에는 특수문자가 포함될 수 없습니다.';
   }
 
+  // birth Checking
+  const inputDate = user.birth.split('-');
+  const nowDate = new Date().toLocaleDateString().split('.');
+
+  if (parseInt(inputDate[2]) > parseInt(nowDate[2])) {
+    if (parseInt(inputDate[1]) > parseInt(nowDate[1])) {
+      if (parseInt(inputDate[0]) > parseInt(nowDate[0])) {
+        return '생년월일은 미래일 수 없습니다.';
+      }
+      return '생년월일은 미래일 수 없습니다.';
+    }
+    return '생년월일은 미래일 수 없습니다.';
+  }
+
   return 'SUCCESS';
-}
+};
 
 const adminValidationCheck = (admin: adminType) => {
   // email Checking
@@ -141,6 +155,11 @@ const adminValidationCheck = (admin: adminType) => {
   }
 
   return 'SUCCESS';
-}
+};
 
-export { emailVaildationCheck, pwValidationCheck, userValidationCheck, adminValidationCheck };
+export {
+  emailVaildationCheck,
+  pwValidationCheck,
+  userValidationCheck,
+  adminValidationCheck,
+};

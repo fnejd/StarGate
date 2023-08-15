@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
-import { signUpApi, verifyEmail } from '@/services/userService';
+import { logoutApi, signUpApi, verifyEmail } from '@/services/authService';
 import {
   emailVaildationCheck,
+  pwValidationCheck,
   userValidationCheck,
 } from '@/hooks/useValidation';
 
@@ -22,6 +23,8 @@ interface userType {
 const SignUpComponent = () => {
   const [emailText, setEmailText] = useState('');
   const [emailState, setEmailState] = useState('red');
+  const [pwText, setPwText] = useState('');
+  const [pwState, setPwState] = useState('red');
   const [user, setUser] = useState<object>({
     email: '',
     name: '',
@@ -33,6 +36,19 @@ const SignUpComponent = () => {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const pw = (user as userType).pw;
+    const pwCheck = (user as userType).pwCheck;
+    const result = pwValidationCheck(pw, pwCheck);
+    if (result == 'SUCCESS') {
+      setPwText('비밀번호가 일치합니다.');
+      setPwState('green');
+    } else {
+      setPwText(result);
+      setPwState('red');
+    }
+  }, [user]);
 
   const verify = async () => {
     const email = (user as userType).email;
@@ -55,10 +71,6 @@ const SignUpComponent = () => {
   };
 
   const signUp = () => {
-    if (emailState == 'red') {
-      alert('이메일 확인을 해주세요.');
-      return 0;
-    }
     const email = (user as userType).email;
     const pw = (user as userType).pw;
     const phone = (user as userType).phone;
@@ -93,11 +105,13 @@ const SignUpComponent = () => {
     const response = signUpApi(formData);
 
     response
-      .then((response) => {
+      .then(async (response) => {
         if (response == 'alreadyToken') {
           alert('로그인 상태로는 회원가입을 할 수 없습니다.');
+          await logoutApi();
           navigate('/');
         }
+        alert('회원가입에 성공하셨습니다.');
         console.log('SignUp SUCCESS');
         navigate('/');
       })
@@ -157,6 +171,8 @@ const SignUpComponent = () => {
         <InputComponent
           text="비밀번호 확인"
           type="password"
+          notice={pwText}
+          state={pwState}
           keyName="pwCheck"
           getter={user}
           setter={setUser}
@@ -165,6 +181,7 @@ const SignUpComponent = () => {
       <div className="flex">
         <InputComponent
           text="전화번호"
+          placehoder="숫자만 입력해주세요."
           type="text"
           keyName="phone"
           getter={user}
@@ -180,7 +197,9 @@ const SignUpComponent = () => {
           setter={setUser}
         />
       </div>
-      <BtnBlue text="회원가입" onClick={signUp} />
+      <p className='w-fit mr-auto ml-auto'>
+        <BtnBlue text="회원가입" onClick={signUp} />
+      </p>
     </div>
   );
 };

@@ -1,32 +1,107 @@
-import React, { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from 'react-beautiful-dnd';
 import CSVReader from 'react-csv-reader';
 import AdminBtn from '@/atoms/common/AdminBtn';
 import AdminInput from '@/atoms/event/AdminInput';
+import DropDown from '@/atoms/event/DropDown';
 
-interface FormData {
-  starName: string;
-  members: (string | undefined)[];
-  fans: (string | undefined)[];
+interface MeetingFUser {
+  no: number;
+  email: string;
+  orderNum: number;
+  isRegister: string;
+  name: string;
 }
 
-const MeetingBottomSection = () => {
+interface MeetingMember {
+  no: number;
+  memberNo: number;
+  orderNum: number;
+  roomId: string;
+}
+
+interface Members {
+  memberNo: number;
+  name: string;
+}
+
+interface FormData {
+  name: string;
+  startDate: Date | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
+  waitingTime: number;
+  meetingTime: number;
+  notice: string;
+  photoNum: number;
+  imageFile: File | null;
+  meetingFUsers: string;
+  meetingMembers: string;
+}
+
+interface Member {
+  memberNo: number;
+  name: string;
+}
+
+interface Group {
+  groupNo: number;
+  name: string;
+  members: Member[];
+}
+
+interface MeetingBottomSectionProps {
+  formData: FormData;
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  group: Group[];
+  setGroup: React.Dispatch<React.SetStateAction<Group>>;
+}
+
+const MeetingBottomSection = ({
+  formData,
+  setFormData,
+  group,
+  setGroup,
+}: MeetingBottomSectionProps) => {
   const [starValue, setStarValue] = useState('');
   const [memberValue, setMemberValue] = useState('');
+  const [watingtimeValue, setWatingtimeValue] = useState('');
   const [fanValue, setFanValue] = useState('');
-  const [formData, setFormData] = useState<FormData>({
-    starName: '',
-    members: [],
-    fans: [],
-  });
+  const [members, setMembers] = useState<Members[]>([]);
+  const [fanData, setFanData] = useState([]);
+
+  console.log('바텀에서 그룹', group);
+
+  // group 데이터가 변경되면 그룹의 멤버도 변경
+  useEffect(() => {
+    if (group && group.length > 0) {
+      setMembers(group[0].members);
+      console.log('첫번째 그룹과 멤버로 폼데이터 디폴트 값 지정');
+    }
+  }, [group]);
 
   const handleStarvalue = (value: string) => {
     setStarValue(value);
-    console.log(`입력값 ${starValue}`);
+    console.log(`연예인은 ${starValue}`);
   };
 
   const handleMembervalue = (value: string) => {
     setMemberValue(value);
-    console.log(`입력값 ${memberValue}`);
+    console.log(`멤버는 ${memberValue}`);
+    console.log(formData.meetingMembers);
+  };
+
+  const handleWatingtime = (value: string) => {
+    setWatingtimeValue(value);
+    console.log(`대기시간은 ${watingtimeValue}`);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      waitingTime: Number(value),
+    }));
   };
 
   const handleFanValue = (value: string) => {
@@ -41,94 +116,227 @@ const MeetingBottomSection = () => {
   //   setFormData({ ...formData, [fieldName]: e.target.value });
   // };
 
-  const addStar = (name: string) => {
-    setFormData({ ...formData, starName: name });
-    setStarValue('');
+  // 등록 함수8
+  const handleGroupChange = (value: number | string) => {
+    const selectedGroup = group.find((item) => item.name === value);
+    if (selectedGroup) {
+      setMembers(selectedGroup.members);
+    }
   };
 
-  const addMember = (name: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      members: [...prevFormData.members, name],
-    }));
-    setMemberValue('');
+  // 멤버 변수가 바뀌변 폼데이터 업데이트
+  useEffect(() => {
+    setFormData((prevFormData) => {
+      const updatedMembers = [
+        ...prevFormData.meetingMembers,
+        ...members.map((member) => member.memberNo),
+      ];
+      console.log(updatedMembers);
+
+      return {
+        ...prevFormData,
+        // 배열 순서 보장을 위한 stringify 처리
+        meetingMembers: updatedMembers,
+      };
+    });
+  }, [members]);
+
+  // 팬 변수가 바뀌면 폼데이터 업데이트
+  useEffect(() => {
+    setFormData((prevFormData) => {
+      const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
+      console.log(updatedFans);
+
+      return {
+        ...prevFormData,
+        meetingFUsers: updatedFans,
+      };
+    });
+  }, [fanData]);
+
+  // const handleMemberChange = (value: number | string) => {
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     meetingMembers: [
+  //       ...prevFormData.meetingMembers,
+  //       {
+  //         memberNo: Number(value), // 매개변수 value를 number 타입으로 변환하여 사용
+  //         name: '유한', // 멤버 번호 설정
+  //         orderNum: prevFormData.meetingMembers.length + 1, // 멤버 순서 설정
+  //         roomId: 2374324, // 회의 방 번호 설정 (임의의 값)
+  //       },
+  //     ],
+  //   }));
+  // };
+
+  // const addMember = (name: string) => {
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     members: [...prevFormData.meetingMembers, name],
+  //   }));
+  //   setMemberValue('');
+  // };
+
+  const addFans = (email: string) => {
+    if (email.trim() !== '') {
+      // 공백 제거
+      const emailValue: string = email.trim();
+      // 중복 체크
+      if (!fanData.includes(emailValue)) {
+        const updateFanData = [...fanData];
+        updateFanData.push(emailValue);
+        setFanData(updateFanData);
+        setFanValue('');
+      } else {
+        // 이미 존재하는 이메일인 경우 처리
+        alert('이미 존재하는 이메일입니다.');
+      }
+    }
   };
 
-  const addFans = (name: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      fans: [...prevFormData.fans, name],
-    }));
-    setFanValue('');
-  };
+  console.log(fanData);
 
   const handleCsvData = (data, fileInfo) => {
-    console.log(data);
+    // 2열(인덱스 1)에 있는 이메일 값들을 추출하여 emailList에 저장
+    const emails = data.slice(1).map((row) => row[1]);
+    // 빈 값이 아닌 것들만 필터링하여 저장
+    const nonEmptyEmails = emails.filter(
+      (email) => email && email.trim() !== ''
+    );
+    console.log('nonEmptyEmails', nonEmptyEmails);
+    setFanData([...nonEmptyEmails]);
   };
+
+  console.log('팬 데이터 업로드', fanData);
+
+  console.log(formData.meetingFUsers);
 
   const deleteMember = (index: number) => {
     setFormData((prevFormData) => {
-      const updatedMembers = [...prevFormData.members];
+      const updatedMembers = [...prevFormData.meetingMembers];
       updatedMembers.splice(index, 1);
       return { ...prevFormData, members: updatedMembers };
     });
   };
 
   const deleteFan = (index: number) => {
-    setFormData((prevFormData) => {
-      const updatedFans = [...prevFormData.fans];
+    setFanData((prevFandata) => {
+      const updatedFans = [...prevFandata];
       updatedFans.splice(index, 1);
-      return { ...prevFormData, fans: updatedFans };
+      return updatedFans;
     });
   };
 
+  // --- Draggable이 Droppable로 드래그 되었을 때 실행되는 이벤트
+  const handleDragEnd = ({ source, destination }: DropResult) => {
+    if (!destination) return;
+
+    // 깊은 복사
+    const _items = JSON.parse(JSON.stringify(members)) as typeof members;
+    console.log('깊은복사', _items);
+    // 기존 아이템 뽑아내기
+    const [targetItem] = _items.splice(source.index, 1);
+    console.log('기존아이템', targetItem);
+    // 기존 아이템을 새로운 위치에 삽입하기
+    _items.splice(destination.index, 0, targetItem);
+    // 상태 변경
+    setMembers(_items);
+  };
+
+  console.log('아이템##############', members);
+
   return (
-    <>
+    <div className="w-550">
       {/* 연예인명 추가 */}
       <div className="flex flex-col items-start">
-        <AdminInput
-          labelFor="연예인명 / 그룹명"
-          type="text"
-          onInputChange={handleStarvalue}
-          value={starValue}
-        >
-          <AdminBtn text="등록" onClick={() => addStar(starValue)} />
-        </AdminInput>
-        {formData.starName ? (
-          <div className="w-62 mt-2 flex justify-between items-center">
-            <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
-              {formData.starName}
-            </div>
-            <AdminBtn text="삭제" onClick={() => handle} />
-          </div>
-        ) : (
-          <></>
+        {/* <div className="flex h-8"> */}
+        <div className="flex mx-1 my-2 font-medium text-white font-suit text-14">
+          그룹 / 솔로명
+        </div>
+        {/* </div> */}
+        {group && (
+          <DropDown
+            options={group.map((item) => item.name)}
+            onOptionChange={handleGroupChange}
+          />
         )}
       </div>
       {/* 멤버명 추가 */}
-      <div className="flex flex-col items-start">
-        <AdminInput
-          labelFor="그룹 멤버명"
-          type="text"
-          onInputChange={handleMembervalue}
-          value={memberValue}
-        >
-          <AdminBtn text="등록" onClick={() => addMember(memberValue)} />
-        </AdminInput>
+      <div className="flex h-8">
+        <div className="flex mx-1 my-2 font-medium text-white font-suit text-14">
+          멤버명
+        </div>
+        <p className="ml-1 leading-9 input-warning">
+          팬사인회 순서는 위에서부터 아래로 진행됩니다
+        </p>
       </div>
-      <div className="flex flex-col items-start w-52 justify-between">
-        {formData.members.map((item, index) => (
-          <div
-            key={index}
-            className="w-62 mt-2 flex justify-between items-center"
-          >
-            <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
-              {item}
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              // style={{ background: snapshot.isDraggingOver ? 'red' : 'blue' }}
+              className="flex flex-col items-start justify-between w-52"
+            >
+              {members &&
+                members.map((item, index) => (
+                  <Draggable
+                    key={index}
+                    draggableId={index.toString()}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        // key={index}
+                        className="flex items-center justify-between mt-2 w-62"
+                      >
+                        <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
+                          {index + 1} 번
+                        </div>
+                        <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
+                          {item.name}
+                        </div>
+                        {/* <AdminBtn
+                          text="삭제"
+                          onClick={() => deleteMember(index)}
+                        /> */}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              {provided.placeholder}
             </div>
-            <AdminBtn text="삭제" onClick={() => deleteMember(index)} />
-          </div>
-        ))}
-      </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+      {/* 멤버가 다수일 경우 다음 통화까지 대기시간 설정 가능 */}
+      {formData.meetingMembers.length >= 1 && (
+        <div className="flex items-end">
+          <AdminInput
+            labelFor="다음 통화까지 대기시간 (초)"
+            type="number"
+            placeholder="10"
+            min="5"
+            max="60"
+            step="5"
+            value={watingtimeValue}
+            onInputChange={handleWatingtime}
+          >
+            {' '}
+            {/* <AdminBtn
+              text="등록"
+              onClick={() => addWatingtime(watingtimeValue)}
+            /> */}
+          </AdminInput>
+          {/* <p className="p-1 pl-2 font-medium text-white font-suit text-14">
+            초
+          </p> */}
+        </div>
+      )}
       {/* 참가자 추가 */}
       <div className="flex flex-col items-start">
         <div className="flex">
@@ -141,36 +349,39 @@ const MeetingBottomSection = () => {
           >
             <AdminBtn text="등록" onClick={() => addFans(fanValue)} />
           </AdminInput>
-          <div className="relative top-9 inline-block w-32 h-8 cursor-pointer">
+          <div className="relative inline-block w-32 h-8 cursor-pointer top-9">
             <CSVReader
               cssClass="csv-btn"
               label="CSV 파일 불러오기"
               onFileLoaded={handleCsvData}
             />
-            <div className="w-32 h-8 leading-8 text-12 font-medium bg-admingray font-suit text-black rounded-sm text-center">
+            <div className="w-32 h-8 font-medium leading-8 text-center text-black rounded-sm text-12 bg-admingray font-suit">
               CSV 파일 불러오기
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-start w-52 justify-between">
-          {formData.fans.map((item, index) => (
-            <div
-              key={index}
-              className="w-62 mt-2 flex justify-between items-center"
-            >
-              <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
-                {item}
-              </div>
-              <AdminBtn text="삭제" onClick={() => deleteFan(index)} />
-            </div>
-          ))}
+        <div className="flex flex-col items-start justify-between w-52">
+          {fanData.map(
+            (item, index) =>
+              item && (
+                <div
+                  key={index}
+                  className="flex items-center justify-between mt-2 w-62"
+                >
+                  <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
+                    {item}
+                  </div>
+                  <AdminBtn text="삭제" onClick={() => deleteFan(index)} />
+                </div>
+              )
+          )}
         </div>
       </div>
 
-      <div className="mx-1 my-2 text-left font-suit font-medium text-14 text-white">
+      {/* <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
         총 미팅 시간은 분 초 입니다
-      </div>
-    </>
+      </div> */}
+    </div>
   );
 };
 

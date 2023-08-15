@@ -1,13 +1,15 @@
-// ManagementModalBox.tsx
-import React, { useState, useRef, MouseEvent } from 'react';
+import { useState, useEffect, useRef, MouseEvent } from 'react';
 import AdminMangementPlusButton from '@/atoms/board/AdminMangementPlusButton';
 import AdminManagementDeleteButton from '@/atoms/board/AdminManagementDeleteButton';
 import AdminManagementInput from '@/atoms/board/AdminManagementInput';
+import { deleteMember } from '@/services/adminBoardService';
+import { useRecoilState } from 'recoil';
+import {
+  selectedGroupMembersState,
+  groupsShouldFetch,
+} from '@/recoil/adminManagementState';
+import { MemberData } from '@/types/board/type';
 
-interface MemberData {
-  memberNo: number;
-  name: string;
-}
 /**
  * ManagementModalBoxProps
  * @param isOpen => 모달 창이 열려있는지를 나타내는 boolean 값
@@ -30,11 +32,18 @@ const AdminManagementModalBox = ({
   members,
 }: ManagementModalBoxProps) => {
   /**
-   * useRef훅을 사용해서 생성된 변수
-   * Dom요소에 대한 참조를 보관할 수 있는 객체
+   * useRef훅을 사용해서 생성된 변수, Dom요소에 대한 참조를 보관할 수 있는 객체
    */
   const modalRef = useRef<HTMLDivElement>(null);
-
+  const [showInput, setShowInput] = useState(false);
+  const [selectedGroupNo, setSelectedGroupNo] = useState<number | null>(null);
+  const [selectedGroupName, setSelectedGroupName] = useState('');
+  const [selectedMemberNo, setSelectedMemberNo] = useState<number | null>(null);
+  const [selectedMemberName, setSelectedMemberName] = useState('');
+  const [selectedGroupMembers, setSelectedGroupMembers] = useRecoilState(
+    selectedGroupMembersState
+  );
+  const [groupsFetch, setGroupsFetch] = useRecoilState(groupsShouldFetch);
   /**
    * MouseEvent 객체를 가져와서 실행
    * 모달 창 바깥을 클릭했을때, 모달창이 존재하고 클릭 이벤트가 모달 창 밖에서 실행됐다면
@@ -46,13 +55,9 @@ const AdminManagementModalBox = ({
       onClose();
     }
   };
-  const [showInput, setShowInput] = useState(false);
-  const [selectedGroupNo, setSelectedGroupNo] = useState<number | null>(null);
-  const [selectedGroupName, setSelectedGroupName] = useState('');
-
-  const [selectedMemberNo, setSelectedMemberNo] = useState<number | null>(null);
-  const [selectedMemberName, setSelectedMemberName] = useState('');
-
+  useEffect(() => {
+    setSelectedGroupMembers(members);
+  }, [members]);
   const showInputOpen = () => {
     setShowInput(true);
   };
@@ -71,12 +76,37 @@ const AdminManagementModalBox = ({
     selectedClear();
     showInputOpen();
   };
-  const handleCancleButtonClick = () => {
-    showInputClose();
+  /**
+   * handleXButtonClick
+   * Input이 열려있다면 handleXButtonClicktoCancle를 이용해 창을 닫음
+   * 아니라면 멤버 삭제 함수 실행
+   */
+  const handleXButtonClick = (memberNo: number | void) => {
+    if (showInput) {
+      showInputClose();
+    } else {
+      handleXButtonClicktoDelete(memberNo);
+    }
   };
-  const handleDeleteButtonClick = (memberNo: number) => {
+  const handleXButtonClicktoDelete = async (memberNo: number | void) => {
     showInputClose();
-    console.log(memberNo);
+    if (memberNo) {
+      const confirmed = window.confirm('정말로 이 멤버를 삭제하시겠습니까?');
+      if (confirmed) {
+        try {
+          await deleteMember(memberNo);
+          const updatedMembers = selectedGroupMembers.filter(
+            (member) => member.memberNo !== memberNo
+          );
+          setSelectedGroupMembers(updatedMembers);
+          setGroupsFetch(true);
+        } catch (error) {
+          console.log('멤버 삭제 에러:', error);
+        }
+      }
+    } else {
+      console.log('memberNo 없음');
+    }
   };
   const handleGroupDoubleClick = (
     groupNo: number | null,
@@ -93,7 +123,9 @@ const AdminManagementModalBox = ({
     setSelectedMemberNo(memberNo);
     setSelectedMemberName(memberName);
   };
-
+  const handleInputEnter = () => {
+    showInputClose();
+  };
   return (
     <>
       {isOpen && (
@@ -109,7 +141,7 @@ const AdminManagementModalBox = ({
               selectedGroupNo === null ? (
                 <div className="flex">
                   <p
-                    className="modal-title flex items-center my-4"
+                    className="modal-title flex items-center my-2"
                     onDoubleClick={() =>
                       handleGroupDoubleClick(groupNo, groupName)
                     }
@@ -125,6 +157,7 @@ const AdminManagementModalBox = ({
                       isGroup={true}
                       groupNo={groupNo}
                       value={selectedGroupName}
+                      onEnter={handleInputEnter}
                     />
                     <AdminMangementPlusButton onClick={handlePlusButtonClick} />
                   </div>
@@ -133,27 +166,16 @@ const AdminManagementModalBox = ({
             ) : (
               <div className="flex">
                 <div className="modal-title flex items-center">
-                  <AdminManagementInput isGroup={true} />
+                  <AdminManagementInput
+                    isGroup={true}
+                    onEnter={handleInputEnter}
+                  />
                   <AdminMangementPlusButton onClick={handlePlusButtonClick} />
                 </div>
               </div>
             )}
-            <ul className='w-full h-400 overflow-y-scroll'>
-              {showInput &&
-                selectedMemberNo === null &&
-                selectedGroupNo === null && (
-                  <li className="modal-content justify-center flex">
-                    <AdminManagementInput
-                      isGroup={false}
-                      groupNo={groupNo}
-                      value={selectedMemberName}
-                    />
-                    <AdminManagementDeleteButton
-                      onClick={() => handleCancleButtonClick()}
-                    />
-                  </li>
-                )}
-              {members.map((member) => (
+            <ul className="w-full h-400 overflow-y-scroll flex flex-col-reverse justify-end">
+              {selectedGroupMembers.map((member) => (
                 <li
                   className="modal-content justify-center flex"
                   key={member.memberNo}
@@ -167,15 +189,31 @@ const AdminManagementModalBox = ({
                       groupNo={groupNo}
                       memberNo={selectedMemberNo}
                       value={selectedMemberName}
+                      onEnter={handleInputEnter}
                     />
                   ) : (
                     <p>{member.name}</p>
                   )}
                   <AdminManagementDeleteButton
-                    onClick={() => handleDeleteButtonClick(member.memberNo)}
+                    onClick={() => handleXButtonClick(member.memberNo)}
                   />
                 </li>
               ))}
+              {showInput &&
+                selectedMemberNo === null &&
+                selectedGroupNo === null && (
+                  <li className="modal-content justify-center flex">
+                    <AdminManagementInput
+                      isGroup={false}
+                      groupNo={groupNo}
+                      value={selectedMemberName}
+                      onEnter={handleInputEnter}
+                    />
+                    <AdminManagementDeleteButton
+                      onClick={() => handleXButtonClick()}
+                    />
+                  </li>
+                )}
             </ul>
           </div>
         </div>
