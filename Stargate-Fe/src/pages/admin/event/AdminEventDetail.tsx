@@ -5,10 +5,12 @@ import MeetingBottomDetail from '@/organisms/event/MeetingBottomDetail';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { fetchEventDetailData } from '@/services/adminEvent';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { MeetingData } from '@/types/event/type';
+import LettersModalBox from '@/organisms/event/LettersModalBox';
 
 const AdminEventDetail = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<MeetingData>({
     uuid: '',
@@ -27,8 +29,13 @@ const AdminEventDetail = () => {
     meetingFUsers: [],
     meetingMembers: [],
   });
-  const navigate = useNavigate();
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
   // 미팅 디테일 가져오기
   useEffect(() => {
     const fetchEventDetail = async () => {
@@ -49,9 +56,6 @@ const AdminEventDetail = () => {
     fetchEventDetail();
   }, []);
 
-  const handleLetterList = (uuid: string) => {
-    navigate(`/admin/event/letters/${uuid}`);
-  };
   const handleMonitoring = (uuid: string) => {
     console.log(uuid, '제작중');
   };
@@ -61,6 +65,9 @@ const AdminEventDetail = () => {
       <BoardHeaderNav isAdmin={true}></BoardHeaderNav>
       <div className="my-10 text-center form-title">{data.name}</div>
       <div className="mb-8 w-full flex justify-end">
+        {isModalOpen && (
+          <LettersModalBox isOpen={isModalOpen} onClose={handleModalClose} uuid={data.uuid} />
+        )}
         <div className="flex w-5/12">
           {loading === false && <MeetingLeftDetail formData={data} />}
         </div>
@@ -74,7 +81,10 @@ const AdminEventDetail = () => {
         </div>
       </div>
       <div className="flex justify-evenly w-m my-20 text-center">
-        <BtnBlue text="편지 리스트" onClick={() => handleLetterList(`${data.uuid}`)} />
+        <BtnBlue
+          text="편지 리스트"
+          onClick={handleModalOpen}
+        />
         <BtnBlue
           text="모니터링 입장"
           onClick={() => handleMonitoring(`${data.uuid}`)}

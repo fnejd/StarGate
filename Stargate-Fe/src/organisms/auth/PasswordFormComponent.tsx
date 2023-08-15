@@ -31,7 +31,7 @@ const PasswordFormComponent: React.FC<PasswordFormProps> = ({
         getter={getter}
         setter={setter}
       />
-      <div className="flex items-end mb-6" onClick={() => setVisiable(false)}>
+      <div className="flex items-end mb-6 text-white" onClick={() => setVisiable(false)}>
         <PWHidden />
       </div>
     </div>
