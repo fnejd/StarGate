@@ -17,7 +17,7 @@ const NotepadComponent = ({
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [current, setCurrent] = useState({ x: 0, y: 0 });
   const [pos, setPos] = useState({ left: 0, top: 0 });
-  const [meetingOrder, setMeetingOrder] = useState(initialMeetingOrder); // 로컬 상태로 meetingOrder 관리
+  const [meetingOrder, setMeetingOrder] = useState(0); // 로컬 상태로 meetingOrder 관리
 
   useEffect(() => {
     // meetingOrder가 변경되면 로컬 상태인 meetingOrder 업데이트
@@ -178,13 +178,13 @@ const NotepadComponent = ({
         onDragEnd={(e) => dragEndHandler(e)}
         style={{ left: pos.left, top: pos.top }}
       >
-        {meetingData.meetingFUsers[meetingOrder] ? (
+        {meetingData && meetingData.meetingFUsers[meetingOrder] ? (
           <>
             <div
               className="p-3 m-2 border-none rounded-sm outline-none resize w-200 h-200 bg-postityellow drop-shadow-lg"
               style={{ cursor: 'none' }}
             >
-              {meetingData.meetingFUserss[meetingOrder]?.postitContents}
+              {meetingData.meetingFUsers[meetingOrder]?.postitContents}
             </div>
           </>
         ) : (
