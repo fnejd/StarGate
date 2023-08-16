@@ -64,7 +64,7 @@ public class RtcSocketHandler extends TextWebSocketHandler {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
         TextMessage message = new TextMessage("{msg : 'My Socket id = " + session.getId() + "'}");
         session.sendMessage(message);
-        log.info("@RtcSocketHandler, meetingInfo = {}", meetingPath);
+        log.info("@OPEN : meetingInfo = {}, socket id = {}", meetingPath,session.getId());
         List<WebSocketSession> sessions = SESSION_MAP.computeIfAbsent(meetingPath, k -> new ArrayList<>());
         sessions.add(session);
 //        int idx = -1;
@@ -87,7 +87,7 @@ public class RtcSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
-        log.info("@CONNECTION CLOSE, meetingInfo = {}", meetingPath);
+        log.info("#CLOSE, meetingInfo = {}, socket ID = {}", meetingPath,session.getId());
         List<WebSocketSession> meetingSessionList = SESSION_MAP.get(meetingPath);
         if (meetingSessionList.size() == 1) {
             SESSION_MAP.remove(meetingPath);
