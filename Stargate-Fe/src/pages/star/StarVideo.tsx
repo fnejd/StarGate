@@ -211,13 +211,12 @@ const StarVideo = () => {
   }, []);
 
   useEffect(() => {
-    console.log(meetingData);
     if (!meetingData) {
       console.log('아직 데이터 없음!');
       return;
     }
-
     const meetingTime = receiveTime;
+
     setTimer((prev) => ({
       ...prev,
       min: Math.trunc(meetingTime / 60),
@@ -226,12 +225,12 @@ const StarVideo = () => {
       waitingSec: meetingData.waitingTime % 60,
     }));
 
-    console.log(timer);
-
     setPhotoNum(meetingData.photoNum);
 
     if (meetingData && meetingOrder === meetingData.meetingFUsers.length) {
       // 통화 종료 시 이벤트 핸들링
+      alert('팬사인회가 종료되었습니다. 수고하셨습니다.');
+      window.close();
     }
   }, [meetingData, meetingOrder, receiveTime]);
 
