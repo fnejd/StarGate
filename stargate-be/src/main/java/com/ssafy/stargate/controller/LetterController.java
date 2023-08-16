@@ -70,7 +70,7 @@ public class LetterController {
      * @param dto LetterFindByMeetingRequestDto 편지 찾기 위한 dto
      * @return [ResponseEntity<LetterListResponseDto>] 팬미팅에 해당하는 편지 목록 정보
      */
-    @GetMapping("/get-meeting")
+    @PostMapping("/get-meeting")
     public ResponseEntity<LetterListResponseDto> getMeetingLetter(@RequestBody LetterFindByMeetingRequestDto dto) {
         LetterListResponseDto letterDtos = letterService.getLetterByMeeting(dto);
         return ResponseEntity.ok(letterDtos);
@@ -83,7 +83,7 @@ public class LetterController {
      * @param dto LetterFindByMemberRequestDto 편지 찾기 위한 dto
      * @return [ResponseEntity<LetterListResponseDto>] 연예인이 받은 편지 목록 정보
      */
-    @GetMapping("/get-member")
+    @PostMapping("/get-member")
     public ResponseEntity<LetterListResponseDto> getMemberLetter(@RequestBody LetterFindByMemberRequestDto dto) {
         LetterListResponseDto letterDtos = letterService.getLetterByMember(dto);
         return ResponseEntity.ok(letterDtos);
