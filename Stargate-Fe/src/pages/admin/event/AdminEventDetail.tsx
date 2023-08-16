@@ -56,35 +56,31 @@ const AdminEventDetail = () => {
     fetchEventDetail();
   }, []);
 
-  const handleMonitoring = (uuid: string) => {
-    console.log(uuid, '제작중');
-  };
-
   return (
     <div className="flex w-xl flex-col items-center">
       <BoardHeaderNav isAdmin={true}></BoardHeaderNav>
       <div className="my-10 text-center form-title">{data.name}</div>
       <div className="mb-8 w-full flex justify-end">
         {isModalOpen && (
-          <LettersModalBox isOpen={isModalOpen} onClose={handleModalClose} uuid={data.uuid} />
+          <LettersModalBox
+            isOpen={isModalOpen}
+            onClose={handleModalClose}
+            uuid={data.uuid}
+          />
         )}
-        <div className="flex w-5/12">
+        <div className="flex flex-col w-5/12 h-full">
           {loading === false && <MeetingLeftDetail formData={data} />}
+          {loading === false && <MeetingBottomDetail formData={data} />}
         </div>
         <div className="flex w-5/12">
           {loading === false && <MeetingRightDetail formData={data} />}
         </div>
       </div>
       <div className="flex w-full justify-end">
-        <div className="flex w-5/6">
-          {loading === false && <MeetingBottomDetail formData={data} />}
-        </div>
+        <div className="flex w-5/6"></div>
       </div>
-      <div className="flex justify-evenly w-m my-20 text-center">
-        <BtnBlue
-          text="편지 리스트"
-          onClick={handleModalOpen}
-        />
+      <div className="flex justify-evenly w-s my-20 text-center">
+        <BtnBlue text="편지 리스트" onClick={handleModalOpen} />
         <Link to="/admin/event/create" state={{ uuid: data.uuid }}>
           <BtnBlue text="수정" />
         </Link>

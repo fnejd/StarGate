@@ -64,18 +64,18 @@ const LettersModalBox = ({ isOpen, onClose, uuid }: LetterModalBoxProps) => {
             </h1>
             <table className="w-4/5">
               <tbody>
-                <tr>
-                  <td>보낸이</td>
-                  <td>내용</td>
-                  <td>받는이</td>
+                <tr className='flex'>
+                  <td className='w-1/6'>보낸이</td>
+                  <td className='flex-grow'>내용</td>
+                  <td className='w-1/6'>받는이</td>
                 </tr>
                 {letters?.letters
                   .filter((letter) => letter.uuid === uuid)
                   .map((letter, index) => (
                     <tr key={index}>
-                      <td>{letter.email}</td>
-                      <td>{letter.contents}</td>
-                      <td>{letter.memberNo}</td>
+                      <td className='w-1/6'>{letter.email}</td>
+                      <td className='flex-grow'>{letter.contents}</td>
+                      <td className='w-1/6'>{letter.memberNo}</td>
                     </tr>
                   ))}
               </tbody>

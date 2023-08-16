@@ -88,15 +88,18 @@ const fetchEventDetailData = async (location: string) => {
 
 const fetchLettersData = async (uuid: string) => {
   try {
-    const response = await api.get('/letters/get-meeting', {
-      params: {
-        uuid: uuid
+    const response = await api.post(
+      '/letters/get-meeting',
+      {
+        uuid: uuid,
       },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-      withCredentials: false,
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        withCredentials: false,
+      }
+    );
     return response.data;
   } catch (error) {
     console.log(uuid);
