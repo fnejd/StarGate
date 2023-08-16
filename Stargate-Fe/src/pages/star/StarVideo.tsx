@@ -4,6 +4,7 @@ import peerService from '@/peer/peer';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
 import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
 import { getStarMeetingDataApi } from '@/services/videoService';
+import { webSocket } from '@/hooks/useWebsocket';
 
 interface starMeetingDataType {
   waitingTime: number;
@@ -26,21 +27,25 @@ const StarVideo = () => {
   const url = roomId.get('roomId') ? roomId.get('roomId') : 'Null';
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+  const [socket, setSocket] = useState<WebSocket>();
 
-  const socketRef = useRef<WebSocket>(
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
-  );
-  const socket = socketRef.current;
+  // const socketRef = useRef<WebSocket>(
+  //   // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  //   // new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
+  //   webSocket(url).getInstance()
+  // );
+  // const socket = socketRef.current;
 
   // 연결상태 변경시 콘솔에 출력
   peerService.peer.onconnectionstatechange = () => {
     console.log('state changed');
+    console.log(peerService.peer);
     console.log(peerService.peer.connecticonState);
   };
 
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
+    console.log(e.candidate);
     if (e.candidate) {
       console.log(
         '#####################################ICE candidate 이벤트 핸들러 설정'
@@ -97,13 +102,14 @@ const StarVideo = () => {
       setMyStream(stream);
 
       // 이미 생성된 peerService 객체를 사용하여 getOffer 메소드 호출
-      const offer = await peerService.getOffer();
+      const offer = peerService.getOffer();
       // 내 오퍼를 보낸다
       const offerData = {
         type: 'offer',
         offer: offer,
       };
       // offer를 문자열로 변환하여 서버로 전송
+      console.log(socket)
       socket.send(JSON.stringify(offerData));
       console.log('1-2. 팬한테 오퍼 전송');
       console.log(offer);
@@ -127,6 +133,11 @@ const StarVideo = () => {
   );
 
   useEffect(() => {
+    setSocket(new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`));
+  }, []);
+
+  useEffect(() => {
+    console.log('socket');
     if (!socket) {
       console.log('socket Connecting Plz');
       return;
@@ -147,7 +158,8 @@ const StarVideo = () => {
         }
         if (receivedData.type === 'ans') {
           console.log('33333333333333333 팬한테 앤써를 받았어요');
-          await peerService.setLocalDescription(receivedData.ans);
+          // await peerService.setLocalDescription(receivedData.ans);
+          peerService.setLocalDescription(receivedData.ans);
           console.log('Connection state:', peerService.peer.connectionState);
           setReceiveTime(receivedData.time);
           setOnTimer(true);

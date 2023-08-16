@@ -25,7 +25,6 @@ const getStarMeetingDataApi = async (params: string) => {
   await api
     .get(`/meetingroom/member/get?roomId=${params}`)
     .then((res: AxiosResponse<starMeetingDataType>) => {
-      console.log(res);
       response = res.data;
     })
     .catch((error) => {

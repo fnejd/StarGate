@@ -41,8 +41,6 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
     }
   }, [participantsData]);
 
-  console.log(participantsData);
-
   return type == 'star' && participantsData != undefined ? (
     <div className="flex flex-row w-screen my-5">
       <div className="flex items-center basis-1/2 w-full text-white ml-5">
