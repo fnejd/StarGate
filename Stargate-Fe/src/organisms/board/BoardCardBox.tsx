@@ -63,8 +63,8 @@ const BoardCardBox = ({
       navigate(`/ready/${uuid}`);
     }
   };
-  const handleToMonitoring = () => {
-    navigate(`/admin/monitoring`);
+  const handleToDetail = () => {
+    navigate(`/admin/event/detail/${uuid}`);
   };
   /**
    * isTimeExceeded가 1800초 초과라면
@@ -107,7 +107,7 @@ const BoardCardBox = ({
                 <div className="w-2/3 flex justify-end">
                   {isAdmin ? (
                     <button
-                      onClick={handleToMonitoring}
+                      onClick={handleToDetail}
                       className={isTimeExceeded ? 'bg-admingray' : ''}
                       disabled={isTimeExceeded}
                     >
@@ -158,7 +158,7 @@ const BoardCardBox = ({
                 <div className="w-2/3 flex justify-end">
                   {isAdmin ? (
                     <button
-                      onClick={handleToMonitoring}
+                      onClick={handleToDetail}
                       className={isTimeExceeded ? 'bg-admingray' : ''}
                       disabled={isTimeExceeded}
                     >
