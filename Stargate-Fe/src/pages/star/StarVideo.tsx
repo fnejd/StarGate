@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
@@ -28,11 +28,15 @@ const StarVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
-  const socketRef = useRef<WebSocket>(
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
-  );
-  const socket = socketRef.current;
+  const socket = useMemo(()=>{
+    return new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
+  },[]);
+
+  // const socketRef = useRef<WebSocket>(
+  //   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  //   new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
+  // );
+  // const socket = socketRef.current;
 
   // 연결상태 변경시 콘솔에 출력
   peerService.peer.onconnectionstatechange = () => {
@@ -42,9 +46,10 @@ const StarVideo = () => {
 
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
+    console.log("ONICECAN:",e);
     if (e.candidate) {
       console.log(
-        '#####################################ICE candidate 이벤트 핸들러 설정'
+        '#####################################ICE candidate 이벤트 핸들러 설정',e.candidate
       );
       socket.send(
         JSON.stringify({
@@ -66,23 +71,23 @@ const StarVideo = () => {
     setRemoteStream(peerService.peer.getRemoteStreams()[0]);
   };
 
-  // 팬이 전화에 들어왔을때 실행되는 함수
-  // 1. 내 미디어 세팅
-  // 2. 내 오퍼 전송
-  const getJoined = useCallback(async () => {
-    try {
+  useEffect(() => {
+    (async () => {
       console.log('내 미디어 세팅');
+      // 백승윤 : 왠지모르지만 여기가 시간 엄청잡아먹음 한 1초? 근데 그 사이에 ICE 날아감.
+
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
       });
+      console.log('STREAM = ', stream);
       if (stream) {
         console.log('스트림이 있으면 피어에 추가');
         stream.getTracks().forEach((track) => {
           peerService.peer.addTrack(track, stream);
         });
         setMyStream(stream);
-        console.log(peerService.peer);
+        console.log("TRACKS = ",peerService.peer.track);
         console.log('1-1. 팬한테 내 미디어 연결');
         // 로컬 미디어 스트림 확인
         console.log('Local media stream:', peerService.peer.getLocalStreams());
@@ -96,18 +101,26 @@ const StarVideo = () => {
         console.log(stream);
       }
       setMyStream(stream);
+    })();
+  }, []);
 
+  // 팬이 전화에 들어왔을때 실행되는 함수
+  // 1. 내 미디어 세팅
+  // 2. 내 오퍼 전송
+  const getJoined = useCallback(async (receivedData) => {
+    try {
       // 이미 생성된 peerService 객체를 사용하여 getOffer 메소드 호출
-      const offer = await peerService.getOffer();
+      const ans = await peerService.getAnswer(receivedData);
       // 내 오퍼를 보낸다
-      const offerData = {
-        type: 'offer',
-        offer: offer,
-      };
+      // const offerData = {
+      //   type: 'offer',
+      //   offer: offer,
+      // };
       // offer를 문자열로 변환하여 서버로 전송
-      socket.send(JSON.stringify(offerData));
-      console.log('1-2. 팬한테 오퍼 전송');
-      console.log(offer);
+      // socket.send(JSON.stringify(offerData));
+      socket.send(JSON.stringify(ans));
+      console.log('1-2. 팬한테 대답 전송');
+      console.log(ans);
     } catch (error) {
       console.error('Error setting up call:', error);
     }
@@ -142,18 +155,19 @@ const StarVideo = () => {
         const receivedData = JSON.parse(event.data);
         console.log('rd', receivedData);
         // 상대가 조인했다는 메시지를 받음
-        if (receivedData.type === 'join') {
+        // if (receivedData.type === 'join') {
+        if (receivedData.type === 'offer') {
           console.log('11111111111111111 어 팬 들어왔다');
-          getJoined();
+          await getJoined(receivedData);
         }
-        if (receivedData.type === 'ans') {
-          console.log('33333333333333333 팬한테 앤써를 받았어요');
-          await peerService.setLocalDescription(receivedData.ans);
-          console.log('Connection state:', peerService.peer.connectionState);
-          setReceiveTime(receivedData.time);
+        // if (receivedData.type === 'ans') {
+        //   console.log('33333333333333333 팬한테 앤써를 받았어요');
+        //   await peerService.setRemoteDescription(receivedData);
+        //   console.log('Connection state:', peerService.peer.connectionState);
+        //   setReceiveTime(receivedData.time);
 
-          setOnTimer(true);
-        }
+        //   setOnTimer(true);
+        // }
         if (receivedData.type === 'candidate') {
           console.log('444444444444444444444 아이스를 받았어요');
           console.log(receivedData.candidate);
