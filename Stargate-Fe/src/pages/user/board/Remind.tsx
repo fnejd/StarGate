@@ -47,7 +47,7 @@ const Remind = () => {
     <div className="h-screen w-xl flex flex-col">
       <BoardHeader isAdmin={false} title="R E M I N D"></BoardHeader>
       {data && (
-        <div className="flex flex-grow mx-10">
+        <div className="flex flex-grow mx-10 min-w-max">
           <RemindTitle
             name={data.name}
             startDate={data.startDate}

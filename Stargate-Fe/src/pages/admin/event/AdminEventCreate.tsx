@@ -44,7 +44,7 @@ interface FormData {
 const AdminEventCreate = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const updateUuid = location.state.uuid || null;
+  const updateUuid = location.state ? location.state.uuid : null;
 
   const [group, setGroup] = useState<Group[]>([]);
   const [formData, setFormData] = useState<FormData>({

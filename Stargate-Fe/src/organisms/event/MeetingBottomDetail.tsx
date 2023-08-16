@@ -3,7 +3,7 @@ import { MeetingData } from '@/types/event/type';
 const MeetingBottomDetail = ({ formData }: { formData: MeetingData }) => {
   console.log('이건가', formData.meetingFUsers);
   return (
-    <div className="w-full flex flex-col items-start font-medium text-white font-suit text-14">
+    <div className="w-full h-96 justify-evenly flex flex-col items-start font-medium text-white font-suit text-14">
       <div className="flex">유저</div>
       <table>
         <tbody>

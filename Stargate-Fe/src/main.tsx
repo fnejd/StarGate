@@ -21,7 +21,6 @@ import AdminManagement from './pages/admin/board/AdminManagement.tsx';
 import AdminMyPage from './pages/admin/board/AdminMyPage.tsx';
 import AdminEventCreate from './pages/admin/event/AdminEventCreate.tsx';
 import AdminEventDetail from './pages/admin/event/AdminEventDetail.tsx';
-import AdminEventDetailLetters from './pages/admin/event/AdminEventDetailLetters.tsx';
 import AdminMonitoring from './pages/admin/event/AdminMonitoring.tsx';
 
 const router = createBrowserRouter([
@@ -42,7 +41,6 @@ const router = createBrowserRouter([
   { path: '/admin/myPage', element: <AdminMyPage /> },
   { path: '/admin/event/create', element: <AdminEventCreate /> },
   { path: '/admin/event/detail/:uuid', element: <AdminEventDetail /> },
-  { path: '/admin/event/letters/:uuid', element: <AdminEventDetailLetters /> },
   { path: '/admin/monitoring', element: <AdminMonitoring /> },
 
   { path: '/star/video', element: <StarVideo /> },

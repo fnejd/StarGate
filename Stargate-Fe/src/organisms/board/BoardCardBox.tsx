@@ -1,6 +1,6 @@
 import BoardCard from '../../atoms/board/BoardCard';
 import { useNavigate } from 'react-router-dom';
-
+import { useState, useEffect } from 'react';
 /**
  * BoardCardBoxProps
  * @param uuid => 미팅에 부여되는 고유 번호
@@ -30,6 +30,32 @@ const BoardCardBox = ({
   isAdmin,
   isLoading,
 }: BoardCardBoxProps) => {
+  const [stringDate, setStringDate] = useState('');
+
+  useEffect(() => {
+    if (date !== undefined) {
+      const start = date;
+      const [year, month, dayWithTime] = start.split('-');
+      const [day, time] = dayWithTime.split('T'); // "T"를 기준으로 분리하여 일자와 시간을 추출
+      const [hour, minute, second] = time.split(':');
+      const newDate: Date = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+        Number(hour),
+        Number(minute),
+        Number(second.split('.')[0])
+      );
+      const formattedDate = `${year}-${month}-${day}  ${newDate
+        .getHours()
+        .toString()
+        .padStart(2, '0')}:${newDate.getMinutes().toString().padStart(2, '0')}`;
+      setStringDate(formattedDate);
+      console.log(date, '===', formattedDate);
+    }
+    console.log(date, '===', stringDate);
+  }, [date]);
+
   const navigate = useNavigate();
 
   const handleToReady = () => {
@@ -66,7 +92,7 @@ const BoardCardBox = ({
                 <div className="flex flex-col w-1/3">
                   <div className="flex justify-between">
                     <p>일시</p>
-                    <p>{date}</p>
+                    <p>{stringDate}</p>
                   </div>
                   <div className="flex justify-between">
                     <p>남은시간</p>
@@ -111,7 +137,7 @@ const BoardCardBox = ({
                 <div className="flex flex-col w-1/3">
                   <div className="flex justify-between">
                     <p>일시</p>
-                    <p>{date}</p>
+                    <p>{stringDate}</p>
                   </div>
                   {isOngoing ? (
                     <div className="flex justify-between">
