@@ -70,6 +70,7 @@ const AdminEventDetail = () => {
         )}
         <div className="flex flex-col w-5/12 h-full">
           {loading === false && <MeetingLeftDetail formData={data} />}
+          <div className='my-4'></div>
           {loading === false && <MeetingBottomDetail formData={data} />}
         </div>
         <div className="flex w-5/12">
