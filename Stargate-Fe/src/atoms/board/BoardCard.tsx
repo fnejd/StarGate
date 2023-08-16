@@ -62,7 +62,7 @@ const BoardCard = ({
     <>
       {isLoading ? (
         <div
-          className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 relative animate-pulse bg-gray-200 rounded-md"
+          className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 relative bg-opacity-25 bg-white shadow-custom rounded-lg border border-custom backdrop-filter-blur animate-pulse"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         ></div>
