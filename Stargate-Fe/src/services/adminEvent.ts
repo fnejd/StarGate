@@ -100,6 +100,7 @@ const fetchLettersData = async (uuid: string) => {
         withCredentials: false,
       }
     );
+    console.log('letters:', response);
     return response.data;
   } catch (error) {
     console.log(uuid);

@@ -19,6 +19,7 @@ interface Letter {
   email: string; // 팬유저이메일
   memberNo: number; // 연예인번호
   uuid: string; // 팬미팅번호
+  name: string; // 연예인이름
   createDate: string; // 생성일
   editDate: string; // 수정일
 }
@@ -64,18 +65,18 @@ const LettersModalBox = ({ isOpen, onClose, uuid }: LetterModalBoxProps) => {
             </h1>
             <table className="w-4/5">
               <tbody>
-                <tr className='flex'>
-                  <td className='w-1/6'>보낸이</td>
-                  <td className='flex-grow'>내용</td>
-                  <td className='w-1/6'>받는이</td>
+                <tr>
+                  <td className="w-1/6">보낸이</td>
+                  <td className="flex-grow">내용</td>
+                  <td className="w-1/6">받는이</td>
                 </tr>
                 {letters?.letters
                   .filter((letter) => letter.uuid === uuid)
                   .map((letter, index) => (
                     <tr key={index}>
-                      <td className='w-1/6'>{letter.email}</td>
-                      <td className='flex-grow'>{letter.contents}</td>
-                      <td className='w-1/6'>{letter.memberNo}</td>
+                      <td className="w-1/6">{letter.email}</td>
+                      <td className="flex-grow">{letter.contents}</td>
+                      <td className="w-1/6">{letter.name}</td>
                     </tr>
                   ))}
               </tbody>

@@ -20,7 +20,7 @@ const MeetingLeftDetail = ({ formData }: { formData: MeetingData }) => {
   const picSec = formData.photoNum * 10;
 
   return (
-    <div className="mb-2 w-full flex flex-col text-white font-suit text-14">
+    <div className="flex flex-col w-full h-600 justify-between mb-2  text-white font-suit text-14 semibold">
       <p>시작 날짜</p>
       <p>{stringDate}</p>
       <p>대기 시간</p>
