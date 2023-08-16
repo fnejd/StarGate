@@ -85,10 +85,6 @@ const AdminEventDetail = () => {
           text="편지 리스트"
           onClick={handleModalOpen}
         />
-        <BtnBlue
-          text="모니터링 입장"
-          onClick={() => handleMonitoring(`${data.uuid}`)}
-        />
         <Link to="/admin/event/create" state={{ uuid: data.uuid }}>
           <BtnBlue text="수정" />
         </Link>
