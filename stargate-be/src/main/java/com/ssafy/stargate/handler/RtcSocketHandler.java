@@ -34,8 +34,8 @@ public class RtcSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
-        log.info("@RtcSocketHandler, meetingInfo = {}", meetingPath);
-        log.info("Message = {}", message.getPayload());
+        log.info("@TEXT, socketId = {}, meeting path = {}", session.getId(), meetingPath);
+        log.info("Message = {}", message.getPayload().substring(0,30));
         for (WebSocketSession webSocketSession : SESSION_MAP.get(meetingPath)) {
             if (webSocketSession!=null && webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
                 webSocketSession.sendMessage(message);
@@ -67,6 +67,7 @@ public class RtcSocketHandler extends TextWebSocketHandler {
         log.info("@OPEN : meetingInfo = {}, socket id = {}", meetingPath,session.getId());
         List<WebSocketSession> sessions = SESSION_MAP.computeIfAbsent(meetingPath, k -> new ArrayList<>());
         sessions.add(session);
+        log.info("@AFTER CONNECT : connected count = {}",sessions.size());
 //        int idx = -1;
 //        if ((idx = meetingPath.lastIndexOf('.')) != -1) {
 //            String monitorRoom = meetingPath.substring(0, idx);
