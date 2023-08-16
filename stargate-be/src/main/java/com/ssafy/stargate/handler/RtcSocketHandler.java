@@ -37,7 +37,7 @@ public class RtcSocketHandler extends TextWebSocketHandler {
         log.info("@RtcSocketHandler, meetingInfo = {}", meetingPath);
         log.info("Message = {}", message);
         for (WebSocketSession webSocketSession : SESSION_MAP.get(meetingPath)) {
-            if (webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
+            if (webSocketSession!=null && webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
                 webSocketSession.sendMessage(message);
             }
         }
@@ -54,7 +54,7 @@ public class RtcSocketHandler extends TextWebSocketHandler {
     }
 
     /**
-     * 연결이 형성될 경우 주소형식(구분자 . 의 유무)에 따라서 모니터링, 일반 클라이언트 세션 리스트에 등재한다.
+     * 연결 이후를 관리한다.
      *
      * @param session 웹소캣 세션
      * @throws Exception 모든 예외는 던진다.
