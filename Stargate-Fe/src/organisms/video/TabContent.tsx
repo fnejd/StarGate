@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactPlayer from 'react-player';
+import BtnRed from '@/atoms/common/BtnRed';
 import BtnWhite from '@/atoms/common/BtnWhite';
 import AdminToggle from '@/atoms/common/AdminToggle';
 import { loginApi } from '@/services/authService';
@@ -332,11 +333,13 @@ const Tab5 = ({ readyData }) => {
 
   return (
     <div className="w-5/6 h-5/6 mx-auto text-center flex justify-center items-center">
-      {timer.minute === 0 && timer.second === 10 ? (
+      {timer.minute === 0 && timer.second === 0 ? ( // 시간이 0분 0초인 경우
         <BtnRed
           onClick={navigateVideoRoom}
-          text={`${timer.minute} : ${timer.second}`}
+          text="입장하기" // 버튼 텍스트 변경
         />
+      ) : timer.minute === 0 && timer.second === 10 ? (
+        <BtnRed text={`${timer.minute} : ${timer.second}`} />
       ) : (
         <BtnWhite text={`${timer.minute} : ${timer.second}`} />
       )}

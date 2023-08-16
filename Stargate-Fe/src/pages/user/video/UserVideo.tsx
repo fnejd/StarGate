@@ -35,6 +35,26 @@ const UserVideo = () => {
     console.log(peerService.peer.connectionState);
   };
 
+  peerService.peer.onconnectionstatechange = (event) => {
+    switch (peerService.peer.connectionState) {
+      case 'connecting':
+        // 연결이 수립 중인 경우의 로직
+        break;
+      case 'connected':
+        // 연결이 성공적으로 수립된 경우의 로직
+        break;
+      case 'disconnected':
+        // 데이터 흐름은 중단된 상태이지만 연결은 살아있는 경우의 로직
+        break;
+      case 'failed':
+        // 연결이 실패한 경우의 로직
+        break;
+      case 'closed':
+        // 연결이 완전히 종료된 경우의 로직
+        break;
+    }
+  };
+
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
     if (e.candidate) {
