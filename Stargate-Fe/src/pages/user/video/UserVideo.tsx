@@ -57,6 +57,7 @@ const UserVideo = () => {
 
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
+    console.log('저는 칸디데이트!!@@@@@@@@@@@@@', e);
     if (e.candidate) {
       console.log('############ICE candidate 이벤트 핸들러 설정');
       socket.send(
@@ -86,6 +87,7 @@ const UserVideo = () => {
   };
 
   // 연예인한테 오퍼 받았을 때 답장 보내는 함수
+  // getAnswer--------------------------------------------------
   const getAnswer = useCallback(
     async (ans) => {
       const ansData = {
@@ -170,7 +172,6 @@ const UserVideo = () => {
       console.log('서버 오픈~');
       console.log('팬 입장');
       console.log(socket);
-
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
@@ -184,27 +185,31 @@ const UserVideo = () => {
       // 원격 미디어 스트림 확인
       setMyStream(stream);
 
-      const data = {
-        type: 'join',
-      };
-      const dataString = JSON.stringify(data);
+      // const data = {
+      //   type: 'join',
+      // };
+      // const dataString = JSON.stringify(data);
       console.log('조인 보낸다 팬 들어왔어요~~');
-      socket.send(dataString); // 서버로 들어왔다는 메시지 'join' 전송
+      const offer = await peerService.getOffer();
+      console.log('!!!!!!!!!setLocalDescription = ', offer);
+      // socket.send(dataString); // 서버로 들어왔다는 메시지 'join' 전송
+      socket.send(JSON.stringify(offer)); // 서버로 들어왔다는 메시지 'join' 전송
 
       socket.onmessage = async (event) => {
         console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
         const receivedData = JSON.parse(event.data);
         console.log('rd', receivedData);
-        if (receivedData.type === 'offer') {
+        if (receivedData.type === 'answer') {
           console.log('22222222222222222 연예인한테 오퍼를 받았어요');
-          console.log(receivedData.offer);
+          console.log(receivedData);
+          peerService.setRemoteDescription(receivedData);
           // 상대 오퍼를 받았으면 answer 를 생성
-          if (peerService.peer) {
-            // 상대 오퍼를 받았으면 answer 를 생성
-            console.log('상대 오퍼 받아서 ans 생성');
-            const ans = await peerService.getAnswer(receivedData.offer);
-            getAnswer(ans);
-          }
+          // if (peerService.peer) {
+          //   // 상대 오퍼를 받았으면 answer 를 생성
+          //   console.log('상대 오퍼 받아서 ans 생성');
+          //   const ans = await peerService.getAnswer(receivedData.offer);
+          //   getAnswer(ans);
+          // }
         }
         if (receivedData.type === 'candidate') {
           console.log('444444444444444444444 아이스를 받았어요');
@@ -231,6 +236,7 @@ const UserVideo = () => {
   }, [socket]);
 
   console.log('미팅순서', meetingOrder);
+  console.log('피어 연결', peerService.peer);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
   const tickWaiting = () => {
@@ -260,6 +266,9 @@ const UserVideo = () => {
     if (timer.waitingMinute === 0 && timer.waitingSecond === 0) {
       console.log('미팅 순서 변경');
       setMeetingOrder(meetingOrder + 1);
+      socket?.close();
+      setRemoteStream(null);
+      peerService.reset();
     }
   }, [timer.waitingMinute, timer.waitingSecond]);
 
@@ -476,6 +485,7 @@ const UserVideo = () => {
             <div className="basis-1/2 text-center">
               <span className="form-title">연예인 영상</span>
               <ReactPlayer
+                key={meetingOrder} // 이 부분을 추가하여 ReactPlayer의 key를 변경하도록 합니다.
                 playing
                 muted
                 height="full"
