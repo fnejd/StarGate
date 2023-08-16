@@ -5,7 +5,8 @@ import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { createEvent } from '@/services/adminEvent';
 import { fetchGroup } from '@/services/adminBoardService';
-
+import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
+import { useNavigate } from 'react-router-dom';
 interface MeetingFUser {
   no: number;
   email: string;
@@ -58,6 +59,7 @@ const AdminEventCreate = () => {
     meetingFUsers: '',
     meetingMembers: '',
   });
+  const navigate = useNavigate();
 
   // 그룹명, 그룹멤버 데이터 가져오기
   useEffect(() => {
@@ -97,6 +99,8 @@ const AdminEventCreate = () => {
         console.log(formData);
         await createEvent(formData);
         console.log('이벤트 전송 성공');
+        alert('이벤트 생성 완료');
+        navigate('/admin/board')
       } catch (error) {
         console.error('이벤트 전송 실패:', error);
       }
@@ -104,35 +108,41 @@ const AdminEventCreate = () => {
   };
 
   return (
-    <div>
+    <div className="w-xl flex flex-col items-center">
+      <BoardHeaderNav isAdmin={true}></BoardHeaderNav>
       <div className="my-10 text-center form-title">팬사인회 생성</div>
-      <div className="mb-8">
-        <label htmlFor="제목" className="flex justify-start my-2 ml-1">
-          <span className="font-medium text-white font-suit text-14">제목</span>
-        </label>
-        <div className="flex">
-          <input
-            className="h-8 px-3 py-2 ml-1 mr-1 text-black bg-white border border-gray-300 rounded-sm w-450 text-12 placeholder-pl-5 font-suit focus:outline-none focus:ring-2 focus:ring-mainblue-300 focus:border-transparent"
-            type="text"
-            placeholder=""
-            value={formData.name}
-            onChange={handleName}
-          />
-        </div>
-      </div>
-      <div className="flex flex-col justify-center w-full">
-        <div className="flex">
+      <div className="w-full flex justify-end">
+        <div className="flex flex-col w-5/12 justify-end">
+          <label htmlFor="제목" className="my-2 ml-1">
+            <span className="font-medium text-white font-suit text-14">
+              제목
+            </span>
+          </label>
+          <div className="flex mb-5">
+            <input
+              className="h-8 px-3 py-2 ml-1 mr-1 text-black bg-white border border-gray-300 rounded-sm w-4/5 text-12 placeholder-pl-5 font-suit focus:outline-none focus:ring-2 focus:ring-mainblue-300 focus:border-transparent"
+              type="text"
+              placeholder=""
+              value={formData.name}
+              onChange={handleName}
+            />
+          </div>
           <MeetingLeftSection formData={formData} setFormData={setFormData} />
+          <div className="flex">
+            <MeetingBottomSection
+              formData={formData}
+              setFormData={setFormData}
+              group={group}
+              setGroup={setGroup}
+            />
+          </div>
+        </div>
+
+        <div className="flex w-5/12 mt-32">
           <MeetingRightSection formData={formData} setFormData={setFormData} />
         </div>
-        <MeetingBottomSection
-          formData={formData}
-          setFormData={setFormData}
-          group={group}
-          setGroup={setGroup}
-        />
       </div>
-      <div className="mx-8 my-20 text-center">
+      <div className="flex justify-evenly w-m mx-8 my-20 text-center">
         <BtnBlue text="확인" onClick={handleCreateEvent} />
       </div>
     </div>
