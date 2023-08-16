@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import NotepadComponent from '@/atoms/video/NotepadComponent';

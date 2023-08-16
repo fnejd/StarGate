@@ -1,6 +1,6 @@
 import TimeLeftComponent from '@/atoms/common/TimeLeftComponent';
 import ProFileIcon from '@/atoms/video/ProFileIcon';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface VideoHeaaderProps {
   min: number;

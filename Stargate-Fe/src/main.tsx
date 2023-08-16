@@ -13,7 +13,7 @@ import Board from './pages/user/board/UserBoard.tsx';
 import MyPage from './pages/user/board/MyPage.tsx';
 import Remind from './pages/user/board/Remind.tsx';
 import Ready from './pages/user/video/ReadyRoom.tsx';
-import Video from './pages/user/video/UserVideo.jsx';
+import UserVideo from './pages/user/video/UserVideo.jsx';
 import StarVideo from './pages/star/StarVideo.tsx';
 import AdminSignUp from './pages/admin/signUp/AdminSignUp.tsx';
 import AdminBoard from './pages/admin/board/AdminBoard.tsx';
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
   { path: '/mypage', element: <MyPage /> },
   { path: '/remind/:uuid', element: <Remind /> },
   { path: '/ready/:uuid', element: <Ready /> },
-  { path: '/video', element: <Video /> },
+  { path: '/video/:uuid', element: <UserVideo /> },
 
   { path: '/admin/signup', element: <AdminSignUp /> },
   { path: '/admin/board', element: <AdminBoard /> },
