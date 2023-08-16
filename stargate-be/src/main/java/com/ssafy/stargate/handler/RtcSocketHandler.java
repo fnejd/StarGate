@@ -9,6 +9,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,16 +34,25 @@ public class RtcSocketHandler extends TextWebSocketHandler {
      * @throws Exception 모든 예외.
      */
     @Override
-    @Synchronized
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
         log.info("@TEXT, socketId = {}, meeting path = {}", session.getId(), meetingPath);
         log.info("Message = {}", message.getPayload());
-        for (WebSocketSession webSocketSession : SESSION_MAP.get(meetingPath)) {
-            if (webSocketSession != null && webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
-                webSocketSession.sendMessage(message);
-            }
-        }
+        SESSION_MAP.get(meetingPath).iterator().forEachRemaining(webSocketSession -> {
+                    try {
+                        if (webSocketSession != null && webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
+                            webSocketSession.sendMessage(message);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
+//        for (WebSocketSession webSocketSession : SESSION_MAP.get(meetingPath).iterator(). for){
+//            if (webSocketSession != null && webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
+//                webSocketSession.sendMessage(message);
+//            }
+//        }
 //        // 모니터링 룸으로 중계하는 기능
 //        int idx;
 //        if ((idx = meetingPath.lastIndexOf('.')) != -1) {
@@ -54,6 +64,7 @@ public class RtcSocketHandler extends TextWebSocketHandler {
 //            }
 //        }
     }
+
 
     /**
      * 연결 이후를 관리한다.
