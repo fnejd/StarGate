@@ -15,7 +15,6 @@ const ProFileIcon = () => {
       const payload = atob(tokenDecode[1]);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       result = JSON.parse(payload.toString());
-      console.log(result);
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (result.auth && result.auth != 'USER') {
@@ -24,7 +23,10 @@ const ProFileIcon = () => {
   }
 
   return (
-    <span onClick={() => navigate(link)} className="material-symbols-outlined m-4 text-48">
+    <span
+      onClick={() => navigate(link)}
+      className="material-symbols-outlined m-4 text-48"
+    >
       account_box
     </span>
   );

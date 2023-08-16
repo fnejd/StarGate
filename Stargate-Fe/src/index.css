@@ -55,26 +55,21 @@
 @layer components {
   .medium-blue {
     @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
-    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
   }
 
   .medium-white {
-    @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
     @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
   }
 
   .form-title {
     @apply font-suit text-32 font-medium text-white;
-    @apply font-suit text-32 font-medium text-white;
   }
 
   .input-warning {
     @apply font-suit text-12 font-medium text-red;
-    @apply font-suit text-12 font-medium text-red;
   }
 
   .page-title-md {
-    @apply font-suit text-16 font-medium text-white;
     @apply font-suit text-16 font-medium text-white;
   }
 
