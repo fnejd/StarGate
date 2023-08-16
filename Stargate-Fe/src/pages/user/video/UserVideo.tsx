@@ -14,7 +14,7 @@ const UserVideo = () => {
   const [videoData, setVideoData] = useState(null);
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-  const [socket, setSocket] = useState<WebSocket>();
+  const [socket, setSocket] = useState<WebSocket | null>(null);
 
   const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
   const [photoNum, setPhotoNum] = useState(null);
@@ -57,7 +57,7 @@ const UserVideo = () => {
 
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
-    console.log(e.candidate);
+    console.log("저는 칸디데이트!!@@@@@@@@@@@@@",e);
     if (e.candidate) {
       console.log('############ICE candidate 이벤트 핸들러 설정');
       socket.send(
@@ -87,6 +87,7 @@ const UserVideo = () => {
   };
 
   // 연예인한테 오퍼 받았을 때 답장 보내는 함수
+  // getAnswer--------------------------------------------------
   const getAnswer = useCallback(
     async (ans) => {
       const ansData = {
@@ -115,15 +116,6 @@ const UserVideo = () => {
       // 멤버 순서 배열 할당
       setVideoData(data);
       setMemberNos(extractedMemberNos);
-      if (data) {
-        console.log("wtfffffffffffffffffffffffffffffffffffffffffffffffffff",data.meetingMembers[meetingOrder+1].roomId)
-        console.log("MEET OREDER",meetingOrder);
-        setSocket(
-          new WebSocket(
-            `ws://i9a406.p.ssafy.io:8080/api/rtc/${data.meetingMembers[meetingOrder+1].roomId}`
-          )
-        );
-      }
     };
 
     fetchData();
@@ -139,13 +131,15 @@ const UserVideo = () => {
           meetingOrder < videoData.meetingMembers.length &&
           meetingOrder > -1
         ) {
-          // const newSocket =
-          // setSocket(newSocket); // 새로운 WebSocket 인스턴스를 상태로 업데이트
+          const newSocket = new WebSocket(
+            `ws://i9a406.p.ssafy.io:8080/api/rtc/${videoData.meetingMembers[meetingOrder].roomId}`
+          );
+          setSocket(newSocket); // 새로운 WebSocket 인스턴스를 상태로 업데이트
         }
       };
 
       console.log('소켓 주소 업데이트$$$$$$$$$', socket);
-      // connectWebSocket();
+      connectWebSocket();
 
       // const meetingTime = videoData.meetingTime - photoNum * 10;
       const meetingTime = videoData.meetingTime - 2 * 10;
@@ -178,7 +172,6 @@ const UserVideo = () => {
       console.log('서버 오픈~');
       console.log('팬 입장');
       console.log(socket);
-
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
@@ -192,34 +185,37 @@ const UserVideo = () => {
       // 원격 미디어 스트림 확인
       setMyStream(stream);
 
-      const data = {
-        type: 'join',
-      };
-      const dataString = JSON.stringify(data);
+      // const data = {
+      //   type: 'join',
+      // };
+      // const dataString = JSON.stringify(data);
       console.log('조인 보낸다 팬 들어왔어요~~');
-      socket.send(dataString); // 서버로 들어왔다는 메시지 'join' 전송
+      const offer = await peerService.getOffer();
+      console.log('!!!!!!!!!setLocalDescription = ', offer);
+      // socket.send(dataString); // 서버로 들어왔다는 메시지 'join' 전송
+      socket.send(JSON.stringify(offer)); // 서버로 들어왔다는 메시지 'join' 전송
 
       socket.onmessage = async (event) => {
         console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
         const receivedData = JSON.parse(event.data);
         console.log('rd', receivedData);
-        if (receivedData.type === 'offer') {
+        if (receivedData.type === 'answer') {
           console.log('22222222222222222 연예인한테 오퍼를 받았어요');
-          console.log(receivedData.offer);
+          console.log(receivedData);
+          peerService.setRemoteDescription(receivedData);
           // 상대 오퍼를 받았으면 answer 를 생성
-          if (peerService.peer) {
-            // 상대 오퍼를 받았으면 answer 를 생성
-            console.log('상대 오퍼 받아서 ans 생성');
-            const ans = peerService.getAnswer(receivedData.offer);
-            getAnswer(ans);
-          }
+          // if (peerService.peer) {
+          //   // 상대 오퍼를 받았으면 answer 를 생성
+          //   console.log('상대 오퍼 받아서 ans 생성');
+          //   const ans = await peerService.getAnswer(receivedData.offer);
+          //   getAnswer(ans);
+          // }
         }
         if (receivedData.type === 'candidate') {
           console.log('444444444444444444444 아이스를 받았어요');
           console.log(receivedData.candidate);
 
           const candidateObject = new RTCIceCandidate(receivedData.candidate);
-          console.log(candidateObject);
           peerService.peer
             .addIceCandidate(candidateObject)
             .then(() => {
@@ -328,17 +324,18 @@ const UserVideo = () => {
   }, [timer.second, timer.minute, photoNum]);
 
   useEffect(() => {
-    // if (peerService.peer) {
-    //   const intervalId = setInterval(() => {
-    //     if (timer.second > 0) {
-    //       console.log('타이머 시작!');
-    //       tick();
-    //     }
-    //   }, 1000); // 1초마다 실행
-    //   return () => {
-    //     clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
-    //   };
-    // }
+    if (peerService.peer) {
+      const intervalId = setInterval(() => {
+        if (timer.second > 0) {
+          console.log('타이머 시작!');
+          tick();
+        }
+      }, 1000); // 1초마다 실행
+
+      return () => {
+        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      };
+    }
   }, [meetingOrder, timer.second]);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////

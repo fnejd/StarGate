@@ -53,5 +53,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <RouterProvider router={router} />
       {/* </SocketProvider> */}
     </RecoilRoot>
-  {/* </React.StrictMode> */}
+  // </React.StrictMode>
 );

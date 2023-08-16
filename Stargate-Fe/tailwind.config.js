@@ -157,19 +157,30 @@ export default {
       },
       dropShadow: {
         nobg: '0 0 0px 1000px #fff inset',
+        card: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+      },
+
+      borderColor: {
+        card: 'rgba(255, 255, 255, 0.18)',
+      },
+      backdropFilter: {
+        blur: 'blur(4px)',
       },
     },
   },
-  plugins: [
-    // plugin(function ({ addUtilities }) {
-    //   const newUtilities = {
-    //     ".medium-white": {
-    //       "@apply font-suit text-28 font-semibold text-white": "",
-    //     },
-    //     ".medium-blue": {
-    //       "@apply font-suit text-28 font-semibold text-[#0010FF]": "",
-    //     },
-    //   };
-    // }),
-  ],
+  variants: {
+    extend: {
+      backdropFilter: ['responsive'],
+    },
+  },
 };
+// plugin(function ({ addUtilities }) {
+//   const newUtilities = {
+//     ".medium-white": {
+//       "@apply font-suit text-28 font-semibold text-white": "",
+//     },
+//     ".medium-blue": {
+//       "@apply font-suit text-28 font-semibold text-[#0010FF]": "",
+//     },
+//   };
+// }),

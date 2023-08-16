@@ -39,7 +39,7 @@ interface FormData {
   photoNum: number;
   imageFile: File | null;
   meetingFUsers: string;
-  meetingMembers: string;
+  meetingMembers: (string | number)[];
 }
 
 interface Member {
@@ -129,15 +129,10 @@ const MeetingBottomSection = ({
   useEffect(() => {
     console.log('멤버 바뀌었습니다!!!');
     setFormData((prevFormData) => {
-      const updatedMembers = [
-        ...prevFormData.meetingMembers,
-        ...members.map((member) => member.memberNo),
-      ];
-
       return {
         ...prevFormData,
         // 배열 순서 보장을 위한 stringify 처리
-        meetingMembers: updatedMembers,
+        meetingMembers: members.map((member) => member.memberNo),
       };
     });
   }, [members]);
@@ -145,8 +140,7 @@ const MeetingBottomSection = ({
   // 팬 변수가 바뀌면 폼데이터 업데이트
   useEffect(() => {
     setFormData((prevFormData) => {
-      const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
-      console.log(updatedFans);
+      const updatedFans = [...fanData];
 
       return {
         ...prevFormData,
@@ -185,6 +179,7 @@ const MeetingBottomSection = ({
       // 중복 체크
       if (!fanData.includes(emailValue)) {
         const updateFanData = [...fanData];
+        console.log(updateFanData);
         updateFanData.push(emailValue);
         setFanData(updateFanData);
         setFanValue('');
@@ -273,7 +268,7 @@ const MeetingBottomSection = ({
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="droppable">
-          {(provided) => (
+          {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
@@ -283,16 +278,16 @@ const MeetingBottomSection = ({
               {members &&
                 members.map((item, index) => (
                   <Draggable
-                    key={item.memberNo}
+                    key={index}
                     draggableId={index.toString()}
                     index={index}
                   >
-                    {(provided, snapshot) => (
+                    {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        key={index}
+                        // key={index}
                         className="flex items-center justify-between mt-2 w-62"
                       >
                         <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">

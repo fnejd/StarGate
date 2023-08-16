@@ -25,8 +25,7 @@ class PeerService {
   ): Promise<RTCSessionDescriptionInit> {
     if (this.peer) {
       // 상대방의 offer를 Remote Description으로 설정
-      // await this.peer.setRemoteDescription(offer);
-      this.peer.setRemoteDescription(offer);
+      await this.peer.setRemoteDescription(offer);
 
       // answer 생성
       const ans = await this.peer.createAnswer();
@@ -40,17 +39,10 @@ class PeerService {
   }
 
   // 상대방의 answer 정보를 설정
-  // async setLocalDescription(ans) {
-  //   if (this.peer) {
-  //     console.log("IM SETLOCALDESCRIPTOR WORK")
-      // await this.peer.setRemoteDescription(new RTCSessionDescription(ans));
-  //   }
-  // }
-  setLocalDescription(ans) {
+  async setRemoteDescription(ans) {
     if (this.peer) {
       console.log("IM SETLOCALDESCRIPTOR WORK")
-      // await this.peer.setRemoteDescription(new RTCSessionDescription(ans));
-      this.peer.setRemoteDescription(new RTCSessionDescription(ans));
+      await this.peer.setRemoteDescription(new RTCSessionDescription(ans));
     }
   }
 
