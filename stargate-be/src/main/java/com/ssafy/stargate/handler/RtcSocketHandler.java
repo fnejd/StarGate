@@ -34,7 +34,6 @@ public class RtcSocketHandler extends TextWebSocketHandler {
      * @throws Exception 모든 예외.
      */
     @Override
-    @Synchronized
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
         log.info("@TEXT, socketId = {}, meeting path = {}", session.getId(), meetingPath);
