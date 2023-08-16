@@ -22,6 +22,7 @@ public class LetterResponseDto {
     private String contents;
     private String email;
     private long memberNo;
+    private String name;
     private UUID uuid;
     private LocalDateTime createDate;
     private LocalDateTime editDate;

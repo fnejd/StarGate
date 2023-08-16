@@ -78,6 +78,7 @@ public class LetterServiceImpl implements LetterService {
                 .memberNo(savedLetter.getPMember().getMemberNo())
                 .uuid(savedLetter.getMeeting().getUuid())
                 .createDate(savedLetter.getCreateDate())
+                .name(savedLetter.getPMember().getName())
                 .build();
     }
 
@@ -114,6 +115,7 @@ public class LetterServiceImpl implements LetterService {
                 .memberNo(letter.getPMember().getMemberNo())
                 .email(letter.getFUser().getEmail())
                 .uuid(letter.getMeeting().getUuid())
+                .name(letter.getPMember().getName())
                 .build();
     }
 
@@ -138,6 +140,7 @@ public class LetterServiceImpl implements LetterService {
                                 .uuid(letter.getMeeting().getUuid())
                                 .createDate(letter.getCreateDate())
                                 .editDate(letter.getEditDate())
+                                .name(letter.getPMember().getName())
                                 .build()
                         )).toList()
                 ).build();
@@ -164,6 +167,7 @@ public class LetterServiceImpl implements LetterService {
                                 .uuid(letter.getMeeting().getUuid())
                                 .createDate(letter.getCreateDate())
                                 .editDate(letter.getEditDate())
+                                .name(letter.getPMember().getName())
                                 .build()
                         )).toList()
                 ).build();
@@ -190,6 +194,7 @@ public class LetterServiceImpl implements LetterService {
                                 .uuid(letter.getMeeting().getUuid())
                                 .createDate(letter.getCreateDate())
                                 .editDate(letter.getEditDate())
+                                .name(letter.getPMember().getName())
                                 .build()
                         )).toList()
                 ).build();
