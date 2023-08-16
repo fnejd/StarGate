@@ -1,16 +1,26 @@
 import { useEffect, useState, ChangeEvent } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import {
-  createEvent,
-  updateEvent,
-  fetchEventDetailData,
-} from '@/services/adminEvent';
+import { createEvent } from '@/services/adminEvent';
 import { fetchGroup } from '@/services/adminBoardService';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
+import { useNavigate } from 'react-router-dom';
+interface MeetingFUser {
+  no: number;
+  email: string;
+  orderNum: number;
+  isRegister: string;
+  name: string;
+}
+
+interface MeetingMember {
+  no: number;
+  memberNo: number;
+  orderNum: number;
+  roomId: string;
+}
 
 interface GroupMember {
   memberNo: number;
@@ -23,56 +33,33 @@ interface Group {
 }
 
 interface FormData {
-  uuid: string | null;
-  name: string | null;
+  name: null;
   startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
   waitingTime: number;
   meetingTime: number;
   notice: string;
   photoNum: number;
-  imageFile:
-    | File
-    | null
-    | {
-        filename: string;
-        fileUrl: string;
-      };
-  meetingFUsers: string | GroupMember;
+  imageFile: File | null;
+  starName: string;
+  meetingFUsers: string;
   meetingMembers: string;
 }
 
 const AdminEventCreate = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const updateUuid = location.state.uuid || null;
-
   const [group, setGroup] = useState<Group[]>([]);
   const [formData, setFormData] = useState<FormData>({
-    uuid: null,
     name: null,
     startDate: null,
     waitingTime: 10,
     meetingTime: 80,
-    notice: '',
     photoNum: 0,
+    notice: '',
     imageFile: null,
+    starName: '',
     meetingFUsers: '',
     meetingMembers: '',
   });
-
-  useEffect(() => {
-    const fetchEventDetail = async () => {
-      if (updateUuid) {
-        const uuid = updateUuid;
-        const fetchedData = await fetchEventDetailData(uuid);
-        if (fetchedData) {
-          setFormData(fetchedData);
-        }
-        console.log('로딩완료', updateUuid, '=== updateUuid');
-      }
-    };
-    if (updateUuid) fetchEventDetail();
-  }, []);
+  const navigate = useNavigate();
 
   // 그룹명, 그룹멤버 데이터 가져오기
   useEffect(() => {
@@ -104,29 +91,18 @@ const AdminEventCreate = () => {
   };
 
   // API로 데이터 전송
-  const handleCheckEvent = async (updateUuid: string) => {
-    if (updateUuid) {
+  const handleCreateEvent = async () => {
+    if (formData) {
+      // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
+      // const mergedFormData = { ...formData, ...eventData };
       try {
         console.log(formData);
-        await updateEvent(formData);
-        console.log('이벤트 수정 성공');
-        navigate(`/admin/event/detail/${updateUuid}`);
+        await createEvent(formData);
+        console.log('이벤트 전송 성공');
+        alert('이벤트 생성 완료');
+        navigate('/admin/board')
       } catch (error) {
-        console.error('이벤트 수정 실패:', error);
-      }
-    } else {
-      if (formData) {
-        // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
-        // const mergedFormData = { ...formData, ...eventData };
-        try {
-          console.log(formData);
-          const returnedData = await createEvent(formData);
-          const uuid: string = returnedData.uuid;
-          console.log('이벤트 생성 성공');
-          navigate(`/admin/event/detail/${uuid}`); //리턴받은거 값으로 보내삼
-        } catch (error) {
-          console.error('이벤트 생성 실패:', error);
-        }
+        console.error('이벤트 전송 실패:', error);
       }
     }
   };
@@ -161,12 +137,13 @@ const AdminEventCreate = () => {
             />
           </div>
         </div>
+
         <div className="flex w-5/12 mt-32">
           <MeetingRightSection formData={formData} setFormData={setFormData} />
         </div>
       </div>
       <div className="flex justify-evenly w-m mx-8 my-20 text-center">
-        <BtnBlue text="확인" onClick={() => handleCheckEvent(updateUuid)} />
+        <BtnBlue text="확인" onClick={handleCreateEvent} />
       </div>
     </div>
   );

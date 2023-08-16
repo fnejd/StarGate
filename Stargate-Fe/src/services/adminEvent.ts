@@ -86,19 +86,25 @@ const fetchEventDetailData = async (location: string) => {
   }
 };
 
-const fetchEventDetailLettersData = async (uuid: string) => {
+const fetchLettersData = async (uuid: string) => {
   try {
-    const response = await api.get('/letters/get-meeting', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    const response = await api.post(
+      '/letters/get-meeting',
+      {
+        uuid: uuid,
       },
-      withCredentials: false,
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        withCredentials: false,
+      }
+    );
+    console.log('letters:', response);
     return response.data;
   } catch (error) {
-    console.log(location);
-    console.log('에러발생', error);
+    console.log(uuid);
+    console.log('letters 에러발생', error);
   }
 };
-
-export { createEvent, updateEvent, fetchEventDetailData };
+export { createEvent, updateEvent, fetchEventDetailData, fetchLettersData };

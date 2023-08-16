@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /**
  * BoardCardProps
@@ -24,6 +24,29 @@ const BoardCard = ({
   isLoading,
 }: BoardCardProps) => {
   const [isHovering, setIsHovering] = useState(false);
+  const [stringDate, setStringDate] = useState('');
+
+  useEffect(() => {
+    if (date !== undefined) {
+      const start = date;
+      const [year, month, dayWithTime] = start.split('-');
+      const [day, time] = dayWithTime.split('T'); // "T"를 기준으로 분리하여 일자와 시간을 추출
+      const [hour, minute, second] = time.split(':');
+      const newDate: Date = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+        Number(hour),
+        Number(minute),
+        Number(second.split('.')[0])
+      );
+      const formattedDate = `${year}-${month}-${day}  ${newDate
+        .getHours()
+        .toString()
+        .padStart(2, '0')}:${newDate.getMinutes().toString().padStart(2, '0')}`;
+      setStringDate(formattedDate);
+    }
+  }, [date]);
 
   const handleMouseEnter = () => {
     if (title && date) {
@@ -39,7 +62,7 @@ const BoardCard = ({
     <>
       {isLoading ? (
         <div
-          className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 relative animate-pulse bg-gray-200 rounded-md"
+          className="lg:h-72 lg:w-72 md:h-48 md:w-48 sm:h-48 sm:w-48 relative bg-opacity-25 bg-white shadow-custom rounded-lg border border-custom backdrop-filter-blur animate-pulse"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         ></div>
@@ -54,11 +77,11 @@ const BoardCard = ({
             src={imageSrc}
             alt="card image"
           />
-          {isHovering && (title || date || remainingTime) && (
+          {isHovering && (title || stringDate || remainingTime) && (
             <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black text-white text-center rounded-md">
               <div>
                 {title && <h2 className="text-lg font-semibold">{title}</h2>}
-                {date && <p className="text-sm">{date}</p>}
+                {stringDate && <p className="text-sm">{stringDate}</p>}
                 {remainingTime && <p className="text-sm">{remainingTime}</p>}
               </div>
             </div>
