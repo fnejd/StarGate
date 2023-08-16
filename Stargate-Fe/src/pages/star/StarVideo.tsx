@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
@@ -151,7 +150,6 @@ const StarVideo = () => {
           await peerService.setLocalDescription(receivedData.ans);
           console.log('Connection state:', peerService.peer.connectionState);
           setReceiveTime(receivedData.time);
-
           setOnTimer(true);
         }
         if (receivedData.type === 'candidate') {
@@ -181,32 +179,30 @@ const StarVideo = () => {
   }, [socket]);
 
   const getMeetingData = async () => {
-    const roomId =
-      url != null
-        ? url
-        : '127baa3f-63df-47e9-a4ab-ff0469737881.002d4659-12b8-430c-a3c1-88beb3df8adb';
-
-    await getStarMeetingDataApi(roomId)
-      .then((res: starMeetingDataType | undefined) => {
-        if (res != undefined) {
-          setMeetingData({
-            waitingTime: res.waitingTime,
-            meetingTime: res.meetingTime,
-            photoNum: res.photoNum,
-            memberNo: res.memberNo,
-            meetingFUsers: res.meetingFUsers,
-          });
-        }
-      })
-      .catch((error) => console.log(error));
+    if (url === null) {
+      console.log('roomId is not defined');
+      return;
+    } else {
+      await getStarMeetingDataApi(url)
+        .then((res: starMeetingDataType | undefined) => {
+          if (res != undefined) {
+            setMeetingData({
+              waitingTime: res.waitingTime,
+              meetingTime: res.meetingTime,
+              photoNum: res.photoNum,
+              memberNo: res.memberNo,
+              meetingFUsers: res.meetingFUsers,
+            });
+          }
+        })
+        .catch((error) => console.log(error));
+    }
 
     return;
   };
 
   useEffect(() => {
     console.log('컴포넌트 실행~~');
-
-    console.log('fetch start');
     const fetchData = async () => {
       if (!meetingData) await getMeetingData();
     };
@@ -240,8 +236,6 @@ const StarVideo = () => {
   }, [meetingData, meetingOrder, receiveTime]);
 
   const tickWaiting = () => {
-    console.log('대기 시간 으로 넘 ㅓ어 감');
-
     if (timer.waitingSec > 0) {
       setTimer((prev) => ({
         ...prev,
@@ -269,8 +263,6 @@ const StarVideo = () => {
   }, [timer.waitingMin, timer.waitingSec]);
 
   const tick = () => {
-    console.log('Tick Method Start', timer.sec);
-
     // sec -1
     if (timer.sec > 0) {
       setTimer((prev) => ({
@@ -279,7 +271,6 @@ const StarVideo = () => {
       }));
     }
     if (timer.sec === 0 && timer.min > 0) {
-      console.log('초가 0이 되어 분이 줄어든다잉');
       setTimer((prev) => ({
         ...prev,
         min: prev.min - 1,
@@ -289,9 +280,7 @@ const StarVideo = () => {
   };
 
   useEffect(() => {
-    console.log('timer start');
     if (timer.sec === 0 && timer.min > 0) {
-      console.log('초가 0이 되어 분이 줄어든다잉');
       setTimer((prev) => ({
         ...prev,
         min: prev.min - 1,
@@ -311,7 +300,6 @@ const StarVideo = () => {
 
       const intervalId = setInterval(() => {
         if (screenshotCount == 0) {
-          console.log('WaitingTimer Run');
           tickWaiting();
         }
       }, 1000);
@@ -328,7 +316,6 @@ const StarVideo = () => {
     if (peerService.peer && onTimer) {
       const intervalId = setInterval(() => {
         if (timer.sec > 0) {
-          console.log('타이머 시작!@!@!!');
           tick();
         }
       }, 1000);
