@@ -35,7 +35,7 @@ public class RtcSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
         log.info("@RtcSocketHandler, meetingInfo = {}", meetingPath);
-        log.info("Message = {}", message);
+        log.info("Message = {}", message.getPayload());
         for (WebSocketSession webSocketSession : SESSION_MAP.get(meetingPath)) {
             if (webSocketSession!=null && webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
                 webSocketSession.sendMessage(message);
