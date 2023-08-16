@@ -114,6 +114,7 @@ const Tab1 = ({
         {stream && mediaActive && (
           <ReactPlayer playing muted height="4/6" width="5/6" url={stream} />
         )}
+        <div className="m-2"></div>
         <canvas
           id="audio"
           width="250"
@@ -331,11 +332,15 @@ const Tab5 = ({ readyData }) => {
   useEffect(() => {
     if (timer.second === 0 && timer.minute > 0) {
       console.log('초가 0이 되어 분이 줄어듦');
-      setTimer((prevTimer) => ({
-        ...prevTimer,
-        minute: prevTimer.minute - 1,
-        second: 59,
-      }));
+      setTimeout(
+        () =>
+          setTimer((prevTimer) => ({
+            ...prevTimer,
+            minute: prevTimer.minute - 1,
+            second: 59,
+          })),
+        1000
+      );
     }
   }, [timer.second, timer.minute]);
 
