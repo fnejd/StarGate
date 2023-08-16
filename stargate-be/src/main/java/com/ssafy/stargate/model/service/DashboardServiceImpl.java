@@ -116,9 +116,9 @@ public class DashboardServiceImpl implements DashboardService{
 
         
         // 예정은 가장 빠른 미팅 순으로 정렬
-        sortExpectedMeetings(expectedMeetings);
+        expectedMeetings = sortExpectedMeetings(expectedMeetings);
         // 리마인드는 가장 최근 미팅 순으로 정렬
-        sortFinishedMeetings(finishedMeetings);
+        finishedMeetings = sortFinishedMeetings(finishedMeetings);
 
         return DashboardResponseDto.builder()
                 .ongoing(ongoingMeetings)
@@ -225,9 +225,9 @@ public class DashboardServiceImpl implements DashboardService{
      * @param dto List<DashboardMeetingResponseDto> 예정 미팅 목록
      * @return 가장 빠르게 시작하는 순으로 정렬된 예정 미팅 목록
      */
-    private void sortExpectedMeetings(List<DashboardMeetingResponseDto> dto){
+    private List<DashboardMeetingResponseDto> sortExpectedMeetings(List<DashboardMeetingResponseDto> dto){
 
-        dto.stream().sorted(Comparator.comparingLong(DashboardMeetingResponseDto -> DashboardMeetingResponseDto.getRemainingTime())).toList();
+        return dto.stream().sorted(Comparator.comparingLong(DashboardMeetingResponseDto::getRemainingTime)).collect(Collectors.toList());
     }
 
     /**
@@ -235,8 +235,8 @@ public class DashboardServiceImpl implements DashboardService{
      * @param dto List<DashboardMeetingResponseDto> 완료된 미팅 목록
      * @return 가장 최근에 끝난 미팅 순으로 정렬된 완료된 미팅 목록
      */
-    private void sortFinishedMeetings(List<DashboardMeetingResponseDto> dto){
-        dto.stream().sorted(Comparator.comparingLong(DashboardMeetingResponseDto::getRemainingTime).reversed()).collect(Collectors.toList());
+    private List<DashboardMeetingResponseDto> sortFinishedMeetings(List<DashboardMeetingResponseDto> dto){
+        return dto.stream().sorted(Comparator.comparingLong(DashboardMeetingResponseDto::getRemainingTime).reversed()).collect(Collectors.toList());
     }
 
 }
