@@ -144,14 +144,14 @@ const NotepadComponent = ({
           <div className={`flex flex-wrap w-${(wrapWidth * 2 + 20) / 2}`}>
           <textarea
             onChange={(e) => setWrapWidth(e.target.offsetWidth)}
-            className={`p-3 m-2 border-none rounded-sm outline-none resize w-${wrapWidth} h-200 bg-postityellow drop-shadow-lg`}
+            className={`p-3 m-2 border-none rounded-sm outline-none resize-none w-${wrapWidth} h-200 bg-postityellow drop-shadow-lg`}
             readOnly
           >
             {videoData.meetingMembers[meetingOrder]?.postitContents}
           </textarea>
           <textarea
             onChange={(e) => setWrapWidth(e.target.offsetWidth)}
-            className={`p-3 m-2 border-none rounded-sm outline-none resize w-${wrapWidth} h-200 bg-postityellow drop-shadow-lg`}
+            className={`p-3 m-2 border-none rounded-sm outline-none resize-none w-${wrapWidth} h-200 bg-postityellow drop-shadow-lg`}
             readOnly
           >
             {videoData.memoContents}

@@ -1,7 +1,6 @@
 import React from 'react';
 import SignInComponent from '@/organisms/auth/SignInComponent';
 import ToolTipComponent from '@/atoms/auth/ToolTipComponent';
-import NotepadComponent from '@/atoms/video/NotepadComponent';
 
 /**
  * @todo
@@ -11,7 +10,6 @@ import NotepadComponent from '@/atoms/video/NotepadComponent';
 const SignIn = () => {
   return (
     <div className="w-screen">
-      <NotepadComponent initialMeetingOrder={0} meetingData={null} />
       <div className="ml-auto mr-auto text-center">
         <h1 className="m-5 text-center text-white t2b">S T A R G A T E</h1>
         <SignInComponent />

@@ -118,6 +118,7 @@ const MeetingBottomSection = ({
 
   // 등록 함수8
   const handleGroupChange = (value: number | string) => {
+    console.log(group);
     const selectedGroup = group.find((item) => item.name === value);
     if (selectedGroup) {
       setMembers(selectedGroup.members);
@@ -126,12 +127,12 @@ const MeetingBottomSection = ({
 
   // 멤버 변수가 바뀌변 폼데이터 업데이트
   useEffect(() => {
+    console.log('멤버 바뀌었습니다!!!');
     setFormData((prevFormData) => {
       const updatedMembers = [
         ...prevFormData.meetingMembers,
         ...members.map((member) => member.memberNo),
       ];
-      console.log(updatedMembers);
 
       return {
         ...prevFormData,
@@ -272,7 +273,7 @@ const MeetingBottomSection = ({
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
+          {(provided) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
@@ -282,16 +283,16 @@ const MeetingBottomSection = ({
               {members &&
                 members.map((item, index) => (
                   <Draggable
-                    key={index}
+                    key={item.memberNo}
                     draggableId={index.toString()}
                     index={index}
                   >
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        // key={index}
+                        key={index}
                         className="flex items-center justify-between mt-2 w-62"
                       >
                         <div className="mx-1 my-2 font-medium text-left text-white font-suit text-14">
