@@ -1,6 +1,7 @@
 package com.ssafy.stargate.handler;
 
 import com.ssafy.stargate.model.dto.response.SimpleDto;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -32,12 +33,13 @@ public class RtcSocketHandler extends TextWebSocketHandler {
      * @throws Exception 모든 예외.
      */
     @Override
+    @Synchronized
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
         log.info("@TEXT, socketId = {}, meeting path = {}", session.getId(), meetingPath);
         log.info("Message = {}", message.getPayload());
         for (WebSocketSession webSocketSession : SESSION_MAP.get(meetingPath)) {
-            if (webSocketSession!=null && webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
+            if (webSocketSession != null && webSocketSession.isOpen() && !session.getId().equals(webSocketSession.getId())) {
                 webSocketSession.sendMessage(message);
             }
         }
@@ -64,10 +66,10 @@ public class RtcSocketHandler extends TextWebSocketHandler {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
         TextMessage message = new TextMessage("{msg : 'My Socket id = " + session.getId() + "'}");
         session.sendMessage(message);
-        log.info("@OPEN : meetingInfo = {}, socket id = {}", meetingPath,session.getId());
+        log.info("@OPEN : meetingInfo = {}, socket id = {}", meetingPath, session.getId());
         List<WebSocketSession> sessions = SESSION_MAP.computeIfAbsent(meetingPath, k -> new ArrayList<>());
         sessions.add(session);
-        log.info("@AFTER CONNECT : connected count = {}",sessions.size());
+        log.info("@AFTER CONNECT : connected count = {}", sessions.size());
 //        int idx = -1;
 //        if ((idx = meetingPath.lastIndexOf('.')) != -1) {
 //            String monitorRoom = meetingPath.substring(0, idx);
@@ -88,13 +90,14 @@ public class RtcSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String meetingPath = (String) session.getAttributes().get("meetingPath");
-        log.info("#CLOSE, meetingInfo = {}, socket ID = {}", meetingPath,session.getId());
-        List<WebSocketSession> meetingSessionList = SESSION_MAP.get(meetingPath);
-        if (meetingSessionList.size() == 1) {
+        log.info("#CLOSE, meetingInfo = {}, socket ID = {}", meetingPath, session.getId());
+        List<WebSocketSession> sessions = SESSION_MAP.get(meetingPath);
+        if (sessions.size() == 1) {
             SESSION_MAP.remove(meetingPath);
         } else {
-            meetingSessionList.remove(session);
+            sessions.remove(session);
         }
+        log.info("@AFTER Disconnect : connected count = {}", sessions.size());
         log.info("MAP SIZE = {}", SESSION_MAP.size());
     }
 }
