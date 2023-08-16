@@ -485,7 +485,7 @@ const UserVideo = () => {
             <div className="basis-1/2 text-center">
               <span className="form-title">연예인 영상</span>
               <ReactPlayer
-                key={meetingOrder} // 이 부분을 추가하여 ReactPlayer의 key를 변경하도록 합니다.
+                key={meetingOrder} 
                 playing
                 muted
                 height="full"
