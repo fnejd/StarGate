@@ -1,0 +1,13 @@
+TODO & Porting manual
+
+[완료] 1. project architecture 그림
+[완료] 1.1 보안 파일이 담긴 폴더 준비 및 보안사유
+-> nginx 설정파일, application-secret.properties파일, dockerfile등.
+[완료] 2. nginx porting manual(setup manual) [현실누나]
+[완료] 3. 기술스택에 대한 버전 명시 ★★★★★
+[완료] 4. 젠킨스 빌드 셋업(Jenkins manual으로 대체)
+[완료] 5. docker setup manual -> 각기 컨테이너의 사용 이미지 및 포트 정보. => 이것으로 서버를 실행시키기 위한 명령어와 순서로 통합????
+6. maybe put pem key file with connection commands?
+[완료] 7. S3 버킷관련 setup manual [현실누나]
+8. 시연 순서에 따른 site별 화면, 실행별 클릭 위치 등 상세 설명. -> 이거는 보통의 시연 이미지 촬영하듯 하면 될듯. -> FE 완성시
+9 DB 덤프만들기 -> FE 완성시 같이

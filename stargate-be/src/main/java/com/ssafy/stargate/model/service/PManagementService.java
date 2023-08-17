@@ -1,23 +1,25 @@
 package com.ssafy.stargate.model.service;
 
-import com.ssafy.stargate.model.dto.common.PGroupDto;
-import com.ssafy.stargate.model.dto.common.PMemberDto;
+import com.ssafy.stargate.model.dto.request.pmanagement.*;
+import com.ssafy.stargate.model.dto.response.pmanagement.PGroupMemberResponseDto;
+import com.ssafy.stargate.model.dto.response.pmanagement.PGroupCreateResponseDto;
+import com.ssafy.stargate.model.dto.response.pmanagement.PMemberCreateResponseDto;
 
 import java.security.Principal;
 import java.util.List;
 
 public interface PManagementService {
-    List<PGroupDto> getGroupList(Principal principal);
+    List<PGroupMemberResponseDto> getGroupList(Principal principal);
 
-    PGroupDto createGroup(PGroupDto dto, Principal principal);
+    PGroupCreateResponseDto createGroup(PGroupCreateRequestDto dto, Principal principal);
 
-    void deleteGroup(PGroupDto dto, Principal principal);
+    void deleteGroup(PGroupDeleteRequestDto dto, Principal principal);
 
-    void deleteMember(PMemberDto dto);
+    void deleteMember(PMemberDeleteRequestDto dto);
 
-    void updateGroup(PGroupDto dto, Principal principal);
+    void updateGroup(PGroupUpdateRequestDto dto, Principal principal);
 
-    PMemberDto createMember(PGroupDto dto);
+    PMemberCreateResponseDto createMember(PMemberCreateRequestDto dto);
 
-    void updateMember(PMemberDto dto);
+    void updateMember(PMemberUpdateRequestDto dto);
 }

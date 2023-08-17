@@ -1,57 +1,71 @@
 package com.ssafy.stargate.model.service;
 
+import com.ssafy.stargate.exception.InputDataBlankException;
+import com.ssafy.stargate.exception.InputDataDuplicationException;
 import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.exception.CRUDException;
-import com.ssafy.stargate.model.dto.common.*;
-import com.ssafy.stargate.model.dto.response.MeetingDetailResponseDto;
+import com.ssafy.stargate.model.dto.request.meeting.MeetingCreateRequestDto;
+import com.ssafy.stargate.model.dto.request.meeting.MeetingDeleteRequestDto;
+import com.ssafy.stargate.model.dto.request.meeting.MeetingUpdateRequestDto;
+import com.ssafy.stargate.model.dto.response.meeting.MeetingDetailResponseDto;
+import com.ssafy.stargate.model.dto.response.meeting.MeetingResponseDto;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import com.ssafy.stargate.model.entity.*;
 import com.ssafy.stargate.model.repository.*;
 import com.ssafy.stargate.util.FileUtil;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * 미팅 관련 서비스 구현체
  */
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
-    @Autowired
+
+
     private final MeetingRepository meetingRepository;
 
-    @Autowired
     private final MeetingFUserRepository meetingFUserRepository;
 
-    @Autowired
     private final MeetingMemberRepository meetingMemberRepository;
 
-    @Autowired
     private final PMemberRepository pMemberRepository;
 
-    @Autowired
     private final PUserRepository pUserRepository;
 
-    @Autowired
     private final FUserRepository fUserRepository;
 
-    @Autowired
     private final FileUtil fileUtil;
 
+    private final String filePath;
 
-    @Value("${s3.filepath.meeting}")
-    private String filePath;
+    public MeetingServiceImpl(
+            MeetingRepository meetingRepository,
+            MeetingFUserRepository meetingFUserRepository,
+            MeetingMemberRepository meetingMemberRepository,
+            PMemberRepository pMemberRepository,
+            PUserRepository pUserRepository,
+            FUserRepository fUserRepository,
+            FileUtil fileUtil,
+            @Value("${s3.filepath.meeting}") String filePath
+    ) {
+        this.meetingRepository = meetingRepository;
+        this.meetingFUserRepository = meetingFUserRepository;
+        this.meetingMemberRepository = meetingMemberRepository;
+        this.pMemberRepository = pMemberRepository;
+        this.pUserRepository = pUserRepository;
+        this.fUserRepository = fUserRepository;
+        this.fileUtil = fileUtil;
+        this.filePath = filePath;
+    }
 
     /**
      * 미팅 세부정보를 가져온다.
@@ -76,7 +90,7 @@ public class MeetingServiceImpl implements MeetingService {
 
         List<MeetingDetailResponseDto.MeetingFUser> meetingFUserDtos = getMeetingDetailFUserDtoList(meeting);
 
-        SavedFileDto savedFileDto = fileUtil.getFileInfo(filePath, meeting.getImage());
+        SavedFileResponseDto savedFileResponseDto = (meeting.getImage() != null) ? fileUtil.getFileInfo(filePath, meeting.getImage()) : null;
 
         PGroup group = getGroup(meeting);
         return MeetingDetailResponseDto.builder()
@@ -87,7 +101,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .meetingTime(meeting.getMeetingTime())
                 .groupNo(group.getGroupNo())
                 .groupName(group.getName())
-                .imageFileInfo(savedFileDto)
+                .imageFileInfo(savedFileResponseDto)
                 .notice(meeting.getNotice())
                 .photoNum(meeting.getPhotoNum())
                 .meetingMembers(meetingMemberDtos)
@@ -99,15 +113,15 @@ public class MeetingServiceImpl implements MeetingService {
     /**
      * 신규 미팅을 생성한다.
      *
-     * @param dto       [MeetingDto] 입력받은 Meeting DTO
+     * @param dto       [MeetingCreateRequestDto] 입력받은 Meeting DTO
      * @param principal [Principal] 소속사 이메일이 포함된 객체
-     * @return [MeetingDto] 생성한 미팅 정보를 담은 DTO
-     * @throws CRUDException     데이터 CRUD 에러
-     * @throws NotFoundException 데이터 찾기 실패 에러
+     * @return [MeetingResponseDto] 생성한 미팅 정보를 담은 DTO
+     * @throws CRUDException           데이터 CRUD 에러
+     * @throws InputDataBlankException 빈 입력 데이터 에러
      */
     @Transactional
     @Override
-    public MeetingDto createMeeting(MeetingDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException {
+    public MeetingResponseDto createMeeting(MeetingCreateRequestDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, InputDataBlankException {
         log.info("data : {}", dto);
         String email = principal.getName();
 
@@ -127,39 +141,39 @@ public class MeetingServiceImpl implements MeetingService {
                             .orElseThrow(() -> new NotFoundException("소속사가 존재하지 않습니다.")))
                     .build();
 
-
-            List<MeetingMemberBridge> meetingMembers = dtoToMeetingMemberList(meeting, dto.getMeetingMembers());
+            List<MeetingMemberBridge> meetingMembers = dtoToMeetingMemberList(meeting, MeetingCreateRequestDto.getParsedMeetingMembers(dto.getMeetingMembers()));
             meetingMemberRepository.saveAll(meetingMembers);
             meeting.setMeetingMembers(meetingMembers);
 
-
-            List<MeetingFUserBridge> meetingFUsers = dtoToMeetingFUserList(meeting, dto.getMeetingFUsers());
+            List<MeetingFUserBridge> meetingFUsers = dtoToMeetingFUserList(meeting, MeetingCreateRequestDto.getParsedMeetingFUsers(dto.getMeetingFUsers()));
             meetingFUserRepository.saveAll(meetingFUsers);
             meeting.setMeetingFUsers(meetingFUsers);
 
             meetingRepository.save(meeting);
-
-            return MeetingDto.entityToDto(meeting);
+            return MeetingResponseDto.entityToDto(meeting);
+        } catch (InputDataBlankException inputDataBlankException) {
+            throw inputDataBlankException; // 그대로 던져주기
         } catch (Exception e) {
             e.printStackTrace();
-
             fileUtil.deleteFile(filePath, filename);
-            throw new CRUDException("미팅 생성 도중 오류가 발생했습니다.");
+
+            throw new CRUDException("미팅 생성 도중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 
 
     /**
      * 미팅 정보를 수정한다.
+     * 이미지파일이 없다면 전의 이미지를 변경하지 않는다.
      *
-     * @param dto       [MeetingDto] 입력받은 Meeting DTO
+     * @param dto       [MeetingUpdateRequestDto] 입력받은 Meeting DTO
      * @param principal [Principal] 소속사 이메일이 포함된 객체
-     * @throws CRUDException     데이터 CRUD 에러
-     * @throws NotFoundException 데이터 찾기 실패 에러
+     * @throws CRUDException           데이터 CRUD 에러
+     * @throws InputDataBlankException 빈 입력 데이터 에러
      */
     @Transactional
     @Override
-    public void updateMeeting(MeetingDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, NotFoundException {
+    public void updateMeeting(MeetingUpdateRequestDto dto, MultipartFile imageFile, Principal principal) throws CRUDException, InputDataBlankException {
         log.info("data : {}", dto);
         String email = principal.getName();
 
@@ -176,21 +190,25 @@ public class MeetingServiceImpl implements MeetingService {
             meeting.setMeetingTime(dto.getMeetingTime());
             meeting.setPhotoNum(dto.getPhotoNum());
             meeting.setNotice(dto.getNotice());
-            meeting.setImage(newFilename);
+            meeting.setImage((newFilename != null) ? newFilename : meeting.getImage());
 
             List<MeetingMemberBridge> meetingMembers = meeting.getMeetingMembers();
-            List<MeetingMemberBridge> newMeetingMembers = dtoToMeetingMemberList(meeting, dto.getMeetingMembers());
+            List<MeetingMemberBridge> newMeetingMembers = dtoToMeetingMemberList(meeting, MeetingCreateRequestDto.getParsedMeetingMembers(dto.getMeetingMembers()));
             updateMeetingMemberList(meetingMembers, newMeetingMembers);
 
             List<MeetingFUserBridge> meetingFUsers = meeting.getMeetingFUsers();
-            List<MeetingFUserBridge> newMeetingFUsers = dtoToMeetingFUserList(meeting, dto.getMeetingFUsers());
+            List<MeetingFUserBridge> newMeetingFUsers = dtoToMeetingFUserList(meeting, MeetingCreateRequestDto.getParsedMeetingFUsers(dto.getMeetingFUsers()));
             updateMeetingFUserList(meetingFUsers, newMeetingFUsers);
 
-            fileUtil.deleteFile(filePath, filename);
+            if (newFilename != null) {
+                fileUtil.deleteFile(filePath, filename);
+            }
+        } catch (InputDataBlankException inputDataBlankException) {
+            throw inputDataBlankException; // 그대로 던져주기
         } catch (Exception e) {
             e.printStackTrace();
             fileUtil.deleteFile(filePath, newFilename);
-            throw new CRUDException("미팅 수정 도중 오류가 발생했습니다.");
+            throw new CRUDException("미팅 생성 도중 오류가 발생했습니다: " + e.getMessage());
         }
 
     }
@@ -198,14 +216,14 @@ public class MeetingServiceImpl implements MeetingService {
     /**
      * 미팅을 삭제한다.
      *
-     * @param dto       [MeetingDto] 입력받은 Meeting DTO
+     * @param dto       [MeetingDeleteRequestDto] 입력받은 Meeting DTO
      * @param principal [Principal] 소속사 이메일이 포함된 객체
      * @throws CRUDException     데이터 CRUD 에러
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     @Transactional
     @Override
-    public void deleteMeeting(MeetingDto dto, Principal principal) throws CRUDException, NotFoundException {
+    public void deleteMeeting(MeetingDeleteRequestDto dto, Principal principal) throws CRUDException, NotFoundException {
         log.info("data : {}", dto);
         String email = principal.getName();
         try {
@@ -223,6 +241,7 @@ public class MeetingServiceImpl implements MeetingService {
     /**
      * 미팅 정보를 가져온다.
      * 미팅을 만든 해당 소속사만 미팅 정보를 변경할 수 있도록 소속사 email (id)와 함께 찾는다.
+     * 미팅 팬유저, 멤버의 orderNum을 이용해 각각 오름차순으로 정렬한다.
      *
      * @param uuid  [UUID] 미팅 uuid (id)
      * @param email [String] 소속사 email (id)
@@ -230,8 +249,10 @@ public class MeetingServiceImpl implements MeetingService {
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     private Meeting getMeeting(UUID uuid, String email) throws NotFoundException {
-        return meetingRepository.findByIdAndEmail(uuid, email)
+        Meeting meeting = meetingRepository.findByIdAndEmail(uuid, email)
                 .orElseThrow(() -> new NotFoundException("미팅 존재하지 않음"));
+        Meeting.sortMeetingByOrderNum(meeting);
+        return meeting;
     }
 
     /**
@@ -241,14 +262,14 @@ public class MeetingServiceImpl implements MeetingService {
      * @return [List<MeetingDetailResponseDto.MeetingMember>] 미팅 멤버 상세 정보 DTO 리스트
      */
     private List<MeetingDetailResponseDto.MeetingMember> getMeetingDetailMemberDtoList(Meeting meeting) {
-        return (List<MeetingDetailResponseDto.MeetingMember>) meeting.getMeetingMembers()
+        return meeting.getMeetingMembers()
                 .stream()
                 .map(meetingMember -> MeetingDetailResponseDto.MeetingMember.builder()
                         .uuid(meetingMember.getUuid())
                         .memberNo(meetingMember.getPMember().getMemberNo())
                         .name(meetingMember.getPMember().getName())
                         .orderNum(meetingMember.getOrderNum())
-                        .roomId(getRoomId(meeting, meetingMember)) // create roomId
+                        .roomId(MeetingMemberBridge.getRoomId(meeting, meetingMember))
                         .build()).toList();
     }
 
@@ -302,48 +323,68 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     /**
-     * 미팅방 id를 생성한다.
-     * 미팅 uuid와 미팅멤버 uuid를 이용한다.
-     *
-     * @param meeting       [Meeting] 미팅
-     * @param meetingMember [MeetingMemberBridge] 미팅 멤버
-     * @return [String] 생성된 미팅방 id
-     */
-    private String getRoomId(Meeting meeting, MeetingMemberBridge meetingMember) {
-        return meeting.getUuid() + "." + meetingMember.getUuid();
-    }
-
-
-    /**
-     * 미팅 멤버 dto 리스트를 통해 미팅 멤버 엔티티 리스트를 만든다.
+     * 미팅 멤버 멤버 번호(id) 리스트를 통해 미팅 멤버 엔티티 리스트를 만든다.
+     * 리스트 순서대로 orderNum을 정해준다. (0부터 시작)
      *
      * @param meeting           [Meeting] 미팅
-     * @param meetingMemberDtos [List<MeetingMemberBridgeDto>] 미팅 멤버 dto 리스트
+     * @param meetingMemberDtos [List<Long>] 미팅 멤버 번호(id) 리스트
      * @return List<MeetingMemberBridge> 미팅 멤버 엔티티 리스트
-     * @throws NotFoundException NotFoundException 데이터 찾기 실패 에러
+     * @throws NotFoundException             NotFoundException 데이터 찾기 실패 에러
+     * @throws InputDataDuplicationException 미팅 멤버 리스트에 번호(id) 중복 발생 시 던져주는 에러
+     * @throws InputDataBlankException       빈 입력 데이터 에러
      */
-    private List<MeetingMemberBridge> dtoToMeetingMemberList(Meeting meeting, List<MeetingMemberBridgeDto> meetingMemberDtos) throws NotFoundException {
-        return meetingMemberDtos.stream().map(meetingMemberBridgeDto -> MeetingMemberBridge.builder()
-                .meeting(meeting)
-                .pMember(pMemberRepository.findById(meetingMemberBridgeDto.getMemberNo())
-                        .orElseThrow(() -> new NotFoundException("미팅 멤버가 존재하지 않습니다.")))
-                .orderNum(meetingMemberBridgeDto.getOrderNum())
-                .build()).toList();
+    private List<MeetingMemberBridge> dtoToMeetingMemberList(Meeting meeting, List<Long> meetingMemberDtos) throws NotFoundException, InputDataDuplicationException, InputDataBlankException {
+        if (meetingMemberDtos.size() < 1) {
+            throw new InputDataBlankException("미팅 멤버는 1명 이상이어야합니다.");
+        }
+        Set<Long> uniqueMemberNos = new HashSet<>();
+        return IntStream.range(0, meetingMemberDtos.size())
+                .mapToObj(index -> {
+                    Long memberNo = meetingMemberDtos.get(index);
+                    if (!uniqueMemberNos.add(memberNo)) {
+                        throw new InputDataDuplicationException("해당 멤버는 미팅 참가 리스트에 이미 존재합니다.");
+                    }
+
+                    return MeetingMemberBridge.builder()
+                            .meeting(meeting)
+                            .pMember(pMemberRepository.findById(memberNo)
+                                    .orElseThrow(() -> new NotFoundException("미팅 멤버가 존재하지 않습니다.")))
+                            .orderNum(index)
+                            .build();
+                })
+                .toList();
     }
 
     /**
-     * 미팅 팬유저 dto 리스트를 통해 미팅 팬유저 엔티티 리스트를 만든다.
+     * 미팅 팬유저 이메일(id) 리스트를 통해 미팅 팬유저 엔티티 리스트를 만든다.
+     * 리스트 순서대로 orderNum을 정해준다. (0부터 시작)
      *
      * @param meeting          [Meeting] 미팅
-     * @param meetingFUserDtos [List<MeetingMemberBridgeDto>] 미팅 팬유저 dto 리스트
-     * @return List<MeetingMemberBridge> 미팅 팬유저 엔티티 리스트
+     * @param meetingFUserDtos [List<String>] 미팅 팬유저 이메일(id) 리스트
+     * @return List<MeetingFUserBridge> 미팅 팬유저 엔티티 리스트
+     * @throws InputDataDuplicationException 미팅 팬유저 리스트에 이메일(id) 중복 발생 시 던져주는 에러
+     * @throws InputDataBlankException       빈 입력 데이터 에러
      */
-    private List<MeetingFUserBridge> dtoToMeetingFUserList(Meeting meeting, List<MeetingFUserBridgeDto> meetingFUserDtos) {
-        return meetingFUserDtos.stream().map(meetingFUserBridgeDto -> MeetingFUserBridge.builder()
-                .meeting(meeting)
-                .email(meetingFUserBridgeDto.getEmail())
-                .orderNum(meetingFUserBridgeDto.getOrderNum())
-                .build()).toList();
+    private List<MeetingFUserBridge> dtoToMeetingFUserList(Meeting meeting, List<String> meetingFUserDtos) throws InputDataDuplicationException, InputDataBlankException {
+        if (meetingFUserDtos.size() < 1) {
+            throw new InputDataBlankException("미팅 유저는 1명 이상이어야합니다.");
+        }
+
+        Set<String> uniqueEmails = new HashSet<>();
+        return IntStream.range(0, meetingFUserDtos.size())
+                .mapToObj(index -> {
+                    String email = meetingFUserDtos.get(index);
+                    if (!uniqueEmails.add(email)) {
+                        throw new InputDataDuplicationException("해당 팬유저는 미팅 참가 리스트에 이미 존재합니다.");
+                    }
+
+                    return MeetingFUserBridge.builder()
+                            .meeting(meeting)
+                            .email(email)
+                            .orderNum(index)
+                            .build();
+                })
+                .toList();
     }
 
     /**

@@ -5,6 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,18 +18,23 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 public class AmazonS3Config {
+    private final String accessKey;
+    private final String secretKey;
+    private final String region;
 
-    @Value("${cloud.aws.credentials.accessKey}")
-    private String accessKey;
-
-    @Value("${cloud.aws.credentials.secretKey}")
-    private String secretKey;
-
-    @Value("${cloud.aws.region.static}")
-    private String region;
+    public AmazonS3Config(
+            @Value("${cloud.aws.credentials.accessKey}") String accessKey,
+            @Value("${cloud.aws.credentials.secretKey}") String secretKey,
+            @Value("${cloud.aws.region.static}") String region
+    ) {
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+        this.region = region;
+    }
 
     /**
      * Amazon S3 웹 서비스에 설정한 계정으로 액세스한 클라이언트 반환한다.
+     *
      * @return AmazonS3Client 객체 제공
      */
     @Bean
