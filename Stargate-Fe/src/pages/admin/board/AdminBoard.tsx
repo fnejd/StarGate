@@ -92,7 +92,7 @@ const AdminBoard = () => {
           />
         )
       )}
-      <Link to="/admin/event/create" className="fixed right-5 bottom-5">
+      <Link to="/admin/event/create" className="fixed right-5 bottom-5 z-50">
         <PlusButton />
       </Link>
       {isExpected ? (

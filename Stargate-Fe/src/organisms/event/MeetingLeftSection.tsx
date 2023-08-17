@@ -122,6 +122,18 @@ const MeetingLeftSection = ({
         } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
         onInputChange={handleStartDate}
       />
+      <AdminInput
+        labelFor="시작 시간"
+        type="time"
+        placeholder=""
+        // 여기 밸류값 변경해야해요!!!!!!!!!!!!!!!!!!!!!!!
+        value={
+          formData.startDate instanceof Date
+            ? formData.startDate.toISOString().split('T')[0]
+            : ''
+        } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
+        onInputChange={handleStartDate}
+      />
 
       <div className="flex items-end w-48">
         <AdminInput

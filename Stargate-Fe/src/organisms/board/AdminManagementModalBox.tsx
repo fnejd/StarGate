@@ -174,7 +174,8 @@ const AdminManagementModalBox = ({
                 </div>
               </div>
             )}
-            <ul className="w-full h-400 overflow-y-scroll flex flex-col-reverse justify-end">
+            <div className="w-full h-400 overflow-auto">
+            <ul className="w-full flex flex-col-reverse justify-end">
               {selectedGroupMembers.map((member) => (
                 <li
                   className="modal-content justify-center flex"
@@ -215,6 +216,7 @@ const AdminManagementModalBox = ({
                   </li>
                 )}
             </ul>
+            </div>
           </div>
         </div>
       )}
