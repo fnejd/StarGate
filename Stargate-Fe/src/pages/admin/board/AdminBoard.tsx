@@ -32,9 +32,15 @@ const AdminBoard = () => {
   /**
    * @param cardBoxData => CardBox에 넣을 data값 선정
    * @param setExpected => CardBox에 Expected[0]이 들어갔는지 확인하는 변수
+   * @param isExpected => 출력할 expected값이 있는지 확인하는 변수
+   * @param isFinished => 출력할 finished값이 있는지 확인하는 변수
    */
   const cardBoxData = data.ongoing[0] || data.expected[0];
   const setExpected = cardBoxData === data.expected[0];
+  const isExpected =
+    (setExpected && data.expected[1] !== undefined) ||
+    (setExpected === false && data.expected[0] !== undefined);
+  const isFinished = data.finished[0] !== undefined;
 
   /**
    * @todo => 추후에 useInterval로 수정
@@ -70,7 +76,7 @@ const AdminBoard = () => {
 
   return (
     <div className="w-xl min-h-screen flex flex-col justify-around">
-      <BoardHeader isAdmin={true}/>
+      <BoardHeader isAdmin={true} />
       {loading ? (
         <BoardCardBox isAdmin={true} isLoading={loading} />
       ) : (
@@ -89,7 +95,13 @@ const AdminBoard = () => {
       <Link to="/admin/event/create" className="fixed right-5 bottom-5">
         <PlusButton />
       </Link>
-      <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
+      {isExpected ? (
+        <p className="t3b text-center lg:my-14 sm:my-6 text-whiteㄹ">예정</p>
+      ) : (
+        <p className="t3b text-center lg:my-14 sm:my-6 text-white opacity-40">
+          예정 없음
+        </p>
+      )}
       {loading ? (
         <BoardCardList isLoading={loading} isAdmin={true} />
       ) : (
@@ -108,7 +120,13 @@ const AdminBoard = () => {
           />
         ))
       )}
-      <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
+      {isFinished ? (
+        <p className="t3b text-center lg:my-14 sm:my-6 text-white">리마인드</p>
+      ) : (
+        <p className="t3b text-center lg:my-14 sm:my-6 text-white opacity-40">
+          리마인드 없음
+        </p>
+      )}
       {data.finished && (
         <BoardCardList
           meetings={data.finished}
