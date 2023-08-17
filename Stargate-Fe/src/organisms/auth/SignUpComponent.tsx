@@ -9,6 +9,7 @@ import {
   pwValidationCheck,
   userValidationCheck,
 } from '@/hooks/useValidation';
+import Swal from 'sweetalert2';
 
 interface userType {
   email: string;
@@ -55,7 +56,7 @@ const SignUpComponent = () => {
     const check = emailVaildationCheck(email);
 
     if (check != 'SUCCESS') {
-      alert(check);
+      Swal.fire('이메일 인증 실패', check, 'warning');
       return 0;
     }
 
@@ -80,7 +81,7 @@ const SignUpComponent = () => {
     const validation = userValidationCheck(user as userType);
     
     if (validation != 'SUCCESS') {
-      alert(validation);
+      Swal.fire('입력 형식 에러', validation, 'error');
       return 0;
     }
 
@@ -107,25 +108,24 @@ const SignUpComponent = () => {
     response
       .then(async (response) => {
         if (response == 'alreadyToken') {
-          alert('로그인 상태로는 회원가입을 할 수 없습니다.');
+          Swal.fire('회원가입 실패', '로그인 상태로는 회원가입을 할 수 없습니다.', 'error');
           await logoutApi();
           navigate('/');
         }
-        alert('회원가입에 성공하셨습니다.');
-        console.log('SignUp SUCCESS');
+        Swal.fire('회원가입 성공', '회원가입에 성공하셨습니다.', 'success');
         navigate('/');
       })
       .catch((error: string) => {
         console.log(error);
-        alert(error);
+        Swal.fire('회원가입 실패', error, 'error');
         return 0;
       });
   };
 
   return (
-    <div className="m-5 max-w-sm ml-auto mr-auto text-center">
+    <div className="m-5 min-w-fit mx-auto text-center">
       <p className="form-title">회원가입</p>
-      <div className="flex items-center">
+      <div className="flex items-center w-s">
         <InputComponent
           text="이메일"
           type="email"

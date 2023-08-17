@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from 'axios';
 import { api } from './api';
 
 // 대기방 정보 불러오기

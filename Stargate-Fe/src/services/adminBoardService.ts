@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { api } from './api';
 
 const fetchAdminBoard = async () => {
@@ -39,7 +40,7 @@ const updateAdminData = async (formData: FormData) => {
       withCredentials: false,
     });
     console.log(response);
-    alert('수정되었습니다.');
+    Swal.fire('수정 성공', '데이터가 수정되었습니다', 'success');
     return response.data;
   } catch (error) {
     console.log('에러발생', error);

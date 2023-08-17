@@ -2,11 +2,6 @@ import React from 'react';
 import SignInComponent from '@/organisms/auth/SignInComponent';
 import ToolTipComponent from '@/atoms/auth/ToolTipComponent';
 
-/**
- * @todo
- * Toggle 버튼 하나 만들어서 로그인 API 요청할 때
- * 관리자 로그인인지 유저 로그인인지 구분 가능토록
- */
 const SignIn = () => {
   return (
     <div className="w-screen">

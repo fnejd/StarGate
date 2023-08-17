@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { checkAuthNumApi } from '@/services/authService';
 import { useSetRecoilState } from 'recoil';
 import { emailState } from '@/recoil/userState';
+import Swal from 'sweetalert2';
 
 interface AuthNumberProps {
   load: boolean;
@@ -49,7 +50,7 @@ const AuthNumberComponent = ({
     let check = true;
     let code = '';
     if (numArr.length < 6) {
-      alert('인증번호 6자리를 입력해주세요.');
+      Swal.fire('입력 오류', '인증번호 6자리를 모두 입력해주세요!', 'warning');
       return 0;
     }
     numArr.forEach((e, i) => {
@@ -61,10 +62,10 @@ const AuthNumberComponent = ({
 
     if (check && result == 'SUCCESS') {
       setEmail(email);
-      alert('인증되었습니다.');
+      Swal.fire('인증 성공', '이메일 인증이 완료되었습니다.~', 'success');
       navigate('/pwreset');
     } else {
-      alert('인증번호가 올바르지 않습니다.');
+      Swal.fire('인증 실패', '인증번호가 올바르지 않습니다.', 'error');
       return 0;
     }
   };

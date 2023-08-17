@@ -6,6 +6,7 @@ import { fetchAdminData } from '@/services/adminBoardService';
 import { UserData, AdminData } from '@/types/board/type';
 import { nameShouldFetch } from '@/recoil/myPageState';
 import { useRecoilState } from 'recoil';
+import Swal from 'sweetalert2';
 
 /**
  * @todo
@@ -40,10 +41,10 @@ const BoardHeaderNav = ({ isAdmin }: { isAdmin: boolean }) => {
     try {
       const result = await logoutApi();
       if (result === 'SUCCESS') {
-        alert('로그아웃 완료');
+        Swal.fire('성공!', '로그아웃을 완료했습니다.', 'success');
         navigate('/');
       } else {
-        alert(result);
+        Swal.fire('어라?', result, 'warning');
       }
     } catch (error) {
       console.log('로그아웃 에러:', error);

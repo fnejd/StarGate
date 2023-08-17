@@ -136,7 +136,7 @@ const MyPageBox = (props: MyPageBoxProps) => {
     }
   };
   return (
-    <div className="my-5 flex flex-col h-screen">
+    <div className="my-5 flex flex-col h-full">
       <p className="form-title text-white">마이페이지</p>
       <div className="flex items-center">
         <InputComponent
