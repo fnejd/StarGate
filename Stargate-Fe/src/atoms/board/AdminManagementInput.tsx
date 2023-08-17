@@ -53,7 +53,6 @@ const AdminManagementInput = ({
   // Input onChange 시 value값 변경해주기
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    console.log('현재 값 :', value);
     setInputValue(value);
   };
 
@@ -63,22 +62,17 @@ const AdminManagementInput = ({
         await updateGroup(groupNo, inputValue);
         setGroupsFetch(true);
       } catch (error) {
-        console.log('그룹 업데이트 에러:', error);
       }
     } else {
       try {
         const newGroup = await createGroup(inputValue);
-        console.log(inputValue, '===', newGroup);
         if (newGroup !== undefined) {
           setGroups([...groups, newGroup]);
           setSelectedGroupNo(newGroup.groupNo);
           setSelectedGroupName(newGroup.name);
-          console.log(newGroup);
-          console.log(groups);
           setGroupsFetch(true);
         }
       } catch (error) {
-        console.log('그룹 생성 에러:', error);
       }
     }
   };
@@ -93,27 +87,20 @@ const AdminManagementInput = ({
             : member
         );
         setSelectedGroupMembers(updatedMembers);
-        console.log('멤버 업데이트', inputValue);
         setGroupsFetch(true);
       } catch (error) {
-        console.log('멤버 업데이트 에러:', error);
       }
     } else {
       if (groupNo)
         try {
           const newMember = await createMember(groupNo, inputValue);
-          console.log(inputValue, '===', newMember);
           if (newMember !== undefined) {
-            console.log('멤버 생성 시작');
             setSelectedGroupMembers([...selectedGroupMembers, newMember]);
             setGroupsFetch(true);
           }
-          console.log('멤버 생성', inputValue);
         } catch (error) {
-          console.log('멤버 생성 에러:', error);
         }
       else {
-        console.log('그룹번호없음');
       }
     }
   };
@@ -122,12 +109,9 @@ const AdminManagementInput = ({
     if (e.key === 'Enter') {
       if (isGroup) {
         await groupInputHandle();
-        console.log('그룹');
       } else {
         await memberInputHandle();
-        console.log('멤버');
       }
-      console.log('엔터');
       onEnter();
     }
   };
