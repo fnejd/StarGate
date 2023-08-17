@@ -226,8 +226,7 @@ public class DashboardServiceImpl implements DashboardService{
      * @return 가장 빠르게 시작하는 순으로 정렬된 예정 미팅 목록
      */
     private List<DashboardMeetingResponseDto> sortExpectedMeetings(List<DashboardMeetingResponseDto> dto){
-
-        return dto.stream().sorted(Comparator.comparingLong(DashboardMeetingResponseDto::getRemainingTime)).collect(Collectors.toList());
+        return dto.stream().sorted((v1, v2) -> v1.getStartDate().compareTo(v2.getStartDate())).collect(Collectors.toList());
     }
 
     /**
@@ -236,7 +235,7 @@ public class DashboardServiceImpl implements DashboardService{
      * @return 가장 최근에 끝난 미팅 순으로 정렬된 완료된 미팅 목록
      */
     private List<DashboardMeetingResponseDto> sortFinishedMeetings(List<DashboardMeetingResponseDto> dto){
-        return dto.stream().sorted(Comparator.comparingLong(DashboardMeetingResponseDto::getRemainingTime).reversed()).collect(Collectors.toList());
+        return dto.stream().sorted((v1, v2) -> v2.getStartDate().compareTo(v1.getStartDate())).collect(Collectors.toList());
     }
 
 }
