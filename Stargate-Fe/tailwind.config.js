@@ -104,6 +104,8 @@ export default {
         admingray: '#DADADA',
         postityellow: '#FFFACE',
         memoblue: '#AAAFF7',
+        mainpurple: '#AEA7D0',
+        mainyellow: '#FFD09E',
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],

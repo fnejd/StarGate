@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import BtnRed from '@/atoms/common/BtnRed';
 import BtnWhite from '@/atoms/common/BtnWhite';
@@ -114,6 +114,7 @@ const Tab1 = ({
         {stream && (
           <ReactPlayer playing={mediaActive} muted height="4/6" width="5/6" url={stream} />
         )}
+        <div className="m-2"></div>
         <canvas
           id="audio"
           width="250"
@@ -286,20 +287,14 @@ const Tab4 = ({ readyData, setReadyData }: Tab2Props) => {
 };
 
 const Tab5 = ({ readyData }) => {
+  const uuid: string = useParams().uuid;
   const navigate = useNavigate();
   const [timer, setTimer] = useState({
     minute: 0,
     second: 0,
   });
-
-  useEffect(() => {
-    setTimer((prevTimer) => ({
-      ...prevTimer,
-      minute: Math.floor(readyData.meetingFUser.remainingTime / 60),
-      second: readyData.meetingFUser.remainingTime % 60,
-    }));
-    tick();
-  }, []);
+  const formattedMinute = timer.minute.toString().padStart(2, '0');
+  const formattedSecond = timer.second.toString().padStart(2, '0');
 
   const tick = () => {
     console.log('틱 시작', timer.second);
@@ -314,13 +309,38 @@ const Tab5 = ({ readyData }) => {
   };
 
   useEffect(() => {
+    setTimer((prevTimer) => ({
+      ...prevTimer,
+      minute: Math.floor(readyData.meetingFUser.remainingTime / 60),
+      second: readyData.meetingFUser.remainingTime % 60,
+    }));
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (timer.second > 0) {
+        console.log('타이머 시작!');
+        tick();
+      }
+    }, 1000); // 1초마다 실행
+
+    return () => {
+      clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+    };
+  }, [timer]);
+
+  useEffect(() => {
     if (timer.second === 0 && timer.minute > 0) {
       console.log('초가 0이 되어 분이 줄어듦');
-      setTimer((prevTimer) => ({
-        ...prevTimer,
-        minute: prevTimer.minute - 1,
-        second: 59,
-      }));
+      setTimeout(
+        () =>
+          setTimer((prevTimer) => ({
+            ...prevTimer,
+            minute: prevTimer.minute - 1,
+            second: 59,
+          })),
+        1000
+      );
     }
   }, [timer.second, timer.minute]);
 
@@ -339,9 +359,9 @@ const Tab5 = ({ readyData }) => {
           text="입장하기" // 버튼 텍스트 변경
         />
       ) : timer.minute === 0 && timer.second === 10 ? (
-        <BtnRed text={`${timer.minute} : ${timer.second}`} />
+        <BtnRed text={`${formattedMinute} : ${formattedSecond}`} />
       ) : (
-        <BtnWhite text={`${timer.minute} : ${timer.second}`} />
+        <BtnWhite text={`${formattedMinute} : ${formattedSecond}`} />
       )}
     </div>
   );
