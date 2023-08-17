@@ -22,6 +22,7 @@ interface InputProps {
   getter?: object;
   setter: React.Dispatch<React.SetStateAction<object>>;
   value?: string;
+  placehoder?: string;
 }
 
 const InputComponent: React.FC<InputProps> = ({
@@ -33,16 +34,16 @@ const InputComponent: React.FC<InputProps> = ({
   getter,
   setter,
   value,
+  placehoder,
 }) => {
   // state 값 class 지정 분기
   if (state == 'red') {
     state = 'input-warning';
   } else if (state != undefined) {
-    state = `font-suit text-12 font-medium text-green-400`;
+    state = `font-suit text-12 font-medium text-green`;
   }
 
   // Input onChange 시 setter 호출해 state 값 변경해주기
-  // 더 좋은 방법 없을까? 고민해보기
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setter({
@@ -61,7 +62,7 @@ const InputComponent: React.FC<InputProps> = ({
             onChange={(e) => onChange(e)}
             className="min-w-full text-white bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
-            placeholder={text}
+            placeholder={placehoder != undefined ? placehoder : text}
             value={value}
           />
         </div>
@@ -72,17 +73,12 @@ const InputComponent: React.FC<InputProps> = ({
             onChange={(e) => onChange(e)}
             className="min-w-full text-white bg-transparent border-b-2 border-slate-50 mt-2 placeholder:text-slate-50"
             type={type}
-            placeholder={text}
+            placeholder={placehoder != undefined ? placehoder : text}
             value={value}
           />
         </div>
       )}
-
-      {notice != null ? (
-        <p className={`mt-1 ${state}`}>{notice}</p>
-      ) : (
-        <p className="ml-3 mt-3"></p>
-      )}
+      <p className={`mt-1.5 ${state} block h-4`}>{notice}</p>
     </div>
   );
 };

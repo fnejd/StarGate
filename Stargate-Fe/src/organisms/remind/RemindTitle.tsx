@@ -6,9 +6,9 @@ interface RemindTitleProps {
   groupName: string;
 }
 
-const RemindTitle = ({ name, startDatem, groupName }: RemindTitleProps) => {
-  const dateObj = new Date('2023-07-19T03:46:22.904');
-  const options = {
+const RemindTitle = ({ name, startDate, groupName }: RemindTitleProps) => {
+  const dateObj = new Date(startDate);
+  const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -19,13 +19,11 @@ const RemindTitle = ({ name, startDatem, groupName }: RemindTitleProps) => {
   );
 
   return (
-    <div>
-      <div className="font-suit text-48 font-medium text-white mb-3">
+    <div className="mt-2 mr-2">
+      <div className="mb-3 font-medium text-white font-suit text-60">
         {formattedDate}
       </div>
-      <div className="font-suit text-80 font-medium text-white">
-        이유한 스무살 기념 팬사인회
-      </div>
+      <div className="font-medium text-white font-suit text-80">{name}</div>
     </div>
   );
 };

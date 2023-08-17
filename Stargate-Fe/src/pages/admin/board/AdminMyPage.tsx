@@ -1,23 +1,29 @@
-import React from 'react';
-import AdminBoardHeaderNav from '@/atoms/board/AdminBoardHeaderNav';
+import { useEffect, useState } from 'react';
+import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 import MyPageBox from '@/organisms/board/MyPageBox';
-
-const dummy = {
-  name: '수환컴퍼니',
-  email: 'YunHans@ssafy.com',
-  code : 123456,
-};
+import { fetchAdminData } from '@/services/adminBoardService';
+import { AdminData } from '@/types/board/type';
 
 const AdminMyPage = () => {
+  const [adminData, setAdminData] = useState<AdminData | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchAdminData();
+      setAdminData(data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
-      <AdminBoardHeaderNav></AdminBoardHeaderNav>
-      <div className='flex w-full justify-center items-center'>
+      <BoardHeaderNav isAdmin={true}/>
+      <div className="flex w-full justify-center items-center">
         <MyPageBox
           isAdmin={true}
-          email={dummy.email}
-          name={dummy.name}
-          code={dummy.code}
+          email={adminData?.email || ''}
+          name={adminData?.name || ''}
+          code={adminData?.code || ''}
         />
       </div>
     </div>

@@ -1,7 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-
-// 서버 URL 상수
-const SERVER_URL = 'http://i9a406.p.ssafy.io:8080';
+import { api } from './api';
 
 interface tokenType {
   accessToken: string;
@@ -27,10 +25,6 @@ interface pwInquiryType {
   code: string;
 }
 
-const api = axios.create({
-  baseURL: SERVER_URL,
-});
-
 /**
  * @COMMONAREA
  */
@@ -47,7 +41,14 @@ const checkTokenExpTime = async () => {
         : localStorage.getItem('tokenExpTime')
     )
   );
-  if (expTime < Date.now() / 1000) {
+  // Header나 LocalStorage에 AccessToken이 있다면 True, 없다면 False;
+  const flag =
+    axios.defaults.headers.common['Authorization'] ||
+    localStorage.getItem('accessToken')
+      ? true
+      : false;
+  // 만료시간이 지나지 않았거나 AccessToken이 없다면 재발급 메서드 호출
+  if (expTime < Date.now() / 1000 && !flag) {
     await reAccessApi();
   }
   return 'SUCCESS';
@@ -59,9 +60,11 @@ const checkTokenExpTime = async () => {
 // 로그인 요청 성공 시 엑세스 토큰 헤더에 넣고 리프레쉬 토큰 스토리지에 저장
 const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   const { accessToken, refreshToken } = response.data;
-  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
+
+  localStorage.setItem('accessToken', accessToken);
 
   if (type) {
     localStorage.setItem('refreshToken', refreshToken);
@@ -71,14 +74,13 @@ const onSuccessLogin = (response: AxiosResponse<tokenType>, type: boolean) => {
   sessionStorage.setItem('refreshToken', refreshToken);
   sessionStorage.setItem('tokenExpTime', `${expTime}`);
 
-  return accessToken;
+  return 'SUCCESS';
 };
 
 // AccessToken이 없을 때,(만료됐을 때 재발급)
 const onNewAccessToken = (response: AxiosResponse<newTokenType>) => {
   const { accessToken } = response.data;
-  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-  console.log('AccessToken 재발급');
+  api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
   const expTime = Date.now() / 1000 + 59 * 60 * 24;
 
@@ -97,34 +99,63 @@ const loginApi = async (formData: FormData, type: boolean) => {
   }
   let response = 'SUCCESS';
   await api
-    .post('/fusers/login', formData)
+    .post('/fusers/login', formData, {
+      withCredentials: false,
+    })
     .then((res: AxiosResponse<tokenType>) => {
-      response = onSuccessLogin(res, type);
+      response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
     })
     .catch((error) => {
       console.log(error);
-      response = 'FAIL';
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+      response = error['response'].data;
     });
 
   return response;
 };
 
-// 로그아웃 요청, 헤더의 Authorization과 로컬 스토리지 비우기
+// 로그아웃 요청
 const logoutApi = async () => {
-  let result = '';
-  await api
-    .post('/fusers/logout')
-    .then(() => {
-      axios.defaults.headers.common['Authorization'] = '';
-      localStorage.clear();
-      sessionStorage.clear();
-      result = 'SUCCESS';
-    })
-    .catch((error) => {
-      console.log(error);
-      result = 'FAIL';
-    });
-  return result;
+  await checkTokenExpTime();
+  try {
+    let result;
+
+    if (localStorage.getItem('accessToken') != null) {
+      const tokenDecode = localStorage
+        .getItem('accessToken')
+        ?.toString()
+        .split('.');
+      if (tokenDecode != undefined && tokenDecode.length > 0) {
+        const payload = atob(tokenDecode[1]);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        result = JSON.parse(payload.toString());
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (result.auth && result.auth == 'USER') {
+        await api.post(
+          '/fusers/logout',
+          {},
+          {
+            headers: {
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+            withCredentials: false,
+          }
+        );
+      }
+    } else {
+      return '로그인 정보가 존재하지 않습니다.';
+    }
+
+    api.defaults.headers.common['Authorization'] = '';
+    localStorage.clear();
+    sessionStorage.clear();
+    return 'SUCCESS';
+  } catch (error) {
+    console.log(error);
+    return '로그인 실패';
+  }
 };
 
 // 회원가입 API
@@ -133,7 +164,9 @@ const signUpApi = async (formData: FormData) => {
     return 'alreadyToken';
   }
   const response = await api
-    .post('/fusers/register', formData)
+    .post('/fusers/register', formData, {
+      // withCredentials: false,
+    })
     .then((response) => console.log(response.status))
     .catch((error) => {
       console.log(error);
@@ -146,12 +179,12 @@ const signUpApi = async (formData: FormData) => {
 // 토큰 재발행 요청, 리프레쉬 토큰을 보내 엑세스 토큰 받아오기
 const reAccessApi = async () => {
   const refreshToken = JSON.stringify(
-    sessionStorage.getItem('refreashToken') != null
+    sessionStorage.getItem('refreshToken') != null
       ? sessionStorage.getItem('refreshToken')
       : localStorage.getItem('refreshToken')
   );
 
-  await api
+  await axios
     .post('/jwt/new-access-token', refreshToken)
     .then(onNewAccessToken)
     .catch((error) => console.log(error));
@@ -166,6 +199,7 @@ const verifyEmail = async (email: string) => {
         'Access-Controll-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
+      // withCredentials: false,
     })
     .then((response: AxiosResponse<checkEmailType>) => {
       const { exist } = response.data;
@@ -175,7 +209,7 @@ const verifyEmail = async (email: string) => {
   return !result;
 };
 
-// 유저 아이디 찾기 => Request 값 이름과 전화번호
+// 유저 아이디 찾기
 const idInquiryApi = async (formData: FormData) => {
   let result = {
     email: '',
@@ -194,8 +228,7 @@ const idInquiryApi = async (formData: FormData) => {
   return result;
 };
 
-// 유저 비밀번호 찾기 => Request 값 이메일 하나
-// 1. 인증번호 발송 => 백에서 인증번호 생성해서 유저 이메일로 하나 Response로 하나 보내기
+// 유저 비밀번호 찾기
 const pwInquiryApi = async (email: string) => {
   let result = {
     email: 'NoData',
@@ -206,9 +239,9 @@ const pwInquiryApi = async (email: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: false,
     })
     .then((response: AxiosResponse<pwInquiryType>) => {
-      console.log(response);
       result = { ...response.data };
     })
     .catch((error) => console.log(error));
@@ -223,6 +256,7 @@ const checkAuthNumApi = (email: string, code: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: false,
     })
     .then()
     .catch((error) => {
@@ -234,11 +268,16 @@ const checkAuthNumApi = (email: string, code: string) => {
 };
 
 // 유저 비밀번호 재설정 API
-// => JSON 타입으로 이멜, 비밀번호로 요청
 const pwResetApi = async (email: string, password: string) => {
   let status = 0;
+  
   await api
-    .post('/fusers/new-pw', JSON.stringify({ email, password }))
+    .post('/fusers/new-pw', JSON.stringify({ email, password }), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: false,
+    })
     .then((res) => {
       status = res.status;
     })
@@ -250,14 +289,14 @@ const pwResetApi = async (email: string, password: string) => {
  * @ADMINAREA
  */
 // 관리자 이메일 중복검사
-const adminVerifyEmail = async (email: string) => {
+const adminVerifyEmail = async (formData: FormData) => {
   let result = true;
   await api
-    .post('/fusers/check-email', JSON.stringify({ email }), {
+    .post('/pusers/check-email', formData, {
       headers: {
         'Access-Controll-Allow-Origin': '*',
-        'Content-Type': 'application/json',
       },
+      withCredentials: false,
     })
     .then((response: AxiosResponse<checkEmailType>) => {
       const { exist } = response.data;
@@ -274,13 +313,16 @@ const adminLoginApi = async (formData: FormData, type: boolean) => {
   }
   let response = 'SUCCESS';
   await api
-    .post('/pusers/login', formData)
+    .post('/pusers/login', formData, {
+      withCredentials: false,
+    })
     .then((res: AxiosResponse<tokenType>) => {
-      response = onSuccessLogin(res, type);
+      response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
     })
     .catch((error) => {
       console.log(error);
-      response = 'FAIL';
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      response = error['response'].data;
     });
 
   return response;
@@ -292,7 +334,9 @@ const adminSignUpApi = async (formData: FormData) => {
     return 'alreadyToken';
   }
   const response = await api
-    .post('/pusers/register', formData)
+    .post('/pusers/register', formData, {
+      withCredentials: false,
+    })
     .then()
     .catch((error) => console.log(error));
 

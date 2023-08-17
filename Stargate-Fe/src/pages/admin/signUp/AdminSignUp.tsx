@@ -1,9 +1,8 @@
-import React from 'react';
 import AdminSignUpComponent from '@/organisms/auth/AdminSignUpComponent';
 
 const AdminSignUp = () => {
   return (
-    <div className="w-screen">
+    <div className="w-full">
       <AdminSignUpComponent />
     </div>
   );

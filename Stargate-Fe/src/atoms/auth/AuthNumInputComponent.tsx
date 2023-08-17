@@ -11,7 +11,12 @@ interface AuthNumInputProps {
   setCurIdx: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const AuthNumInputComponent: React.FC<AuthNumInputProps> = ({ index, numArr, setNumArr, setCurIdx }) => {
+const AuthNumInputComponent: React.FC<AuthNumInputProps> = ({
+  index,
+  numArr,
+  setNumArr,
+  setCurIdx,
+}) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const newArr = [...numArr];
@@ -22,7 +27,6 @@ const AuthNumInputComponent: React.FC<AuthNumInputProps> = ({ index, numArr, set
 
   return (
     <div className="m-1.5 border-2 border-blue-600 rounded-lg w-14 h-20 relative content-center">
-      {/* <p className="block text-black text-48 mt-auto mb-auto">{num}</p> */}
       <input
         id={`NumInput_${index}`}
         maxLength={1}
