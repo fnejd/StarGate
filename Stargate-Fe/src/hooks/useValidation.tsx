@@ -102,17 +102,16 @@ const userValidationCheck = (user: userType) => {
   }
 
   // birth Checking
-  const inputDate = user.birth.split('-');
-  const nowDate = new Date().toLocaleDateString().split('.');
+  const birth = user.birth.split('-');
+  const birthDate = new Date(
+    parseInt(birth[0]),
+    parseInt(birth[1]) - 1,
+    parseInt(birth[2])
+  );
+  const nowDate = new Date();
 
-  if (parseInt(inputDate[2]) > parseInt(nowDate[2])) {
-    if (parseInt(inputDate[1]) > parseInt(nowDate[1])) {
-      if (parseInt(inputDate[0]) > parseInt(nowDate[0])) {
-        return '생년월일은 미래일 수 없습니다.';
-      }
-      return '생년월일은 미래일 수 없습니다.';
-    }
-    return '생년월일은 미래일 수 없습니다.';
+  if (birthDate > nowDate) {
+    return '생년월일을 제대로 입력해주세요.';
   }
 
   return 'SUCCESS';

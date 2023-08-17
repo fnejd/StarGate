@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 interface DropdownProps {
   options: (string | number)[];
-  onOptionChange: (value: number) => void;
+  onOptionChange: (value: number | string) => void;
   disabled?: boolean;
 }
 
@@ -15,7 +15,7 @@ const DropDown: React.FC<DropdownProps> = ({
   // const [cutCount, setCutCount] = useState<number>(4);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = Number(event.target.value);
+    const selectedValue = Number.isNaN(Number(event.target.value)) ? event.target.value : Number(event.target.value);
     console.log('옵션선택%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%', selectedValue)
     // setSelectedValue(selectedValue);
     onOptionChange(selectedValue);
