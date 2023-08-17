@@ -82,13 +82,10 @@ const MeetingLeftSection = ({
   const handleStartDate = (value: string): void => {
     const [year, month, day] = value.split('-');
     const newDate: Date = new Date(
-      Number(year),
-      Number(month) - 1,
-      Number(day)
+      Date.UTC(Number(year), Number(month) - 1, Number(day))
     );
-    const stringDate: string = newDate.toISOString().slice(0, -1);
+    const stringDate: string = newDate.toISOString().split('T')[0];
     if (newDate.getTime() < Date.now()) {
-      // value가 현재보다 과거 날짜일 경우 경고 띄우기
       Swal.fire('날짜 설정 실패', '과거 날짜는 선택할 수 없습니다.', 'error');
       return;
     }
@@ -100,6 +97,17 @@ const MeetingLeftSection = ({
     }));
     console.log(`시작 날짜 ${value}`);
     setSelectDate(value);
+  };
+
+  const handleTimeChange = (value: string): void => {
+    const currentKSTDate = new Date();
+    const selectedTime = new Date(`${selectDate}T${value}`);
+    if (selectedTime.getTime() < currentKSTDate.getTime()) {
+      Swal.fire('시간 설정 실패', '과거 시간은 선택할 수 없습니다.', 'error');
+      return;
+    }
+
+    setSelectTime(value);
   };
 
   const handleTotalTime = (value: number): void => {
@@ -146,18 +154,20 @@ const MeetingLeftSection = ({
   return (
     <div className="mb-6 w-550">
       <div className="flex items-end">
-        <AdminInput
-          labelFor="시작 날짜"
-          type="date"
-          placeholder=""
-          max="9999-12-31"
-          value={
-            formData.startDate instanceof Date
-              ? formData.startDate.toISOString().split('T')[0]
-              : ''
-          } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
-          onInputChange={handleStartDate}
-        />
+        <div className='w-52'>
+          <AdminInput
+            labelFor="시작 날짜"
+            type="date"
+            placeholder=""
+            max="9999-12-31"
+            value={
+              formData.startDate instanceof Date
+                ? formData.startDate.toISOString().split('T')[0]
+                : selectDate
+            } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
+            onInputChange={handleStartDate}
+          />
+        </div>
         <p className="p1b text-white h-full">{selectDate}</p>
       </div>
 
@@ -168,9 +178,7 @@ const MeetingLeftSection = ({
           placeholder=""
           // 여기 밸류값 변경해야해요!!!!!!!!!!!!!!!!!!!!!!!
           value={selectTime} // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
-          onInputChange={(e) => {
-            setSelectTime(e);
-          }}
+          onInputChange={handleTimeChange}
         />
         <p className="p1b text-white h-full">{selectTime}</p>
       </div>

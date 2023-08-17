@@ -1,3 +1,4 @@
+import AdminBtn from '@/atoms/common/AdminBtn';
 import { useState, ChangeEvent, useEffect } from 'react';
 // import { MeetingRightSection } from '@/organisms/MeetingRightSection';
 
@@ -83,12 +84,13 @@ const MeetingRightSection = ({
           <div className="flex w-48 mx-1 my-2 font-medium text-white font-suit text-14">
             대표사진
           </div>
-          <button
+          <AdminBtn
             onClick={() => document.getElementById('fileInput')?.click()} // 파일 선택 버튼 클릭 시 input 클릭 이벤트 호출
-            className="w-20 h-8 mb-2 font-medium text-black rounded-sm text-12 bg-admingray font-suit"
+            className="w-24 h-8 mb-2 font-medium text-black rounded-sm text-12 bg-admingray font-suit"
+            text='파일 선택'
           >
-            파일 선택
-          </button>
+            
+          </AdminBtn>
           <input
             id="fileInput"
             type="file"
