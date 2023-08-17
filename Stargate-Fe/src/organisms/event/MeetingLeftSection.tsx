@@ -43,19 +43,25 @@ const MeetingLeftSection = ({
 }: MeetingLeftSectionProps) => {
   const [picSec, setPicSec] = useState<number>(40);
   const [photoTime, setPhotoTime] = useState<boolean>(false);
+  const [initial, setInitial] = useState(false);
   // const [totalSec, setTotalSec] = useState<number>(80);
-  const [selectDate, setSelectDate] = useState('');
-  const [selectTime, setSelectTime] = useState('');
+
+  const [selectDate, setSelectDate] = useState<string | null>(null);
+  const [selectTime, setSelectTime] = useState<string | null>(null);
   const [numbers, setNumbers] = useState<number[]>([]);
 
   useEffect(() => {
-    if (formData.startDate) {
+    console.log(formData);
+    if (formData.startDate && !initial) {
+      // initializing
       const arr =
         formData.startDate instanceof Date
           ? formData.startDate.toISOString().split('T')
           : formData.startDate.split('T');
       setSelectDate(arr[0]);
       setSelectTime(arr[1]);
+      console.log(selectTime);
+      setInitial(true);
     }
     if (formData.photoNum > 0) {
       console.log(formData.photoNum);
@@ -79,34 +85,29 @@ const MeetingLeftSection = ({
     }
   }, [photoTime]);
 
+  useEffect(() => {
+    if (selectDate && selectTime) {
+      // 상위로 전달
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        startDate: `${selectDate}T${selectTime}:00`,
+      }));
+    }
+  }, [selectDate, selectTime]);
+
   const handleStartDate = (value: string): void => {
     const [year, month, day] = value.split('-');
     const newDate: Date = new Date(
       Date.UTC(Number(year), Number(month) - 1, Number(day))
     );
-    const stringDate: string = newDate.toISOString().split('T')[0];
     if (newDate.getTime() < Date.now()) {
       Swal.fire('날짜 설정 실패', '과거 날짜는 선택할 수 없습니다.', 'error');
       return;
     }
-
-    // 상위로 전달
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      startDate: stringDate,
-    }));
-    console.log(`시작 날짜 ${value}`);
     setSelectDate(value);
   };
 
   const handleTimeChange = (value: string): void => {
-    const currentKSTDate = new Date();
-    const selectedTime = new Date(`${selectDate}T${value}`);
-    if (selectedTime.getTime() < currentKSTDate.getTime()) {
-      Swal.fire('시간 설정 실패', '과거 시간은 선택할 수 없습니다.', 'error');
-      return;
-    }
-
     setSelectTime(value);
   };
 
@@ -154,7 +155,7 @@ const MeetingLeftSection = ({
   return (
     <div className="mb-6 w-550">
       <div className="flex items-end">
-        <div className='w-52'>
+        <div className="w-52">
           <AdminInput
             labelFor="시작 날짜"
             type="date"

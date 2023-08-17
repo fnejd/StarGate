@@ -23,6 +23,7 @@ interface InputProps {
   setter: React.Dispatch<React.SetStateAction<object>>;
   value?: string;
   placehoder?: string;
+  disabled?: boolean;
 }
 
 const InputComponent: React.FC<InputProps> = ({
@@ -35,6 +36,7 @@ const InputComponent: React.FC<InputProps> = ({
   setter,
   value,
   placehoder,
+  disabled,
 }) => {
   // state 값 class 지정 분기
   if (state == 'red') {
@@ -64,6 +66,7 @@ const InputComponent: React.FC<InputProps> = ({
             type={type}
             placeholder={placehoder != undefined ? placehoder : text}
             value={value}
+            disabled={disabled ? true : false}
           />
         </div>
       ) : (
@@ -75,6 +78,7 @@ const InputComponent: React.FC<InputProps> = ({
             type={type}
             placeholder={placehoder != undefined ? placehoder : text}
             value={value}
+            disabled={disabled ? true : false}
           />
         </div>
       )}

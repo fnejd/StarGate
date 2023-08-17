@@ -15,6 +15,11 @@ body {
   width: 100% !important;
 }
 
+#root {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .cloud1 {
   background-image: url('./assets/img/cloud1.png');
   background-position: top left;
