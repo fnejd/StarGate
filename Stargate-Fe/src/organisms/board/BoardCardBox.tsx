@@ -91,12 +91,12 @@ const BoardCardBox = ({
               <div className="flex">
                 <div className="flex flex-col w-1/2">
                   <div className="flex justify-between mb-2">
-                    <p className='h3b'>일시</p>
-                    <p className='h3r'>{stringDate}</p>
+                    <p className="h3b">일시</p>
+                    <p className="h3r">{stringDate}</p>
                   </div>
                   <div className="flex justify-between">
-                    <p className='h3b'>남은시간</p>
-                    <p className='h3r'>
+                    <p className="h3b">남은시간</p>
+                    <p className="h3r">
                       {days > 0 && `${days}일 `}
                       {hours > 0 && `${hours}시간 `}
                       {minutes > 0 && `${minutes}분 `}
@@ -106,11 +106,7 @@ const BoardCardBox = ({
                 </div>
                 <div className="w-2/3 flex justify-end p2b">
                   {isAdmin ? (
-                    <button
-                      onClick={handleToDetail}
-                      className={isTimeExceeded ? 'medium-gray' : 'medium-blue'}
-                      disabled={isTimeExceeded}
-                    >
+                    <button onClick={handleToDetail} className="medium-blue">
                       상세보기
                     </button>
                   ) : (
@@ -136,17 +132,17 @@ const BoardCardBox = ({
               <div className="flex">
                 <div className="flex flex-col w-1/2">
                   <div className="flex justify-between mb-2">
-                    <p className='h3b'>일시</p>
-                    <p className='h3r'>{stringDate}</p>
+                    <p className="h3b">일시</p>
+                    <p className="h3r">{stringDate}</p>
                   </div>
                   {isOngoing ? (
                     <div className="flex justify-between">
-                      <p className='h3b'>진행중입니다!</p>
+                      <p className="h3b">진행중입니다!</p>
                     </div>
                   ) : (
                     <div className="flex justify-between">
-                      <p className='h3b'>남은시간</p>
-                      <p className='h3r'>
+                      <p className="h3b">남은시간</p>
+                      <p className="h3r">
                         {days > 0 && `${days}일 `}
                         {hours > 0 && `${hours}시간 `}
                         {minutes > 0 && `${minutes}분 `}
@@ -157,11 +153,7 @@ const BoardCardBox = ({
                 </div>
                 <div className="w-2/3 flex justify-end p2b">
                   {isAdmin ? (
-                    <button
-                      onClick={handleToDetail}
-                      className={isTimeExceeded ? 'medium-gray' : 'medium-blue'}
-                      disabled={isTimeExceeded}
-                    >
+                    <button onClick={handleToDetail} className="medium-blue">
                       상세보기
                     </button>
                   ) : (
