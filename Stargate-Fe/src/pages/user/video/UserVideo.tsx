@@ -6,6 +6,7 @@ import peerService from '@/peer/peer';
 import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
 import { getUserVideo, postPicture } from '@/services/userVideo';
+import PhotoTimer from '@/atoms/video/PhotoTimer';
 import * as bodyPix from '@tensorflow-models/body-pix';
 
 const UserVideo = () => {
@@ -28,6 +29,7 @@ const UserVideo = () => {
   // 미팅이 종료되고 대기 시간 시작할 때 사용하는 상태
   const [isWaiting, setIsWaiting] = useState(false);
   const [meetingOrder, setMeetingOrder] = useState(-1); // 이게 바뀌었을 때 미팅 순서가 넘어감
+  const [isPhotoTaken, setIsPhotoTaken] = useState(false);
 
   // 연결상태 변경시 콘솔에 출력
   peerService.peer.onconnectionstatechange = () => {
@@ -141,19 +143,22 @@ const UserVideo = () => {
       console.log('소켓 주소 업데이트$$$$$$$$$', socket);
       connectWebSocket();
 
-      // const meetingTime = videoData.meetingTime - photoNum * 10;
-      const meetingTime = videoData.meetingTime - 2 * 10;
+      let adjustedMeetingTime = videoData.meetingTime;
 
-      // 분과 초 설정
+      if (photoNum !== null) {
+        adjustedMeetingTime -= photoNum * 10;
+      }
+
+      // 분과 초 초기 설정
       setTimer((prevTimer) => ({
         ...prevTimer,
-        minute: Math.floor(meetingTime / 60),
-        second: meetingTime % 60,
+        minute: Math.floor(adjustedMeetingTime / 60),
+        second: adjustedMeetingTime % 60,
         waitingMinute: Math.floor(videoData.waitingTime / 60),
         waitingSecond: videoData.waitingTime % 60,
       }));
-      // setPhotoNum(videoData.photoNum);
-      setPhotoNum(2);
+      // 촬영 컷 수 설정
+      setPhotoNum(videoData.photoNum);
     }
 
     if (videoData && meetingOrder === videoData.meetingMembers.length) {
@@ -302,16 +307,19 @@ const UserVideo = () => {
         second: 59,
       }));
     } else if (timer.second == 0 && timer.minute == 0 && photoNum != 0) {
-      // let screenshotCount = videoData.photoNum;
-      let screenshotCount = 2;
+      // 미팅 시간이 끝나고 폴라로이드 촬영이 있는 경우
+      let screenshotCount = photoNum;
 
       const intervalPhoto = setInterval(() => {
+        // 포토 타임이 있을 경우
         if (screenshotCount > 0) {
+          // 10초마다 촬영 진행 및 포토 타이머 렌더링
           console.log('촬영 시작**************8');
-          takeScreenshotAndSend();
+          setIsPhotoTaken(true);
+          // takeScreenshotAndSend();
           screenshotCount--;
         }
-      }, 10000); // 10초마다 실행
+      }, 10000);
 
       const intervalId = setInterval(() => {
         if (screenshotCount == 0) {
@@ -481,11 +489,12 @@ const UserVideo = () => {
             ></video> */}
             </div>
           )}
+          {isPhotoTaken && <PhotoTimer onPhotoTaken={takeScreenshotAndSend} />}
           {remoteStream && (
             <div className="basis-1/2 text-center">
               <span className="form-title">연예인 영상</span>
               <ReactPlayer
-                key={meetingOrder} 
+                key={meetingOrder}
                 playing
                 muted
                 height="full"
