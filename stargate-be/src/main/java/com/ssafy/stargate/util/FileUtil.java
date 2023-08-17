@@ -1,10 +1,9 @@
 package com.ssafy.stargate.util;
 
 import com.ssafy.stargate.handler.FileHandler;
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 @RequiredArgsConstructor
 public class FileUtil {
-    @Autowired
+
     private final FileHandler fileHandler;
 
     /**
@@ -36,7 +35,7 @@ public class FileUtil {
      * @param filename [String] 파일 이름
      * @return [SavedFileDto] 저장된 파일 정보를 담은 DTO
      */
-    public SavedFileDto getFileInfo(String filePath, String filename) {
+    public SavedFileResponseDto getFileInfo(String filePath, String filename) {
         return getFileInfo(getKey(filePath, filename));
     }
 
@@ -46,7 +45,7 @@ public class FileUtil {
      * @param key [String] 파일 경로
      * @return [SavedFileDto] 저장된 파일 정보를 담은 DTO
      */
-    public SavedFileDto getFileInfo(String key) {
+    public SavedFileResponseDto getFileInfo(String key) {
         try {
             return fileHandler.getFileInfo(key);
         } catch (Exception e) {

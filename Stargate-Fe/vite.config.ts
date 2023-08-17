@@ -9,8 +9,8 @@ const viteConfig = defineConfig({
     port: 3000,
     // 프록시 추가
     proxy: {
-      '/api': {
-        target: 'ws://i9a406.p.ssafy.io:8080/rtc',
+      '/rtc': {
+        target: 'https://www.stargate-a406.kro.kr/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
         secure: false,

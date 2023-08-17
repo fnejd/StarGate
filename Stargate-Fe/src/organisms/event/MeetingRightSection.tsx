@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 // import { MeetingRightSection } from '@/organisms/MeetingRightSection';
 
 interface MeetingFUser {
@@ -40,6 +40,10 @@ const MeetingRightSection = ({
   const [textValue, setTextValue] = useState<string>('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (formData.notice) setTextValue(formData.notice);
+  }, [formData]);
+
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -48,18 +52,28 @@ const MeetingRightSection = ({
         setSelectedImage(reader.result as string);
       };
 
-       // formData 업데이트
-       setFormData((prevFormData) => ({
+      // formData 업데이트
+      setFormData((prevFormData) => ({
         ...prevFormData,
         imageFile: file, // 선택된 파일로 이미지 업데이트
       }));
-    
+
       reader.readAsDataURL(file);
     }
   };
 
   const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(event.target.value);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    console.log('공지', value);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      notice: textValue,
+    }));
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {

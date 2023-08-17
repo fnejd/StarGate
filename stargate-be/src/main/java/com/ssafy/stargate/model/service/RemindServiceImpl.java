@@ -1,18 +1,18 @@
 package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.response.RemindResponseDto;
+import com.ssafy.stargate.model.dto.response.remind.RemindResponseDto;
 import com.ssafy.stargate.model.entity.*;
 import com.ssafy.stargate.model.repository.LetterRepository;
 import com.ssafy.stargate.model.repository.MeetingRepository;
 import com.ssafy.stargate.model.repository.PolaroidRepository;
 import com.ssafy.stargate.util.FileUtil;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,22 +22,32 @@ import java.util.UUID;
  * 팬유저 팬미팅 리마인드 관련 서비스 구현체
  */
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class RemindServiceImpl implements RemindService {
-    @Autowired
-    private FileUtil fileUtil;
 
-    @Value("polaroid")
-    private String polaroidFilePath;
+    private final FileUtil fileUtil;
 
-    @Autowired
+    private final String polaroidFilePath;
+
     private final PolaroidRepository polaroidRepository;
 
-    @Autowired
     private final MeetingRepository meetingRepository;
 
-    @Autowired
     private final LetterRepository letterRepository;
+
+    public RemindServiceImpl(
+            FileUtil fileUtil,
+            @Value("${s3.filepath.polaroid}") String polaroidFilePath,
+            PolaroidRepository polaroidRepository,
+            MeetingRepository meetingRepository,
+            LetterRepository letterRepository
+    ) {
+        this.fileUtil = fileUtil;
+        this.polaroidFilePath = polaroidFilePath;
+        this.polaroidRepository = polaroidRepository;
+        this.meetingRepository = meetingRepository;
+        this.letterRepository = letterRepository;
+    }
 
     /**
      * 해당 팬미팅의 리마인드 정보를 가져온다.
@@ -67,14 +77,17 @@ public class RemindServiceImpl implements RemindService {
 
     /**
      * 미팅 정보를 가져온다.
+     * 미팅 팬유저, 멤버의 orderNum을 이용해 각각 오름차순으로 정렬한다.
      *
      * @param uuid [UUID] 미팅 uuid (id)
      * @return [Meeting] 미팅 데이터
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     private Meeting getMeeting(UUID uuid) throws NotFoundException {
-        return meetingRepository.findById(uuid)
+        Meeting meeting = meetingRepository.findById(uuid)
                 .orElseThrow(() -> new NotFoundException("미팅 존재하지 않음"));
+        Meeting.sortMeetingByOrderNum(meeting);
+        return meeting;
     }
 
     /**
@@ -104,10 +117,10 @@ public class RemindServiceImpl implements RemindService {
                     long memberNo = meetingMember.getPMember().getMemberNo();
 
                     Optional<List<Polaroid>> polaroids = polaroidRepository.findPolaroidList(email, memberNo, uuid);
-                    List<RemindResponseDto.PolaroidDto> polaroidDtos = getPolaroidList(polaroids.isPresent() ? polaroids.get() : null);
+                    List<RemindResponseDto.PolaroidDto> polaroidDtos = (polaroids.isPresent())? getPolaroidList(polaroids.get()) : new ArrayList<>();
 
                     Optional<Letter> letter = letterRepository.findLetter(email, memberNo, uuid);
-                    RemindResponseDto.LetterDto letterDto = getLetter(letter.isPresent() ? letter.get() : null);
+                    RemindResponseDto.LetterDto letterDto = (letter.isPresent())? getLetter(letter.get()) : null;
 
                     return RemindResponseDto.MeetingMemberDto.builder()
                             .memberNo(memberNo)

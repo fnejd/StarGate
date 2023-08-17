@@ -12,7 +12,6 @@ import LettersModalBox from '@/organisms/event/LettersModalBox';
 const AdminEventDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isOver, setIsOver] = useState<boolean>(false);
   const [data, setData] = useState<MeetingData>({
     uuid: '',
     name: '',
@@ -49,21 +48,13 @@ const AdminEventDetail = () => {
       if (fetchedData) {
         setData(fetchedData);
         console.log('데이터는', fetchedData);
+        console.log(fetchedData.startDate);
         setLoading(false);
       }
       console.log('로딩완료', location);
     };
     fetchEventDetail();
   }, []);
-
-  useEffect(() => {
-    if (data.startDate) {
-      const currentDateTime = new Date();
-      const startDateTime = new Date(data.startDate);
-      const isBeforeStartDate = startDateTime < currentDateTime;
-      setIsOver(isBeforeStartDate);
-    }
-  }, [data.startDate]);
 
   return (
     <div className="flex w-xl flex-col items-center">
@@ -90,13 +81,10 @@ const AdminEventDetail = () => {
         <div className="flex w-5/6"></div>
       </div>
       <div className="flex justify-evenly w-s my-20 text-center">
-        {isOver ? (
-          <BtnBlue text="편지 리스트" onClick={handleModalOpen} />
-        ) : (
-          <Link to="/admin/event/create" state={{ uuid: data.uuid }}>
-            <BtnBlue text="수정" />
-          </Link>
-        )}
+        <BtnBlue text="편지 리스트" onClick={handleModalOpen} />
+        <Link to="/admin/event/create" state={{ uuid: data.uuid, type: true }}>
+          <BtnBlue text="수정" />
+        </Link>
       </div>
     </div>
   );

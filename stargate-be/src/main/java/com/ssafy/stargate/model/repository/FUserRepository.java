@@ -15,4 +15,6 @@ import java.util.Optional;
 public interface FUserRepository extends JpaRepository<FUser, String> {
 
     Optional<FUser> findByName(String name);
+
+    Optional<FUser> findByNameAndPhone(String name, String phone);
 }

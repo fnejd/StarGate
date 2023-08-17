@@ -80,6 +80,56 @@ const BoardCardBox = ({
   );
   const seconds = remainingTime - days * 86400 - hours * 3600 - minutes * 60;
 
+  const [stringDate, setStringDate] = useState('');
+
+  useEffect(() => {
+    if (date !== undefined) {
+      const start = date;
+      const [year, month, dayWithTime] = start.split('-');
+      const [day, time] = dayWithTime.split('T'); // "T"를 기준으로 분리하여 일자와 시간을 추출
+      const [hour, minute, second] = time.split(':');
+      const newDate: Date = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+        Number(hour),
+        Number(minute),
+        Number(second.split('.')[0])
+      );
+      const formattedDate = `${year}-${month}-${day}  ${newDate
+        .getHours()
+        .toString()
+        .padStart(2, '0')}:${newDate.getMinutes().toString().padStart(2, '0')}`;
+      setStringDate(formattedDate);
+      console.log(date, '===', formattedDate);
+    }
+    console.log(date, '===', stringDate);
+  }, [date]);
+
+  const navigate = useNavigate();
+
+  const handleToReady = () => {
+    if (remainingTime <= 1800) {
+      navigate(`/ready/${uuid}`);
+    }
+  };
+  const handleToDetail = () => {
+    navigate(`/admin/event/detail/${uuid}`);
+  };
+  /**
+   * isTimeExceeded가 1800초 초과라면
+   * 색깔 회색 + 사용 불가로 막아놓음
+   */
+  const isTimeExceeded = !isAdmin ? remainingTime > 1800 : false;
+  const isOngoing = 1 > remainingTime;
+
+  const days = Math.floor(remainingTime / 86400);
+  const hours = Math.floor((remainingTime - days * 86400) / 3600);
+  const minutes = Math.floor(
+    (remainingTime - days * 86400 - hours * 3600) / 60
+  );
+  const seconds = remainingTime - days * 86400 - hours * 3600 - minutes * 60;
+
   return (
     <div className="flex justify-center">
       {isLoading ? (

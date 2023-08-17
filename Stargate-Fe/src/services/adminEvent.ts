@@ -41,7 +41,6 @@ const updateEvent = async (meetingData: FormData) => {
   if (meetingData) {
     try {
       const formDataToSend = new FormData();
-      const access = localStorage.getItem('accessToken');
 
       for (const key in meetingData) {
         if (meetingData.hasOwnProperty(key)) {
@@ -59,8 +58,6 @@ const updateEvent = async (meetingData: FormData) => {
       const response = await api.put('/meetings/update', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          // 'Authorization': `Bearer ${access}`,
-          // withCredentials: false,
         },
       });
 

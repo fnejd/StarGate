@@ -30,10 +30,10 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
   meetingIdx,
 }) => {
   const [nextUser, setNextUser] = useState<string | null>(null);
-
+  console.log(participantsData);
   useEffect(() => {
-    if (participantsData) {
-      if (participantsData[meetingIdx + 1]) {
+    if (participantsData != undefined && participantsData != null) {
+      if (participantsData[meetingIdx + 1] != undefined && participantsData[meetingIdx + 1] != null) {
         setNextUser(participantsData[meetingIdx + 1].name);
       } else {
         setNextUser(null);
@@ -45,11 +45,12 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
     <div className="flex flex-row w-screen my-5">
       <div className="flex items-center w-full ml-5 text-white basis-1/2">
         <ProFileIcon />
+        {nextUser && 
         <div className="mx-auto">
-          <p>이름: {participantsData[meetingIdx].name}</p>
-          <p>생일: {participantsData[meetingIdx].birthday}</p>
-          <p>촬영 여부: {participantsData[meetingIdx].isPolaroidEnable}</p>
-        </div>
+          <p>이름: {nextUser ? participantsData[meetingIdx]?.name : ''}</p>
+          <p>생일: {nextUser ? participantsData[meetingIdx]?.birthday : ''}</p>
+          <p>촬영 여부: {nextUser ? participantsData[meetingIdx]?.isPolaroidEnable : ''}</p>
+        </div>}
       </div>
       <div className="flex justify-end mr-5 basis-1/4">
         <TimeLeftComponent min={min} sec={sec} />

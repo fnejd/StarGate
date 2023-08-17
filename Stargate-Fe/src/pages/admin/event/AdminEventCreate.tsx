@@ -3,10 +3,14 @@ import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { createEvent } from '@/services/adminEvent';
+import {
+  createEvent,
+  fetchEventDetailData,
+  updateEvent,
+} from '@/services/adminEvent';
 import { fetchGroup } from '@/services/adminBoardService';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 interface MeetingFUser {
   no: number;
@@ -34,20 +38,38 @@ interface Group {
 }
 
 interface FormData {
-  name: null;
+  name: string | null;
   startDate: Date | String | null; // null로 초기화하여 값을 비워놓을 수 있도록 함
   waitingTime: number;
   meetingTime: number;
   notice: string;
   photoNum: number;
   imageFile: File | null;
-  starName: string;
+  // starName: string;
   meetingFUsers: string;
   meetingMembers: string;
 }
 
 const AdminEventCreate = () => {
   const [group, setGroup] = useState<Group[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<MeetingData>({
+    uuid: '',
+    name: '',
+    startDate: '',
+    waitingTime: 10,
+    meetingTime: 80,
+    notice: '',
+    photoNum: 0,
+    groupNo: 0,
+    groupName: '',
+    imageFileInfo: {
+      filename: '',
+      fileUrl: '',
+    },
+    meetingFUsers: [],
+    meetingMembers: [],
+  });
   const [formData, setFormData] = useState<FormData>({
     name: null,
     startDate: null,
@@ -56,22 +78,52 @@ const AdminEventCreate = () => {
     photoNum: 0,
     notice: '',
     imageFile: null,
-    starName: '',
     meetingFUsers: '',
     meetingMembers: '',
   });
   const navigate = useNavigate();
+  const localLocation = useLocation();
+  const uuid = localLocation.state?.uuid;
+  // AdminEventDetail 에서 uuid 갖고 넘어올 땐 true 가지고 옴
+  const type = localLocation.state?.type === true ? true : false;
+
+  const getGroup = async () => {
+    const data = await fetchGroup();
+    console.log('데이터', data);
+    setGroup(data);
+    console.log(group);
+  };
+
+  const fetchEventDetail = async () => {
+    const fetchedData = await fetchEventDetailData(uuid);
+    if (fetchedData) {
+      setData(fetchedData);
+      setLoading(false);
+    }
+  };
 
   // 그룹명, 그룹멤버 데이터 가져오기
   useEffect(() => {
-    const getGroup = async () => {
-      const data = await fetchGroup();
-      console.log('데이터', data);
-      setGroup(data);
-      console.log(group);
-    };
-    getGroup();
-  }, []);
+    if (!loading) {
+      setFormData({
+        name: data.name,
+        startDate: data.startDate,
+        waitingTime: data.waitingTime,
+        meetingTime: data.meetingTime,
+        photoNum: data.photoNum,
+        notice: data.notice,
+        imageFile: null,
+        meetingFUsers: data.meetingFUsers,
+        meetingMembers: data.meetingMembers,
+      });
+    }
+    if (type) {
+      fetchEventDetail();
+      getGroup();
+    } else {
+      getGroup();
+    }
+  }, [loading]);
 
   console.log('폼데이터', formData);
 
@@ -98,10 +150,15 @@ const AdminEventCreate = () => {
       // const mergedFormData = { ...formData, ...eventData };
       try {
         console.log(formData);
-        await createEvent(formData);
+        if (type) {
+          await updateEvent(formData);
+          Swal.fire('수정 완료', '이벤트 수정 완료!', 'success');
+        } else {
+          await createEvent(formData);
+          Swal.fire('생성 완료', '이벤트 생성 완료!', 'success');
+        }
         console.log('이벤트 전송 성공');
-        Swal.fire('생성 완료', '이벤트 생성 완료!', 'success');
-        navigate('/admin/board')
+        navigate('/admin/board');
       } catch (error) {
         console.error('이벤트 전송 실패:', error);
       }
