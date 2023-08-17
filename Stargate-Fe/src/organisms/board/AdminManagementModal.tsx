@@ -71,14 +71,11 @@ const AdminManagementModal = ({ group }: AdminManagementModalProps) => {
       if (confirmed) {
         try {
           await deleteGroup(groupDeleteNum);
-          console.log('그룹 삭제:', groupDeleteNum);
           setGroupsFetch(true);
         } catch (error) {
-          console.log(error);
         }
       }
     } else {
-      console.log('groupDeleteNum 없음');
     }
   };
   return (

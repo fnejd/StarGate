@@ -43,16 +43,12 @@ const AdminEventDetail = () => {
       const currentUrl = window.location.href;
       const parts = currentUrl.split('/');
       const uuid = parts[parts.length - 1];
-      console.log(uuid);
 
       const fetchedData = await fetchEventDetailData(uuid);
       if (fetchedData) {
         setData(fetchedData);
-        console.log('데이터는', fetchedData);
-        console.log(fetchedData.startDate);
         setLoading(false);
       }
-      console.log('로딩완료', location);
     };
     fetchEventDetail();
   }, []);

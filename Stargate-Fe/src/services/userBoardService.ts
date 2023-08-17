@@ -9,10 +9,8 @@ const fetchUserBoard = async () => {
       },
       withCredentials: false,
     });
-    console.log(response);
     return response.data;
   } catch (error) {
-    console.log('에러발생', error);
   }
 };
 
@@ -24,10 +22,8 @@ const fetchUserData = async () => {
       },
       withCredentials: false,
     });
-    console.log(response);
     return response.data;
   } catch (error) {
-    console.log('에러발생', error);
   }
 };
 
@@ -39,11 +35,9 @@ const updateUserData = async (formData: FormData) => {
       },
       withCredentials: false,
     });
-    console.log(response);
     Swal.fire('수정 완료', '유저 데이터가 수정되었습니다!', 'success');
     return response.data;
   } catch (error) {
-    console.log('에러발생', error);
   }
 };
 
@@ -57,8 +51,6 @@ const fetchRemindData = async (uuid : string) => {
     });
     return response.data;
   } catch (error) {
-    console.log(location)
-    console.log('에러발생', error);
   }
 };
 export { fetchUserBoard, fetchUserData, updateUserData, fetchRemindData };

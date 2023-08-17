@@ -51,9 +51,7 @@ const BoardCardBox = ({
         .toString()
         .padStart(2, '0')}:${newDate.getMinutes().toString().padStart(2, '0')}`;
       setStringDate(formattedDate);
-      console.log(date, '===', formattedDate);
     }
-    console.log(date, '===', stringDate);
   }, [date]);
 
   const navigate = useNavigate();

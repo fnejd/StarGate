@@ -18,10 +18,8 @@ const UserBoard = () => {
       const fetchedData = await fetchUserBoard();
       if (fetchedData) {
         setData(fetchedData);
-        console.log(fetchedData);
       }
       setLoading(false);
-      console.log('로딩완료');
     };
     fetchData();
   }, []);
