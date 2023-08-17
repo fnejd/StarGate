@@ -356,7 +356,7 @@ const StarVideo = () => {
             <p>연옌</p>
             <ReactPlayer
               playing
-              muted
+              // muted
               height="full"
               width="full"
               url={myStream}
@@ -368,7 +368,7 @@ const StarVideo = () => {
             <p>팬</p>
             <ReactPlayer
               playing
-              muted
+              // muted
               height="full"
               width="full"
               url={remoteStream}

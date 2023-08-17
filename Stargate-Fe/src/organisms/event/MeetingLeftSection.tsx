@@ -160,7 +160,8 @@ const MeetingLeftSection = ({
         />
         <p className="p1b text-white h-full">{selectDate}</p>
       </div>
-      <div className="flex items-end">
+
+      <div className="flex items-end w-48">
         <AdminInput
           labelFor="시작 시간"
           type="time"
@@ -173,21 +174,6 @@ const MeetingLeftSection = ({
         />
         <p className="p1b text-white h-full">{selectTime}</p>
       </div>
-
-      <div className="flex items-end w-48">
-        <AdminInput
-          labelFor="시작 시간"
-          type="time"
-          placeholder=""
-          // 여기 밸류값 변경해야해요!!!!!!!!!!!!!!!!!!!!!!!
-          value={
-            selectTime
-          } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
-          onInputChange={(e) => {setSelectTime(e)}}
-        />
-        <p className="p1b text-white h-full">{selectTime}</p>
-      </div>
-      
 
       <div className="flex items-end w-48">
         <AdminInput
