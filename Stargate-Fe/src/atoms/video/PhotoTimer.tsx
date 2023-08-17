@@ -11,7 +11,7 @@ const PhotoTimer = ({ onPhotoTaken }) => {
     }, 0);
   };
 
-  console.log('사진촬영 타이머', photoTime)
+  console.log('사진촬영 타이머', photoTime);
 
   useEffect(() => {
     const intervalId = setTimeout(() => {
@@ -27,15 +27,16 @@ const PhotoTimer = ({ onPhotoTaken }) => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-       if (photoTime === 1) {
-      // 타이머가 끝날 경우
-      handleFlash()
-      onPhotoTaken();
-    }}, 1000)
+      if (photoTime === 1) {
+        // 타이머가 끝날 경우
+        handleFlash();
+        onPhotoTaken();
+      }
+    }, 1000);
     return () => {
       clearInterval(intervalId);
     };
-  }, [photoTime])
+  }, [photoTime]);
 
   return (
     <div
@@ -43,7 +44,10 @@ const PhotoTimer = ({ onPhotoTaken }) => {
         flash ? 'bg-white' : ''
       }`}
     >
-      <span className={`timer-number ${flash ? 'text-black' : 'z-15'}`}>
+      <span>촬영 준비</span>
+      <span
+        className={`timer-number font-italic ${flash ? 'text-black' : 'z-15'}`}
+      >
         {photoTime}
       </span>
     </div>

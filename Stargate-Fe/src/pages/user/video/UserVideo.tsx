@@ -11,6 +11,7 @@ import * as bodyPix from '@tensorflow-models/body-pix';
 
 const UserVideo = () => {
   const navigate = useNavigate();
+  const containerRef = useRef(null);
   const uuid: string = useParams().uuid;
   const [videoData, setVideoData] = useState(null);
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
@@ -141,12 +142,11 @@ const UserVideo = () => {
       console.log('소켓 주소 업데이트$$$$$$$$$', socket);
       connectWebSocket();
 
-
       let adjustedMeetingTime = videoData.meetingTime;
 
       if (videoData.photoNum !== null) {
         adjustedMeetingTime -= videoData.photoNum * 10;
-        console.log('사진이 있어요', adjustedMeetingTime)
+        console.log('사진이 있어요', adjustedMeetingTime);
       }
 
       // 분과 초 초기 설정
@@ -258,11 +258,15 @@ const UserVideo = () => {
 
     if (timer.waitingSecond === 0) {
       if (timer.waitingMinute > 0) {
-        setTimer((prevTimer) => ({
-          ...prevTimer,
-          waitingMinute: prevTimer.waitingMinute - 1,
-          waitingSecond: 59,
-        }));
+        setTimeout(
+          () =>
+            setTimer((prevTimer) => ({
+              ...prevTimer,
+              waitingMinute: prevTimer.waitingMinute - 1,
+              waitingSecond: 59,
+            })),
+          1000
+        );
       }
     }
   };
@@ -339,7 +343,10 @@ const UserVideo = () => {
     } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum != 0) {
       // 미팅 시간이 끝나고 폴라로이드 촬영이 있는 경우
       let screenshotCount = photoNum;
-      console.log('폴라로이드 촬영 컷수 (((((((((((((((((((((', screenshotCount)
+      console.log(
+        '폴라로이드 촬영 컷수 (((((((((((((((((((((',
+        screenshotCount
+      );
 
       console.log('촬영 시작**************8', photoNum);
       setIsPhotoTaken(true);
@@ -364,11 +371,18 @@ const UserVideo = () => {
       //   clearInterval(intervalPhoto); // 컴포넌트 언마운트 시 interval 정리
       //   // clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       // };
-    } 
-    // else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum === 0) {
-    //   console.log("호에에에에에에에에에에ㅔ에에에에에에에에에에에에에에에에엥엥");
-    //   setIsWaiting(true);
-    // }
+    } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum == 0) {
+      const intervalId = setInterval(() => {
+        // if (screenshotCount == 0) {
+        console.log('대기시간타이머 시작!');
+        tickWaiting();
+        // }
+      }, 1000); // 1초마다 실행
+
+      return () => {
+        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      };
+    }
   }, [timer.second, timer.minute, photoNum]);
 
   useEffect(() => {
@@ -390,51 +404,55 @@ const UserVideo = () => {
 
   // 폴라로이드 촬영 및 전송
   const takeScreenshotAndSend = async () => {
-    console.log('폴라로이드 촬영 및 전송')
-    const videoContainer = document.getElementById('video-container');
-    const canvas = await html2canvas(videoContainer);
+    if (containerRef.current) {
+      const containerElement = containerRef.current;
+      const canvas = await html2canvas(containerElement);
+      console.log('폴라로이드 촬영 및 전송');
+      // const videoContainer = document.getElementById('video-container');
+      // const canvas = await html2canvas(videoContainer);
 
-    // 스크린샷을 이미지 데이터로 변환
-    const screenshotData = canvas.toDataURL('image/jpeg');
+      // 스크린샷을 이미지 데이터로 변환
+      const screenshotData = canvas.toDataURL('image/jpeg');
 
-    const takePhoto = async () => {
-      // Data URI를 Blob으로 변환하는 함수
-      const dataURItoBlob = (dataURI) => {
-        const byteString = atob(dataURI.split(',')[1]);
-        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-        const ab = new ArrayBuffer(byteString.length);
-        const ia = new Uint8Array(ab);
+      const takePhoto = async () => {
+        // Data URI를 Blob으로 변환하는 함수
+        const dataURItoBlob = (dataURI) => {
+          const byteString = atob(dataURI.split(',')[1]);
+          const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+          const ab = new ArrayBuffer(byteString.length);
+          const ia = new Uint8Array(ab);
 
-        for (let i = 0; i < byteString.length; i++) {
-          ia[i] = byteString.charCodeAt(i);
+          for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+          }
+
+          return new Blob([ab], { type: mimeString });
+        };
+
+        const blobImage = dataURItoBlob(screenshotData);
+
+        const formData = new FormData();
+        formData.append('uuid', uuid);
+        formData.append('email', videoData.email);
+        formData.append(
+          'memberNo',
+          videoData.meetingMembers[meetingOrder].memberNo.toString()
+        ); // memberNo는 문자열로 변환하여 추가
+        formData.append('imageFile', blobImage, 'screenshot.jpg');
+
+        for (const key of formData.keys()) {
+          console.log(key, formData.get(key));
         }
-
-        return new Blob([ab], { type: mimeString });
+        const response = await postPicture(formData);
+        console.log('사진 촬영', response);
       };
 
-      const blobImage = dataURItoBlob(screenshotData);
-
-      const formData = new FormData();
-      formData.append('uuid', uuid);
-      formData.append('email', videoData.email);
-      formData.append(
-        'memberNo',
-        videoData.meetingMembers[meetingOrder].memberNo.toString()
-      ); // memberNo는 문자열로 변환하여 추가
-      formData.append('imageFile', blobImage, 'screenshot.jpg');
-
-      for (const key of formData.keys()) {
-        console.log(key, formData.get(key));
-      }
-      const response = await postPicture(formData);
-      console.log('사진 촬영', response);
-    };
-
-    takePhoto();
-    setIsPhotoTaken(false)
+      takePhoto();
+      setIsPhotoTaken(false);
+    }
   };
 
-  console.log('포토 타이머 뜨니???', isPhotoTaken)
+  console.log('포토 타이머 뜨니???', isPhotoTaken);
   ///////////////////////////////////////////////////////////////////////////////////////////
 
   // const performBodyPixSegmentation = async (videoElement) => {
@@ -497,9 +515,9 @@ const UserVideo = () => {
             initialMeetingOrder={meetingOrder}
           />
         )}
-        <div id="video-container">
+        <div id="video-container" ref={containerRef}>
           {myStream && (
-            <div className="basis-1/2 text-center">
+            <div className="text-center basis-1/2">
               <span className="form-title">내 영상</span>
               <ReactPlayer
                 playing
@@ -510,9 +528,11 @@ const UserVideo = () => {
               />
             </div>
           )}
-          {videoData && isPhotoTaken && <PhotoTimer onPhotoTaken={takeScreenshotAndSend} />}
+          {videoData && isPhotoTaken && (
+            <PhotoTimer onPhotoTaken={takeScreenshotAndSend} />
+          )}
           {remoteStream && (
-            <div className="basis-1/2 text-center">
+            <div className="text-center basis-1/2">
               <span className="form-title">연예인 영상</span>
               <ReactPlayer
                 key={meetingOrder}

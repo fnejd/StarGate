@@ -6,6 +6,7 @@ import { MeetingMember } from '@/types/board/type';
 import { useRecoilState } from 'recoil';
 import { nameShouldFetch } from '@/recoil/myPageState';
 import BoardHeader from '@/organisms/board/BoardHeader';
+import { useHorizontalScroll } from '@/hooks/useHorizontalScroll';
 
 interface MeetingData {
   uuid: string;
@@ -21,6 +22,7 @@ interface MeetingData {
  */
 
 const Remind = () => {
+  const scrollRef = useHorizontalScroll();
   const [data, setData] = useState<MeetingData>();
   const [loading, setLoading] = useState(true);
   const [nameFetch, setNameFetch] = useRecoilState(nameShouldFetch);
@@ -44,10 +46,13 @@ const Remind = () => {
   }, []);
 
   return (
-    <div className="h-screen w-xl flex flex-col">
-      <BoardHeader isAdmin={false} title="R E M I N D"></BoardHeader>
+    <div
+      className="flex flex-col h-screen overflow-x-auto w-xl"
+      ref={scrollRef}
+    >
+      <BoardHeader isAdmin={false} title="R  E  M  I  N  D"></BoardHeader>
       {data && (
-        <div className="flex flex-grow mx-10 min-w-max">
+        <div className="flex flex-grow mx-10 scroll-container min-w-max">
           <RemindTitle
             name={data.name}
             startDate={data.startDate}
