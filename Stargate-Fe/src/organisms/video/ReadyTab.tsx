@@ -7,6 +7,7 @@ import {
   postNotePad,
   postMemo,
 } from '@/services/userVideo';
+import Swal from 'sweetalert2';
 
 interface RedayDataProps {
   readyData: ReadyData;
@@ -96,7 +97,7 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
         .slice(0, 4)
         .some((state) => !state);
       if (hasFalseStateBeforeTab5) {
-        alert('입장 전 위의 필수 절차를 먼저 진행해주세요');
+        Swal.fire('Warning', '입장 전 위의 필수 절차를 먼저 진행해주세요', 'warning');
         setActiveTab(0);
         return;
       }
@@ -150,7 +151,7 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
         .slice(0, 4)
         .some((state) => !state);
       if (hasFalseStateBeforeTab5) {
-        alert('입장 전 위의 필수 절차를 먼저 진행해주세요');
+        Swal.fire('Warning', '입장 전 위의 필수 절차를 먼저 진행해주세요', 'warning');
         setActiveTab(0);
         return;
       }

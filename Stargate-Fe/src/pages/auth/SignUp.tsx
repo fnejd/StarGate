@@ -2,7 +2,7 @@ import SignUpComponent from '@/organisms/auth/SignUpComponent';
 
 const SignUp = () => {
   return (
-    <div className="w-auto">
+    <div className="w-full">
       <SignUpComponent />
     </div>
   );

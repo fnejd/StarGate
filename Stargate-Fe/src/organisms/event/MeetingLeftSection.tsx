@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AdminInput from '@/atoms/event/AdminInput';
 import DropDown from '@/atoms/event/DropDown';
 import AdminToggle from '@/atoms/common/AdminToggle';
+import Swal from 'sweetalert2';
 
 interface MeetingFUser {
   no: number;
@@ -43,6 +44,8 @@ const MeetingLeftSection = ({
   const [picSec, setPicSec] = useState<number>(40);
   const [photoTime, setPhotoTime] = useState<boolean>(false);
   // const [totalSec, setTotalSec] = useState<number>(80);
+  const [selectDate, setSelectDate] = useState('');
+  const [selectTime, setSelectTime] = useState('');
   const [numbers, setNumbers] = useState<number[]>([4]);
   useEffect(() => {
     // photoTime이 false일 때 picSec를 0으로 업데이트
@@ -59,7 +62,7 @@ const MeetingLeftSection = ({
     const stringDate: string = newDate.toISOString().slice(0, -1)
     if (newDate.getTime() < Date.now()) {
       // value가 현재보다 과거 날짜일 경우 경고 띄우기
-      alert('과거 날짜는 선택할 수 없습니다.');
+      Swal.fire('날짜 설정 실패', '과거 날짜는 선택할 수 없습니다.', 'error');
       return;
     }
 
@@ -69,6 +72,7 @@ const MeetingLeftSection = ({
       startDate: stringDate,
     }));
     console.log(`시작 날짜 ${value}`);
+    setSelectDate(value);
   };
 
   const handleTotalTime = (value: number): void => {
@@ -96,7 +100,7 @@ const MeetingLeftSection = ({
   const handleTimeBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (typeof value == 'number' && value <= 80) {
-      alert('전체 미팅 시간은 80초보다 커야 합니다.');
+      Swal.fire('시간 설정 실패', '전체 미팅 시간은 80초보다 커야 합니다.', 'error');
     }
   };
 
@@ -110,30 +114,35 @@ const MeetingLeftSection = ({
 
   return (
     <div className="mb-6 w-550">
-      <AdminInput
-        labelFor="시작 날짜"
-        type="date"
-        placeholder=""
-        max="9999-12-31"
-        value={
-          formData.startDate instanceof Date
-            ? formData.startDate.toISOString().split('T')[0]
-            : ''
-        } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
-        onInputChange={handleStartDate}
-      />
-      <AdminInput
-        labelFor="시작 시간"
-        type="time"
-        placeholder=""
-        // 여기 밸류값 변경해야해요!!!!!!!!!!!!!!!!!!!!!!!
-        value={
-          formData.startDate instanceof Date
-            ? formData.startDate.toISOString().split('T')[0]
-            : ''
-        } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
-        onInputChange={handleStartDate}
-      />
+      <div className="flex items-end">
+        <AdminInput
+          labelFor="시작 날짜"
+          type="date"
+          placeholder=""
+          max="9999-12-31"
+          value={
+            formData.startDate instanceof Date
+              ? formData.startDate.toISOString().split('T')[0]
+              : ''
+          } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
+          onInputChange={handleStartDate}
+        />
+        <p className="p1b text-white h-full">{selectDate}</p>
+      </div>
+      <div className="flex items-end">
+        <AdminInput
+          labelFor="시작 시간"
+          type="time"
+          placeholder=""
+          // 여기 밸류값 변경해야해요!!!!!!!!!!!!!!!!!!!!!!!
+          value={
+            selectTime
+          } // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
+          onInputChange={(e) => {setSelectTime(e)}}
+        />
+        <p className="p1b text-white h-full">{selectTime}</p>
+      </div>
+      
 
       <div className="flex items-end w-48">
         <AdminInput

@@ -29,7 +29,7 @@ const StarVideo = () => {
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
   const socket = useMemo(()=>{
-    return new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
+    return new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}${url}`)
   },[]);
 
   // const socketRef = useRef<WebSocket>(

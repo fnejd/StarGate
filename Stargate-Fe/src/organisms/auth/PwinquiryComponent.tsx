@@ -4,6 +4,7 @@ import AuthNumberComponent from './AuthNumberComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { pwInquiryApi } from '@/services/authService';
 import { emailVaildationCheck } from '@/hooks/useValidation';
+import Swal from 'sweetalert2';
 // import { useSetRecoilState } from 'recoil';
 // import { emailState } from '@/recoil/userState';
 
@@ -29,16 +30,15 @@ const PwinquiryComponent = () => {
     // 이메일 정보 서버에 보내구!
     const check = emailVaildationCheck((email as emailType).email);
     if (check != 'SUCCESS') {
-      alert(check);
+      Swal.fire('이메일 형식 오류', check, 'warning');
       return 0;
     }
     setLoading(true);
     setIsOpen(true);
     await pwInquiryApi((email as emailType).email)
       .then((response: emailType) => {
-        console.log(response);
         if (response.email == 'NoData') {
-          alert('이메일 검색 결과가 없습니다.');
+          Swal.fire('유저 검색 실패', '등록된 이메일 정보가 없습니다.', 'error');
           window.location.reload();
           return 0;
         }
