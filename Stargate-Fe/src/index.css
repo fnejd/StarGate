@@ -7,28 +7,28 @@
 
 @font-face {
   font-family: 'SUIT';
-  src: url(./assets/font/SUIT-Regular.ttf) format('truetype');
+  src: url(/assets/font/SUIT-Regular.ttf) format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SUIT';
-  src: url(./assets/font/SUIT-SemiBold.ttf) format('truetype');
+  src: url(/assets/font/SUIT-SemiBold.ttf) format('truetype');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'KREON';
-  src: url(./assets/font/KREON-Regular.ttf) format('truetype');
+  src: url(/assets/font/KREON-Regular.ttf) format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'KREON';
-  src: url(./assets/font/KREON-SemiBold.ttf) format('truetype');
+  src: url(/assets/font/KREON-SemiBold.ttf) format('truetype');
   font-weight: 600;
   font-style: normal;
 }

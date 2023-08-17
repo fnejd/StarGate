@@ -70,7 +70,7 @@ const BoardCardBox = ({
    * isTimeExceeded가 1800초 초과라면
    * 색깔 회색 + 사용 불가로 막아놓음
    */
-  const isTimeExceeded = remainingTime > 1800;
+  const isTimeExceeded = !isAdmin ? remainingTime > 1800 : false;
   const isOngoing = 1 > remainingTime;
 
   const days = Math.floor(remainingTime / 86400);
