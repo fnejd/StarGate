@@ -49,6 +49,7 @@ public class PUserServiceImpl implements PUserService {
         }
         PUser pUser = PUser.builder()
                 .email(dto.getEmail())
+                .name(dto.getName())
                 .code(dto.getCode())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .joinDate(LocalDateTime.now())
