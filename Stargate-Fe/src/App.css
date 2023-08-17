@@ -8,7 +8,7 @@ html {
 
 body{
   background-image: linear-gradient(to top, var(--tw-gradient-stops));
-  background-size: 100vw 100%;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
 }
 
