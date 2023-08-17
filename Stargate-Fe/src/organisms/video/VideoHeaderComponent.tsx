@@ -62,7 +62,7 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
       </div>
       {/* 다음 사람 뜨는 텍스트 부분 */}
       <div className="flex basis-1/4 justify-center text-white">
-        <p className="text-xl mt-1">NEXT</p>
+        <p className="text-xl mt-1 mr-2">NEXT</p>
         <p className="modal-title">{nextUser}</p>
       </div>
     </div>

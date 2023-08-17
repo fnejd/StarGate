@@ -26,8 +26,6 @@ const UserVideo = () => {
     waitingMinute: 0,
     waitingSecond: 0,
   });
-  // 미팅이 종료되고 대기 시간 시작할 때 사용하는 상태
-  const [isWaiting, setIsWaiting] = useState(false);
   const [meetingOrder, setMeetingOrder] = useState(-1); // 이게 바뀌었을 때 미팅 순서가 넘어감
   const [isPhotoTaken, setIsPhotoTaken] = useState(false);
 
@@ -143,10 +141,12 @@ const UserVideo = () => {
       console.log('소켓 주소 업데이트$$$$$$$$$', socket);
       connectWebSocket();
 
+
       let adjustedMeetingTime = videoData.meetingTime;
 
-      if (photoNum !== null) {
-        adjustedMeetingTime -= photoNum * 10;
+      if (videoData.photoNum !== null) {
+        adjustedMeetingTime -= videoData.photoNum * 10;
+        console.log('사진이 있어요', adjustedMeetingTime)
       }
 
       // 분과 초 초기 설정
@@ -288,48 +288,69 @@ const UserVideo = () => {
         second: prevTimer.second - 1,
       }));
     }
-    if (timer.second === 0 && timer.minute > 0) {
-      console.log('초가 0이 되어 분이 줄어듦');
-      setTimer((prevTimer) => ({
-        ...prevTimer,
-        minute: prevTimer.minute - 1,
-        second: 59,
-      }));
-    }
+    // if (timer.second === 0 && timer.minute > 0) {
+    //   console.log('초가 0이 되어 분이 줄어듦');
+    //   setTimer((prevTimer) => ({
+    //     ...prevTimer,
+    //     minute: prevTimer.minute - 1,
+    //     second: 59,
+    //   }));
+    // }
   };
 
   useEffect(() => {
     if (timer.second === 0 && timer.minute > 0) {
       console.log('초가 0이 되어 분이 줄어듦');
-      setTimer((prevTimer) => ({
-        ...prevTimer,
-        minute: prevTimer.minute - 1,
-        second: 59,
-      }));
-    } else if (timer.second == 0 && timer.minute == 0 && photoNum != 0) {
+      setTimeout(
+        () =>
+          setTimer((prevTimer) => ({
+            ...prevTimer,
+            minute: prevTimer.minute - 1,
+            second: 59,
+          })),
+        1000
+      );
+    } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum != 0) {
       // 미팅 시간이 끝나고 폴라로이드 촬영이 있는 경우
       let screenshotCount = photoNum;
+      console.log('폴라로이드 촬영 컷수 (((((((((((((((((((((', screenshotCount)
 
-      const intervalPhoto = setInterval(() => {
-        // 포토 타임이 있을 경우
-        if (screenshotCount > 0) {
-          // 10초마다 촬영 진행 및 포토 타이머 렌더링
-          console.log('촬영 시작**************8');
-          setIsPhotoTaken(true);
-          // takeScreenshotAndSend();
-          screenshotCount--;
-        }
-      }, 10000);
+      console.log('촬영 시작**************8', screenshotCount);
+      setIsPhotoTaken(true);
+      // takeScreenshotAndSend();
+      screenshotCount--;
 
+      // const intervalPhoto = setInterval(() => {
+      //   // 포토 타임이 있을 경우
+      //   if (screenshotCount > 0) {
+      //     // 10초마다 촬영 진행 및 포토 타이머 렌더링
+      //     console.log('촬영 시작**************8');
+      //     setIsPhotoTaken(true);
+      //     // takeScreenshotAndSend();
+      //     screenshotCount--;
+      //   }
+      // }, 10000);
+
+      // const intervalId = setInterval(() => {
+      //   if (screenshotCount == 0) {
+      //     console.log('대기시간타이머 시작!');
+      //     tickWaiting();
+      //   }
+      // }, 1000); // 1초마다 실행
+
+      // return () => {
+      //   clearInterval(intervalPhoto); // 컴포넌트 언마운트 시 interval 정리
+      //   clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      // };
+    } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum == 0) {
       const intervalId = setInterval(() => {
-        if (screenshotCount == 0) {
+        // if (screenshotCount == 0) {
           console.log('대기시간타이머 시작!');
           tickWaiting();
-        }
+        // }
       }, 1000); // 1초마다 실행
 
       return () => {
-        clearInterval(intervalPhoto); // 컴포넌트 언마운트 시 interval 정리
         clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       };
     }
@@ -354,6 +375,7 @@ const UserVideo = () => {
 
   // 폴라로이드 촬영 및 전송
   const takeScreenshotAndSend = async () => {
+    console.log('폴라로이드 촬영 및 전송')
     const videoContainer = document.getElementById('video-container');
     const canvas = await html2canvas(videoContainer);
 
@@ -394,7 +416,10 @@ const UserVideo = () => {
     };
 
     takePhoto();
+    setIsPhotoTaken(false)
   };
+
+  console.log('포토 타이머 뜨니???', isPhotoTaken)
   ///////////////////////////////////////////////////////////////////////////////////////////
 
   // const performBodyPixSegmentation = async (videoElement) => {
@@ -467,29 +492,9 @@ const UserVideo = () => {
                 width="full"
                 url={myStream}
               />
-              {/* <video
-              ref={(video) => {
-                if (video) {
-                  video.play(); // 비디오 재생 시작
-                  performBodyPixSegmentation(video)
-                    .then((segmentation) => {
-                      // 세분화 결과를 여기서 처리할 수 있습니다.
-                      // 세분화 결과를 사용하여 캔버스 수정이나 배경 제거 적용 가능
-                    })
-                    .catch((error) => {
-                      console.error('BodyPix 세분화 오류:', error);
-                    });
-                }
-              }}
-              id="webcam"
-              autoPlay
-              playsInline
-              width="640"
-              height="480"
-            ></video> */}
             </div>
           )}
-          {isPhotoTaken && <PhotoTimer onPhotoTaken={takeScreenshotAndSend} />}
+          {videoData && isPhotoTaken && <PhotoTimer onPhotoTaken={takeScreenshotAndSend} />}
           {remoteStream && (
             <div className="basis-1/2 text-center">
               <span className="form-title">연예인 영상</span>
