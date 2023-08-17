@@ -532,14 +532,14 @@ const UserVideo = () => {
           meetingIdx={meetingOrder}
         />
       )}
-      <div className="flex flex-row w-screen h-full">
+      <div className="flex flex-row w-screen h-full justify-center">
         {videoData && (
           <NotepadComponent
             videoData={videoData}
             initialMeetingOrder={meetingOrder}
           />
         )}
-        <div id="video-container" className="flex" ref={containerRef}>
+        <div id="video-container" className="flex w-full" ref={containerRef}>
           {myStream && (
             <div className="text-center basis-1/2">
               <span className="form-title">내 영상</span>

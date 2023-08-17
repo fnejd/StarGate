@@ -151,7 +151,7 @@ const AdminEventCreate = () => {
       try {
         console.log(formData);
         if (type) {
-          await updateEvent(formData);
+          await updateEvent(formData, uuid);
           Swal.fire('수정 완료', '이벤트 수정 완료!', 'success');
         } else {
           await createEvent(formData);

@@ -133,6 +133,7 @@ const MyPageBox = (props: MyPageBoxProps) => {
           value={boxEmail}
           getter={box}
           setter={setBox}
+          disabled
         />
       </div>
       {isAdmin ? (

@@ -90,7 +90,10 @@ const AdminEventDetail = () => {
         {isOver ? (
           <BtnBlue text="편지 리스트" onClick={handleModalOpen} />
         ) : (
-          <Link to="/admin/event/create" state={{ uuid: data.uuid }}>
+          <Link
+            to="/admin/event/create"
+            state={{ uuid: data.uuid, type: true }}
+          >
             <BtnBlue text="수정" />
           </Link>
         )}

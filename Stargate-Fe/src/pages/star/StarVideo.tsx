@@ -346,35 +346,39 @@ const StarVideo = () => {
         participantsData={meetingData && meetingData.meetingFUsers}
         meetingIdx={meetingOrder}
       />
-      <div className="flex flex-row w-screen h-full">
-        <NotepadComponent
-          meetingData={meetingData}
-          initialMeetingOrder={meetingOrder}
-        />
-        {myStream && (
-          <div className="basis-1/2">
-            <p>연옌</p>
-            <ReactPlayer
-              playing
-              // muted
-              height="full"
-              width="full"
-              url={myStream}
-            />
-          </div>
+      <div className="flex flex-row w-screen h-full justify-center">
+        {meetingData && (
+          <NotepadComponent
+            meetingData={meetingData}
+            initialMeetingOrder={meetingOrder}
+          />
         )}
-        {remoteStream && (
-          <div className="basis-1/2">
-            <p>팬</p>
-            <ReactPlayer
-              playing
-              // muted
-              height="full"
-              width="full"
-              url={remoteStream}
-            />
-          </div>
-        )}
+        <div className="flex w-full">
+          {remoteStream && (
+            <div className="text-center basis-1/2">
+              <p>팬</p>
+              <ReactPlayer
+                playing
+                // muted
+                height="full"
+                width="full"
+                url={remoteStream}
+              />
+            </div>
+          )}
+          {myStream && (
+            <div className="text-center basis-1/2">
+              <p>연옌</p>
+              <ReactPlayer
+                playing
+                // muted
+                height="full"
+                width="full"
+                url={myStream}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
