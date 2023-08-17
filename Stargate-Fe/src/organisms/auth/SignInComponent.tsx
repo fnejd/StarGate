@@ -6,7 +6,6 @@ import { adminLoginApi, loginApi } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
 import ToggleButtonComponent from '@/atoms/auth/ToggleButtonComponent';
 import Swal from 'sweetalert2';
-import Swal from 'sweetalert2';
 
 interface userType {
   type: string;

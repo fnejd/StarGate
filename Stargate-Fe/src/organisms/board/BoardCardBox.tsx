@@ -80,8 +80,6 @@ const BoardCardBox = ({
   );
   const seconds = remainingTime - days * 86400 - hours * 3600 - minutes * 60;
 
-  const [stringDate, setStringDate] = useState('');
-
   useEffect(() => {
     if (date !== undefined) {
       const start = date;
@@ -105,30 +103,6 @@ const BoardCardBox = ({
     }
     console.log(date, '===', stringDate);
   }, [date]);
-
-  const navigate = useNavigate();
-
-  const handleToReady = () => {
-    if (remainingTime <= 1800) {
-      navigate(`/ready/${uuid}`);
-    }
-  };
-  const handleToDetail = () => {
-    navigate(`/admin/event/detail/${uuid}`);
-  };
-  /**
-   * isTimeExceeded가 1800초 초과라면
-   * 색깔 회색 + 사용 불가로 막아놓음
-   */
-  const isTimeExceeded = !isAdmin ? remainingTime > 1800 : false;
-  const isOngoing = 1 > remainingTime;
-
-  const days = Math.floor(remainingTime / 86400);
-  const hours = Math.floor((remainingTime - days * 86400) / 3600);
-  const minutes = Math.floor(
-    (remainingTime - days * 86400 - hours * 3600) / 60
-  );
-  const seconds = remainingTime - days * 86400 - hours * 3600 - minutes * 60;
 
   return (
     <div className="flex justify-center">
