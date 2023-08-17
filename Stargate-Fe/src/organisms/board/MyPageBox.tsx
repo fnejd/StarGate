@@ -90,7 +90,6 @@ const MyPageBox = (props: MyPageBoxProps) => {
   const adminFormData = new FormData();
 
   const updateAdmin = async () => {
-    console.log('실행됨?');
     adminFormData.append('email', boxEmail);
     adminFormData.append('name', boxName);
     adminFormData.append('code', boxCode);
@@ -98,17 +97,11 @@ const MyPageBox = (props: MyPageBoxProps) => {
     if ((box as BoxType).newPw) {
       userFormData.append('newPassword', (box as BoxType).newPw);
     }
-    console.log(adminFormData.get('email'));
-    console.log(adminFormData.get('name'));
-    console.log(adminFormData.get('code'));
-    console.log(adminFormData.get('orignalPassword'));
-    console.log(adminFormData.get('newPassword'));
     const data = await updateAdminData(adminFormData);
     setNameFetch(true);
   };
 
   const updateUser = async () => {
-    console.log('실행됨?');
     userFormData.append('email', boxEmail);
     userFormData.append('name', boxName);
     userFormData.append('nickname', boxNickname);
@@ -118,12 +111,6 @@ const MyPageBox = (props: MyPageBoxProps) => {
       userFormData.append('newPassword', (box as BoxType).newPw);
     }
     userFormData.append('phone', boxPhone);
-    console.log(userFormData.get('email'));
-    console.log(userFormData.get('name'));
-    console.log(userFormData.get('nickname'));
-    console.log(userFormData.get('password'));
-    console.log(userFormData.get('newPassword'));
-    console.log(userFormData.get('phone'));
     const data = await updateUserData(userFormData);
     setNameFetch(true);
   };

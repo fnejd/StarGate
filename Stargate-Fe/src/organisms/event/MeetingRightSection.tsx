@@ -87,10 +87,8 @@ const MeetingRightSection = ({
           <AdminBtn
             onClick={() => document.getElementById('fileInput')?.click()} // 파일 선택 버튼 클릭 시 input 클릭 이벤트 호출
             className="w-24 h-8 mb-2 font-medium text-black rounded-sm text-12 bg-admingray font-suit"
-            text='파일 선택'
-          >
-            
-          </AdminBtn>
+            text="파일 선택"
+          ></AdminBtn>
           <input
             id="fileInput"
             type="file"

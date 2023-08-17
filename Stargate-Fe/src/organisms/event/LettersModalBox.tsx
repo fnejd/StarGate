@@ -42,8 +42,6 @@ const LettersModalBox = ({ isOpen, onClose, uuid }: LetterModalBoxProps) => {
       const fetchedData = await fetchLettersData(uuid);
       if (fetchedData) {
         setLetters(fetchedData);
-        console.log('데이터는', fetchedData);
-        console.log(fetchedData.startDate);
       }
     };
     fetchLetters();

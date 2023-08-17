@@ -101,11 +101,9 @@ const AdminManagementModalBox = ({
           setSelectedGroupMembers(updatedMembers);
           setGroupsFetch(true);
         } catch (error) {
-          console.log('멤버 삭제 에러:', error);
         }
       }
     } else {
-      console.log('memberNo 없음');
     }
   };
   const handleGroupDoubleClick = (

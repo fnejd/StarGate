@@ -31,7 +31,6 @@ const BoardHeaderNav = ({ isAdmin }: { isAdmin: boolean }) => {
           setUserData(data);
         }
       }
-      console.log('이름 가져옴');
       setNameFetch(false);
     };
     fetchData();
@@ -47,7 +46,6 @@ const BoardHeaderNav = ({ isAdmin }: { isAdmin: boolean }) => {
         Swal.fire('어라?', result, 'warning');
       }
     } catch (error) {
-      console.log('로그아웃 에러:', error);
     }
   };
 
