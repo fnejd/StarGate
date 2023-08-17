@@ -10,7 +10,7 @@ const viteConfig = defineConfig({
     // 프록시 추가
     proxy: {
       '/api': {
-        target: 'ws://i9a406.p.ssafy.io:8080/rtc',
+        target: 'wss://i9a406.p.ssafy.io:8080/rtc',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
         secure: false,

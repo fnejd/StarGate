@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { adminSignUpApi, adminVerifyEmail } from '@/services/authService';
 import {
   adminValidationCheck,
   emailVaildationCheck,
+  pwValidationCheck,
 } from '@/hooks/useValidation';
 import Swal from 'sweetalert2';
 
@@ -20,6 +21,8 @@ interface adminType {
 const AdminSignUpComponent = () => {
   const [emailText, setEmailText] = useState('사용 불가한 이메일입니다.');
   const [emailState, setEmailState] = useState('red');
+  const [pwText, setPwText] = useState('');
+  const [pwState, setPwState] = useState('red');
   const [admin, setAdmin] = useState<object>({
     email: '',
     company: '',
@@ -29,6 +32,19 @@ const AdminSignUpComponent = () => {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const pw = (admin as adminType).pw;
+    const pwCheck = (admin as adminType).pwCheck;
+    const result = pwValidationCheck(pw, pwCheck);
+    if (result == 'SUCCESS') {
+      setPwText('비밀번호가 일치합니다.');
+      setPwState('green');
+    } else {
+      setPwText(result);
+      setPwState('red');
+    }
+  }, [admin]);
 
   // 이메일 중복검사
   const verify = async () => {
@@ -143,6 +159,8 @@ const AdminSignUpComponent = () => {
         <InputComponent
           text="비밀번호 확인"
           type="password"
+          notice={pwText}
+          state={pwState}
           keyName="pwCheck"
           getter={admin}
           setter={setAdmin}

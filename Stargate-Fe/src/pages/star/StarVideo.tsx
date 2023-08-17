@@ -199,7 +199,7 @@ const StarVideo = () => {
       url != null
         ? url
         : '127baa3f-63df-47e9-a4ab-ff0469737881.002d4659-12b8-430c-a3c1-88beb3df8adb';
-
+    console.log(roomId);
     await getStarMeetingDataApi(roomId)
       .then((res: starMeetingDataType | undefined) => {
         if (res != undefined) {

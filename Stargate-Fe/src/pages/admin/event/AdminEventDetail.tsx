@@ -82,7 +82,7 @@ const AdminEventDetail = () => {
       </div>
       <div className="flex justify-evenly w-s my-20 text-center">
         <BtnBlue text="편지 리스트" onClick={handleModalOpen} />
-        <Link to="/admin/event/create" state={{ uuid: data.uuid }}>
+        <Link to="/admin/event/create" state={{ uuid: data.uuid, type: 'update' }}>
           <BtnBlue text="수정" />
         </Link>
       </div>

@@ -3,10 +3,10 @@ import MeetingLeftSection from '@/organisms/event/MeetingLeftSection';
 import MeetingRightSection from '@/organisms/event/MeetingRightSection';
 import MeetingBottomSection from '@/organisms/event/MeetingBottomSection';
 import BtnBlue from '@/atoms/common/BtnBlue';
-import { createEvent } from '@/services/adminEvent';
+import { createEvent, fetchEventDetailData } from '@/services/adminEvent';
 import { fetchGroup } from '@/services/adminBoardService';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 interface MeetingFUser {
   no: number;
@@ -62,15 +62,38 @@ const AdminEventCreate = () => {
   });
   const navigate = useNavigate();
 
-  // 그룹명, 그룹멤버 데이터 가져오기
-  useEffect(() => {
-    const getGroup = async () => {
+  const location = useLocation();
+  const uuid = location.state?.uuid;
+  const type = location.state?.type == 'update' ? true : false;
+  const getGroup = async () => {
       const data = await fetchGroup();
       console.log('데이터', data);
       setGroup(data);
       console.log(group);
     };
-    getGroup();
+  const fetchEventDetail = async () => {
+      const currentUrl = window.location.href;
+      const parts = currentUrl.split('/');
+      const uuid = parts[parts.length - 1];
+      console.log(uuid);
+
+      const fetchedData = await fetchEventDetailData(uuid);
+      if (fetchedData) {
+        setData(fetchedData);
+        console.log('데이터는', fetchedData);
+        console.log(fetchedData.startDate);
+        setLoading(false);
+      }
+      console.log('로딩완료', location);
+    };
+  // 그룹명, 그룹멤버 데이터 가져오기
+  useEffect(() => {
+    
+    if (type) {
+
+    } else {
+      getGroup();
+    }
   }, []);
 
   console.log('폼데이터', formData);
