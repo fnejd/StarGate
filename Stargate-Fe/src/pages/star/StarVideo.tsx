@@ -377,6 +377,45 @@ const StarVideo = () => {
         )}
       </div>
     </div>
+    <div className="w-screen h-screen">
+      <VideoHeaderComponent
+        min={timer.min}
+        sec={timer.sec}
+        type="star"
+        participantsData={meetingData && meetingData.meetingFUsers}
+        meetingIdx={meetingOrder}
+      />
+      <div className="flex flex-row w-screen h-full">
+        <NotepadComponent
+          meetingData={meetingData}
+          initialMeetingOrder={meetingOrder}
+        />
+        {myStream && (
+          <div className="basis-1/2">
+            <p>연옌</p>
+            <ReactPlayer
+              playing
+              muted
+              height="full"
+              width="full"
+              url={myStream}
+            />
+          </div>
+        )}
+        {remoteStream && (
+          <div className="basis-1/2">
+            <p>팬</p>
+            <ReactPlayer
+              playing
+              muted
+              height="full"
+              width="full"
+              url={remoteStream}
+            />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

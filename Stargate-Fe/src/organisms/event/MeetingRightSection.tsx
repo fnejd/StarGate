@@ -76,6 +76,16 @@ const MeetingRightSection = ({
     }));
   };
 
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    console.log('공지', value);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      notice: textValue,
+    }));
+  }
+
   return (
     <>
       <div className="w-48 h-8">

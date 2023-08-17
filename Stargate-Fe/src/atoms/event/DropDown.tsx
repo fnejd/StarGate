@@ -15,13 +15,8 @@ const DropDown: React.FC<DropdownProps> = ({
   // const [cutCount, setCutCount] = useState<number>(4);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = Number.isNaN(Number(event.target.value))
-      ? event.target.value
-      : Number(event.target.value);
-    console.log(
-      '옵션선택%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
-      selectedValue
-    );
+    const selectedValue = Number.isNaN(Number(event.target.value)) ? event.target.value : Number(event.target.value);
+    console.log('옵션선택%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%', selectedValue)
     // setSelectedValue(selectedValue);
     onOptionChange(selectedValue);
   };

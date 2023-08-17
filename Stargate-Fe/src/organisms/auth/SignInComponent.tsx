@@ -6,6 +6,7 @@ import { adminLoginApi, loginApi } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
 import ToggleButtonComponent from '@/atoms/auth/ToggleButtonComponent';
 import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 interface userType {
   type: string;
@@ -27,9 +28,9 @@ const SignInComponent = () => {
 
   // 패스워드 유효성 검사 부분
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
-      navigate('/board');
-    }
+    // if (localStorage.getItem('refreshToken')) {
+    //   navigate('/board');
+    // }
 
     // Password Checking
     const password = (user as userType).pw;
@@ -98,7 +99,7 @@ const SignInComponent = () => {
   };
 
   return (
-    <div className="max-w-sm mt-20 ml-auto mr-auto items-center">
+    <div className="max-w-sm mt-20 mt-20 ml-auto mr-auto items-center">
       <InputComponent
         type="text"
         text="이메일"

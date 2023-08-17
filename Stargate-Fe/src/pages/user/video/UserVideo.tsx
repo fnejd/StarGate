@@ -133,7 +133,7 @@ const UserVideo = () => {
           meetingOrder > -1
         ) {
           const newSocket = new WebSocket(
-            `${import.meta.env.VITE_WEBSOCKET_URL}${videoData.meetingMembers[meetingOrder].roomId}`
+            `ws://i9a406.p.ssafy.io:8080/api/rtc/${videoData.meetingMembers[meetingOrder].roomId}`
           );
           setSocket(newSocket); // 새로운 WebSocket 인스턴스를 상태로 업데이트
         }
@@ -537,7 +537,7 @@ const UserVideo = () => {
             initialMeetingOrder={meetingOrder}
           />
         )}
-        <div id="video-container" className="flex" ref={containerRef}>
+        <div id="video-container" ref={containerRef}>
           {myStream && (
             <div className="text-center basis-1/2">
               <span className="form-title">내 영상</span>

@@ -82,6 +82,7 @@
 
   .timer-number {
     @apply italic font-suit text-80 font-semibold opacity-100;
+
   }
 
   .modal-title {
