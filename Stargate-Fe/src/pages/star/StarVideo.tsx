@@ -270,6 +270,15 @@ const StarVideo = () => {
           waitingMin: prev.waitingMin - 1,
           waitingSec: 59,
         }));
+        setTimeout(
+          () =>
+            setTimer((prevTimer) => ({
+              ...prevTimer,
+              waitingMin: prevTimer.waitingMin - 1,
+              waitingSec: 59,
+            })),
+          1000
+        );
       }
     }
   };
@@ -294,11 +303,15 @@ const StarVideo = () => {
     }
     if (timer.sec === 0 && timer.min > 0) {
       console.log('초가 0이 되어 분이 줄어든다잉');
-      setTimer((prev) => ({
-        ...prev,
-        min: prev.min - 1,
-        sec: 59,
-      }));
+      setTimeout(
+        () =>
+          setTimer((prevTimer) => ({
+            ...prevTimer,
+            min: prevTimer.min - 1,
+            sec: 59,
+          })),
+        1000
+      );
     }
   };
 
@@ -306,11 +319,15 @@ const StarVideo = () => {
     console.log('timer start');
     if (timer.sec === 0 && timer.min > 0) {
       console.log('초가 0이 되어 분이 줄어든다잉');
-      setTimer((prev) => ({
-        ...prev,
-        min: prev.min - 1,
-        sec: 59,
-      }));
+      setTimeout(
+        () =>
+          setTimer((prevTimer) => ({
+            ...prevTimer,
+            min: prevTimer.min - 1,
+            sec: 59,
+          })),
+        1000
+      );
     } else if (timer.sec == 0 && timer.min == 0 && photoNum != 0) {
       // let screenshotCount = photoNum;
       let screenshotCount = 2;
