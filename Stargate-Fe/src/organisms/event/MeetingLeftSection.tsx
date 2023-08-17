@@ -46,20 +46,47 @@ const MeetingLeftSection = ({
   // const [totalSec, setTotalSec] = useState<number>(80);
   const [selectDate, setSelectDate] = useState('');
   const [selectTime, setSelectTime] = useState('');
-  const [numbers, setNumbers] = useState<number[]>([4]);
+  const [numbers, setNumbers] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (formData.startDate) {
+      const arr =
+        formData.startDate instanceof Date
+          ? formData.startDate.toISOString().split('T')
+          : formData.startDate.split('T');
+      setSelectDate(arr[0]);
+      setSelectTime(arr[1]);
+    }
+    if (formData.photoNum > 0) {
+      console.log(formData.photoNum);
+      setPhotoTime(true);
+      setPicSec(formData.photoNum * 10);
+      const cnt = Math.floor(formData.meetingTime / 2 / 10);
+      console.log(`컷 수는 ${cnt}`);
+
+      let newNumbers: number[] = [formData.photoNum];
+
+      newNumbers = Array.from({ length: cnt - 4 }, (_, index) => 4 + index);
+      setNumbers(newNumbers);
+    }
+    console.log(picSec);
+  }, [formData]);
+
   useEffect(() => {
     // photoTime이 false일 때 picSec를 0으로 업데이트
     if (!photoTime) {
       setPicSec(0);
-    } else {
-      setPicSec(40);
     }
   }, [photoTime]);
 
   const handleStartDate = (value: string): void => {
     const [year, month, day] = value.split('-');
-    const newDate: Date = new Date(Number(year), Number(month) - 1, Number(day));
-    const stringDate: string = newDate.toISOString().slice(0, -1)
+    const newDate: Date = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day)
+    );
+    const stringDate: string = newDate.toISOString().slice(0, -1);
     if (newDate.getTime() < Date.now()) {
       // value가 현재보다 과거 날짜일 경우 경고 띄우기
       Swal.fire('날짜 설정 실패', '과거 날짜는 선택할 수 없습니다.', 'error');
@@ -100,7 +127,11 @@ const MeetingLeftSection = ({
   const handleTimeBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (typeof value == 'number' && value <= 80) {
-      Swal.fire('시간 설정 실패', '전체 미팅 시간은 80초보다 커야 합니다.', 'error');
+      Swal.fire(
+        '시간 설정 실패',
+        '전체 미팅 시간은 80초보다 커야 합니다.',
+        'error'
+      );
     }
   };
 
@@ -130,6 +161,20 @@ const MeetingLeftSection = ({
         <p className="p1b text-white h-full">{selectDate}</p>
       </div>
       <div className="flex items-end">
+        <AdminInput
+          labelFor="시작 시간"
+          type="time"
+          placeholder=""
+          // 여기 밸류값 변경해야해요!!!!!!!!!!!!!!!!!!!!!!!
+          value={selectTime} // startDate가 null이 아니면 value로 설정, null이면 빈 문자열로 설정
+          onInputChange={(e) => {
+            setSelectTime(e);
+          }}
+        />
+        <p className="p1b text-white h-full">{selectTime}</p>
+      </div>
+
+      <div className="flex items-end w-48">
         <AdminInput
           labelFor="시작 시간"
           type="time"

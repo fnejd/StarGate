@@ -6,6 +6,7 @@ import { adminLoginApi, loginApi } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
 import ToggleButtonComponent from '@/atoms/auth/ToggleButtonComponent';
 import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 interface userType {
   type: string;
@@ -27,9 +28,9 @@ const SignInComponent = () => {
 
   // 패스워드 유효성 검사 부분
   useEffect(() => {
-    if (localStorage.getItem('refreshToken')) {
-      navigate('/board');
-    }
+    // if (localStorage.getItem('refreshToken')) {
+    //   navigate('/board');
+    // }
 
     // Password Checking
     const password = (user as userType).pw;
@@ -67,7 +68,7 @@ const SignInComponent = () => {
           console.log(res);
           if (res == 'alreadyToken') {
             Swal.fire('로그인 실패', '이미 로그인 된 상태입니다.', 'warning');
-            navigate('/admin/board');
+            navigate('/');
           } else if (res == 'SUCCESS') {
             Swal.fire('로그인 성공!', '로그인에 성공하셨습니다.', 'success');
             navigate('/admin/board');
@@ -81,7 +82,7 @@ const SignInComponent = () => {
         .then((res) => {
           if (res == 'alreadyToken') {
             Swal.fire('로그인 실패', '이미 로그인 된 상태입니다.', 'warning');
-            navigate('/board');
+            navigate('/');
           } else if (res == 'SUCCESS') {
             Swal.fire('로그인 성공!', '로그인에 성공하셨습니다.', 'success');
             navigate('/board');
@@ -98,7 +99,7 @@ const SignInComponent = () => {
   };
 
   return (
-    <div className="max-w-sm mt-20 ml-auto mr-auto items-center">
+    <div className="max-w-sm mt-20 mt-20 ml-auto mr-auto items-center">
       <InputComponent
         type="text"
         text="이메일"

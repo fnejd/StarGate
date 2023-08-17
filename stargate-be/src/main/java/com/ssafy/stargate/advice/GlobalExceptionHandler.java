@@ -25,4 +25,10 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage());
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> allException(Exception e){
+        log.error(e.getMessage());
+        return ResponseEntity.status(500).body(e.getMessage());
+    }
 }

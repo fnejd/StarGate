@@ -4,19 +4,15 @@ import com.ssafy.stargate.exception.EmailDuplicationException;
 import com.ssafy.stargate.exception.LoginException;
 import com.ssafy.stargate.exception.NotFoundException;
 import com.ssafy.stargate.exception.RegisterException;
-import com.ssafy.stargate.model.dto.common.FUserDto;
-import com.ssafy.stargate.model.dto.common.FUserFindIdDto;
-import com.ssafy.stargate.model.dto.common.FUserFindPwDto;
-import com.ssafy.stargate.model.dto.request.FUserLoginRequestDto;
-import com.ssafy.stargate.model.dto.request.FUserUpdateRequestDto;
-import com.ssafy.stargate.model.dto.request.UserEmailCheckRequestDto;
-import com.ssafy.stargate.model.dto.response.JwtResponseDto;
-import com.ssafy.stargate.model.dto.response.RemindResponseDto;
-import com.ssafy.stargate.model.dto.response.UserEmailCheckResponseDto;
+import com.ssafy.stargate.model.dto.request.fuser.*;
+import com.ssafy.stargate.model.dto.request.fuser.FUserEmailCheckRequestDto;
+import com.ssafy.stargate.model.dto.response.jwt.JwtResponseDto;
+import com.ssafy.stargate.model.dto.response.fuser.FUserEmailCheckResponseDto;
+import com.ssafy.stargate.model.dto.response.fuser.FUserFindIdResponseDto;
+import com.ssafy.stargate.model.dto.response.fuser.FUserFindPwResponseDto;
+import com.ssafy.stargate.model.dto.response.fuser.FUserResponseDto;
 import org.springframework.validation.annotation.Validated;
-
 import java.security.Principal;
-import java.util.UUID;
 
 
 /**
@@ -25,25 +21,25 @@ import java.util.UUID;
  * @author 남현실, 김도현
  */
 public interface FUserService {
-    public void create(@Validated FUserDto dto) throws EmailDuplicationException, RegisterException;
+    public void create(@Validated FUserCreateRequestDto dto) throws EmailDuplicationException, RegisterException;
 
     public JwtResponseDto login(FUserLoginRequestDto dto) throws NotFoundException, LoginException;
 
-    public FUserDto getFUser(Principal principal) throws NotFoundException;
+    public FUserResponseDto getFUser(Principal principal) throws NotFoundException;
 
-    public FUserDto updateFUser(FUserUpdateRequestDto fUserDto, Principal principal) throws NotFoundException;
+    public FUserResponseDto updateFUser(FUserUpdateRequestDto fUserDto, Principal principal) throws NotFoundException;
 
     public void deleteFUser(Principal principal);
 
-    public FUserFindIdDto getFUserId(FUserFindIdDto dto) throws NotFoundException;
+    public FUserFindIdResponseDto getFUserId(FUserFindIdRequestDto dto) throws NotFoundException;
 
-    public FUserFindPwDto getCertifyCode(FUserFindPwDto dto) throws NotFoundException;
+    public FUserFindPwResponseDto getCertifyCode(FUserFindPwRequestDto dto) throws NotFoundException;
 
-    public void checkCertify(FUserFindPwDto dto) throws LoginException, NotFoundException;
+    public void checkCertify(FUserCheckCodeRequestDto dto) throws LoginException, NotFoundException;
 
-    public void updateFUserPw(FUserFindPwDto dto) throws NotFoundException;
+    public void updateFUserPw(FUserResetPwRequestDto dto) throws NotFoundException;
 
-    public UserEmailCheckResponseDto checkDuplicateEmail(UserEmailCheckRequestDto dto);
+    public FUserEmailCheckResponseDto checkDuplicateEmail(FUserEmailCheckRequestDto dto);
 
     public void logout() throws NotFoundException;
 }

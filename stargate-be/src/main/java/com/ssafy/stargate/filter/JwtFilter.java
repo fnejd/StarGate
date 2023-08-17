@@ -22,6 +22,7 @@ import java.io.IOException;
 
 /**
  * Http Request 한번의 요청에 대해 한번만 실행해는 JWT 관련 필터
+ *
  * @author 김도현
  */
 @Slf4j
@@ -29,23 +30,23 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     /**
      * SecurityContextHolder 에 authentication 저장, 유효하지 않은 토큰 이면 601 status code 전송
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
+     *
+     * @param request     HttpServletRequest
+     * @param response    HttpServletResponse
      * @param filterChain
      * @throws ServletException
      * @throws IOException
      * @throws InvalidTokenException
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException , InvalidTokenException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, InvalidTokenException {
 
         String token = getToken(request);
-        log.info("info log= {} bearer 뺸 token",token);
+        log.info("bearer 뺸 token = {} ", token);
 
         if (token != null && jwtTokenUtil.validateToken(token)) {
             Authentication authentication = jwtTokenUtil.getAuthentication(token);
@@ -57,19 +58,21 @@ public class JwtFilter extends OncePerRequestFilter {
 
     /**
      * Bearer 를 제외한 토큰 반환
+     *
      * @param request HttpServletRequest
      * @return String Bearer 를 제외한 토큰
      */
-    private String getToken(HttpServletRequest request){
+    private String getToken(HttpServletRequest request) {
 
         String bearerToken = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
+        String token = jwtTokenUtil.removeBearer(bearerToken);
+
+        return token;
     }
+
 }
+
 
 
 

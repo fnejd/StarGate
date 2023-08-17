@@ -1,6 +1,8 @@
 package com.ssafy.stargate.config;
 
+import com.ssafy.stargate.filter.JwtExceptionFilter;
 import com.ssafy.stargate.filter.JwtFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +22,11 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
-    @Autowired
-    private JwtFilter jwtFilter;
+
+    private final JwtFilter jwtFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,27 +37,31 @@ public class WebSecurityConfig {
                         .requestMatchers("/pusers/register", "/pusers/check-email",
                                 "/pusers/login", "/fusers/register", "/fusers/login",
                                 "/fusers/find-id", "/fusers/get-code", "/fusers/check-code",
-                                "/fusers/new-pw", "/fusers/check-email"
+                                "/fusers/new-pw", "/fusers/check-email","/meetingroom/member/get"
                         ).anonymous()
                         .requestMatchers("/pdashboard").hasAuthority("Producer")
                         .requestMatchers("/rtc/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/histories/**").permitAll() // TODO: 멤버 인증 권한 어떻게? 우선 공개로 함
                         .anyRequest().authenticated()
                 )
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtFilter.class);
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost", "http://localhost:3000"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost", "http://localhost:3000","https://stargatea406.netlify.app/"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

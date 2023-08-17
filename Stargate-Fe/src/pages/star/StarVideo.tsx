@@ -1,10 +1,10 @@
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import ReactPlayer from 'react-player';
 import peerService from '@/peer/peer';
 import NotepadComponent from '@/atoms/video/NotepadComponent';
 import VideoHeaderComponent from '@/organisms/video/VideoHeaderComponent';
 import { getStarMeetingDataApi } from '@/services/videoService';
+import Swal from 'sweetalert2';
 
 interface starMeetingDataType {
   waitingTime: number;
@@ -28,15 +28,9 @@ const StarVideo = () => {
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
-  const socket = useMemo(()=>{
-    return new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}${url}`)
-  },[]);
-
-  // const socketRef = useRef<WebSocket>(
-  //   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  //   new WebSocket(`ws://i9a406.p.ssafy.io:8080/api/rtc/${url}`)
-  // );
-  // const socket = socketRef.current;
+  const socket = useMemo(() => {
+    return new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}${url}`);
+  }, []);
 
   // 연결상태 변경시 콘솔에 출력
   peerService.peer.onconnectionstatechange = () => {
@@ -46,10 +40,11 @@ const StarVideo = () => {
 
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
-    console.log("ONICECAN:",e);
+    console.log('ONICECAN:', e);
     if (e.candidate) {
       console.log(
-        '#####################################ICE candidate 이벤트 핸들러 설정',e.candidate
+        '#####################################ICE candidate 이벤트 핸들러 설정',
+        e.candidate
       );
       socket.send(
         JSON.stringify({
@@ -74,7 +69,7 @@ const StarVideo = () => {
   useEffect(() => {
     (async () => {
       console.log('내 미디어 세팅');
-      // 백승윤 : 왠지모르지만 여기가 시간 엄청잡아먹음 한 1초? 근데 그 사이에 ICE 날아감.
+      // baek : 왠지모르지만 여기가 시간 엄청잡아먹음 한 1초? 근데 그 사이에 ICE 날아감.
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -87,7 +82,7 @@ const StarVideo = () => {
           peerService.peer.addTrack(track, stream);
         });
         setMyStream(stream);
-        console.log("TRACKS = ",peerService.peer.track);
+        console.log('TRACKS = ', peerService.peer.track);
         console.log('1-1. 팬한테 내 미디어 연결');
         // 로컬 미디어 스트림 확인
         console.log('Local media stream:', peerService.peer.getLocalStreams());
@@ -111,13 +106,7 @@ const StarVideo = () => {
     try {
       // 이미 생성된 peerService 객체를 사용하여 getOffer 메소드 호출
       const ans = await peerService.getAnswer(receivedData);
-      // 내 오퍼를 보낸다
-      // const offerData = {
-      //   type: 'offer',
-      //   offer: offer,
-      // };
-      // offer를 문자열로 변환하여 서버로 전송
-      // socket.send(JSON.stringify(offerData));
+
       socket.send(JSON.stringify(ans));
       console.log('1-2. 팬한테 대답 전송');
       console.log(ans);
@@ -126,7 +115,6 @@ const StarVideo = () => {
     }
   }, []);
 
-  const [receiveTime, setReceiveTime] = useState(0);
   const [timer, setTimer] = useState({
     min: 0,
     sec: 0,
@@ -154,20 +142,13 @@ const StarVideo = () => {
         console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
         const receivedData = JSON.parse(event.data);
         console.log('rd', receivedData);
-        // 상대가 조인했다는 메시지를 받음
-        // if (receivedData.type === 'join') {
+
         if (receivedData.type === 'offer') {
           console.log('11111111111111111 어 팬 들어왔다');
           await getJoined(receivedData);
+          setOnTimer(true);
         }
-        // if (receivedData.type === 'ans') {
-        //   console.log('33333333333333333 팬한테 앤써를 받았어요');
-        //   await peerService.setRemoteDescription(receivedData);
-        //   console.log('Connection state:', peerService.peer.connectionState);
-        //   setReceiveTime(receivedData.time);
 
-        //   setOnTimer(true);
-        // }
         if (receivedData.type === 'candidate') {
           console.log('444444444444444444444 아이스를 받았어요');
           console.log(receivedData.candidate);
@@ -195,10 +176,11 @@ const StarVideo = () => {
   }, [socket]);
 
   const getMeetingData = async () => {
-    const roomId =
-      url != null
-        ? url
-        : '127baa3f-63df-47e9-a4ab-ff0469737881.002d4659-12b8-430c-a3c1-88beb3df8adb';
+    if (url === null) {
+      Swal.fire('접속 오류', '올바른 접속을 시도해주세요.', 'error');
+      return;
+    }
+    const roomId = url;
 
     await getStarMeetingDataApi(roomId)
       .then((res: starMeetingDataType | undefined) => {
@@ -220,7 +202,6 @@ const StarVideo = () => {
   useEffect(() => {
     console.log('컴포넌트 실행~~');
 
-    console.log('fetch start');
     const fetchData = async () => {
       if (!meetingData) await getMeetingData();
     };
@@ -229,13 +210,12 @@ const StarVideo = () => {
   }, []);
 
   useEffect(() => {
-    console.log(meetingData);
     if (!meetingData) {
       console.log('아직 데이터 없음!');
       return;
     }
 
-    const meetingTime = receiveTime;
+    const meetingTime = meetingData.meetingTime - meetingData.photoNum * 10;
     setTimer((prev) => ({
       ...prev,
       min: Math.trunc(meetingTime / 60),
@@ -244,18 +224,14 @@ const StarVideo = () => {
       waitingSec: meetingData.waitingTime % 60,
     }));
 
-    console.log(timer);
-
     setPhotoNum(meetingData.photoNum);
 
     if (meetingData && meetingOrder === meetingData.meetingFUsers.length) {
-      // 통화 종료 시 이벤트 핸들링
+      Swal.fire('통화 종료', '팬사인회가 종료되었습니다.', 'question');
     }
-  }, [meetingData, meetingOrder, receiveTime]);
+  }, [meetingData, meetingOrder]);
 
   const tickWaiting = () => {
-    console.log('대기 시간 으로 넘 ㅓ어 감');
-
     if (timer.waitingSec > 0) {
       setTimer((prev) => ({
         ...prev,
@@ -292,8 +268,6 @@ const StarVideo = () => {
   }, [timer.waitingMin, timer.waitingSec]);
 
   const tick = () => {
-    console.log('Tick Method Start', timer.sec);
-
     // sec -1
     if (timer.sec > 0) {
       setTimer((prev) => ({
@@ -302,7 +276,6 @@ const StarVideo = () => {
       }));
     }
     if (timer.sec === 0 && timer.min > 0) {
-      console.log('초가 0이 되어 분이 줄어든다잉');
       setTimeout(
         () =>
           setTimer((prevTimer) => ({
@@ -316,9 +289,7 @@ const StarVideo = () => {
   };
 
   useEffect(() => {
-    console.log('timer start');
     if (timer.sec === 0 && timer.min > 0) {
-      console.log('초가 0이 되어 분이 줄어든다잉');
       setTimeout(
         () =>
           setTimer((prevTimer) => ({
@@ -334,7 +305,6 @@ const StarVideo = () => {
 
       const intervalPhoto = setInterval(() => {
         if (screenshotCount > 0) {
-          console.log('Photo Shot');
           // takeScreenshotAndSend();
           screenshotCount--;
         }
@@ -342,7 +312,6 @@ const StarVideo = () => {
 
       const intervalId = setInterval(() => {
         if (screenshotCount == 0) {
-          console.log('WaitingTimer Run');
           tickWaiting();
         }
       }, 1000);
@@ -355,11 +324,9 @@ const StarVideo = () => {
   }, [timer.sec, timer.min, photoNum]);
 
   useEffect(() => {
-    console.log(onTimer);
     if (peerService.peer && onTimer) {
       const intervalId = setInterval(() => {
         if (timer.sec > 0) {
-          console.log('타이머 시작!@!@!!');
           tick();
         }
       }, 1000);
@@ -371,6 +338,45 @@ const StarVideo = () => {
   }, [meetingOrder, timer.sec, onTimer]);
 
   return (
+    <div className="w-screen h-screen">
+      <VideoHeaderComponent
+        min={timer.min}
+        sec={timer.sec}
+        type="star"
+        participantsData={meetingData && meetingData.meetingFUsers}
+        meetingIdx={meetingOrder}
+      />
+      <div className="flex flex-row w-screen h-full">
+        <NotepadComponent
+          meetingData={meetingData}
+          initialMeetingOrder={meetingOrder}
+        />
+        {myStream && (
+          <div className="basis-1/2">
+            <p>연옌</p>
+            <ReactPlayer
+              playing
+              muted
+              height="full"
+              width="full"
+              url={myStream}
+            />
+          </div>
+        )}
+        {remoteStream && (
+          <div className="basis-1/2">
+            <p>팬</p>
+            <ReactPlayer
+              playing
+              muted
+              height="full"
+              width="full"
+              url={remoteStream}
+            />
+          </div>
+        )}
+      </div>
+    </div>
     <div className="w-screen h-screen">
       <VideoHeaderComponent
         min={timer.min}
