@@ -258,11 +258,15 @@ const UserVideo = () => {
 
     if (timer.waitingSecond === 0) {
       if (timer.waitingMinute > 0) {
-        setTimer((prevTimer) => ({
-          ...prevTimer,
-          waitingMinute: prevTimer.waitingMinute - 1,
-          waitingSecond: 59,
-        }));
+        setTimeout(
+          () =>
+            setTimer((prevTimer) => ({
+              ...prevTimer,
+              waitingMinute: prevTimer.waitingMinute - 1,
+              waitingSecond: 59,
+            })),
+          1000
+        );
       }
     }
   };

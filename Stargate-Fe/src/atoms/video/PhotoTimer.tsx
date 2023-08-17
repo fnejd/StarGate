@@ -43,6 +43,7 @@ const PhotoTimer = ({ onPhotoTaken }) => {
         flash ? 'bg-white' : ''
       }`}
     >
+      <span>촬영 준비</span>
       <span className={`timer-number ${flash ? 'text-black' : 'z-15'}`}>
         {photoTime}
       </span>
