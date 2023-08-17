@@ -90,7 +90,7 @@ const UserBoard = () => {
         )
       )}
       {isExpected ? (
-        <p className="t3b text-center lg:my-14 sm:my-6 text-whiteㄹ">예정</p>
+        <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
       ) : (
         <p className="t3b text-center lg:my-14 sm:my-6 text-white opacity-40">
           예정 없음
