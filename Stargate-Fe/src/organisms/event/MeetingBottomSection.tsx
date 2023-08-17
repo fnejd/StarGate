@@ -39,7 +39,7 @@ interface FormData {
   photoNum: number;
   imageFile: File | null;
   meetingFUsers: string;
-  meetingMembers: string;
+  meetingMembers: (string | number)[];
 }
 
 interface Member {
@@ -118,6 +118,7 @@ const MeetingBottomSection = ({
 
   // 등록 함수8
   const handleGroupChange = (value: number | string) => {
+    console.log(group);
     const selectedGroup = group.find((item) => item.name === value);
     if (selectedGroup) {
       setMembers(selectedGroup.members);
@@ -126,17 +127,12 @@ const MeetingBottomSection = ({
 
   // 멤버 변수가 바뀌변 폼데이터 업데이트
   useEffect(() => {
+    console.log('멤버 바뀌었습니다!!!');
     setFormData((prevFormData) => {
-      const updatedMembers = [
-        ...prevFormData.meetingMembers,
-        ...members.map((member) => member.memberNo),
-      ];
-      console.log(updatedMembers);
-
       return {
         ...prevFormData,
         // 배열 순서 보장을 위한 stringify 처리
-        meetingMembers: updatedMembers,
+        meetingMembers: members.map((member) => member.memberNo),
       };
     });
   }, [members]);
@@ -144,8 +140,7 @@ const MeetingBottomSection = ({
   // 팬 변수가 바뀌면 폼데이터 업데이트
   useEffect(() => {
     setFormData((prevFormData) => {
-      const updatedFans = [...prevFormData.meetingFUsers, ...fanData];
-      console.log(updatedFans);
+      const updatedFans = [...fanData];
 
       return {
         ...prevFormData,
@@ -184,6 +179,7 @@ const MeetingBottomSection = ({
       // 중복 체크
       if (!fanData.includes(emailValue)) {
         const updateFanData = [...fanData];
+        console.log(updateFanData);
         updateFanData.push(emailValue);
         setFanData(updateFanData);
         setFanValue('');

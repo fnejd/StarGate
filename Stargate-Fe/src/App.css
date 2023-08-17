@@ -1,9 +1,19 @@
 html {
-  background-image: linear-gradient(to top, var(--tw-gradient-stops));
   --tw-gradient-from: #e7f1ff var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(231 241 255 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
   --tw-gradient-to: #0010ff var(--tw-gradient-to-position);
+
+}
+
+body{
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+:root {
+  width: 100% !important;
 }
 
 .material-symbols-rounded {
@@ -23,6 +33,7 @@ html {
     'opsz' 0;
 }
 
+// input 태그 자동완성 사용 시 배경색 생기는 거 지우기
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px #fff inset;
   -webkit-text-fill-color: white;
