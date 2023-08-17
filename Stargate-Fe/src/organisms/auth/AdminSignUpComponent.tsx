@@ -7,6 +7,7 @@ import {
   adminValidationCheck,
   emailVaildationCheck,
 } from '@/hooks/useValidation';
+import Swal from 'sweetalert2';
 
 interface adminType {
   email: string;
@@ -34,7 +35,7 @@ const AdminSignUpComponent = () => {
     const email = (admin as adminType).email;
     const check = emailVaildationCheck(email);
     if (check != 'SUCCESS') {
-      alert(check);
+      Swal.fire('형식 오류', check, 'warning');
       return 0;
     }
     const formData = new FormData();
@@ -57,7 +58,7 @@ const AdminSignUpComponent = () => {
     const validation = adminValidationCheck(admin as adminType);
     // 'SUCCESS'가 리턴되지 않았다면 리턴값 출력
     if (validation != 'SUCCESS') {
-      alert(validation);
+      Swal.fire('형식 오류', validation, 'warning');
       return 0;
     }
 
@@ -74,22 +75,25 @@ const AdminSignUpComponent = () => {
     response
       .then((response) => {
         if (response == 'alreadyToken') {
-          alert('로그인 상태로는 회원가입을 할 수 없습니다.');
+          Swal.fire(
+            '회원가입 실패',
+            '로그인 상태로는 회원가입을 할 수 없습니다.',
+            'warning'
+          );
           navigate('/');
         }
-        console.log('SignUp SUCCESS');
         navigate('/');
       })
       .catch((error) => {
         console.log(error);
-        alert('회원가입에 문제가 발생했습니다.');
+        Swal.fire('서버 에러', '회웝가입에 문제가 발생했습니다.', 'error');
       });
   };
 
   return (
-    <div className="max-w-sm ml-auto mr-auto text-center">
+    <div className="m-5 min-w-fit mx-auto text-center">
       <p className="form-title">관리자 회원가입</p>
-      <div className="flex items-center">
+      <div className="flex items-center w-s">
         <InputComponent
           text="이메일"
           type="email"

@@ -4,6 +4,7 @@ import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
 import { pwValidationCheck } from '@/hooks/useValidation';
 import { pwResetApi } from '@/services/authService';
+import Swal from 'sweetalert2';
 // import { emailState } from '@/recoil/userState';
 // import { useRecoilValue } from 'recoil';
 
@@ -48,13 +49,13 @@ const PwResetComponent = () => {
 
     // 비밀번호가 일치하지 않는 경우
     if (validation != 'SUCCESS') {
-      alert(validation);
+      Swal.fire('재설정 실패', validation, 'warning');
       window.location.reload();
       return 0;
     }
 
     if (email == null) {
-      alert('이메일 정보가 저장되지않았습니다.');
+      Swal.fire('재설정 실패', '유저 이메일 정보가 없습니다.', 'error');
       navigate('/pwinquiry');
       return 0;
     }
@@ -62,13 +63,12 @@ const PwResetComponent = () => {
     // 비밀번호 재설정 API 호출
     pwResetApi(email, pw)
       .then((res) => {
-        console.log(res);
         if (res != '200') {
-          alert('비밀번호 재설정에 문제가 발생했습니다.');
+          Swal.fire('재설정 실패', '서버에 에러가 발생했습니다.', 'error');
           window.location.reload();
           return 0;
         }
-        alert('재설정을 완료했습니다.');
+        Swal.fire('재설정 성공', `${email}님 비밀번호 재설정을 완료했습니다.`, 'success');
       })
       .catch((error) => console.log(error));
     navigate('/');

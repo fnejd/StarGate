@@ -7,6 +7,7 @@ import { createEvent } from '@/services/adminEvent';
 import { fetchGroup } from '@/services/adminBoardService';
 import BoardHeaderNav from '@/atoms/board/BoardHeaderNav';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 interface MeetingFUser {
   no: number;
   email: string;
@@ -99,7 +100,7 @@ const AdminEventCreate = () => {
         console.log(formData);
         await createEvent(formData);
         console.log('이벤트 전송 성공');
-        alert('이벤트 생성 완료');
+        Swal.fire('생성 완료', '이벤트 생성 완료!', 'success');
         navigate('/admin/board')
       } catch (error) {
         console.error('이벤트 전송 실패:', error);

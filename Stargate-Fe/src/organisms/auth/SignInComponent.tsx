@@ -5,6 +5,7 @@ import BtnBlue from '@/atoms/common/BtnBlue';
 import { adminLoginApi, loginApi } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
 import ToggleButtonComponent from '@/atoms/auth/ToggleButtonComponent';
+import Swal from 'sweetalert2';
 
 interface userType {
   type: string;
@@ -26,9 +27,9 @@ const SignInComponent = () => {
 
   // 패스워드 유효성 검사 부분
   useEffect(() => {
-    // if (localStorage.getItem('refreshToken')) {
-    //   navigate('/board');
-    // }
+    if (localStorage.getItem('refreshToken')) {
+      navigate('/board');
+    }
 
     // Password Checking
     const password = (user as userType).pw;
@@ -42,22 +43,18 @@ const SignInComponent = () => {
       setPwState('red');
       setPwText('올바르지 않은 형식입니다.');
     }
-    console.log(user);
   }, [user]);
 
   const Login = () => {
     // 로그인 요청 부분
-    console.log((user as userType).type);
     // User 객체 FormData로 변환
     const formData = new FormData();
 
     formData.append('email', (user as userType).email);
     formData.append('password', (user as userType).pw);
 
-    console.log(formData);
-
     if (pwState == 'red') {
-      alert('잘못된 비밀번호입니다.');
+      Swal.fire('로그인 실패', '올바르지 않은 비밀번호 입니다.', 'warning');
       return;
     }
 
@@ -65,36 +62,34 @@ const SignInComponent = () => {
     // 로그인 유지 체크 박스 값 체크 되었는지 검사한 후
     // 체크 되어 있으면 로컬 스토리지에 토큰 저장해주기
     if ((user as userType).type == 'on') {
-      console.log('adminLogin');
       adminLoginApi(formData, checked)
         .then((res) => {
           console.log(res);
           if (res == 'alreadyToken') {
-            alert('이미 로그인 된 상태입니다.');
+            Swal.fire('로그인 실패', '이미 로그인 된 상태입니다.', 'warning');
             navigate('/admin/board');
           } else if (res == 'SUCCESS') {
-            alert('로그인에 성공하셨습니다.');
+            Swal.fire('로그인 성공!', '로그인에 성공하셨습니다.', 'success');
             navigate('/admin/board');
           } else {
-            alert('관리자 로그인 실패');
+            Swal.fire('로그인 실패', '관리자 로그인 실패', 'error');
           }
         })
         .catch((error) => console.log(error));
     } else {
-      console.log('userLogin');
       loginApi(formData, checked)
         .then((res) => {
           if (res == 'alreadyToken') {
-            alert('이미 로그인 된 상태입니다.');
+            Swal.fire('로그인 실패', '이미 로그인 된 상태입니다.', 'warning');
             navigate('/board');
           } else if (res == 'SUCCESS') {
-            alert('로그인에 성공하셨습니다.');
+            Swal.fire('로그인 성공!', '로그인에 성공하셨습니다.', 'success');
             navigate('/board');
           } else {
             if (res === '팬 로그인 실패') {
-              alert('비밀번호를 다시 확인해주십시오.');
+              Swal.fire('로그인 실패', '비밀번호를 다시 확인해주십시오.', 'error');
             } else {
-              alert(res);
+              Swal.fire('로그인 실패', res, 'error');
             }
           }
         })

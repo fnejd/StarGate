@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 서버 URL 상수
-const SERVER_URL = 'https://www.stargate-a406.kro.kr/api';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 /**
  * api
