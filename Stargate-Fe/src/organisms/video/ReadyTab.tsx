@@ -172,8 +172,8 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
   }
   return (
     readyData && (
-      <div className="mx-auto">
-        <div className="font-medium text-white font-suit text-40 m-4 text-center">
+      <div className="mx-auto h-5/6 flex flex-col justify-around">
+        <div className="font-medium text-white font-suit text-40 text-center">
           {readyData.name}
         </div>
         <div className="flex flex-col flex-wrap w-l h-550 bg-white rounded-md">

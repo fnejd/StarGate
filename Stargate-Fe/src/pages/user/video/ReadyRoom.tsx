@@ -63,7 +63,7 @@ const ReadyRoom = () => {
   console.log('최종 레디 데이터', readyData)
 
   return (
-    <div>
+    <div className='flex w-xl h-screen justify-center'>
       <ReadyTab readyData={readyData} setReadyData={setReadyData} />
     </div>
   );
