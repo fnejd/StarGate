@@ -52,13 +52,17 @@ const Remind = () => {
     >
       <BoardHeader isAdmin={false} title="R  E  M  I  N  D"></BoardHeader>
       {data && (
-        <div className="flex flex-grow mx-10 scroll-container min-w-max">
+        <div className="relative flex flex-grow mx-10 scroll-container min-w-max">
           <RemindTitle
             name={data.name}
             startDate={data.startDate}
             groupName={data.groupName}
+            className="absolute inset-0 pointer-events-none backdrop-blur-md"
           />
-          <RemindDetail meetingMembers={data.meetingMembers} />
+          <RemindDetail
+            meetingMembers={data.meetingMembers}
+            remindData={data}
+          />
         </div>
       )}
     </div>
