@@ -31,6 +31,7 @@ export default {
         200: '200px',
         250: '250px',
         300: '300px',
+        340: '340px',
         350: '350px',
         380: '380px',
         400: '400px',
@@ -104,6 +105,8 @@ export default {
         admingray: '#DADADA',
         postityellow: '#FFFACE',
         memoblue: '#AAAFF7',
+        mainpurple: '#AEA7D0',
+        mainyellow: '#FFD09E',
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],

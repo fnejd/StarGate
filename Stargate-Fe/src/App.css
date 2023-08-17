@@ -5,7 +5,7 @@ html {
   --tw-gradient-to: #0010ff var(--tw-gradient-to-position);
 }
 
-body{
+body {
   background-image: linear-gradient(to top, var(--tw-gradient-stops));
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -15,9 +15,16 @@ body{
   width: 100% !important;
 }
 
-#root {
-  margin-right: auto;
-  margin-left: auto;
+.cloud1 {
+  background-image: url('./assets/img/cloud1.png');
+  background-position: top left;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  width: 200px;
+  height: 150px;
+  z-index: 1;
 }
 
 .material-symbols-rounded {

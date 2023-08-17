@@ -72,7 +72,7 @@ const Remind = () => {
 
   return (
     <div
-      className="flex flex-col h-screen overflow-x-auto w-xl"
+      className="flex flex-col w-screen h-screen overflow-x-auto bg-no-repeat bg-cover bg-gradient-to-b from-mainpurple to-mainyellow"
       ref={scrollRef}
     >
       <BoardHeader isAdmin={false} title="R  E  M  I  N  D"></BoardHeader>
