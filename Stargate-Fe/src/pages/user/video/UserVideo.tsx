@@ -19,7 +19,7 @@ const UserVideo = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   const [memberNos, setMemberNos] = useState([]); // 미팅 순서대로 고유번호가 담긴 값 (웹소켓 주소로 사용)
-  const [photoNum, setPhotoNum] = useState(null);
+  const [photoNum, setPhotoNum] = useState(0);
   const [picTime, setPictime] = useState(10);
   const [timer, setTimer] = useState({
     minute: 0,
@@ -302,7 +302,32 @@ const UserVideo = () => {
     // }
   };
 
+  /**
+   * 사진 찍고(isPhoto -> false됨) 아직 찍을 사진이 남은 경우
+   */
+  useEffect(()=>{
+    if(timer.second===0 && timer.minute===0 && !isPhotoTaken && photoNum>0){
+      console.log("사진 굴러가유 -> 남은 촬영수 : ",photoNum);
+      setIsPhotoTaken(true);
+      setPhotoNum(photoNum-1);
+    }else if(timer.second===0 && timer.minute===0 && !isPhotoTaken && photoNum===0){
+      const intervalId = setInterval(() => {
+        // if (screenshotCount == 0) {
+          console.log('대기시간타이머 시작!');
+          tickWaiting();
+        // }
+      }, 1000); // 1초마다 실행
+      return () => {
+        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      };
+    }
+  },[isPhotoTaken,photoNum,timer])
+
+
+  // 역할 : 
   useEffect(() => {
+    // 상단 타이머의 카운트 다운을 수행
+    console.log("@@저는 타이머 카운터?@@")
     if (timer.second === 0 && timer.minute > 0) {
       console.log('초가 0이 되어 분이 줄어듦');
       setTimeout(
@@ -314,12 +339,8 @@ const UserVideo = () => {
           })),
         1000
       );
-    } else if (
-      videoData &&
-      timer.second == 0 &&
-      timer.minute == 0 &&
-      photoNum != 0
-    ) {
+    // 폴라로이드 촬영을 수행한다.
+    } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum != 0) {
       // 미팅 시간이 끝나고 폴라로이드 촬영이 있는 경우
       let screenshotCount = photoNum;
       console.log(
@@ -327,20 +348,16 @@ const UserVideo = () => {
         screenshotCount
       );
 
-      console.log('촬영 시작**************8', screenshotCount);
+      console.log('촬영 시작**************8', photoNum);
       setIsPhotoTaken(true);
-      // takeScreenshotAndSend();
-      screenshotCount--;
 
       // const intervalPhoto = setInterval(() => {
       //   // 포토 타임이 있을 경우
-      //   if (screenshotCount > 0) {
-      //     // 10초마다 촬영 진행 및 포토 타이머 렌더링
-      //     console.log('촬영 시작**************8');
-      //     setIsPhotoTaken(true);
-      //     // takeScreenshotAndSend();
-      //     screenshotCount--;
+      //   console.log("SCreenshotCOunt = ",screenshotCount)
+      //   if(screenshotCount===0){
+      //     clearInterval(intervalPhoto);
       //   }
+      //   launchPhotoSystem();
       // }, 10000);
 
       // const intervalId = setInterval(() => {
@@ -352,24 +369,10 @@ const UserVideo = () => {
 
       // return () => {
       //   clearInterval(intervalPhoto); // 컴포넌트 언마운트 시 interval 정리
-      //   clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+      //   // clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       // };
-    } else if (
-      videoData &&
-      timer.second == 0 &&
-      timer.minute == 0 &&
-      photoNum == 0
-    ) {
-      const intervalId = setInterval(() => {
-        // if (screenshotCount == 0) {
-        console.log('대기시간타이머 시작!');
-        tickWaiting();
-        // }
-      }, 1000); // 1초마다 실행
-
-      return () => {
-        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
-      };
+    } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum == 0) {
+      
     }
   }, [timer.second, timer.minute, photoNum]);
 
@@ -437,6 +440,19 @@ const UserVideo = () => {
 
       takePhoto();
       setIsPhotoTaken(false);
+        if(photoNum===0){
+          console.log("오라오라오아랑로아로아로아로아로아로")
+          const intervalId = setInterval(() => {
+          // if (screenshotCount == 0) {
+          console.log('대기시간타이머 시작!');
+          tickWaiting();
+          if(timer.second===0){
+            clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+          }
+          // }
+        }, 1000); // 1초마다 실행
+
+      }
     }
   };
 
@@ -477,6 +493,7 @@ const UserVideo = () => {
   //     performBodyPixSegmentation(video); // BodyPix 세분화 및 효과 적용
   //   }
   // }, [myStream]);
+
 
   return (
     <div className="w-screen h-screen">
