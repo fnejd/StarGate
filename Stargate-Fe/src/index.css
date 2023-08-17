@@ -57,6 +57,10 @@
     @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
   }
 
+  .medium-gray {
+    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-admingray rounded-xl;
+  }
+
   .medium-white {
     @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
   }
