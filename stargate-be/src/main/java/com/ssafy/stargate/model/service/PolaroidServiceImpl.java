@@ -2,14 +2,12 @@ package com.ssafy.stargate.model.service;
 
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.request.PolaroidRequestDto;
-import com.ssafy.stargate.model.dto.response.PolaroidResponseDto;
+import com.ssafy.stargate.model.dto.request.polaroid.PolaroidWriteRequestDto;
+import com.ssafy.stargate.model.dto.response.polaroid.PolaroidResponseDto;
 import com.ssafy.stargate.model.entity.*;
 import com.ssafy.stargate.model.repository.*;
 import com.ssafy.stargate.util.FileUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,28 +23,40 @@ import java.util.UUID;
  */
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class PolaroidServiceImpl implements PolaroidService {
-    @Autowired
+
+
     private final PolaroidRepository polaroidRepository;
 
-    @Autowired
     private final MeetingRepository meetingRepository;
 
-    @Autowired
     private final MeetingMemberRepository meetingMemberRepository;
 
-    @Autowired
     private final MeetingFUserRepository meetingFUserRepository;
 
-    @Autowired
     private final FUserRepository fUserRepository;
 
-    @Autowired
     private final FileUtil fileUtil;
 
-    @Value("polaroid")
     private String filePath;
+
+    public PolaroidServiceImpl(
+            PolaroidRepository polaroidRepository,
+            MeetingRepository meetingRepository,
+            MeetingMemberRepository meetingMemberRepository,
+            MeetingFUserRepository meetingFUserRepository,
+            FUserRepository fUserRepository,
+            FileUtil fileUtil,
+            @Value("${s3.filepath.polaroid}") String filePath
+    ) {
+        this.polaroidRepository = polaroidRepository;
+        this.meetingRepository = meetingRepository;
+        this.meetingMemberRepository = meetingMemberRepository;
+        this.meetingFUserRepository = meetingFUserRepository;
+        this.fUserRepository = fUserRepository;
+        this.fileUtil = fileUtil;
+        this.filePath = filePath;
+    }
 
     /**
      * 저장된 폴라로이드 리스트를 가져온다.
@@ -73,12 +83,12 @@ public class PolaroidServiceImpl implements PolaroidService {
     /**
      * 폴라로이드 이미지를 저장한다.
      *
-     * @param dto       [MeetingDto] 생성할 폴라로이드 정보
+     * @param dto       [PolaroidWriteRequestDto] 생성할 폴라로이드 정보
      * @param imageFile [MultipartFile] 폴라로이드 이미지 파일
      * @throws CRUDException 폴라로이드 생성 실패
      */
     @Override
-    public void createPolaroid(PolaroidRequestDto dto, MultipartFile imageFile) throws CRUDException {
+    public void createPolaroid(PolaroidWriteRequestDto dto, MultipartFile imageFile) throws CRUDException {
         String filename = fileUtil.uploadFile(filePath, imageFile);
         if (filename == null) {
             throw new CRUDException("이미지 파일이 없어 생성이 불가능합니다.");
@@ -95,6 +105,7 @@ public class PolaroidServiceImpl implements PolaroidService {
             polaroidRepository.save(polaroid);
         } catch (Exception e) {
             fileUtil.deleteFile(filePath, filename);
+            e.printStackTrace();
             throw new CRUDException("폴라로이드 생성 중 오류가 발생했습니다.");
         }
     }
@@ -115,17 +126,18 @@ public class PolaroidServiceImpl implements PolaroidService {
 
     /**
      * 멤버별로 폴라로이드를 찾아가면서 폴라로이드 response dto를 만든다
+     *
      * @param meetingMembers [List<MeetingMemberBridge>]
-     * @param email [String] 팬 유저 email (id)
-     * @param uuid [String] 미팅 uuid
+     * @param email          [String] 팬 유저 email (id)
+     * @param uuid           [String] 미팅 uuid
      * @return [List<PolaroidResponseDto>] 폴라로이드 response dto
      */
-    private List<PolaroidResponseDto> getPolaroidResponseDtoList(List<MeetingMemberBridge> meetingMembers, String email, UUID uuid){
+    private List<PolaroidResponseDto> getPolaroidResponseDtoList(List<MeetingMemberBridge> meetingMembers, String email, UUID uuid) {
         return meetingMembers.stream().map(meetingMember -> {
                     long memberNo = meetingMember.getPMember().getMemberNo();
 
                     Optional<List<Polaroid>> optionalPolaroids = polaroidRepository.findPolaroidList(email, memberNo, uuid);
-                    if(!optionalPolaroids.isPresent()) {
+                    if (!optionalPolaroids.isPresent()) {
                         return null;
                     }
                     List<PolaroidResponseDto.PolaroidDetailDto> polaroidDetailDtos = polaroidToDetailDtoList(optionalPolaroids.get());
@@ -140,14 +152,17 @@ public class PolaroidServiceImpl implements PolaroidService {
 
     /**
      * 저장된 미팅을 가져온다.
+     * 미팅 팬유저, 멤버의 orderNum을 이용해 각각 오름차순으로 정렬한다.
      *
      * @param uuid [UUID] 미팅 uuid (id)
      * @return [Meeting] 미팅 데이터
      * @throws NotFoundException 데이터 찾기 실패 에러
      */
     private Meeting getMeeting(UUID uuid) throws NotFoundException {
-        return meetingRepository.findById(uuid)
+        Meeting meeting = meetingRepository.findById(uuid)
                 .orElseThrow(() -> new NotFoundException("미팅 존재하지 않음"));
+        Meeting.sortMeetingByOrderNum(meeting);
+        return meeting;
     }
 
     /**

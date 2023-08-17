@@ -65,4 +65,14 @@ public class Meeting extends BaseEntity {
     @OneToMany(mappedBy = "meeting")
     @Builder.Default
     private List<Letter> letters = new ArrayList<>();
+
+    /**
+     * 미팅의 각 미팅 멤버/팬유저들을 orderNum값을 따라 오름차순으로 정렬해준다.
+     *
+     * @param meeting 정렬할 미팅 엔티티
+     */
+    public static void sortMeetingByOrderNum(Meeting meeting) {
+        MeetingMemberBridge.sortMeetingMembersByOrderNum(meeting.getMeetingMembers());
+        MeetingFUserBridge.sortMeetingFUsersByOrderNum(meeting.getMeetingFUsers());
+    }
 }

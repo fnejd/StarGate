@@ -1,6 +1,6 @@
 package com.ssafy.stargate.model.service;
 
-import com.ssafy.stargate.model.dto.response.RemindResponseDto;
+import com.ssafy.stargate.model.dto.response.remind.RemindResponseDto;
 
 import java.security.Principal;
 import java.util.UUID;
