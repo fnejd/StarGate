@@ -11,8 +11,10 @@ export function useHorizontalScroll(): RefObject<HTMLDivElement> {
         if (e.deltaY === 0) return;
         e.preventDefault();
 
+        const scrollSpeed = 3;
+
         el.scrollTo({
-          left: el.scrollLeft + e.deltaY,
+          left: el.scrollLeft + e.deltaY * scrollSpeed,
           behavior: 'smooth',
         });
       };

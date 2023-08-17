@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import RemindDetail from '@/organisms/remind/RemindDetail';
 import RemindTitle from '@/organisms/remind/RemindTitle';
 import { fetchRemindData } from '@/services/userBoardService';
@@ -17,12 +17,9 @@ interface MeetingData {
   meetingMembers: MeetingMember[];
 }
 
-/**
- * @todo => 처음으로 button 만들기
- */
-
 const Remind = () => {
   const scrollRef = useHorizontalScroll();
+  const remindDetailRef = useRef();
   const [data, setData] = useState<MeetingData>();
   const [loading, setLoading] = useState(true);
   const [nameFetch, setNameFetch] = useRecoilState(nameShouldFetch);
@@ -31,18 +28,46 @@ const Remind = () => {
     const currentUrl = window.location.href;
     const parts = currentUrl.split('/');
     const uuid = parts[parts.length - 1];
-    console.log(uuid);
+
     const fetchRemind = async () => {
       const fetchedData = await fetchRemindData(uuid);
       if (fetchedData) {
         setData(fetchedData);
-        console.log('데이터는', fetchedData);
         setNameFetch(true);
       }
       setLoading(false);
-      console.log('로딩완료', location);
     };
     fetchRemind();
+  }, []);
+
+  console.log('데이터 가져오기', data);
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === remindDetailRef.current) {
+          if (entry.isIntersecting) {
+            remindTitleRef.current.classList.add('blurred');
+          } else {
+            remindTitleRef.current.classList.remove('blurred');
+          }
+        }
+      });
+    }, options);
+
+    if (remindDetailRef.current) {
+      observer.observe(remindDetailRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -60,6 +85,7 @@ const Remind = () => {
             className="absolute inset-0 pointer-events-none backdrop-blur-md"
           />
           <RemindDetail
+            ref={remindDetailRef} // 생성한 ref 전달
             meetingMembers={data.meetingMembers}
             remindData={data}
           />
