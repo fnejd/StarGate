@@ -57,7 +57,7 @@ const UserVideo = () => {
 
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
-    console.log("저는 칸디데이트!!@@@@@@@@@@@@@",e);
+    console.log('저는 칸디데이트!!@@@@@@@@@@@@@', e);
     if (e.candidate) {
       console.log('############ICE candidate 이벤트 핸들러 설정');
       socket.send(
@@ -236,6 +236,7 @@ const UserVideo = () => {
   }, [socket]);
 
   console.log('미팅순서', meetingOrder);
+  console.log('피어 연결', peerService.peer);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
   const tickWaiting = () => {
@@ -265,6 +266,9 @@ const UserVideo = () => {
     if (timer.waitingMinute === 0 && timer.waitingSecond === 0) {
       console.log('미팅 순서 변경');
       setMeetingOrder(meetingOrder + 1);
+      socket?.close();
+      setRemoteStream(null);
+      peerService.reset();
     }
   }, [timer.waitingMinute, timer.waitingSecond]);
 
@@ -481,6 +485,7 @@ const UserVideo = () => {
             <div className="basis-1/2 text-center">
               <span className="form-title">연예인 영상</span>
               <ReactPlayer
+                key={meetingOrder} // 이 부분을 추가하여 ReactPlayer의 key를 변경하도록 합니다.
                 playing
                 muted
                 height="full"
