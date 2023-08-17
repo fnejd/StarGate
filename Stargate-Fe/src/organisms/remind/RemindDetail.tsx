@@ -63,7 +63,7 @@ const RemindDetail = forwardRef(
               <h3 className="form-title">{member.name}</h3>
               {member.polaroids.map((polaroid) => (
                 <img
-                  className="mx-10 w-400 h-400"
+                  className="mx-10 w-600 h-340"
                   key={polaroid.no}
                   src={polaroid.imageFileInfo.fileUrl}
                   alt={`폴라로이드 ${polaroid.no}`}
