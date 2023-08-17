@@ -40,7 +40,7 @@ const InputComponent: React.FC<InputProps> = ({
   if (state == 'red') {
     state = 'input-warning';
   } else if (state != undefined) {
-    state = `font-suit text-12 font-medium text-green-400`;
+    state = `font-suit text-12 font-medium text-green`;
   }
 
   // Input onChange 시 setter 호출해 state 값 변경해주기
@@ -79,7 +79,7 @@ const InputComponent: React.FC<InputProps> = ({
           />
         </div>
       )}
-      <p className={`mt-1 ${state} block h-4`}>{notice}</p>
+      <p className={`mt-1.5 ${state} block h-4`}>{notice}</p>
     </div>
   );
 };

@@ -111,8 +111,8 @@ const Tab1 = ({
   return (
     <div className="w-5/6 h-5/6 flex items-center justify-center mx-auto">
       <div className="w-5/6 h-5/6 mx-auto flex flex-col items-center">
-        {stream && mediaActive && (
-          <ReactPlayer playing muted height="4/6" width="5/6" url={stream} />
+        {stream && (
+          <ReactPlayer playing={mediaActive} muted height="4/6" width="5/6" url={stream} />
         )}
         <div className="m-2"></div>
         <canvas
