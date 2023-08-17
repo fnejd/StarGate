@@ -56,10 +56,10 @@ const RemindDetail = forwardRef(
     };
 
     return (
-      <div className="flex ml-5" ref={ref}>
+      <div className="flex" ref={ref}>
         {meetingMembers.map((member) => (
           <div key={member.memberNo}>
-            <div className="flex">
+            <div className="flex ml-24">
               <h3 className="form-title">{member.name}</h3>
               {member.polaroids.map((polaroid) => (
                 <img
