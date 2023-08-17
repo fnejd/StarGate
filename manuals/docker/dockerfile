@@ -1,3 +1,0 @@
-from openjdk:17
-copy stargate.jar app.jar
-entrypoint ["java","-jar","/app.jar"]
