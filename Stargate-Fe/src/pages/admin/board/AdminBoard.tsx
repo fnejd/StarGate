@@ -86,7 +86,7 @@ const AdminBoard = () => {
           />
         )
       )}
-      <Link to="/admin/event/create" className="fixed right-5 bottom-5">
+      <Link to="/admin/event/create" className="fixed right-5 bottom-5 z-50">
         <PlusButton />
       </Link>
       <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
