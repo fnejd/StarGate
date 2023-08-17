@@ -14,7 +14,7 @@ const PhotoTimer = ({ onPhotoTaken }) => {
   console.log('사진촬영 타이머', photoTime);
 
   useEffect(() => {
-    const intervalId = setTimeout(() => {
+    const intervalId = setInterval(() => {
       if (photoTime >= 1) {
         setPhotoTime(photoTime - 1);
       }
@@ -44,7 +44,7 @@ const PhotoTimer = ({ onPhotoTaken }) => {
         flash ? 'bg-white' : ''
       }`}
     >
-      <span>촬영 준비</span>
+      <span className="font-italic">촬영 준비!</span>
       <span
         className={`timer-number font-italic ${flash ? 'text-black' : 'z-15'}`}
       >

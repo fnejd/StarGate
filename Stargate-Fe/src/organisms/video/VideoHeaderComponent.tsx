@@ -71,11 +71,12 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
       <div className="flex justify-end mr-5 basis-1/4">
         <TimeLeftComponent min={min} sec={sec} />
       </div>
-      {/* 다음 사람 뜨는 텍스트 부분 */}
-      <div className="flex justify-center text-white basis-1/4">
-        <p className="mt-1 text-xl">NEXT</p>
-        <p className="modal-title">{nextUser}</p>
-      </div>
+      {nextUser && (
+        <div className="flex justify-center text-white basis-1/4">
+          <p className="mt-1 text-xl">NEXT</p>
+          <p className="modal-title">{nextUser}</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -305,29 +305,38 @@ const UserVideo = () => {
   /**
    * 사진 찍고(isPhoto -> false됨) 아직 찍을 사진이 남은 경우
    */
-  useEffect(()=>{
-    if(timer.second===0 && timer.minute===0 && !isPhotoTaken && photoNum>0){
-      console.log("사진 굴러가유 -> 남은 촬영수 : ",photoNum);
+  useEffect(() => {
+    if (
+      timer.second === 0 &&
+      timer.minute === 0 &&
+      !isPhotoTaken &&
+      photoNum > 0
+    ) {
+      console.log('사진 굴러가유 -> 남은 촬영수 : ', photoNum);
       setIsPhotoTaken(true);
-      setPhotoNum(photoNum-1);
-    }else if(timer.second===0 && timer.minute===0 && !isPhotoTaken && photoNum===0){
+      setPhotoNum(photoNum - 1);
+    } else if (
+      timer.second === 0 &&
+      timer.minute === 0 &&
+      !isPhotoTaken &&
+      photoNum === 0
+    ) {
       const intervalId = setInterval(() => {
         // if (screenshotCount == 0) {
-          console.log('대기시간타이머 시작!');
-          tickWaiting();
+        console.log('대기시간타이머 시작!');
+        tickWaiting();
         // }
       }, 1000); // 1초마다 실행
       return () => {
         clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       };
     }
-  },[isPhotoTaken,photoNum,timer])
+  }, [isPhotoTaken, photoNum, timer]);
 
-
-  // 역할 : 
+  // 역할 :
   useEffect(() => {
     // 상단 타이머의 카운트 다운을 수행
-    console.log("@@저는 타이머 카운터?@@")
+    console.log('@@저는 타이머 카운터?@@');
     if (timer.second === 0 && timer.minute > 0) {
       console.log('초가 0이 되어 분이 줄어듦');
       setTimeout(
@@ -339,8 +348,13 @@ const UserVideo = () => {
           })),
         1000
       );
-    // 폴라로이드 촬영을 수행한다.
-    } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum != 0) {
+      // 폴라로이드 촬영을 수행한다.
+    } else if (
+      videoData &&
+      timer.second == 0 &&
+      timer.minute == 0 &&
+      photoNum != 0
+    ) {
       // 미팅 시간이 끝나고 폴라로이드 촬영이 있는 경우
       let screenshotCount = photoNum;
       console.log(
@@ -371,8 +385,12 @@ const UserVideo = () => {
       //   clearInterval(intervalPhoto); // 컴포넌트 언마운트 시 interval 정리
       //   // clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       // };
-    } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum == 0) {
-      
+    } else if (
+      videoData &&
+      timer.second == 0 &&
+      timer.minute == 0 &&
+      photoNum == 0
+    ) {
     }
   }, [timer.second, timer.minute, photoNum]);
 
@@ -440,18 +458,17 @@ const UserVideo = () => {
 
       takePhoto();
       setIsPhotoTaken(false);
-        if(photoNum===0){
-          console.log("오라오라오아랑로아로아로아로아로아로")
-          const intervalId = setInterval(() => {
+      if (photoNum === 0) {
+        console.log('오라오라오아랑로아로아로아로아로아로');
+        const intervalId = setInterval(() => {
           // if (screenshotCount == 0) {
           console.log('대기시간타이머 시작!');
           tickWaiting();
-          if(timer.second===0){
+          if (timer.second === 0) {
             clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
           }
           // }
         }, 1000); // 1초마다 실행
-
       }
     }
   };
@@ -494,10 +511,9 @@ const UserVideo = () => {
   //   }
   // }, [myStream]);
 
-
   return (
     <div className="w-screen h-screen">
-      {socket && (
+      {socket && videoData && (
         <VideoHeaderComponent
           min={
             timer.minute === 0 && timer.second === 0
@@ -510,6 +526,8 @@ const UserVideo = () => {
               : timer.second
           }
           type="user"
+          participantsData={videoData.meetingMembers}
+          meetingIdx={meetingOrder}
         />
       )}
       <div className="flex flex-row w-screen h-full">
