@@ -14,7 +14,6 @@ import java.util.UUID;
 @ToString
 public class LetterWriteRequestDto {
 
-    private String email;
     private long memberNo;
     private UUID uuid;
     private String contents;

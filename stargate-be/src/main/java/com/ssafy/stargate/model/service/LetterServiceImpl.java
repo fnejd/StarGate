@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -39,21 +40,24 @@ public class LetterServiceImpl implements LetterService {
 
     private final PMemberRepository pMemberRepository;
 
+    
     /**
      * 편지 작성해서 저장 및 수정
-     *
+     * @param principal
      * @param dto LetterWriteRequestDto 팬유저가 작성한 편지 정보 담는 dto
      * @return LetterResponseDto 저장된 편지 정보 dto
      * @throws NotFoundException 존재하지 않는 회원, 존재하지 않는 멤버, 존재하지 않는 팬미팅 에러
      */
     @Override
-    public LetterResponseDto writeLetter(LetterWriteRequestDto dto) throws NotFoundException {
+    public LetterResponseDto writeLetter(Principal principal, LetterWriteRequestDto dto) throws NotFoundException {
 
-        Letter letter = letterRepository.findLetter(dto.getEmail(), dto.getMemberNo(), dto.getUuid()).orElse(null);
+        String email = principal.getName();
+
+        Letter letter = letterRepository.findLetter(email, dto.getMemberNo(), dto.getUuid()).orElse(null);
 
         if (letter == null) {
 
-            FUser fUser = fUserRepository.findById(dto.getEmail()).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+            FUser fUser = fUserRepository.findById(email).orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
             PMember pMember = pMemberRepository.findById(dto.getMemberNo()).orElseThrow(() -> new NotFoundException("존재하지 않는 멤버입니다."));
             Meeting meeting = meetingRepository.findById(dto.getUuid()).orElseThrow(() -> new NotFoundException("존재하지 않는 팬미팅입니다."));
 
