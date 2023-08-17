@@ -132,6 +132,7 @@ const AdminBoard = () => {
           meetings={data.finished}
           isAdmin={true}
           isLoading={loading}
+          isOver={true}
         />
       )}
     </div>
