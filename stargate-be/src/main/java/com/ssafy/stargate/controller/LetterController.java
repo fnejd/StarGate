@@ -24,16 +24,17 @@ import java.security.Principal;
 public class LetterController {
     private final LetterService letterService;
 
+
     /**
      * 편지 작성, 이미 있는 편지인 경우 업데이트
-     *
+     * @param principal
      * @param dto LetterWriteRequestDto 팬유저가 작성한 편지 정보 담는 dto
      * @return [ResponseEntity<LetterResponseDto>] 팬유저가 작성한 편지 정보가 저장된 dto
      * @throws NotFoundException 존재하지 않는 회원, 존재하지 않는 멤버, 존재하지 않는 팬미팅 에러
      */
     @PostMapping("/write")
-    public ResponseEntity<LetterResponseDto> writeLetter(@RequestBody LetterWriteRequestDto dto) throws NotFoundException {
-        LetterResponseDto letterDto = letterService.writeLetter(dto);
+    public ResponseEntity<LetterResponseDto> writeLetter(Principal principal, @RequestBody LetterWriteRequestDto dto) throws NotFoundException {
+        LetterResponseDto letterDto = letterService.writeLetter(principal, dto);
         return ResponseEntity.ok(letterDto);
     }
 

@@ -8,6 +8,7 @@ import com.ssafy.stargate.model.dto.request.letter.LetterWriteRequestDto;
 import com.ssafy.stargate.model.dto.response.letter.LetterListResponseDto;
 import com.ssafy.stargate.model.dto.response.letter.LetterResponseDto;
 
+import java.security.Principal;
 
 
 /**
@@ -15,7 +16,7 @@ import com.ssafy.stargate.model.dto.response.letter.LetterResponseDto;
  */
 public interface LetterService {
 
-    public LetterResponseDto writeLetter(LetterWriteRequestDto dto) throws NotFoundException;
+    public LetterResponseDto writeLetter(Principal principal, LetterWriteRequestDto dto) throws NotFoundException;
 
     public void deleteLetter(LetterDeleteRequestDto dto);
 
