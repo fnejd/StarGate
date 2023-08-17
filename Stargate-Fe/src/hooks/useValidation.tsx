@@ -38,7 +38,7 @@ const pwValidationCheck = (pw: string, pwCheck: string) => {
     return '비밀번호가 일치하지 않습니다.';
   }
   if (!regexPw.test(pw)) {
-    return '비밀번호 형식을 다시 확인해주세요.';
+    return `영어, 숫자, 특수문자를 조합해 8자 이상 설정해주세요.`;
   }
   return 'SUCCESS';
 };
@@ -65,7 +65,7 @@ const userValidationCheck = (user: userType) => {
     return '비밀번호가 일치하지 않습니다.';
   }
   if (!regexPw.test(pw)) {
-    return '비밀번호 형식을 다시 확인해주세요.';
+    return '영어, 숫자, 특수문자를 조합해 8자 이상 설정해주세요.';
   }
 
   // phoneNumber formatting & Checking
@@ -139,7 +139,7 @@ const adminValidationCheck = (admin: adminType) => {
     return '비밀번호가 일치하지 않습니다.';
   }
   if (!regexPw.test(pw)) {
-    return '비밀번호 형식을 다시 확인해주세요.';
+    return '영어, 숫자, 특수문자를 조합해 8자 이상 설정해주세요.';
   }
 
   // nickName Checking

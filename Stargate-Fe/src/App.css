@@ -3,7 +3,6 @@ html {
   --tw-gradient-to: rgb(231 241 255 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
   --tw-gradient-to: #0010ff var(--tw-gradient-to-position);
-
 }
 
 body{
@@ -14,6 +13,11 @@ body{
 
 :root {
   width: 100% !important;
+}
+
+#root {
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .material-symbols-rounded {

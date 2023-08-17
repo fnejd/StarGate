@@ -123,7 +123,7 @@ const SignUpComponent = () => {
   };
 
   return (
-    <div className="m-5 max-w-sm ml-auto mr-auto text-center">
+    <div className="m-5 max-w-sm mx-auto text-center">
       <p className="form-title">회원가입</p>
       <div className="flex items-center">
         <InputComponent

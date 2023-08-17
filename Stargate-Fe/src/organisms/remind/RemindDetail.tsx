@@ -8,7 +8,7 @@ const RemindDetail = ({ meetingMembers }: MeetingMembersProps) => {
   return (
     <div className="flex">
       {meetingMembers.map((member) => (
-        <div key={member.memberNo}>
+        <div className='flex' key={member.memberNo}>
           <h3 className='form-title'>{member.name}</h3>
           <div className='flex'>
           {member.polaroids.map((polaroid) => (
