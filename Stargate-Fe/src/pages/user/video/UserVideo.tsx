@@ -310,7 +310,7 @@ const UserVideo = () => {
       console.log("사진 굴러가유 -> 남은 촬영수 : ",photoNum);
       setIsPhotoTaken(true);
       setPhotoNum(photoNum-1);
-    }else if(timer.second + timer.minute === 0 && !isPhotoTaken && photoNum===0){
+    }else if(timer.second===0 && timer.minute===0 && !isPhotoTaken && photoNum===0){
       const intervalId = setInterval(() => {
         // if (screenshotCount == 0) {
           console.log('대기시간타이머 시작!');
@@ -372,16 +372,7 @@ const UserVideo = () => {
       //   // clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
       // };
     } else if (videoData && timer.second == 0 && timer.minute == 0 && photoNum == 0) {
-      const intervalId = setInterval(() => {
-        // if (screenshotCount == 0) {
-        console.log('대기시간타이머 시작!');
-        tickWaiting();
-        // }
-      }, 1000); // 1초마다 실행
-
-      return () => {
-        clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
-      };
+      
     }
   }, [timer.second, timer.minute, photoNum]);
 
@@ -449,6 +440,19 @@ const UserVideo = () => {
 
       takePhoto();
       setIsPhotoTaken(false);
+        if(photoNum===0){
+          console.log("오라오라오아랑로아로아로아로아로아로")
+          const intervalId = setInterval(() => {
+          // if (screenshotCount == 0) {
+          console.log('대기시간타이머 시작!');
+          tickWaiting();
+          if(timer.second===0){
+            clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
+          }
+          // }
+        }, 1000); // 1초마다 실행
+
+      }
     }
   };
 
