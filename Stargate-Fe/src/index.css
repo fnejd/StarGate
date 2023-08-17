@@ -77,6 +77,11 @@
     @apply font-suit text-16 font-medium text-white;
   }
 
+  .timer-number {
+    @apply italic font-suit text-80 font-semibold opacity-100;
+
+  }
+
   .modal-title {
     @apply font-suit text-48 font-semibold;
   }

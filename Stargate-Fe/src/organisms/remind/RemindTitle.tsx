@@ -19,11 +19,11 @@ const RemindTitle = ({ name, startDate, groupName }: RemindTitleProps) => {
   );
 
   return (
-    <div>
-      <div className="font-suit text-48 font-medium text-white mb-3">
+    <div className="mt-2 mr-2">
+      <div className="mb-3 font-medium text-white font-suit text-60">
         {formattedDate}
       </div>
-      <div className="font-suit text-60 font-medium text-white">{name}</div>
+      <div className="font-medium text-white font-suit text-80">{name}</div>
     </div>
   );
 };

@@ -43,7 +43,7 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
 
   return type == 'star' && participantsData != undefined ? (
     <div className="flex flex-row w-screen my-5">
-      <div className="flex items-center basis-1/2 w-full text-white ml-5">
+      <div className="flex items-center w-full ml-5 text-white basis-1/2">
         <ProFileIcon />
         <div className="mx-auto">
           <p>이름: {participantsData[meetingIdx].name}</p>
@@ -51,12 +51,12 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
           <p>촬영 여부: {participantsData[meetingIdx].isPolaroidEnable}</p>
         </div>
       </div>
-      <div className="flex basis-1/4 justify-end mr-5">
+      <div className="flex justify-end mr-5 basis-1/4">
         <TimeLeftComponent min={min} sec={sec} />
       </div>
       {nextUser ? (
-        <div className="flex basis-1/4 justify-center text-white">
-          <p className="text-xl mt-1">NEXT</p>
+        <div className="flex justify-center text-white basis-1/4">
+          <p className="mt-1 text-xl">NEXT</p>
           <p className="modal-title">{nextUser}</p>
         </div>
       ) : (
@@ -65,19 +65,17 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
     </div>
   ) : (
     <div className="flex flex-row w-screen my-5">
-      <div className="basis-1/2 w-full text-white ml-5">
+      <div className="w-full ml-5 text-white basis-1/2">
         <ProFileIcon />
       </div>
-      <div className="flex basis-1/4 justify-end mr-5">
+      <div className="flex justify-end mr-5 basis-1/4">
         <TimeLeftComponent min={min} sec={sec} />
       </div>
-      {nextUser ? (
-        <div className="flex basis-1/4 justify-center text-white">
-          <p className="text-xl mt-1">NEXT</p>
+      {nextUser && (
+        <div className="flex justify-center text-white basis-1/4">
+          <p className="mt-1 text-xl">NEXT</p>
           <p className="modal-title">{nextUser}</p>
         </div>
-      ) : (
-        <div className="flex basis-1/4"></div>
       )}
     </div>
   );
