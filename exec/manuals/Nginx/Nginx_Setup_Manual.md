@@ -252,3 +252,51 @@
     ```bash
     sudo service nginx restart
     ```
+
+## Web Socket 설정
+
+> **배경**
+>
+>
+> ssl을 적용하게 되면서 ws프로토콜을 wss프로토콜로 변경하여 통신을 해야했다.
+>
+> wss프로토콜로 요청을 보냈을 때 다음과 같은 에러가 났다.
+>
+> ```
+> WebSocket connection to 'wss://[도메인 주소]/api/ws/[uuid]' failed:
+> ```
+>
+> 이 에러를 해결하기 위해서는 nginx에 추가 설정을 해주어야한다.
+>
+1. `/etc/nginx/nginx.conf` 파일을 접근한다.
+
+    ```bash
+    sudo vim /etc/nginx/nginx.conf
+    ```
+
+2. 웹소켓관련 엔드포인트에 대하여 다음과 같이 설정한 후 저장한다.
+
+    ```
+    server {
+        ...
+        location /api/ws {
+            proxy_pass http://127.0.0.1:8080/api/ws;
+            
+            # web socket
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Origin "";
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+        }
+        ...
+    }
+    ```
+
+3. 설정을 적용하기 위해 nginx를 재시작한다.
+
+    ```bash
+    sudo service nginx restart
+    ```
