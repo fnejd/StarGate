@@ -1,11 +1,206 @@
+/* Tailwind 기본 스타일과 플러그인에 의해 등록된 모든 기본 스타일을 주입 */
 @tailwind base;
+/* Tailwind 컴포넌트 클래스와 플러그인에 의해 등록된 컴포넌트 클래스를 주입 */
 @tailwind components;
+/* Tailwind 유틸리티 클래스와 플러그인에 의해 등록된 모든 유틸리티 클래스를 주입 */
 @tailwind utilities;
+
+@font-face {
+  font-family: 'SUIT';
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SUIT';
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KREON';
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KREON';
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@layer base {
+  [hidden] {
+    @apply hidden;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  button:disabled {
+    @apply cursor-not-allowed;
+  }
+
+  abbr[title] {
+    @apply cursor-help no-underline;
+  }
+}
+
+@layer components {
+  .medium-blue {
+    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
+  }
+
+  .medium-gray {
+    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-admingray rounded-xl;
+  }
+
+  .medium-white {
+    @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
+  }
+
+  .form-title {
+    @apply font-suit text-32 font-medium text-white;
+  }
+
+  .input-warning {
+    @apply font-suit text-12 font-medium text-red;
+  }
+
+  .page-title-md {
+    @apply font-suit text-16 font-medium text-white;
+  }
+
+  .timer-number {
+    @apply italic font-suit text-80 font-semibold opacity-100;
+
+  }
+
+  .modal-title {
+    @apply font-suit text-48 font-semibold;
+  }
+
+  .modal-content {
+    @apply font-suit text-40 font-medium;
+  }
+
+  .csv-btn {
+    @apply absolute top-0 left-0 z-10 w-32 h-8 ml-1 text-12 font-medium bg-admingray text-black rounded-sm cursor-pointer opacity-0;
+  }
+
+  .t1b {
+    @apply font-kreon text-160 font-semibold leading-120;
+  }
+
+  .t1r {
+    @apply font-kreon text-160 font-normal leading-120;
+  }
+
+  .t2b {
+    @apply font-kreon text-80 font-semibold leading-120;
+  }
+
+  .t2r {
+    @apply font-kreon text-80 font-normal leading-120;
+  }
+
+  .t3b {
+    @apply font-kreon text-60 font-semibold leading-120;
+  }
+
+  .t3r {
+    @apply font-kreon text-60 font-normal leading-120;
+  }
+
+  .t4b {
+    @apply font-kreon text-48 font-semibold leading-120;
+  }
+
+  .t4r {
+    @apply font-kreon text-48 font-normal leading-120;
+  }
+
+  .h1b {
+    @apply font-suit text-32 font-semibold leading-120;
+  }
+
+  .h1r {
+    @apply font-suit text-32 font-normal leading-120;
+  }
+
+  .h2b {
+    @apply font-suit text-28 font-semibold leading-120;
+  }
+
+  .h2r {
+    @apply font-suit text-28 font-normal leading-120;
+  }
+
+  .h3b {
+    @apply font-suit text-24 font-semibold leading-120;
+  }
+
+  .h3r {
+    @apply font-suit text-24 font-normal leading-120;
+  }
+
+  .h4b {
+    @apply font-suit text-20 font-semibold leading-130;
+  }
+
+  .h4r {
+    @apply font-suit text-20 font-normal leading-130;
+  }
+
+  .p1b {
+    @apply font-suit text-18 font-semibold leading-140;
+  }
+
+  .p1r {
+    @apply font-suit text-18 font-normal leading-140;
+  }
+
+  .p2b {
+    @apply font-suit text-16 font-semibold leading-140;
+  }
+
+  .p2r {
+    @apply font-suit text-16 font-normal leading-140;
+  }
+
+  .p3b {
+    @apply font-suit text-14 font-semibold leading-140;
+  }
+
+  .p3r {
+    @apply font-suit text-14 font-normal leading-140;
+  }
+
+  .captionb {
+    @apply font-suit text-12 font-semibold leading-140;
+  }
+
+  .captionr {
+    @apply font-suit text-12 font-normal leading-140;
+  }
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+
+  width: 100vw !important;
+  height: 100vh !important;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -29,6 +224,7 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
