@@ -87,18 +87,41 @@ const AdminEventCreate = () => {
   // AdminEventDetail 에서 uuid 갖고 넘어올 땐 true 가지고 옴
   const type = localLocation.state?.type === true ? true : false;
 
+  const getGroup = async () => {
+    const data = await fetchGroup();
+    setGroup(data);
+  };
+
+  const fetchEventDetail = async () => {
+    const fetchedData = await fetchEventDetailData(uuid);
+    if (fetchedData) {
+      setData(fetchedData);
+      setLoading(false);
+    }
+  };
+
   // 그룹명, 그룹멤버 데이터 가져오기
   useEffect(() => {
-    const getGroup = async () => {
-      const data = await fetchGroup();
-      console.log('데이터', data);
-      setGroup(data);
-      console.log(group);
-    };
-    getGroup();
-  }, []);
-
-  console.log('폼데이터', formData);
+    if (!loading) {
+      setFormData({
+        name: data.name,
+        startDate: data.startDate,
+        waitingTime: data.waitingTime,
+        meetingTime: data.meetingTime,
+        photoNum: data.photoNum,
+        notice: data.notice,
+        imageFile: null,
+        meetingFUsers: data.meetingFUsers,
+        meetingMembers: data.meetingMembers,
+      });
+    }
+    if (type) {
+      fetchEventDetail();
+      getGroup();
+    } else {
+      getGroup();
+    }
+  }, [loading]);
 
   const handleName = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -106,7 +129,6 @@ const AdminEventCreate = () => {
       ...prevFormData,
       name: value,
     }));
-    console.log(`제목 ${formData.name}`);
   };
 
   const handleFormDataChange = (data: FormData) => {
@@ -122,7 +144,6 @@ const AdminEventCreate = () => {
       // MeetingLeftSection에서 받은 formData와 AdminEventCreate의 formData를 합침
       // const mergedFormData = { ...formData, ...eventData };
       try {
-        console.log(formData);
         if (type) {
           await updateEvent(formData, uuid);
           Swal.fire('수정 완료', '이벤트 수정 완료!', 'success');
@@ -130,10 +151,8 @@ const AdminEventCreate = () => {
           await createEvent(formData);
           Swal.fire('생성 완료', '이벤트 생성 완료!', 'success');
         }
-        console.log('이벤트 전송 성공');
         navigate('/admin/board');
       } catch (error) {
-        console.error('이벤트 전송 실패:', error);
       }
     }
   };

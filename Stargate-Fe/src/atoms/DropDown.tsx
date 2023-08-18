@@ -15,7 +15,6 @@
 
 //   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 //     const selectedValue = Number(event.target.value);
-//     console.log(selectedValue);
 //     onOptionChange(selectedValue);
 //   };
 

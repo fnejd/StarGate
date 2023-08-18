@@ -37,7 +37,6 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
         participantsData[meetingIdx + 1] != undefined &&
         participantsData[meetingIdx + 1] != null
       ) {
-        console.log(participantsData[meetingIdx + 1]);
         setNextUser(participantsData[meetingIdx + 1].name);
       } else {
         setNextUser(null);

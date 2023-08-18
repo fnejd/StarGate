@@ -56,9 +56,7 @@ const AdminSignUpComponent = () => {
     }
     const formData = new FormData();
     formData.append('email', email);
-    const result = await adminVerifyEmail(formData).catch((error) =>
-      console.log(error)
-    );
+    const result = await adminVerifyEmail(formData).catch((error) => {});
 
     if (result) {
       setEmailText('사용 가능한 이메일입니다.');
@@ -101,8 +99,7 @@ const AdminSignUpComponent = () => {
         navigate('/');
       })
       .catch((error) => {
-        console.log(error);
-        Swal.fire('서버 에러', '회웝가입에 문제가 발생했습니다.', 'error');
+        Swal.fire('서버 에러', '회원가입에 문제가 발생했습니다.', error);
       });
   };
 
@@ -124,7 +121,13 @@ const AdminSignUpComponent = () => {
           onClick={() => {
             verify()
               .then()
-              .catch((error) => console.log(error));
+              .catch((error) => {
+                Swal.fire(
+                  '서버 에러',
+                  '회웝가입에 문제가 발생했습니다.',
+                  error
+                );
+              });
           }}
         >
           이메일 확인

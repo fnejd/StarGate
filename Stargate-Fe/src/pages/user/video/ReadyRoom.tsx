@@ -49,19 +49,15 @@ const ReadyRoom = () => {
     const fetchReadyData = async () => {
       try {
         const readyData = await getReady(uuid);
-        console.log('대기방 데이터', readyData);
         setReadyData(readyData);
         // 여기서 readyData를 사용하거나 처리할 수 있음
         sessionStorage.setItem('meetingOrder', '0'); // 처음에 0으로 설정
       } catch (error) {
-        console.error('데이터 가져오기 실패 ', error);
       }
     };
 
     fetchReadyData(); // async 함수 호출
   }, []);
-
-  console.log('최종 레디 데이터', readyData);
 
   return (
     <div className="flex w-xl h-screen justify-center">

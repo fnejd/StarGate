@@ -70,7 +70,6 @@ const PwResetComponent = () => {
         }
         Swal.fire('재설정 성공', `${email}님 비밀번호 재설정을 완료했습니다.`, 'success');
       })
-      .catch((error) => console.log(error));
     navigate('/');
   };
 

@@ -7,7 +7,6 @@ const postLetter = async (letterData) => {
     const response = await api.post('/letters/write', letterData);
     return response.data;
   } catch (error) {
-    console.error('편지 전송 실패', error);
   }
 };
 
@@ -17,7 +16,6 @@ const getEachLetter = async (no: number) => {
     const response = await api.get(`/letters/get/${no}`);
     return response.data;
   } catch (error) {
-    console.error('개별 편지 가져오기 실패', error);
   }
 };
 

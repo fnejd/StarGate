@@ -41,7 +41,6 @@ const IdinquiryComponent = () => {
         }
         setIsOpen(true);
       })
-      .catch((error) => console.log(error));
   };
 
   return (

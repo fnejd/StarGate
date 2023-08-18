@@ -69,18 +69,13 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
   ];
   const uuid: string = useParams().uuid;
 
-  console.log('컴포넌트상에서 레디 데이터', readyData);
-
   useEffect(() => {
     if (activeTab !== 1) {
       setMediaActive(false);
-      console.log('탭 1 아님');
     } else if (activeTab === 1) {
       setMediaActive(true);
     }
   }, [activeTab]);
-
-  console.log('미디어액티브', mediaActive);
 
   // 클릭된 인덱스 이전의 탭들을 모두 false로 설정하는 함수
   const handleResetTabs = (tabIndex: number) => {
@@ -119,10 +114,8 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
         uuid,
         readyData.meetingMembers
       );
-      console.log('폴라로이드 전송###', response);
     }
     if (tabIndex == 3) {
-      console.log(readyData);
       const postitData = {
         email: readyData.meetingFUser.email,
         uuid: uuid,
@@ -133,19 +126,14 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
       };
 
       const response = await postNotePad(postitData);
-      console.log('포스트잇 전송###', response);
     }
     if (tabIndex == 4) {
-      console.log(readyData);
       const noteData = {
         uuid: uuid,
         contents: readyData.meetingFUser.memoContents,
       };
 
-      console.log('메모 전송', noteData);
-
       const response = await postMemo(noteData);
-      console.log('메모장 전송###', response);
 
       const hasFalseStateBeforeTab5 = tabState
         .slice(0, 4)
@@ -159,10 +147,6 @@ const ReadyTab = ({ readyData, setReadyData }: RedayDataProps) => {
     if (tabIndex === 5) {
     }
   };
-
-  console.log('탭 상태', tabState);
-  console.log('활성화된 탭', activeTab);
-  console.log('레디 데이터', readyData);
 
   {
     /* 현재 상태가 true면 무조건 메인블루

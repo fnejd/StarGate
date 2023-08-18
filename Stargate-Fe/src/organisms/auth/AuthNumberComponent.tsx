@@ -46,7 +46,6 @@ const AuthNumberComponent = ({
   }, [numArr, curIdx]);
 
   const AuthNumCheck = () => {
-    console.log(authNum);
     let check = true;
     let code = '';
     if (numArr.length < 6) {

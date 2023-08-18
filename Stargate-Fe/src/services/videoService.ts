@@ -33,7 +33,6 @@ const getStarMeetingDataApi = async (params: string) => {
           throw new Error(error.message);
         } else throw new Error('알 수 없는 오류 발생');
       }
-      console.log(error);
     });
   return response;
 };
