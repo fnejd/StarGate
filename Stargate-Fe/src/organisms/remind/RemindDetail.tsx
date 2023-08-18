@@ -16,9 +16,6 @@ const RemindDetail = forwardRef(
     ref: ForwardedRef<any>
   ) => {
     const [letterContentsMap, setLetterContentsMap] = useState({});
-
-    console.log('편지 데이터 렌더링 관리', letterContentsMap);
-
     const handleSendLetter = async (member) => {
       const letterContents = letterContentsMap[member.memberNo]?.contents || '';
 
@@ -28,15 +25,11 @@ const RemindDetail = forwardRef(
         contents: letterContents,
       };
 
-      console.log('내 편지', letterdata);
-
       if (letterContents.trim() !== '') {
         const postResponse = await postLetter(letterdata);
-        console.log('편지 보내고 응답', postResponse);
         const letterNum = postResponse.no;
 
         const letter = await getEachLetter(letterNum);
-        console.log('서버로 보낸 편지 도착', letter);
 
         setLetterContentsMap((prevContentsMap) => ({
           ...prevContentsMap,

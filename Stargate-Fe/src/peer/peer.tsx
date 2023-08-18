@@ -54,7 +54,6 @@ class PeerService {
   // 상대방의 answer 정보를 설정
   async setRemoteDescription(ans) {
     if (this.peer) {
-      console.log('IM SETLOCALDESCRIPTOR WORK');
       await this.peer.setRemoteDescription(new RTCSessionDescription(ans));
     }
   }

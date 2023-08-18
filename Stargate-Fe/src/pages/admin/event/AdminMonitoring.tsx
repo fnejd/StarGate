@@ -21,7 +21,6 @@ const AdminMonitoring = () => {
 
   //   useEffect(() => {
   //     // 서버에 소켓 연결을 초기화
-  //     console.log(socketRef.current);
 
   //     // 사용자 미디어 장치 권한 요청 및 스트림 획득
   //     navigator.mediaDevices

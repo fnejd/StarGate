@@ -74,13 +74,10 @@ const MeetingBottomSection = ({
   const [fanData, setFanData] = useState([]);
   const [initial, setInitial] = useState(false);
 
-  console.log('바텀에서 그룹', group);
-
   // group 데이터가 변경되면 그룹의 멤버도 변경
   useEffect(() => {
     if (group && group.length > 0) {
       setMembers(group[0].members);
-      console.log('첫번째 그룹과 멤버로 폼데이터 디폴트 값 지정');
     }
   }, [group]);
 
@@ -101,19 +98,14 @@ const MeetingBottomSection = ({
 
   const handleStarvalue = (value: string) => {
     setStarValue(value);
-    console.log(`연예인은 ${starValue}`);
   };
 
   const handleMembervalue = (value: string) => {
     setMemberValue(value);
-    console.log(`멤버는 ${memberValue}`);
-    console.log(formData.meetingMembers);
   };
 
   const handleWatingtime = (value: string) => {
     setWatingtimeValue(value);
-    console.log(`대기시간은 ${watingtimeValue}`);
-
     setFormData((prevFormData) => ({
       ...prevFormData,
       waitingTime: Number(value),
@@ -122,7 +114,6 @@ const MeetingBottomSection = ({
 
   const handleFanValue = (value: string) => {
     setFanValue(value);
-    console.log(`입력값 ${fanValue}`);
   };
 
   // const handleForm = (
@@ -134,7 +125,6 @@ const MeetingBottomSection = ({
 
   // 등록 함수8
   const handleGroupChange = (value: number | string) => {
-    console.log(group);
     const selectedGroup = group.find((item) => item.name === value);
     if (selectedGroup) {
       setMembers(selectedGroup.members);
@@ -143,7 +133,6 @@ const MeetingBottomSection = ({
 
   // 멤버 변수가 바뀌변 폼데이터 업데이트
   useEffect(() => {
-    console.log('멤버 바뀌었습니다!!!');
     setFormData((prevFormData) => {
       return {
         ...prevFormData,
@@ -157,7 +146,6 @@ const MeetingBottomSection = ({
   useEffect(() => {
     setFormData((prevFormData) => {
       const updatedFans = [...fanData];
-      console.log(updatedFans);
       return {
         ...prevFormData,
         meetingFUsers: updatedFans,
@@ -195,7 +183,6 @@ const MeetingBottomSection = ({
       // 중복 체크
       if (!fanData.includes(emailValue)) {
         const updateFanData = [...fanData];
-        console.log(updateFanData);
         updateFanData.push(emailValue);
         setFanData(updateFanData);
         setFanValue('');
@@ -206,8 +193,6 @@ const MeetingBottomSection = ({
     }
   };
 
-  console.log(fanData);
-
   const handleCsvData = (data, fileInfo) => {
     // 2열(인덱스 1)에 있는 이메일 값들을 추출하여 emailList에 저장
     const emails = data.slice(1).map((row) => row[1]);
@@ -215,13 +200,8 @@ const MeetingBottomSection = ({
     const nonEmptyEmails = emails.filter(
       (email) => email && email.trim() !== ''
     );
-    console.log('nonEmptyEmails', nonEmptyEmails);
     setFanData([...nonEmptyEmails]);
   };
-
-  console.log('팬 데이터 업로드', fanData);
-
-  console.log(formData.meetingFUsers);
 
   const deleteMember = (index: number) => {
     setFormData((prevFormData) => {
@@ -245,17 +225,13 @@ const MeetingBottomSection = ({
 
     // 깊은 복사
     const _items = JSON.parse(JSON.stringify(members)) as typeof members;
-    console.log('깊은복사', _items);
     // 기존 아이템 뽑아내기
     const [targetItem] = _items.splice(source.index, 1);
-    console.log('기존아이템', targetItem);
     // 기존 아이템을 새로운 위치에 삽입하기
     _items.splice(destination.index, 0, targetItem);
     // 상태 변경
     setMembers(_items);
   };
-
-  console.log('아이템##############', members);
 
   return (
     <div className="w-550">

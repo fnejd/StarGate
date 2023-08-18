@@ -46,7 +46,6 @@ const Tab1 = ({
         });
         setStream(mediaStream);
       } catch (error) {
-        console.error('Error accessing media devices:', error);
       }
     }
 
@@ -67,7 +66,6 @@ const Tab1 = ({
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
       const canvas = document.getElementById('audio');
-      console.log(canvas);
       const canvasCtx = canvas.getContext('2d');
       function drawGraph() {
         canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -148,9 +146,6 @@ const Tab2 = ({ readyData, setReadyData }: Tab2Props) => {
       };
     });
   }, [memberInfo]);
-
-  console.log('멤버 폴라로이드 정보', memberInfo);
-  console.log('멤버정보', readyData.meetingMembers);
   return (
     <div className="w-5/6 h-5/6 mx-auto">
       <div className="text-18 font-semibold text-center flex justify-between mt-6 mb-4 mx-auto">
@@ -212,8 +207,6 @@ const Tab3 = ({ readyData, setReadyData }: Tab2Props) => {
     });
   }, [memberInfo]);
 
-  console.log('포스트잇 업뎃', memberInfo);
-
   return (
     <>
       <div className="bg-postityellow w-4/6 h-380 p-3 mx-auto rounded-sm drop-shadow-lg border-none outline-none mt-2">
@@ -269,8 +262,6 @@ const Tab4 = ({ readyData, setReadyData }: Tab2Props) => {
     });
   };
 
-  console.log('메모 바뀌는', readyData);
-
   return (
     <div className="bg-memoblue w-4/6 h-380 p-3 mx-auto rounded-sm drop-shadow-lg border-none outline-none mt-2">
       <div className="mt-2 font-semibold p-2">
@@ -297,10 +288,8 @@ const Tab5 = ({ readyData }) => {
   const formattedSecond = timer.second.toString().padStart(2, '0');
 
   const tick = () => {
-    console.log('틱 시작', timer.second);
     // 초 줄여주는 로직
     if (timer.second > 0) {
-      console.log('초 줄어듦');
       setTimer((prevTimer) => ({
         ...prevTimer,
         second: prevTimer.second - 1,
@@ -319,7 +308,6 @@ const Tab5 = ({ readyData }) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (timer.second > 0) {
-        console.log('타이머 시작!');
         tick();
       }
     }, 1000); // 1초마다 실행
@@ -331,7 +319,6 @@ const Tab5 = ({ readyData }) => {
 
   useEffect(() => {
     if (timer.second === 0 && timer.minute > 0) {
-      console.log('초가 0이 되어 분이 줄어듦');
       setTimeout(
         () =>
           setTimer((prevTimer) => ({

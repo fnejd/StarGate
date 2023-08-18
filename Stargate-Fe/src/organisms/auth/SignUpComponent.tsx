@@ -116,7 +116,6 @@ const SignUpComponent = () => {
         navigate('/');
       })
       .catch((error: string) => {
-        console.log(error);
         Swal.fire('회원가입 실패', error, 'error');
         return 0;
       });
@@ -140,7 +139,7 @@ const SignUpComponent = () => {
           onClick={() => {
             verify()
               .then()
-              .catch((error) => console.log(error));
+              .catch((error) => {});
           }}
         >
           이메일 확인

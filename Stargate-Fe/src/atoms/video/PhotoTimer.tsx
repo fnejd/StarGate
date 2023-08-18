@@ -11,8 +11,6 @@ const PhotoTimer = ({ onPhotoTaken }) => {
     }, 0);
   };
 
-  console.log('사진촬영 타이머', photoTime);
-
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (photoTime >= 1) {
