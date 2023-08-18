@@ -40,7 +40,6 @@ const BoardCardList = ({
   isAdmin: boolean;
   isLoading: boolean;
   isOver?: boolean;
-  isRemind? :boolean;
 }) => {
   const navigate = useNavigate();
   const remainder = meetings === undefined ? 0 : meetings.length % 4;

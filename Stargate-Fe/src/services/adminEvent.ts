@@ -37,11 +37,10 @@ const createEvent = async (meetingData: FormData | null) => {
   }
 };
 
-const updateEvent = async (meetingData: FormData) => {
+const updateEvent = async (meetingData: FormData, uuid: string) => {
   if (meetingData) {
     try {
       const formDataToSend = new FormData();
-      const access = localStorage.getItem('accessToken');
 
       for (const key in meetingData) {
         if (meetingData.hasOwnProperty(key)) {
@@ -56,11 +55,11 @@ const updateEvent = async (meetingData: FormData) => {
       for (let key of formDataToSend.keys()) {
         console.log(key, ':', formDataToSend.get(key));
       }
+      formDataToSend.forEach((e) => console.log(e));
+      formDataToSend.append('uuid', uuid);
       const response = await api.put('/meetings/update', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          // 'Authorization': `Bearer ${access}`,
-          // withCredentials: false,
         },
       });
 

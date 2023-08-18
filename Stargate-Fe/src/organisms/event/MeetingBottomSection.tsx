@@ -72,6 +72,7 @@ const MeetingBottomSection = ({
   const [fanValue, setFanValue] = useState('');
   const [members, setMembers] = useState<Members[]>([]);
   const [fanData, setFanData] = useState([]);
+  const [initial, setInitial] = useState(false);
 
   console.log('바텀에서 그룹', group);
 
@@ -82,6 +83,21 @@ const MeetingBottomSection = ({
       console.log('첫번째 그룹과 멤버로 폼데이터 디폴트 값 지정');
     }
   }, [group]);
+
+  useEffect(() => {
+    if (
+      formData.meetingFUsers != undefined &&
+      formData.meetingFUsers.length > 0 &&
+      !initial
+    ) {
+      const arr: [] = [];
+      for (let i = 0; i < formData.meetingFUsers.length; i++) {
+        arr.push(formData.meetingFUsers[i].email);
+      }
+      setFanData(arr);
+      setInitial(true);
+    }
+  }, [formData]);
 
   const handleStarvalue = (value: string) => {
     setStarValue(value);
@@ -141,7 +157,7 @@ const MeetingBottomSection = ({
   useEffect(() => {
     setFormData((prevFormData) => {
       const updatedFans = [...fanData];
-
+      console.log(updatedFans);
       return {
         ...prevFormData,
         meetingFUsers: updatedFans,

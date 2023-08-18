@@ -11,7 +11,7 @@ import {
   MeetingFUser,
   MeetingMember,
   ImageFileInfo,
-} from '@/types/ready';
+} from '@/types/video/ready';
 
 interface TabProps {
   readyData: MeetingData;
@@ -25,7 +25,7 @@ interface Tab2Props {
 const navigateVideoRoom = () => {};
 
 const Tab0 = ({ readyData }: TabProps) => {
-  return <div className="w-5/6 h-5/6 mx-auto">{readyData.notice}</div>;
+  return <div className="w-5/6 mx-auto h-5/6">{readyData.notice}</div>;
 };
 
 const Tab1 = ({
@@ -109,17 +109,23 @@ const Tab1 = ({
   }, [audioContext, stream]);
 
   return (
-    <div className="w-5/6 h-5/6 flex items-center justify-center mx-auto">
-      <div className="w-5/6 h-5/6 mx-auto flex flex-col items-center">
+    <div className="flex items-center justify-center w-5/6 mx-auto h-5/6">
+      <div className="flex flex-col items-center w-5/6 mx-auto h-5/6">
         {stream && (
-          <ReactPlayer playing={mediaActive} muted height="4/6" width="5/6" url={stream} />
+          <ReactPlayer
+            playing={mediaActive}
+            muted
+            height="4/6"
+            width="5/6"
+            url={stream}
+          />
         )}
         <div className="m-2"></div>
         <canvas
           id="audio"
           width="250"
           height="80"
-          className="rounded-md mx-auto"
+          className="mx-auto rounded-md"
         ></canvas>
       </div>
     </div>
@@ -152,14 +158,14 @@ const Tab2 = ({ readyData, setReadyData }: Tab2Props) => {
   console.log('멤버 폴라로이드 정보', memberInfo);
   console.log('멤버정보', readyData.meetingMembers);
   return (
-    <div className="w-5/6 h-5/6 mx-auto">
-      <div className="text-18 font-semibold text-center flex justify-between mt-6 mb-4 mx-auto">
+    <div className="w-5/6 mx-auto h-5/6">
+      <div className="flex justify-between mx-auto mt-6 mb-4 font-semibold text-center text-18">
         <span>멤버 이름</span>
         <span>폴라로이드 촬영 여부</span>
       </div>
       {memberInfo &&
         memberInfo.map((member, index) => (
-          <div key={index} className="flex justify-between my-8 mx-auto p-4">
+          <div key={index} className="flex justify-between p-4 mx-auto my-8">
             <div className="text-18">{member.name}</div>
             <AdminToggle
               photoTime={member.isPolaroidEnable}
@@ -216,20 +222,20 @@ const Tab3 = ({ readyData, setReadyData }: Tab2Props) => {
 
   return (
     <>
-      <div className="bg-postityellow w-4/6 h-380 p-3 mx-auto rounded-sm drop-shadow-lg border-none outline-none mt-2">
+      <div className="w-4/6 p-3 mx-auto mt-2 border-none rounded-sm outline-none bg-postityellow h-380 drop-shadow-lg">
         {memberInfo[memberIndex] && (
-          <div className="mt-2 font-semibold p-2">
+          <div className="p-2 mt-2 font-semibold">
             To. {memberInfo[memberIndex].name}
             <div>
               <textarea
-                className="bg-postityellow resize-none w-400 h-250 outline-none p-2"
+                className="p-2 outline-none resize-none bg-postityellow w-400 h-250"
                 value={postitValue}
                 onChange={handlePostitChange}
               ></textarea>
             </div>
           </div>
         )}
-        <div className="flex justify-between cursor-pointer m-2 text-gray-500">
+        <div className="flex justify-between m-2 text-gray-500 cursor-pointer">
           <span
             className="material-symbols-rounded text-32"
             onClick={handlePrevMember}
@@ -272,11 +278,11 @@ const Tab4 = ({ readyData, setReadyData }: Tab2Props) => {
   console.log('메모 바뀌는', readyData);
 
   return (
-    <div className="bg-memoblue w-4/6 h-380 p-3 mx-auto rounded-sm drop-shadow-lg border-none outline-none mt-2">
-      <div className="mt-2 font-semibold p-2">
+    <div className="w-4/6 p-3 mx-auto mt-2 border-none rounded-sm outline-none bg-memoblue h-380 drop-shadow-lg">
+      <div className="p-2 mt-2 font-semibold">
         <div>
           <textarea
-            className="bg-memoblue resize-none w-400 h-250 outline-none p-2"
+            className="p-2 outline-none resize-none bg-memoblue w-400 h-250"
             value={memoValue}
             onChange={handleMemoChange}
           ></textarea>
@@ -352,13 +358,13 @@ const Tab5 = ({ readyData }) => {
   };
 
   return (
-    <div className="w-5/6 h-5/6 mx-auto text-center flex justify-center items-center">
+    <div className="flex items-center justify-center w-5/6 mx-auto text-center h-5/6">
       {timer.minute === 0 && timer.second === 0 ? ( // 시간이 0분 0초인 경우
         <BtnRed
           onClick={navigateVideoRoom}
           text="입장하기" // 버튼 텍스트 변경
         />
-      ) : timer.minute === 0 && timer.second === 10 ? (
+      ) : timer.minute === 0 && timer.second <= 10 ? (
         <BtnRed text={`${formattedMinute} : ${formattedSecond}`} />
       ) : (
         <BtnWhite text={`${formattedMinute} : ${formattedSecond}`} />

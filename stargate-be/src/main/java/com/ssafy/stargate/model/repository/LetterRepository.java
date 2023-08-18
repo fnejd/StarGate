@@ -16,7 +16,7 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
 
     Optional<List<Letter>> findByMeeting_Uuid(UUID uuid);
 
-    Optional<List<Letter>> findBypMemberMemberNo(long memberNo);
+    Optional<List<Letter>> findBypMemberMemberNo(Long memberNo);
 
     Optional<List<Letter>> findByfUserEmail(String email);
 

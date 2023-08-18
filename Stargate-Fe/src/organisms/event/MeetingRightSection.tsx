@@ -1,4 +1,5 @@
-import { useState, ChangeEvent } from 'react';
+import AdminBtn from '@/atoms/common/AdminBtn';
+import { useState, ChangeEvent, useEffect } from 'react';
 // import { MeetingRightSection } from '@/organisms/MeetingRightSection';
 
 interface MeetingFUser {
@@ -40,6 +41,10 @@ const MeetingRightSection = ({
   const [textValue, setTextValue] = useState<string>('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (formData.notice) setTextValue(formData.notice);
+  }, [formData]);
+
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -48,12 +53,12 @@ const MeetingRightSection = ({
         setSelectedImage(reader.result as string);
       };
 
-       // formData 업데이트
-       setFormData((prevFormData) => ({
+      // formData 업데이트
+      setFormData((prevFormData) => ({
         ...prevFormData,
         imageFile: file, // 선택된 파일로 이미지 업데이트
       }));
-    
+
       reader.readAsDataURL(file);
     }
   };
@@ -70,7 +75,7 @@ const MeetingRightSection = ({
       ...prevFormData,
       notice: textValue,
     }));
-  }
+  };
 
   return (
     <>
@@ -79,12 +84,11 @@ const MeetingRightSection = ({
           <div className="flex w-48 mx-1 my-2 font-medium text-white font-suit text-14">
             대표사진
           </div>
-          <button
+          <AdminBtn
             onClick={() => document.getElementById('fileInput')?.click()} // 파일 선택 버튼 클릭 시 input 클릭 이벤트 호출
-            className="w-20 h-8 mb-2 font-medium text-black rounded-sm text-12 bg-admingray font-suit"
-          >
-            파일 선택
-          </button>
+            className="w-24 h-8 mb-2 font-medium text-black rounded-sm text-12 bg-admingray font-suit"
+            text="파일 선택"
+          ></AdminBtn>
           <input
             id="fileInput"
             type="file"

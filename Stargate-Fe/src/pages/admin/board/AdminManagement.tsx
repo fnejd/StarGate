@@ -13,7 +13,6 @@ const AdminManagement = () => {
       if (groupsFetch) {
         const data = await fetchGroup();
         setGroups(data);
-        console.log('그룹을 다시 가져옵니다',data);
         setGroupsFetch(false);
       }
     };

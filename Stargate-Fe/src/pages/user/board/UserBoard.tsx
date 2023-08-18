@@ -18,10 +18,8 @@ const UserBoard = () => {
       const fetchedData = await fetchUserBoard();
       if (fetchedData) {
         setData(fetchedData);
-        console.log(fetchedData);
       }
       setLoading(false);
-      console.log('로딩완료');
     };
     fetchData();
   }, []);
@@ -72,7 +70,7 @@ const UserBoard = () => {
   }, [data]);
 
   return (
-    <div className="w-xl min-h-screen flex flex-col justify-around">
+    <div className="flex flex-col justify-around min-h-screen bg-no-repeat bg-cover w-xl bg-gradient-to-b from-mainblue to-mainyellow">
       <BoardHeader isAdmin={false} />
       {loading ? (
         <BoardCardBox isAdmin={false} isLoading={loading} />
@@ -90,7 +88,7 @@ const UserBoard = () => {
         )
       )}
       {isExpected ? (
-        <p className="t3b text-center lg:my-14 sm:my-6 text-whiteㄹ">예정</p>
+        <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
       ) : (
         <p className="t3b text-center lg:my-14 sm:my-6 text-white opacity-40">
           예정 없음

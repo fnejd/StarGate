@@ -6,29 +6,33 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'SUIT-Regular';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+  font-family: 'SUIT';
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SUIT-SemiBold';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-SemiBold.woff2') format('woff2');
+  font-family: 'SUIT';
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KREON';
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'KREON';
-  src: url(/assets/font/KREON-Regular.ttf) format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'KREON';
-  src: url(/assets/font/KREON-SemiBold.ttf) format('truetype');
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
   font-weight: 600;
   font-style: normal;
 }
@@ -41,7 +45,6 @@
   button {
     @apply cursor-pointer;
   }
-
 
   button:disabled {
     @apply cursor-not-allowed;
@@ -101,7 +104,6 @@
   .t1r {
     @apply font-kreon text-160 font-normal leading-120;
   }
-
 
   .t2b {
     @apply font-kreon text-80 font-semibold leading-120;
@@ -265,4 +267,3 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-

@@ -21,10 +21,8 @@ const AdminBoard = () => {
       const fetchedData = await fetchAdminBoard();
       if (fetchedData) {
         setData(fetchedData);
-        console.log(fetchedData);
       }
       setLoading(false);
-      console.log('로딩완료');
     };
     fetchData();
   }, []);
@@ -75,7 +73,7 @@ const AdminBoard = () => {
   }, [data]);
 
   return (
-    <div className="w-xl min-h-screen flex flex-col justify-around">
+    <div className="flex flex-col justify-around min-h-screen bg-no-repeat bg-cover w-xl bg-gradient-to-b from-mainblue to-mainyellow">
       <BoardHeader isAdmin={true} />
       {loading ? (
         <BoardCardBox isAdmin={true} isLoading={loading} />
@@ -96,7 +94,7 @@ const AdminBoard = () => {
         <PlusButton />
       </Link>
       {isExpected ? (
-        <p className="t3b text-center lg:my-14 sm:my-6 text-whiteㄹ">예정</p>
+        <p className="t3b text-center lg:my-14 sm:my-6 text-white">예정</p>
       ) : (
         <p className="t3b text-center lg:my-14 sm:my-6 text-white opacity-40">
           예정 없음
@@ -132,6 +130,7 @@ const AdminBoard = () => {
           meetings={data.finished}
           isAdmin={true}
           isLoading={loading}
+          isOver={true}
         />
       )}
     </div>

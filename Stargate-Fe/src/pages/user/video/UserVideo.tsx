@@ -133,7 +133,9 @@ const UserVideo = () => {
           meetingOrder > -1
         ) {
           const newSocket = new WebSocket(
-            `${import.meta.env.VITE_WEBSOCKET_URL}${videoData.meetingMembers[meetingOrder].roomId}`
+            `${import.meta.env.VITE_WEBSOCKET_URL}${
+              videoData.meetingMembers[meetingOrder].roomId
+            }`
           );
           setSocket(newSocket); // 새로운 WebSocket 인스턴스를 상태로 업데이트
         }
@@ -530,20 +532,20 @@ const UserVideo = () => {
           meetingIdx={meetingOrder}
         />
       )}
-      <div className="flex flex-row w-screen h-full">
+      <div className="flex flex-row w-screen h-full justify-center">
         {videoData && (
           <NotepadComponent
             videoData={videoData}
             initialMeetingOrder={meetingOrder}
           />
         )}
-        <div id="video-container" className="flex" ref={containerRef}>
+        <div id="video-container" className="flex w-full" ref={containerRef}>
           {myStream && (
             <div className="text-center basis-1/2">
               <span className="form-title">내 영상</span>
               <ReactPlayer
                 playing
-                muted
+                // muted
                 height="full"
                 width="full"
                 url={myStream}
@@ -559,7 +561,7 @@ const UserVideo = () => {
               <ReactPlayer
                 key={meetingOrder}
                 playing
-                muted
+                // muted
                 height="full"
                 width="full"
                 url={remoteStream}

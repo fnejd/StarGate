@@ -87,7 +87,11 @@ const SignInComponent = () => {
             navigate('/board');
           } else {
             if (res === '팬 로그인 실패') {
-              Swal.fire('로그인 실패', '비밀번호를 다시 확인해주십시오.', 'error');
+              Swal.fire(
+                '로그인 실패',
+                '비밀번호를 다시 확인해주십시오.',
+                'error'
+              );
             } else {
               Swal.fire('로그인 실패', res, 'error');
             }

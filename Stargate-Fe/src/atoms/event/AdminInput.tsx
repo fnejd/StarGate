@@ -28,7 +28,7 @@ const AdminInput = ({
 }: AdminInputProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    if (onInputChange) {
+    if (onInputChange && newValue != undefined) {
       onInputChange(newValue); // onInputChange가 존재할 때에만 호출
     }
   };

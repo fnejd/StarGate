@@ -2,12 +2,11 @@ package com.ssafy.stargate.handler;
 
 import com.ssafy.stargate.exception.CRUDException;
 import com.ssafy.stargate.exception.NotFoundException;
-import com.ssafy.stargate.model.dto.common.SavedFileDto;
+import com.ssafy.stargate.model.dto.response.file.SavedFileResponseDto;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
-import java.util.UUID;
 
 /**
  * Multipart로 받은 파일을 핸들링하는 클래스
@@ -19,7 +18,7 @@ public abstract class FileHandler {
      * @return [SavedFileDto] 저장된 파일 정보를 담은 DTO
      * @throws NotFoundException 해당 파일이 없음
      */
-    public abstract SavedFileDto getFileInfo(String key) throws NotFoundException;
+    public abstract SavedFileResponseDto getFileInfo(String key) throws NotFoundException;
 
     /**
      * 파일을 저장하는 추상 함수
