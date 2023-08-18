@@ -65,14 +65,16 @@ pnpm run dev
 ![스타게이트_-_13](/uploads/01961f81aadc1999e92bd9e36f63e53b/스타게이트_-_13.png)
 
 ### User
-![스타게이트_-_14](/uploads/cdb5da8eee0f3e81840d7b497e5598bc/스타게이트_-_14.png)
-![스타게이트_-_15](/uploads/c7cb3610700b15fe10b363149f8d9a57/스타게이트_-_15.png)
-![스타게이트_-_16](/uploads/920df4e390656cfb1891531ed3eccb92/스타게이트_-_16.png)
+![스타게이트_-_21](/uploads/1dae5049bf2867be287090f4e171b392/스타게이트_-_21.png)
+![스타게이트_-_22](/uploads/800d4a9058dc4a8d421741c7eced5cc3/스타게이트_-_22.png)
+![스타게이트_-_23](/uploads/0db97668275d8c06db05138cd21c35af/스타게이트_-_23.png)
+![스타게이트_-_24](/uploads/21d8b3526b25ae6a36b2c2f7432e65ce/스타게이트_-_24.png)
+![스타게이트_-_25](/uploads/647c90c913421202593ca399f419d4b6/스타게이트_-_25.png)
 
 ### Admin
-![스타게이트_-_17](/uploads/6730fb0fd0f07506f17a5dffeb2dce43/스타게이트_-_17.png)
-![스타게이트_-_18](/uploads/be76f5bd554c07008b59403722c6ec23/스타게이트_-_18.png)
-![스타게이트_-_19](/uploads/911fb5e83a48ee42126fbcd9af4e762b/스타게이트_-_19.png)
+![스타게이트_-_26](/uploads/75172c93f36d28c61f62d3a765b5be0a/스타게이트_-_26.png)
+![스타게이트_-_27](/uploads/1c7fcd013ee4a1d47627b2fe8ebb5446/스타게이트_-_27.png)
+
 ## Skills
 ### Frontend
  - React
