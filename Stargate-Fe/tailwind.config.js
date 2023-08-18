@@ -5,19 +5,21 @@ import { Plugin } from 'tailwindcss';
 export default {
   content: [
     // 모든 html 파일 경로 등록
-    "./**/*.html",
-    "./src/**/*.{html,js}",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    './**/*.html',
+    './src/**/*.{html,js}',
+    './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       width: {
-        'xs' : '15vw',
-        's' : '30vw',
-        'm': '50vw',
-        'l': '70vw',
-        'xl': '98vw',
+        xs: '15vw',
+        s: '30vw',
+        m: '50vw',
+        l: '70vw',
+        xl: '98vw',
         62: '241px',
+        200: '200px',
+        250: '250px',
         300: '300px',
         350: '350px',
         400: '400px',
@@ -26,8 +28,12 @@ export default {
         600: '600px',
       },
       height: {
+        200: '200px',
+        250: '250px',
         300: '300px',
+        340: '340px',
         350: '350px',
+        380: '380px',
         400: '400px',
         500: '500px',
         550: '550px',
@@ -95,7 +101,12 @@ export default {
         y11: '#432005',
 
         red: '#DC2626',
+        green: '#22C55E',
         admingray: '#DADADA',
+        postityellow: '#FFFACE',
+        memoblue: '#AAAFF7',
+        mainpurple: '#AEA7D0',
+        mainyellow: '#FFD09E',
       },
       fontFamily: {
         suit: ['SUIT', 'sans-serif'],
@@ -147,18 +158,32 @@ export default {
         lg: '16px',
         xl: '32px',
       },
+      dropShadow: {
+        nobg: '0 0 0px 1000px #fff inset',
+        card: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+      },
+
+      borderColor: {
+        card: 'rgba(255, 255, 255, 0.18)',
+      },
+      backdropFilter: {
+        blur: 'blur(4px)',
+      },
     },
   },
-  plugins: [
-    // plugin(function ({ addUtilities }) {
-    //   const newUtilities = {
-    //     ".medium-white": {
-    //       "@apply font-suit text-28 font-semibold text-white": "",
-    //     },
-    //     ".medium-blue": {
-    //       "@apply font-suit text-28 font-semibold text-[#0010FF]": "",
-    //     },
-    //   };
-    // }),
-  ],
-}
+  variants: {
+    extend: {
+      backdropFilter: ['responsive'],
+    },
+  },
+};
+// plugin(function ({ addUtilities }) {
+//   const newUtilities = {
+//     ".medium-white": {
+//       "@apply font-suit text-28 font-semibold text-white": "",
+//     },
+//     ".medium-blue": {
+//       "@apply font-suit text-28 font-semibold text-[#0010FF]": "",
+//     },
+//   };
+// }),

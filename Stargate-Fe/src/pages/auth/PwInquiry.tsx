@@ -1,4 +1,3 @@
-import React from 'react';
 import PwinquiryComponent from '@/organisms/auth/PwinquiryComponent';
 
 /**

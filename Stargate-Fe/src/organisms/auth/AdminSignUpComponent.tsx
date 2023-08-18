@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import { useNavigate } from 'react-router-dom';
-import { adminSignUpApi, adminVerifyEmail } from '@/services/userService';
+import { adminSignUpApi, adminVerifyEmail } from '@/services/authService';
 import {
   adminValidationCheck,
   emailVaildationCheck,
+  pwValidationCheck,
 } from '@/hooks/useValidation';
+import Swal from 'sweetalert2';
 
 interface adminType {
   email: string;
@@ -19,6 +21,8 @@ interface adminType {
 const AdminSignUpComponent = () => {
   const [emailText, setEmailText] = useState('사용 불가한 이메일입니다.');
   const [emailState, setEmailState] = useState('red');
+  const [pwText, setPwText] = useState('');
+  const [pwState, setPwState] = useState('red');
   const [admin, setAdmin] = useState<object>({
     email: '',
     company: '',
@@ -29,17 +33,30 @@ const AdminSignUpComponent = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const pw = (admin as adminType).pw;
+    const pwCheck = (admin as adminType).pwCheck;
+    const result = pwValidationCheck(pw, pwCheck);
+    if (result == 'SUCCESS') {
+      setPwText('비밀번호가 일치합니다.');
+      setPwState('green');
+    } else {
+      setPwText(result);
+      setPwState('red');
+    }
+  }, [admin]);
+
   // 이메일 중복검사
   const verify = async () => {
     const email = (admin as adminType).email;
     const check = emailVaildationCheck(email);
     if (check != 'SUCCESS') {
-      alert(check);
+      Swal.fire('형식 오류', check, 'warning');
       return 0;
     }
-    const result = await adminVerifyEmail(email).catch((error) =>
-      console.log(error)
-    );
+    const formData = new FormData();
+    formData.append('email', email);
+    const result = await adminVerifyEmail(formData).catch((error) => {});
 
     if (result) {
       setEmailText('사용 가능한 이메일입니다.');
@@ -55,7 +72,7 @@ const AdminSignUpComponent = () => {
     const validation = adminValidationCheck(admin as adminType);
     // 'SUCCESS'가 리턴되지 않았다면 리턴값 출력
     if (validation != 'SUCCESS') {
-      alert(validation);
+      Swal.fire('형식 오류', validation, 'warning');
       return 0;
     }
 
@@ -72,22 +89,24 @@ const AdminSignUpComponent = () => {
     response
       .then((response) => {
         if (response == 'alreadyToken') {
-          alert('로그인 상태로는 회원가입을 할 수 없습니다.');
+          Swal.fire(
+            '회원가입 실패',
+            '로그인 상태로는 회원가입을 할 수 없습니다.',
+            'warning'
+          );
           navigate('/');
         }
-        console.log('SignUp SUCCESS');
         navigate('/');
       })
       .catch((error) => {
-        console.log(error);
-        alert('회원가입에 문제가 발생했습니다.');
+        Swal.fire('서버 에러', '회원가입에 문제가 발생했습니다.', error);
       });
   };
 
   return (
-    <div className="max-w-sm ml-auto mr-auto text-center">
+    <div className="m-5 min-w-fit mx-auto text-center">
       <p className="form-title">관리자 회원가입</p>
-      <div className="flex items-center">
+      <div className="flex items-center w-s">
         <InputComponent
           text="이메일"
           type="email"
@@ -102,7 +121,13 @@ const AdminSignUpComponent = () => {
           onClick={() => {
             verify()
               .then()
-              .catch((error) => console.log(error));
+              .catch((error) => {
+                Swal.fire(
+                  '서버 에러',
+                  '회웝가입에 문제가 발생했습니다.',
+                  error
+                );
+              });
           }}
         >
           이메일 확인
@@ -137,6 +162,8 @@ const AdminSignUpComponent = () => {
         <InputComponent
           text="비밀번호 확인"
           type="password"
+          notice={pwText}
+          state={pwState}
           keyName="pwCheck"
           getter={admin}
           setter={setAdmin}

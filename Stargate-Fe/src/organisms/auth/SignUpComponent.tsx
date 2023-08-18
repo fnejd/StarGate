@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputComponent from '@/atoms/common/InputComponent';
 import PasswordFormComponent from './PasswordFormComponent';
 import BtnBlue from '@/atoms/common/BtnBlue';
 import { useNavigate } from 'react-router-dom';
-import { signUpApi, verifyEmail } from '@/services/userService';
+import { logoutApi, signUpApi, verifyEmail } from '@/services/authService';
 import {
   emailVaildationCheck,
+  pwValidationCheck,
   userValidationCheck,
 } from '@/hooks/useValidation';
+import Swal from 'sweetalert2';
 
 interface userType {
   email: string;
@@ -22,6 +24,8 @@ interface userType {
 const SignUpComponent = () => {
   const [emailText, setEmailText] = useState('');
   const [emailState, setEmailState] = useState('red');
+  const [pwText, setPwText] = useState('');
+  const [pwState, setPwState] = useState('red');
   const [user, setUser] = useState<object>({
     email: '',
     name: '',
@@ -34,12 +38,25 @@ const SignUpComponent = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const pw = (user as userType).pw;
+    const pwCheck = (user as userType).pwCheck;
+    const result = pwValidationCheck(pw, pwCheck);
+    if (result == 'SUCCESS') {
+      setPwText('비밀번호가 일치합니다.');
+      setPwState('green');
+    } else {
+      setPwText(result);
+      setPwState('red');
+    }
+  }, [user]);
+
   const verify = async () => {
     const email = (user as userType).email;
     const check = emailVaildationCheck(email);
 
     if (check != 'SUCCESS') {
-      alert(check);
+      Swal.fire('이메일 인증 실패', check, 'warning');
       return 0;
     }
 
@@ -55,10 +72,6 @@ const SignUpComponent = () => {
   };
 
   const signUp = () => {
-    if (emailState == 'red') {
-      alert('이메일 확인을 해주세요.');
-      return 0;
-    }
     const email = (user as userType).email;
     const pw = (user as userType).pw;
     const phone = (user as userType).phone;
@@ -68,7 +81,7 @@ const SignUpComponent = () => {
     const validation = userValidationCheck(user as userType);
     
     if (validation != 'SUCCESS') {
-      alert(validation);
+      Swal.fire('입력 형식 에러', validation, 'error');
       return 0;
     }
 
@@ -93,25 +106,25 @@ const SignUpComponent = () => {
     const response = signUpApi(formData);
 
     response
-      .then((response) => {
+      .then(async (response) => {
         if (response == 'alreadyToken') {
-          alert('로그인 상태로는 회원가입을 할 수 없습니다.');
+          Swal.fire('회원가입 실패', '로그인 상태로는 회원가입을 할 수 없습니다.', 'error');
+          await logoutApi();
           navigate('/');
         }
-        console.log('SignUp SUCCESS');
+        Swal.fire('회원가입 성공', '회원가입에 성공하셨습니다.', 'success');
         navigate('/');
       })
       .catch((error: string) => {
-        console.log(error);
-        alert(error);
+        Swal.fire('회원가입 실패', error, 'error');
         return 0;
       });
   };
 
   return (
-    <div className="m-5 max-w-sm ml-auto mr-auto text-center">
+    <div className="m-5 min-w-fit mx-auto text-center">
       <p className="form-title">회원가입</p>
-      <div className="flex items-center">
+      <div className="flex items-center w-s">
         <InputComponent
           text="이메일"
           type="email"
@@ -126,7 +139,7 @@ const SignUpComponent = () => {
           onClick={() => {
             verify()
               .then()
-              .catch((error) => console.log(error));
+              .catch((error) => {});
           }}
         >
           이메일 확인
@@ -157,6 +170,8 @@ const SignUpComponent = () => {
         <InputComponent
           text="비밀번호 확인"
           type="password"
+          notice={pwText}
+          state={pwState}
           keyName="pwCheck"
           getter={user}
           setter={setUser}
@@ -165,6 +180,7 @@ const SignUpComponent = () => {
       <div className="flex">
         <InputComponent
           text="전화번호"
+          placehoder="숫자만 입력해주세요."
           type="text"
           keyName="phone"
           getter={user}
@@ -180,7 +196,9 @@ const SignUpComponent = () => {
           setter={setUser}
         />
       </div>
-      <BtnBlue text="회원가입" onClick={signUp} />
+      <p className='w-fit mr-auto ml-auto'>
+        <BtnBlue text="회원가입" onClick={signUp} />
+      </p>
     </div>
   );
 };

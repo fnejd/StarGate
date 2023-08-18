@@ -7,28 +7,32 @@
 
 @font-face {
   font-family: 'SUIT';
-  src: url(./assets/font/SUIT-Regular.ttf) format('truetype');
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SUIT';
-  src: url(./assets/font/SUIT-SemiBold.ttf) format('truetype');
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'KREON';
-  src: url(./assets/font/KREON-Regular.ttf) format('truetype');
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'KREON';
-  src: url(./assets/font/KREON-SemiBold.ttf) format('truetype');
+  src: url(https://stargate-a406.s3.ap-northeast-2.amazonaws.com/assets/font/Kreon-Regular.ttf)
+    format('truetype');
   font-weight: 600;
   font-style: normal;
 }
@@ -42,7 +46,6 @@
     @apply cursor-pointer;
   }
 
-
   button:disabled {
     @apply cursor-not-allowed;
   }
@@ -55,27 +58,31 @@
 @layer components {
   .medium-blue {
     @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
-    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-mainblue rounded-xl;
+  }
+
+  .medium-gray {
+    @apply font-suit w-40 h-16 text-20 font-medium text-white bg-admingray rounded-xl;
   }
 
   .medium-white {
-    @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
     @apply font-suit w-40 h-16 text-20 font-medium text-mainblue bg-white rounded-xl;
   }
 
   .form-title {
     @apply font-suit text-32 font-medium text-white;
-    @apply font-suit text-32 font-medium text-white;
   }
 
   .input-warning {
-    @apply font-suit text-12 font-medium text-red;
     @apply font-suit text-12 font-medium text-red;
   }
 
   .page-title-md {
     @apply font-suit text-16 font-medium text-white;
-    @apply font-suit text-16 font-medium text-white;
+  }
+
+  .timer-number {
+    @apply italic font-suit text-80 font-semibold opacity-100;
+
   }
 
   .modal-title {
@@ -97,7 +104,6 @@
   .t1r {
     @apply font-kreon text-160 font-normal leading-120;
   }
-
 
   .t2b {
     @apply font-kreon text-80 font-semibold leading-120;
@@ -261,4 +267,3 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-

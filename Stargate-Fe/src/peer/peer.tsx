@@ -16,6 +16,19 @@ class PeerService {
     }
   }
 
+  reset() {
+    this.peer = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: [
+            'stun:stun.l.google.com:19302',
+            'stun:global.stun.twilio.com:3478',
+          ],
+        },
+      ],
+    });
+  }
+
   ////////////////////////////메소드////////////////////////////
 
   // 상대방으로부터 받은 offer 정보를 통해 answer을 생성
@@ -39,9 +52,8 @@ class PeerService {
   }
 
   // 상대방의 answer 정보를 설정
-  async setLocalDescription(ans) {
+  async setRemoteDescription(ans) {
     if (this.peer) {
-      console.log("IM SETLOCALDESCRIPTOR WORK")
       await this.peer.setRemoteDescription(new RTCSessionDescription(ans));
     }
   }
@@ -64,5 +76,5 @@ class PeerService {
 }
 
 // Singleton 패턴을 사용하여 단 하나의 인스턴스를 공유
-const peerService = new PeerService();
+let peerService = new PeerService();
 export default peerService;
