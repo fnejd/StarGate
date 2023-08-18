@@ -7,7 +7,6 @@ const getReady = async (uuid: string) => {
     const response = await api.get('/readyroom/get' + queryString);
     return response.data;
   } catch (error) {
-    console.error('미팅 생성 실패 ', error);
   }
 };
 
@@ -24,7 +23,6 @@ const postPolraroidOption = async (uuid, meetingMembers) => {
     );
     return response;
   } catch (error) {
-    console.error('포스트잇 저장 실패', error);
   }
 };
 
@@ -34,7 +32,6 @@ const postNotePad = async (postitData) => {
     const response = await api.post('/postit/write', postitData);
     return response;
   } catch (error) {
-    console.error('포스트잇 저장 실패', error);
   }
 };
 
@@ -44,7 +41,6 @@ const postMemo = async (noteData) => {
     const response = await api.post('/readyroom/memo/write', noteData);
     return response;
   } catch (error) {
-    console.error('메모 저장 실패', error);
   }
 };
 
@@ -53,25 +49,20 @@ const getUserVideo = async (uuid: string) => {
   try {
     const queryString = `?uuid=${uuid}`;
     const response = await api.get('/meetingroom/fuser/get' + queryString);
-    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error('미팅 생성 실패 ', error);
   }
 };
 
 const postPicture = async (formData) => {
   try {
-    console.log('사진 데이터', formData);
     const response = await api.post('/polaroids/create', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error('폴라로이드 전송 실패', error);
   }
 };
 

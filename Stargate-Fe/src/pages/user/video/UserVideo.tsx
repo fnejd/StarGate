@@ -32,8 +32,6 @@ const UserVideo = () => {
 
   // 연결상태 변경시 콘솔에 출력
   peerService.peer.onconnectionstatechange = () => {
-    console.log('state changed');
-    console.log(peerService.peer.connectionState);
   };
 
   peerService.peer.onconnectionstatechange = (event) => {
@@ -58,9 +56,7 @@ const UserVideo = () => {
 
   // 상대 피어에 대한 ICE candidate 이벤트 핸들러 설정
   peerService.peer.onicecandidate = (e) => {
-    console.log('저는 칸디데이트!!@@@@@@@@@@@@@', e);
     if (e.candidate) {
-      console.log('############ICE candidate 이벤트 핸들러 설정');
       socket.send(
         JSON.stringify({
           type: 'candidate',
@@ -72,17 +68,12 @@ const UserVideo = () => {
 
   // ontrack 이벤트 핸들러를 등록하여 스트림 정보를 받을 때 사용자 목록을 업데이트
   peerService.peer.ontrack = (e) => {
-    console.log('ontrack success');
-    // 로컬 미디어 스트림 확인
-    console.log('Local media stream:', peerService.peer.getLocalStreams());
 
     // 원격 미디어 스트림 확인
-    console.log('Remote media stream:', peerService.peer.getRemoteStreams());
     setRemoteStream(peerService.peer.getRemoteStreams()[0]);
 
     // 원격 미디어 스트림이 있을 경우, 원격 비디오를 표시하기 위해 remoteStream을 연결합니다.
     if (remoteStream) {
-      console.log('&&&&&&&&&&&상대방 화면 등록');
       remoteVideoRef.current!.srcObject = remoteStream;
     }
   };
@@ -97,22 +88,16 @@ const UserVideo = () => {
         time: videoData.meetingTime,
       };
       socket.send(JSON.stringify(ansData));
-      console.log('3. 연예인한테 응답보냄');
-      console.log(peerService);
     },
     [socket]
   );
 
   useEffect(() => {
-    console.log('컴포넌트 실행');
-
-    console.log('서버에서 데이터 받아옴');
     const fetchData = async () => {
       const data = await getUserVideo(uuid);
       const extractedMemberNos = data.meetingMembers.map(
         (member) => member.memberNo
       );
-      console.log(extractedMemberNos);
       // 서버에서 받아온 데이터 저장
       // 멤버 순서 배열 할당
       setVideoData(data);
@@ -141,14 +126,12 @@ const UserVideo = () => {
         }
       };
 
-      console.log('소켓 주소 업데이트$$$$$$$$$', socket);
       connectWebSocket();
 
       let adjustedMeetingTime = videoData.meetingTime;
 
       if (videoData.photoNum !== null) {
         adjustedMeetingTime -= videoData.photoNum * 10;
-        console.log('사진이 있어요', adjustedMeetingTime);
       }
 
       // 분과 초 초기 설정
@@ -168,17 +151,12 @@ const UserVideo = () => {
     }
   }, [videoData, meetingOrder]);
 
-  console.log('대기 시간 설정', timer, photoNum);
   useEffect(() => {
     if (!socket) {
-      console.log('소켓 초기화 안됨!!!!!!!!!!!!!!!!!!!!!');
       return; // socket이 초기화되지 않은 경우 처리
     }
 
     socket.onopen = async () => {
-      console.log('서버 오픈~');
-      console.log('팬 입장');
-      console.log(socket);
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
@@ -187,7 +165,6 @@ const UserVideo = () => {
         peerService.peer.addTrack(track, stream);
       });
       // 로컬 미디어 스트림 확인
-      console.log('Local media stream:', peerService.peer.getLocalStreams());
 
       // 원격 미디어 스트림 확인
       setMyStream(stream);
@@ -196,43 +173,31 @@ const UserVideo = () => {
       //   type: 'join',
       // };
       // const dataString = JSON.stringify(data);
-      console.log('조인 보낸다 팬 들어왔어요~~');
       const offer = await peerService.getOffer();
-      console.log('!!!!!!!!!setLocalDescription = ', offer);
       // socket.send(dataString); // 서버로 들어왔다는 메시지 'join' 전송
       socket.send(JSON.stringify(offer)); // 서버로 들어왔다는 메시지 'join' 전송
 
       socket.onmessage = async (event) => {
-        console.log('EVENT = ', event); // 받은 메시지의 이벤트 정보를 로그 출력
         const receivedData = JSON.parse(event.data);
-        console.log('rd', receivedData);
         if (receivedData.type === 'answer') {
-          console.log('22222222222222222 연예인한테 오퍼를 받았어요');
-          console.log(receivedData);
           peerService.setRemoteDescription(receivedData);
           // 상대 오퍼를 받았으면 answer 를 생성
           // if (peerService.peer) {
           //   // 상대 오퍼를 받았으면 answer 를 생성
-          //   console.log('상대 오퍼 받아서 ans 생성');
           //   const ans = await peerService.getAnswer(receivedData.offer);
           //   getAnswer(ans);
           // }
         }
         if (receivedData.type === 'candidate') {
-          console.log('444444444444444444444 아이스를 받았어요');
-          console.log(receivedData.candidate);
 
           const candidateObject = new RTCIceCandidate(receivedData.candidate);
           peerService.peer
             .addIceCandidate(candidateObject)
             .then(() => {
-              console.log('ICE 후보자 추가 성공');
               setRemoteStream(peerService.peer.getRemoteStreams()[0]);
             })
             .catch((error) => {
-              console.error('ICE 후보자 추가 실패:', error);
             });
-          console.log('Connection state:', peerService.peer.connectionState);
         }
       };
       // 컴포넌트 언마운트 시 연결 해제
@@ -242,16 +207,12 @@ const UserVideo = () => {
     };
   }, [socket]);
 
-  console.log('미팅순서', meetingOrder);
-  console.log('피어 연결', peerService.peer);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////// 미팅 타이머 설정 코드 //////////////////////////
   const tickWaiting = () => {
-    console.log('대기시간으로 넘어감');
 
     // 초 줄여주는 로직
     if (timer.waitingSecond > 0) {
-      console.log('대기시간 초 줄여주는 로직');
       setTimer((prevTimer) => ({
         ...prevTimer,
         waitingSecond: prevTimer.waitingSecond - 1,
@@ -275,7 +236,6 @@ const UserVideo = () => {
 
   useEffect(() => {
     if (timer.waitingMinute === 0 && timer.waitingSecond === 0) {
-      console.log('미팅 순서 변경');
       setMeetingOrder(meetingOrder + 1);
       socket?.close();
       setRemoteStream(null);
@@ -285,17 +245,14 @@ const UserVideo = () => {
 
   // 타이머 함수
   const tick = () => {
-    console.log('틱 시작', timer.second);
     // 초 줄여주는 로직
     if (timer.second > 0) {
-      console.log('초 줄어듦');
       setTimer((prevTimer) => ({
         ...prevTimer,
         second: prevTimer.second - 1,
       }));
     }
     // if (timer.second === 0 && timer.minute > 0) {
-    //   console.log('초가 0이 되어 분이 줄어듦');
     //   setTimer((prevTimer) => ({
     //     ...prevTimer,
     //     minute: prevTimer.minute - 1,
@@ -314,7 +271,6 @@ const UserVideo = () => {
       !isPhotoTaken &&
       photoNum > 0
     ) {
-      console.log('사진 굴러가유 -> 남은 촬영수 : ', photoNum);
       setIsPhotoTaken(true);
       setPhotoNum(photoNum - 1);
     } else if (
@@ -325,7 +281,6 @@ const UserVideo = () => {
     ) {
       const intervalId = setInterval(() => {
         // if (screenshotCount == 0) {
-        console.log('대기시간타이머 시작!');
         tickWaiting();
         // }
       }, 1000); // 1초마다 실행
@@ -338,9 +293,7 @@ const UserVideo = () => {
   // 역할 :
   useEffect(() => {
     // 상단 타이머의 카운트 다운을 수행
-    console.log('@@저는 타이머 카운터?@@');
     if (timer.second === 0 && timer.minute > 0) {
-      console.log('초가 0이 되어 분이 줄어듦');
       setTimeout(
         () =>
           setTimer((prevTimer) => ({
@@ -359,17 +312,10 @@ const UserVideo = () => {
     ) {
       // 미팅 시간이 끝나고 폴라로이드 촬영이 있는 경우
       let screenshotCount = photoNum;
-      console.log(
-        '폴라로이드 촬영 컷수 (((((((((((((((((((((',
-        screenshotCount
-      );
-
-      console.log('촬영 시작**************8', photoNum);
       setIsPhotoTaken(true);
 
       // const intervalPhoto = setInterval(() => {
       //   // 포토 타임이 있을 경우
-      //   console.log("SCreenshotCOunt = ",screenshotCount)
       //   if(screenshotCount===0){
       //     clearInterval(intervalPhoto);
       //   }
@@ -378,7 +324,6 @@ const UserVideo = () => {
 
       // const intervalId = setInterval(() => {
       //   if (screenshotCount == 0) {
-      //     console.log('대기시간타이머 시작!');
       //     tickWaiting();
       //   }
       // }, 1000); // 1초마다 실행
@@ -400,7 +345,6 @@ const UserVideo = () => {
     if (peerService.peer) {
       const intervalId = setInterval(() => {
         if (timer.second > 0) {
-          console.log('타이머 시작!');
           tick();
         }
       }, 1000); // 1초마다 실행
@@ -418,7 +362,6 @@ const UserVideo = () => {
     if (containerRef.current) {
       const containerElement = containerRef.current;
       const canvas = await html2canvas(containerElement);
-      console.log('폴라로이드 촬영 및 전송');
       // const videoContainer = document.getElementById('video-container');
       // const canvas = await html2canvas(videoContainer);
 
@@ -452,19 +395,15 @@ const UserVideo = () => {
         formData.append('imageFile', blobImage, 'screenshot.jpg');
 
         for (const key of formData.keys()) {
-          console.log(key, formData.get(key));
         }
         const response = await postPicture(formData);
-        console.log('사진 촬영', response);
       };
 
       takePhoto();
       setIsPhotoTaken(false);
       if (photoNum === 0) {
-        console.log('오라오라오아랑로아로아로아로아로아로');
         const intervalId = setInterval(() => {
           // if (screenshotCount == 0) {
-          console.log('대기시간타이머 시작!');
           tickWaiting();
           if (timer.second === 0) {
             clearInterval(intervalId); // 컴포넌트 언마운트 시 interval 정리
@@ -475,7 +414,6 @@ const UserVideo = () => {
     }
   };
 
-  console.log('포토 타이머 뜨니???', isPhotoTaken);
   ///////////////////////////////////////////////////////////////////////////////////////////
 
   // const performBodyPixSegmentation = async (videoElement) => {
@@ -501,7 +439,6 @@ const UserVideo = () => {
   //     flipHorizontal
   //   );
 
-  //   console.log(segmentation);
   // };
 
   // useEffect(() => {

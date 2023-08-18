@@ -51,7 +51,6 @@ const MeetingLeftSection = ({
   const [numbers, setNumbers] = useState<number[]>([]);
 
   useEffect(() => {
-    console.log(formData);
     if (formData.startDate && !initial) {
       // initializing
       const arr =
@@ -60,22 +59,17 @@ const MeetingLeftSection = ({
           : formData.startDate.split('T');
       setSelectDate(arr[0]);
       setSelectTime(arr[1]);
-      console.log(selectTime);
       setInitial(true);
     }
     if (formData.photoNum > 0) {
-      console.log(formData.photoNum);
       setPhotoTime(true);
       setPicSec(formData.photoNum * 10);
       const cnt = Math.floor(formData.meetingTime / 2 / 10);
-      console.log(`컷 수는 ${cnt}`);
-
       let newNumbers: number[] = [formData.photoNum];
 
       newNumbers = Array.from({ length: cnt - 4 }, (_, index) => 4 + index);
       setNumbers(newNumbers);
     }
-    console.log(picSec);
   }, [formData]);
 
   useEffect(() => {
@@ -121,11 +115,8 @@ const MeetingLeftSection = ({
       ...prevFormData,
       meetingTime: value,
     }));
-    console.log(`전체 미팅 시간은 ${value}초`);
-    console.log(formData);
 
     const cnt = Math.floor(value / 2 / 10);
-    console.log(`컷 수는 ${cnt}`);
 
     let newNumbers: number[] = [4];
 

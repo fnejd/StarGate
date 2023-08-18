@@ -40,8 +40,6 @@ const Remind = () => {
     fetchRemind();
   }, []);
 
-  console.log('데이터 가져오기', data);
-
   useEffect(() => {
     const options = {
       root: null,

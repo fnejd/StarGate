@@ -106,7 +106,6 @@ const loginApi = async (formData: FormData, type: boolean) => {
       response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
     })
     .catch((error) => {
-      console.log(error);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       response = error['response'].data;
     });
@@ -153,7 +152,6 @@ const logoutApi = async () => {
     sessionStorage.clear();
     return 'SUCCESS';
   } catch (error) {
-    console.log(error);
     return '로그인 실패';
   }
 };
@@ -167,9 +165,8 @@ const signUpApi = async (formData: FormData) => {
     .post('/fusers/register', formData, {
       // withCredentials: false,
     })
-    .then((response) => console.log(response.status))
+    .then((response) => {})
     .catch((error) => {
-      console.log(error);
       throw new Error('회원가입에 문제가 발생했습니다.');
     });
 
@@ -187,7 +184,7 @@ const reAccessApi = async () => {
   await axios
     .post('/jwt/new-access-token', refreshToken)
     .then(onNewAccessToken)
-    .catch((error) => console.log(error));
+    .catch((error) => {});
 };
 
 // 유저 이메일 중복검사
@@ -205,7 +202,7 @@ const verifyEmail = async (email: string) => {
       const { exist } = response.data;
       result = exist;
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {});
   return !result;
 };
 
@@ -222,7 +219,6 @@ const idInquiryApi = async (formData: FormData) => {
       result = { ...response.data };
     })
     .catch((error) => {
-      console.log(error);
       result = { ...result, email: 'NoData' };
     });
   return result;
@@ -244,7 +240,7 @@ const pwInquiryApi = async (email: string) => {
     .then((response: AxiosResponse<pwInquiryType>) => {
       result = { ...response.data };
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {});
   return result;
 };
 // 2. 인증번호 입력한거랑 DB에 저장된 인증번호랑 같은 지 검사
@@ -260,7 +256,6 @@ const checkAuthNumApi = (email: string, code: string) => {
     })
     .then()
     .catch((error) => {
-      console.log(error);
       result = 'FAIL';
     });
 
@@ -281,7 +276,7 @@ const pwResetApi = async (email: string, password: string) => {
     .then((res) => {
       status = res.status;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {});
   return status.toString();
 };
 
@@ -302,7 +297,7 @@ const adminVerifyEmail = async (formData: FormData) => {
       const { exist } = response.data;
       result = exist;
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {});
   return !result;
 };
 
@@ -320,7 +315,6 @@ const adminLoginApi = async (formData: FormData, type: boolean) => {
       response = res.status == 200 ? onSuccessLogin(res, type) : 'FAIL';
     })
     .catch((error) => {
-      console.log(error);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       response = error['response'].data;
     });
@@ -338,7 +332,7 @@ const adminSignUpApi = async (formData: FormData) => {
       withCredentials: false,
     })
     .then()
-    .catch((error) => console.log(error));
+    .catch((error) => {});
 
   return response;
 };

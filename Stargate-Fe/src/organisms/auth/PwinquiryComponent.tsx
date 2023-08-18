@@ -46,8 +46,6 @@ const PwinquiryComponent = () => {
         const arr = response.code.split('');
         setAuthNum(arr.map((e) => parseInt(e)));
       })
-      .catch((error) => console.log(error));
-
     setLoading(false);
   };
 

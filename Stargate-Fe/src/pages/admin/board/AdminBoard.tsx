@@ -17,7 +17,6 @@ const AdminBoard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('로딩중');
       const fetchedData = await fetchAdminBoard();
       if (fetchedData) {
         setData(fetchedData);
