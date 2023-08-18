@@ -72,7 +72,7 @@ const AdminBoard = () => {
   }, [data]);
 
   return (
-    <div className="w-xl min-h-screen flex flex-col justify-around">
+    <div className="flex flex-col justify-around min-h-screen bg-no-repeat bg-cover w-xl bg-gradient-to-b from-mainblue to-mainyellow">
       <BoardHeader isAdmin={true} />
       {loading ? (
         <BoardCardBox isAdmin={true} isLoading={loading} />

@@ -51,6 +51,7 @@ const ReadyRoom = () => {
         const readyData = await getReady(uuid);
         setReadyData(readyData);
         // 여기서 readyData를 사용하거나 처리할 수 있음
+        sessionStorage.setItem('meetingOrder', '0'); // 처음에 0으로 설정
       } catch (error) {
       }
     };
@@ -59,7 +60,7 @@ const ReadyRoom = () => {
   }, []);
 
   return (
-    <div className='flex w-xl h-screen justify-center'>
+    <div className="flex w-xl h-screen justify-center">
       <ReadyTab readyData={readyData} setReadyData={setReadyData} />
     </div>
   );

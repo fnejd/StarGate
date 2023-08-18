@@ -30,7 +30,7 @@ const VideoHeaderComponent: React.FC<VideoHeaaderProps> = ({
   meetingIdx,
 }) => {
   const [nextUser, setNextUser] = useState<string | null>(null);
-
+  console.log(participantsData);
   useEffect(() => {
     if (participantsData != undefined && participantsData != null) {
       if (

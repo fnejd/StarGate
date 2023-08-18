@@ -66,7 +66,7 @@ const SignInComponent = () => {
         .then((res) => {
           if (res == 'alreadyToken') {
             Swal.fire('로그인 실패', '이미 로그인 된 상태입니다.', 'warning');
-            navigate('/admin/board');
+            navigate('/');
           } else if (res == 'SUCCESS') {
             Swal.fire('로그인 성공!', '로그인에 성공하셨습니다.', 'success');
             navigate('/admin/board');
@@ -82,7 +82,7 @@ const SignInComponent = () => {
         .then((res) => {
           if (res == 'alreadyToken') {
             Swal.fire('로그인 실패', '이미 로그인 된 상태입니다.', 'warning');
-            navigate('/board');
+            navigate('/');
           } else if (res == 'SUCCESS') {
             Swal.fire('로그인 성공!', '로그인에 성공하셨습니다.', 'success');
             navigate('/board');
