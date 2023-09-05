@@ -1,11 +1,10 @@
 ## <img src="https://pic.sopili.net/pub/emoji/twitter/2/72x72/1f320.png" width=32 height=32> 스타게이트
 #### [화상통화 팬사인회 App 스타게이트](https://stargatea406.netlify.app/)
-![스타게이트_-_1](/uploads/ab4dfeb6812b29e8881da4a69b6c4910/스타게이트_-_1.png)
+![스타게이트-0](/readmeImages/스타게이트 - 0.png)
 
 ## Link
  - [스타게이트 Link](https://stargatea406.netlify.app/)
  - [Visit Project Repository](https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A406)
- - [Proto Type](https://www.figma.com/file/XV9X0H24uaUo6EEIHUlKHW/%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85?type=design&node-id=0%3A1&mode=design&t=iLza45bmqasaKXw7-1)
 
 ## Guide
 
@@ -31,13 +30,12 @@
 0. [Dev 서버 구동방법](#dev-서버-구동방법)
 1. [개발 배경](#개발-배경)
 2. [Soultion](#soultion)
-3. [Preview](#preview)
-4. [Skills](#skills)
-5. [Structure](#structure)
-6. [Team](#team)
-7. [Project Control](#project-control)
-8. [Code Convention](#code-convention)
-9. [Challenges](#challenges)
+3. [Skills](#skills)
+4. [Structure](#structure)
+5. [Team](#team)
+6. [Project Control](#project-control)
+7. [Code Convention](#code-convention)
+8. [Challenges](#challenges)
 
 ## Dev 서버 구동방법
 아래 코드를 터미널에 붙여넣습니다.
@@ -51,57 +49,29 @@ pnpm install
 pnpm run dev
    
 ## 개발 배경
-![스타게이트_-_3](/uploads/5a0bf9aa8352c9697c1a8ad24358c866/스타게이트_-_3.png)
-![스타게이트_-_4](/uploads/173aba4903b6cb73e4829cf93a2136f3/스타게이트_-_4.png)
-![스타게이트_-_5](/uploads/bdd2614e092c4a1f0b5ad16183cdbfcb/스타게이트_-_5.png)
-![스타게이트_-_6](/uploads/a5c1fa1c5bf05fb5a4f3c17711002183/스타게이트_-_6.png)
-![스타게이트_-_9](/uploads/2e2543a6982a22d5c3c07c5f10536336/스타게이트_-_9.png)
+![스타게이트-1](/readmeImages/스타게이트 - 1.png)
+![스타게이트-2](/readmeImages/스타게이트 - 2.png)
+![스타게이트-3](/readmeImages/스타게이트 - 3.png)
+![스타게이트-4](/readmeImages/스타게이트 - 4.png)
 
 ## Solution
-![스타게이트_-_10](/uploads/676b8a2ce979f3a66ab41530ed61c184/스타게이트_-_10.png)
-![스타게이트_-_11](/uploads/109f0884caf1f89075dd4ef153bd1a51/스타게이트_-_11.png)
-
-## Preview
-![스타게이트_-_13](/uploads/01961f81aadc1999e92bd9e36f63e53b/스타게이트_-_13.png)
+![스타게이트-5](/readmeImages/스타게이트 - 5.png)
+![스타게이트-6](/readmeImages/스타게이트 - 6.png)
+![스타게이트-7](/readmeImages/스타게이트 - 7.png)
 
 ### User
-![스타게이트_-_21](/uploads/1dae5049bf2867be287090f4e171b392/스타게이트_-_21.png)
-![스타게이트_-_22](/uploads/800d4a9058dc4a8d421741c7eced5cc3/스타게이트_-_22.png)
-![스타게이트_-_23](/uploads/0db97668275d8c06db05138cd21c35af/스타게이트_-_23.png)
-![스타게이트_-_24](/uploads/21d8b3526b25ae6a36b2c2f7432e65ce/스타게이트_-_24.png)
-![스타게이트_-_25](/uploads/647c90c913421202593ca399f419d4b6/스타게이트_-_25.png)
+![스타게이트-8](/readmeImages/스타게이트 - 8.png)
+![스타게이트-9](/readmeImages/스타게이트 - 9.png)
+![스타게이트-10](/readmeImages/스타게이트 - 10.png)
+![스타게이트-11](/readmeImages/스타게이트 - 11.png)
+![스타게이트-12](/readmeImages/스타게이트 - 12.png)
 
 ### Admin
-![스타게이트_-_26](/uploads/75172c93f36d28c61f62d3a765b5be0a/스타게이트_-_26.png)
-![스타게이트_-_27](/uploads/1c7fcd013ee4a1d47627b2fe8ebb5446/스타게이트_-_27.png)
-
-## Skills
-### Frontend
- - React
-    - Recoil
-    - React Query
- - TypeScript 
- - Tailwind CSS
- - Axios
- - pnpm
- - Vite
-
-### Backend
- - Java
- - Spring Boot 
- - Gradle
- - dependencies
-    - WebSocket
-    - Spring Security
-    - JPA
-    - Validation
- - MySQL
-
-### Server
- - AWS EC2
- - Docker Desktop(예정)
-
-## Structure
+![스타게이트-13](/readmeImages/스타게이트 - 13.png)
+![스타게이트_14](/readmeImages/스타게이트 - 14.png)
+## architecture
+![스타게이트_15](/readmeImages/스타게이트 - 15.png)
+## Folder Structure
 ### Frontend
 ##### Frontend에서는 Atomic Design Pattern을 커스텀하여 Atoms, Organisms, Pages 3단계로 나눠서 구현하였습니다.<br>
 Atom : 더 이상 분해할 수 없는 기본 컴포넌트<br/>
@@ -167,22 +137,48 @@ C:.
             └─ssafy
                 └─stargate
 ```
+## Skills
+![스타게이트_16](/readmeImages/스타게이트 - 16.png)
+### Frontend
+ - React
+    - Recoil
+ - TypeScript 
+ - Tailwind CSS
+ - Axios
+ - pnpm
+ - Vite
+
+### Backend
+ - Java
+ - Spring Boot 
+ - Gradle
+ - dependencies
+    - WebSocket
+    - Spring Security
+    - JPA
+    - Validation
+ - MySQL
+
+### Server
+ - AWS EC2
+ - Docker Desktop
+
 ## Team
 <table>
   <tr>
     <td align="center" width="500px">
       <a href="https://github.com/legitgoons" target="_blank">
-        <img src="/uploads/ffe88f9187c5b6a51ca96ebce666c432/Group_2282.png" alt="이의찬 프로필" />
+        <img src="/readmeImages/Fe1.png" alt="이의찬 프로필" />
       </a>
     </td>
     <td align="center" width="500px">
       <a href="https://github.com/YeryunJung" target="_blank">
-        <img src="/uploads/00efc64e9b0155133a39f6c4b9acffdf/Group_2276.png" alt="정예륜 프로필" />
+        <img src="/readmeImages/Fe2.png" alt="정예륜 프로필" />
       </a>
     </td>
     <td align="center" width="500px">
       <a href="https://github.com/l0u0h0" target="_blank">
-        <img src="/uploads/584e9159f6fbb5db301ad6b9b5fb07c9/Group_2277.png" alt="이유한 프로필" />
+        <img src="/readmeImages/Fe3.png" alt="이유한 프로필" />
       </a>
     </td>
   </tr>
@@ -206,17 +202,17 @@ C:.
   <tr>
     <td align="center" width="500px">
       <a href="https://github.com/inputTitleHere" target="_blank">
-        <img src="/uploads/f0871877228b427956f04aa4185ca45c/Group_532.png" alt="백승윤 프로필" />
+        <img src="/readmeImages/Be1.png" alt="백승윤 프로필" />
       </a>
     </td>
     <td align="center" width="500px">
       <a href="https://github.com/hsilnam" target="_blank">
-        <img src="/uploads/c0f99102c11f5525da13b41dd97baf00/Group_2275.png" alt="남현실 프로필" />
+        <img src="/readmeImages/Be2.png" alt="남현실 프로필" />
       </a>
     </td>
     <td align="center" width="500px">
       <a href="https://github.com/fnejd" target="_blank">
-        <img src="/uploads/3d8cdfac094287b678f0922ccdda5049/Group_2278.png" alt="김도현 프로필" />
+        <img src="/readmeImages/Be3.png" alt="김도현 프로필" />
       </a>
     </td>
   </tr>
