@@ -1,6 +1,7 @@
 ## <img src="https://pic.sopili.net/pub/emoji/twitter/2/72x72/1f320.png" width=32 height=32> 스타게이트
 #### [화상통화 팬사인회 App 스타게이트](https://stargatea406.netlify.app/)
-![스타게이트-0](/readmeImages/스타게이트 - 0.png)
+
+![스타게이트-0](/readmeImages/스타게이트-0.png)
 
 ## Link
  - [스타게이트 Link](https://stargatea406.netlify.app/)
@@ -49,28 +50,28 @@ pnpm install
 pnpm run dev
    
 ## 개발 배경
-![스타게이트-1](/readmeImages/스타게이트 - 1.png)
-![스타게이트-2](/readmeImages/스타게이트 - 2.png)
-![스타게이트-3](/readmeImages/스타게이트 - 3.png)
-![스타게이트-4](/readmeImages/스타게이트 - 4.png)
+![스타게이트-1](/readmeImages/스타게이트-1.png)
+![스타게이트-2](/readmeImages/스타게이트-2.png)
+![스타게이트-3](/readmeImages/스타게이트-3.png)
+![스타게이트-4](/readmeImages/스타게이트-4.png)
 
 ## Solution
-![스타게이트-5](/readmeImages/스타게이트 - 5.png)
-![스타게이트-6](/readmeImages/스타게이트 - 6.png)
-![스타게이트-7](/readmeImages/스타게이트 - 7.png)
+![스타게이트-5](/readmeImages/스타게이트-5.png)
+![스타게이트-6](/readmeImages/스타게이트-6.png)
+![스타게이트-7](/readmeImages/스타게이트-7.png)
 
 ### User
-![스타게이트-8](/readmeImages/스타게이트 - 8.png)
-![스타게이트-9](/readmeImages/스타게이트 - 9.png)
-![스타게이트-10](/readmeImages/스타게이트 - 10.png)
-![스타게이트-11](/readmeImages/스타게이트 - 11.png)
-![스타게이트-12](/readmeImages/스타게이트 - 12.png)
+![스타게이트-8](/readmeImages/스타게이트-8.png)
+![스타게이트-9](/readmeImages/스타게이트-9.png)
+![스타게이트-10](/readmeImages/스타게이트-10.png)
+![스타게이트-11](/readmeImages/스타게이트-11.png)
+![스타게이트-12](/readmeImages/스타게이트-12.png)
 
 ### Admin
-![스타게이트-13](/readmeImages/스타게이트 - 13.png)
-![스타게이트_14](/readmeImages/스타게이트 - 14.png)
+![스타게이트-13](/readmeImages/스타게이트-13.png)
+![스타게이트_14](/readmeImages/스타게이트-14.png)
 ## architecture
-![스타게이트_15](/readmeImages/스타게이트 - 15.png)
+![스타게이트_15](/readmeImages/스타게이트-15.png)
 ## Folder Structure
 ### Frontend
 ##### Frontend에서는 Atomic Design Pattern을 커스텀하여 Atoms, Organisms, Pages 3단계로 나눠서 구현하였습니다.<br>
@@ -138,7 +139,7 @@ C:.
                 └─stargate
 ```
 ## Skills
-![스타게이트_16](/readmeImages/스타게이트 - 16.png)
+![스타게이트_16](/readmeImages/스타게이트-16.png)
 ### Frontend
  - React
     - Recoil
@@ -168,17 +169,17 @@ C:.
   <tr>
     <td align="center" width="500px">
       <a href="https://github.com/legitgoons" target="_blank">
-        <img src="/readmeImages/Fe1.png" alt="이의찬 프로필" />
+        <img src="./readmeImages/Fe1.png" alt="이의찬 프로필" />
       </a>
     </td>
     <td align="center" width="500px">
       <a href="https://github.com/YeryunJung" target="_blank">
-        <img src="/readmeImages/Fe2.png" alt="정예륜 프로필" />
+        <img src="./readmeImages/Fe2.png" alt="정예륜 프로필" />
       </a>
     </td>
     <td align="center" width="500px">
       <a href="https://github.com/l0u0h0" target="_blank">
-        <img src="/readmeImages/Fe3.png" alt="이유한 프로필" />
+        <img src="./readmeImages/Fe3.png" alt="이유한 프로필" />
       </a>
     </td>
   </tr>
@@ -202,17 +203,17 @@ C:.
   <tr>
     <td align="center" width="500px">
       <a href="https://github.com/inputTitleHere" target="_blank">
-        <img src="/readmeImages/Be1.png" alt="백승윤 프로필" />
+        <img src="./readmeImages/Be1.png" alt="백승윤 프로필" />
       </a>
     </td>
     <td align="center" width="500px">
       <a href="https://github.com/hsilnam" target="_blank">
-        <img src="/readmeImages/Be2.png" alt="남현실 프로필" />
+        <img src="./readmeImages/Be2.png" alt="남현실 프로필" />
       </a>
     </td>
     <td align="center" width="500px">
       <a href="https://github.com/fnejd" target="_blank">
-        <img src="/readmeImages/Be3.png" alt="김도현 프로필" />
+        <img src="./readmeImages/Be3.png" alt="김도현 프로필" />
       </a>
     </td>
   </tr>
