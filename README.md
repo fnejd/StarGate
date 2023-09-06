@@ -241,6 +241,9 @@ C:.
 ##### Task Control: Notion, Figma, Jira, Slack
 
 ## Code Convention
+![스타게이트_17](/readmeImages/스타게이트-17.png)
+![스타게이트_18](/readmeImages/스타게이트-18.png)
+![스타게이트_19](/readmeImages/스타게이트-19.png)
 #### Part별 Code Convention은 노션에 작성했습니다.
 ### [Frontend](https://denim-meteorite-208.notion.site/478eaf4a6ea44312bfd3a91645586f5e?pvs=4)
 ### [Backend](https://denim-meteorite-208.notion.site/724d3b46fe24422f8429c3ef21ef3d18?pvs=4)
