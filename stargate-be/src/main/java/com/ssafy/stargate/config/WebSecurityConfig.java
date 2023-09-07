@@ -25,14 +25,11 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
 
-    private final JwtFilter jwtFilter;
-    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
